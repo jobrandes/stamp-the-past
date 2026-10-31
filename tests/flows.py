@@ -267,6 +267,22 @@ with sync_playwright() as p:
     need('next badge:' in pg.inner_text('.stat').lower(),'Home shows a next badge goal')
     pg.click('#bnav [data-t=pass]'); pg.wait_for_timeout(200)
     need('right now: sparks' in pg.inner_text('.passhead').lower() and '3 to go' in pg.inner_text('.passhead').lower(),'Passport names the current town and stamps to go')
+    # keyboard: Tab never leaves the open menu, Escape closes it and focus returns to the Menu button
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.focus('.menubtn'); pg.keyboard.press('Enter'); pg.wait_for_timeout(250)
+    out=False
+    for _ in range(45):
+        pg.keyboard.press('Tab')
+        if not pg.evaluate("!!document.activeElement.closest('#menu')"): out=True; break
+    need(not out,'Tab stays inside the open menu')
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(250)
+    need(pg.locator('#menu').count()==0 and pg.evaluate("document.activeElement.classList.contains('menubtn')"),'Escape closes the menu and focus returns to the Menu button')
+    # Report dialog: Escape closes it and focus goes back to the Menu button
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.menubtn'); pg.click('#menu [data-a=report]'); pg.wait_for_timeout(250)
+    need(pg.locator('#report').count()==1,'Report dialog opens from the menu')
+    pg.keyboard.press('Escape'); pg.wait_for_timeout(250)
+    need(pg.locator('#report').count()==0 and pg.evaluate("document.activeElement.classList.contains('menubtn')"),'Escape closes Report and focus returns to the Menu button')
     # spot the change (Reno, Phoenix, Sacramento): wrong answer is struck out, right answer explains itself
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}})
     pg.click('.stop >> nth=0'); pg.click('text=I am here')

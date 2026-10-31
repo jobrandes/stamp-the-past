@@ -585,7 +585,7 @@
   }
   function closeCeleb(){ var e=document.getElementById('celeb'); if(e){ e.remove(); setTimeout(flushBadges,250); } }
   document.addEventListener('keydown',function(e){
-    if(e.key==='Tab'){ var dlg=document.getElementById('report')||document.getElementById('menu')||document.getElementById('tour')||document.getElementById('celeb'); if(dlg&&dlg.offsetParent!==null||dlg&&getComputedStyle(dlg).display!=='none'){ var f=dlg.querySelectorAll('button'); if(f.length){ var first=f[0], last=f[f.length-1]; if(!dlg.contains(document.activeElement)){ first.focus(); e.preventDefault(); } else if(e.shiftKey&&document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey&&document.activeElement===last){ first.focus(); e.preventDefault(); } } } }
+    if(e.key==='Tab'){ var dlg=document.getElementById('report')||document.getElementById('menu')||document.getElementById('tour')||document.getElementById('celeb'); if(dlg&&dlg.offsetParent!==null||dlg&&getComputedStyle(dlg).display!=='none'){ var f=[].filter.call(dlg.querySelectorAll('button,a[href],input,select,textarea,summary,[tabindex]:not([tabindex="-1"])'),function(x){ return !x.disabled&&x.offsetParent!==null&&(!x.checkVisibility||x.checkVisibility()); }); if(f.length){ var first=f[0], last=f[f.length-1]; if(!dlg.contains(document.activeElement)){ first.focus(); e.preventDefault(); } else if(e.shiftKey&&document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey&&document.activeElement===last){ first.focus(); e.preventDefault(); } } } }
   });
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeReport(); closeCeleb(); closeBpop(); closeMenu(); if(document.getElementById('tour')) endTour(); } });
   /* offline: the web version caches itself (sw.js). Say so when the connection changes. */
@@ -611,7 +611,7 @@
     d.innerHTML='<div class="celeb-card tour-card rep-card"><h2 id="repT">Something wrong?</h2><p>Wrong answer, confusing screen, broken photo, or a plaque that says something else. Tell us in a sentence or two.</p><label class="mono" for="repMsg">What happened</label><textarea id="repMsg" maxlength="600" rows="4"></textarea><label class="mono" for="repWho">Your email (optional, only if you want a reply)</label><input id="repWho" type="email" maxlength="120" autocomplete="off"><p class="why">Please do not include personal details. We send along only where in the app you were: <em>'+d.dataset.where+'</em>.</p><p id="repMsgOut" class="feedback" aria-live="polite"></p><div class="celeb-btns"><button class="btn" data-a="repsend">Send</button><button class="btn ghost" data-a="repclose">Cancel</button></div></div>';
     document.body.appendChild(d); var f=document.getElementById('repMsg'); if(f) f.focus();
   }
-  function closeReport(){ var e=document.getElementById('report'); if(e) e.remove(); }
+  function closeReport(){ var e=document.getElementById('report'); if(e){ e.remove(); var m=document.getElementById('menuBtn'); if(m&&m.offsetParent!==null&&(!document.activeElement||document.activeElement===document.body)) try{ m.focus(); }catch(x){} } }
   function sendReport(){
     var d=document.getElementById('report'); if(!d) return;
     var msg=document.getElementById('repMsg').value.trim(), out=document.getElementById('repMsgOut');

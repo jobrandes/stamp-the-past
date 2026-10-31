@@ -258,3 +258,4 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Badge popup (test fix): .bsnack lets taps pass through (only its See and close buttons catch taps) so it never blocks Next buttons beneath it for its 13 s.
 - Home badge goal + Passport current town (v09, v10): Home progress card shows 'Next badge: <name> · n of goal' (closest unearned badge); Passport head shows 'Right now: <town> · d of t stamps, n to go' for the in-progress town. Tests added.
 - Toast (w01): .toast uses width:max-content and a 18px radius; before, a fixed left:50% box shrank to half the screen and long messages became a tall blob at 360px.
+- Keyboard (w02): Tab trap in menu/report/tour/celebration now covers links, inputs and summaries and ignores hidden ones (checkVisibility); closing Report with Escape returns focus to the Menu button. Tests added.
