@@ -971,3 +971,6 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}
 .cmp .dragtip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:2;pointer-events:none;background:rgba(10,20,35,.82);color:#fff;font:600 0.75rem var(--font-mono);letter-spacing:.06em;padding:6px 12px;border-radius:999px;white-space:nowrap;max-width:calc(100% - 20px)}
 .savedh{margin:18px 0 8px}
+.nextstop .nprog{margin:6px 0 4px;font-size:0.9375rem}
+.nextstop .bt-p{margin:0 0 8px}
+.nextstop .btn{margin-top:8px}

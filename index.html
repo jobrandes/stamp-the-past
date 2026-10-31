@@ -977,6 +977,9 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}
 .cmp .dragtip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:2;pointer-events:none;background:rgba(10,20,35,.82);color:#fff;font:600 0.75rem var(--font-mono);letter-spacing:.06em;padding:6px 12px;border-radius:999px;white-space:nowrap;max-width:calc(100% - 20px)}
 .savedh{margin:18px 0 8px}
+.nextstop .nprog{margin:6px 0 4px;font-size:0.9375rem}
+.nextstop .bt-p{margin:0 0 8px}
+.nextstop .btn{margin-top:8px}
 </style>
 
 <div class="app">
@@ -1478,7 +1481,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     var vcount=0; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st){ if(st.verified&&st.verified.on) vcount++; }); });
     var res=null; [cityId].concat(ORDER).forEach(function(k){ if(!res&&CITIES[k]){ var d=sum(ALL[k].done); if(d>0&&d<CITIES[k].stops.length) res=k; } });
         var passTop=got>0?'<section class="passport" id="passport"><button class="rcard" data-a="mypass"><span><strong>Your passport</strong><span class="rsub">'+got+' of '+total+' stamps earned'+(totalPts()?' · '+totalPts()+' challenge points':'')+'</span></span><span class="go">Open ›</span></button></section>':'';
-    h+=goalHtml();
+    h+=savedCardHtml()+goalHtml();
     function townLi(k){
       var c=CITIES[k], st=ALL[k], n=sum(st.done), x=sum(st.done)*100+sum(st.claims)*25, rk=c.ranks[0][1];
       c.ranks.forEach(function(r){ if(x>=r[0]) rk=r[1]; });
@@ -1698,6 +1701,8 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   function wkOf(ds){ var m=/^(\d{4})-(\d{2})-(\d{2})/.exec(ds); if(!m) return null; return Math.floor((Date.UTC(+m[1],+m[2]-1,+m[3])/86400000-4)/7); }
   function streakWeeks(){ var set={}; logGet().forEach(function(d){ var w=wkOf(d); if(w!==null) set[w]=1; }); var now=wkOf(dstr(new Date())), w=set[now]?now:now-1, n=0; while(set[w]){ n++; w--; } return n; }
   function monthStamps(){ var m=dstr(new Date()).slice(0,7); return logGet().filter(function(d){ return d.slice(0,7)===m; }).length; }
+  function savedCardHtml(){ var o=savedOpen(); if(!o.length) return ''; var m=0; o.forEach(function(x){ m+=stopMins(CITIES[x.k].stops[x.i]); });
+    return '<section class="goal"><button class="rcard" data-a="gotrip"><span><strong>Your saved stops: '+o.length+'</strong><span class="rsub">About '+m+' minutes on site. Open My trip to plan the outing.</span></span><span class="go">Open ›</span></button></section>'; }
   function goalHtml(){
     var n=totalStamps(); var tw=weekTrailHtml(); if(n<1) return tw?'<section class="goal"><p class="mono">This week</p>'+tw+'</section>':'';
     var best=null; ORDER.forEach(function(k){ var d=sum(ALL[k].done), t=CITIES[k].stops.length; if(d>0&&d<t){ var left=t-d; if(!best||left<best.left) best={k:k,left:left}; } });
@@ -1719,6 +1724,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   function savedSet(a){ try{ localStorage.setItem('stp-saved',JSON.stringify(a)); }catch(e){} }
   function savedKey(k,i){ var st=CITIES[k]&&CITIES[k].stops[i]; return st?k+':'+st.id:''; }
   function isSaved(k,i){ var key=savedKey(k,i); return !!key&&savedRaw().indexOf(key)>-1; }
+  function savedOpen(){ return savedList().filter(function(x){ return !ALL[x.k].done[x.i]; }); }
   function savedList(){ var out=[]; savedRaw().forEach(function(key){ var p=key.split(':'), k=p[0], c=CITIES[k]; if(!c) return; for(var i=0;i<c.stops.length;i++){ if(c.stops[i].id===p.slice(1).join(':')){ out.push({k:k,i:i}); break; } } }); return out; }
   var btab='towns', btrail='stations', bnavSel='home';
   (function(){ var ly=0, ut=0; function u(){ ut=Date.now(); } window.addEventListener('touchmove',u,{passive:true}); window.addEventListener('wheel',u,{passive:true}); window.addEventListener('scroll',function(){ var y=window.pageYOffset||0, d=y-ly; if(Math.abs(d)<10) return; ly=y; if(Date.now()-ut>1200) return; document.body.classList.toggle('navhide',d>0&&y>160); },{passive:true}); })();
@@ -1727,7 +1733,9 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   function passSeenSet(){ try{ localStorage.setItem('stp-pass-seen',String(totalStamps())); localStorage.setItem('stp-bseen',String(Object.keys(bdGet()).length)); }catch(e){} }
   function tripHtml(){
     var t=tripGet(), sv=savedList();
-    var svHtml=sv.length?'<p class="mono savedh">Saved stops</p><ul class="tlist">'+sv.map(function(x){ var st=CITIES[x.k].stops[x.i], dn=ALL[x.k].done[x.i]; return '<li class="trow'+(dn?' done':'')+'"><button class="trowb" data-a="neargo" data-c="'+x.k+'" data-i="'+x.i+'" data-far="1"><span class="tcheck" aria-hidden="true">'+(dn?'&#10003;':'')+'</span><span class="tn"><strong>'+st.name+'</strong><span class="sub">'+CITIES[x.k].name+(dn?' · Stamped':'')+'</span></span><span class="go">Open ›</span></button><button class="tstar on" data-a="savestop" data-c="'+x.k+'" data-i="'+x.i+'" aria-pressed="true" aria-label="Remove '+st.name.replace(/"/g,'&quot;')+' from saved stops">★</button></li>'; }).join('')+'</ul>':'';
+    if(geoPos) sv.sort(function(p,q){ var a1=CITIES[p.k].stops[p.i].geo, b1=CITIES[q.k].stops[q.i].geo; if(!a1||!b1) return 0; return distM(geoPos.lat,geoPos.lon,a1[0],a1[1])-distM(geoPos.lat,geoPos.lon,b1[0],b1[1]); });
+    var sOpen=sv.filter(function(x){ return !ALL[x.k].done[x.i]; }), sMin=0; sOpen.forEach(function(x){ sMin+=stopMins(CITIES[x.k].stops[x.i]); });
+    var svHtml=sv.length?'<p class="mono savedh">Saved stops</p><p class="tripsum">'+(sOpen.length?'<strong>'+sOpen.length+(sOpen.length===1?' stop':' stops')+' to visit</strong> · about '+sMin+' minutes on site, not counting the drive'+(geoPos?' · closest first':''):'<strong>All your saved stops are stamped.</strong>')+'</p><ul class="tlist">'+sv.map(function(x){ var st=CITIES[x.k].stops[x.i], dn=ALL[x.k].done[x.i]; return '<li class="trow'+(dn?' done':'')+'"><button class="trowb" data-a="neargo" data-c="'+x.k+'" data-i="'+x.i+'" data-far="1"><span class="tcheck" aria-hidden="true">'+(dn?'&#10003;':'')+'</span><span class="tn"><strong>'+st.name+'</strong><span class="sub">'+CITIES[x.k].name+(dn?' · Stamped':' · about '+stopMins(st)+' min')+'</span></span><span class="go">Open ›</span></button><button class="tstar on" data-a="savestop" data-c="'+x.k+'" data-i="'+x.i+'" aria-pressed="true" aria-label="Remove '+st.name.replace(/"/g,'&quot;')+' from saved stops">★</button></li>'; }).join('')+'</ul>':'';
     if(!t.length&&!sv.length) return '<div class="bempty"><h3>Plan a trip</h3><p>Tap the star on any town, or Save on any stop, to keep it here. You will see how many stamps are left in each place, like a checklist for the road.</p></div>';
     if(!t.length) return '<div class="trip" id="trip">'+svHtml+'</div>';
     var left=0, rows=t.map(function(k){ var c=CITIES[k], d=sum(ALL[k].done), n=c.stops.length, r=n-d; left+=r; var pc=Math.round(d/n*100);
@@ -1750,7 +1758,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   var TRICON={"stations": "<path d=\"M6 5h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 4h12M8 20l1.5-3m6.5 3-1.5-3M9 13h.01M15 13h.01\"/>", "capitols": "<path d=\"M4 20h16M6 20v-7m4 7v-7m4 7v-7m4 7v-7M3 13h18M5 13a7 7 0 0 1 14 0M12 3v3\"/>", "faith": "<path d=\"M12 2v5m-2-3h4M7 21V12l5-5 5 5v9M10 21v-4h4v4M4 21h16\"/>", "bridges": "<path d=\"M2 18h20M4 18v-5m16 5v-5M4 13c3-6 13-6 16 0M8 14v4m4-5v5m4-4v4\"/>"};
   var TRCOL={stations:'#B7791F',capitols:'#1B58B8',faith:'#2F855A',bridges:'#0F766E'};
   function browseOpen(){
-    var n=tripGet().length, T=[['towns','Towns'],['trails','Trails'],['trip','My trip'+(n?' ('+n+')':'')]];
+    var n=tripGet().length+savedList().length, T=[['towns','Towns'],['trails','Trails'],['trip','My trip'+(n?' ('+n+')':'')]];
     return '<section class="browse" id="browse"><div class="btabs" role="tablist" aria-label="Browse">'+T.map(function(t){ return '<button class="btab" role="tab" id="bt-'+t[0]+'" data-a="btab" data-t="'+t[0]+'" aria-selected="'+(btab===t[0])+'" aria-controls="bp-'+t[0]+'">'+t[1]+'</button>'; }).join('')+'</div><div class="bpanel" id="bp-towns" role="tabpanel"'+(btab==='towns'?'':' hidden')+'>';
   }
   function setBtab(t){ btab=t; if(t==='towns'||t==='trails') bnavSel=t; ['towns','trails','trip'].forEach(function(x){ var p=document.getElementById('bp-'+x), b=document.getElementById('bt-'+x); if(p) p.hidden=(x!==t); if(b) b.setAttribute('aria-selected',x===t?'true':'false'); }); }
@@ -2064,6 +2072,8 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     var n=STOPS.length, j=-1, k, t;
     for(k=1;k<n;k++){ t=(cur.i+k)%n; if(!S.done[t]){ j=t; break; } }
     var h='<section class="card nextstop"><p class="mono">What next</p>';
+    var dn=sum(S.done), pc=Math.round(dn/n*100), nb=nextBadge();
+    h+='<p class="nprog"><strong>'+dn+' of '+n+' stamps in '+city().name+'</strong>'+(dn<n?' · '+(n-dn)+' to go':' · complete')+'</p><span class="bt-p" role="progressbar" aria-valuemin="0" aria-valuemax="'+n+'" aria-valuenow="'+dn+'" aria-label="'+city().name+' progress"><i style="width:'+pc+'%"></i></span>'+(nb?'<p class="hint">Next badge: '+nb.b.n+' · '+nb.cur+' of '+nb.goal+'</p>':'');
     if(j>=0){
       h+='<p>Stop done. Now go to <strong>'+STOPS[j].name+'</strong>, then check in there.</p><button class="btn" data-a="nextstop" data-i="'+j+'">Next stop: '+STOPS[j].name+'</button><button class="btn ghost" data-a="exit">Back to the trail</button>';
     } else {
@@ -2295,6 +2305,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
       if(bt==='pass'){ openPass(); return; }
       if(bt==='home'){ bnavSel='home'; goHome(); return; }
       bnavSel=bt; if(!atHome||onPass) goHome(); setBtab(bt); updateBnav(); var bw=document.getElementById('browse'); if(bw&&bw.scrollIntoView) bw.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+    if(a==='gotrip'){ bnavSel='towns'; if(!atHome||onPass) goHome(); setBtab('trip'); updateBnav(); var bw2=document.getElementById('browse'); if(bw2&&bw2.scrollIntoView) bw2.scrollIntoView({behavior:'smooth',block:'start'}); return; }
     if(a==='btab'){ setBtab(b.getAttribute('data-t')); return; }
     if(a==='trail'){ btrail=b.getAttribute('data-t'); document.querySelectorAll('.tcard').forEach(function(c){ var on=c.getAttribute('data-t')===btrail; c.classList.toggle('on',on); c.setAttribute('aria-pressed',on?'true':'false'); }); document.querySelectorAll('.trl').forEach(function(x){ x.hidden=(x.getAttribute('data-trail')!==btrail); }); return; }
     if(a==='share'){ var sk=b.getAttribute('data-k'); if(sk&&CITIES[sk]) shareStamps('town',sk); else shareStamps('passport'); return; }
@@ -2302,7 +2313,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     if(a==='sharefile'){ if(fadeFile&&navigator.share) navigator.share({files:[fadeFile.f],text:fadeFile.t}).catch(function(){}); return; }
     if(a==='sharefade'){ fadeShare(b); return; }
     if(a==='spotpick'){ var sp=STOPS[cur.i]&&STOPS[cur.i].spot, box=document.getElementById('spot'); if(!sp||!box) return; var k=+b.getAttribute('data-k'), fb=box.querySelector('.sfb'); if(k===sp.answer){ box.querySelectorAll('.spo').forEach(function(x){ x.disabled=true; x.classList.remove('wrong'); }); b.classList.add('right'); fb.textContent='Right. '+sp.why; } else { b.classList.add('wrong'); b.disabled=true; fb.textContent='Not that one. Slide the photo again and try another.'; } return; }
-    if(a==='savestop'){ var sk=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), key=savedKey(sk,si), sa=savedRaw(), sx=sa.indexOf(key); if(!key) return; if(sx>-1) sa.splice(sx,1); else sa.push(key); savedSet(sa); var sy=window.scrollY; render(false); window.scrollTo(0,sy); toast(sx>-1?'Removed from saved stops.':'Saved. Find it under Towns, My trip.'); return; }
+    if(a==='savestop'){ var sk=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), key=savedKey(sk,si), sa=savedRaw(), sx=sa.indexOf(key); if(!key) return; if(sx>-1) sa.splice(sx,1); else sa.push(key); savedSet(sa); var sy=window.scrollY; render(false); window.scrollTo(0,sy); toast(sx>-1?'Removed from saved stops.':'Saved. Find it on Home under My trip.'); return; }
     if(a==='trip'){ var tk=b.getAttribute('data-c'), ta=tripGet(), ti=ta.indexOf(tk); if(ti>-1) ta.splice(ti,1); else ta.push(tk); tripSet(ta); var sv=window.scrollY; render(); window.scrollTo(0,sv); toast(ti>-1?'Removed from your trip.':'Added to your trip.'); return; }
     if(a==='schip'){ var inp=document.getElementById('townSearch'); if(inp){ var sv2=b.getAttribute('data-s'); inp.value=(inp.value.trim().toLowerCase()===sv2.toLowerCase())?'':sv2; inp.dispatchEvent(new Event('input',{bubbles:true})); } return; }
     if(a==='gomissions'){ setBtab('towns'); var mm=document.getElementById('missions'); if(mm&&mm.scrollIntoView) mm.scrollIntoView({behavior:'smooth',block:'start'}); return; }
