@@ -293,6 +293,17 @@ with sync_playwright() as p:
     need(pg.locator('.cmp .dragtip').count()==1,'slider shows a drag tag the first time')
     bx=pg.locator('.cmp .box').first.bounding_box(); pg.mouse.move(bx['x']+bx['width']*.8,bx['y']+bx['height']/2); pg.mouse.down(); pg.mouse.move(bx['x']+bx['width']*.3,bx['y']+bx['height']/2); pg.mouse.up()
     need(pg.locator('.cmp .dragtip').count()==0,'drag tag goes away once the slider is used')
+    # save a stop for later: Save on a stop, find it under Towns > My trip, open it, remove it
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[0,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.stop >> nth=1'); pg.wait_for_timeout(200)
+    need('save' in pg.inner_text('[data-a=savestop]').lower(),'stop screen offers Save')
+    pg.click('[data-a=savestop]'); pg.wait_for_timeout(200)
+    need(pg.get_attribute('[data-a=savestop]','aria-pressed')=='true','Save toggles to Saved')
+    pg.click('[data-a=exit]'); pg.click('#bnav [data-t=towns]'); pg.click('#bt-trip'); pg.wait_for_timeout(200)
+    need('train depot' in pg.inner_text('#bp-trip').lower(),'saved stop appears under My trip')
+    pg.click('#bp-trip [data-a=neargo]'); pg.wait_for_timeout(250)
+    need('train depot' in pg.inner_text('#stopTitle').lower(),'saved stop opens from My trip')
+    pg.click('[data-a=savestop]'); need(pg.get_attribute('[data-a=savestop]','aria-pressed')=='false','Saved toggles back off')
     # spot the change (Reno, Phoenix, Sacramento): wrong answer is struck out, right answer explains itself
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}})
     pg.click('.stop >> nth=0'); pg.click('text=I am here')

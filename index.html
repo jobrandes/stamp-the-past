@@ -976,6 +976,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .stat .sgoal{margin:2px 0 0;font-size:0.8125rem;color:var(--muted)}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}
 .cmp .dragtip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:2;pointer-events:none;background:rgba(10,20,35,.82);color:#fff;font:600 0.75rem var(--font-mono);letter-spacing:.06em;padding:6px 12px;border-radius:999px;white-space:nowrap;max-width:calc(100% - 20px)}
+.savedh{margin:18px 0 8px}
 </style>
 
 <div class="app">
@@ -1713,17 +1714,24 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   }
   function tripGet(){ try{ var a=JSON.parse(localStorage.getItem('stp-trip')||'[]'); return Array.isArray(a)?a.filter(function(k){ return CITIES[k]; }):[]; }catch(e){ return []; } }
   function tripSet(a){ try{ localStorage.setItem('stp-trip',JSON.stringify(a)); }catch(e){} }
+  function savedRaw(){ try{ var a=JSON.parse(localStorage.getItem('stp-saved')||'[]'); return Array.isArray(a)?a.filter(function(x){ return typeof x==='string'; }):[]; }catch(e){ return []; } }
+  function savedSet(a){ try{ localStorage.setItem('stp-saved',JSON.stringify(a)); }catch(e){} }
+  function savedKey(k,i){ var st=CITIES[k]&&CITIES[k].stops[i]; return st?k+':'+st.id:''; }
+  function isSaved(k,i){ var key=savedKey(k,i); return !!key&&savedRaw().indexOf(key)>-1; }
+  function savedList(){ var out=[]; savedRaw().forEach(function(key){ var p=key.split(':'), k=p[0], c=CITIES[k]; if(!c) return; for(var i=0;i<c.stops.length;i++){ if(c.stops[i].id===p.slice(1).join(':')){ out.push({k:k,i:i}); break; } } }); return out; }
   var btab='towns', btrail='stations', bnavSel='home';
   (function(){ var ly=0, ut=0; function u(){ ut=Date.now(); } window.addEventListener('touchmove',u,{passive:true}); window.addEventListener('wheel',u,{passive:true}); window.addEventListener('scroll',function(){ var y=window.pageYOffset||0, d=y-ly; if(Math.abs(d)<10) return; ly=y; if(Date.now()-ut>1200) return; document.body.classList.toggle('navhide',d>0&&y>160); },{passive:true}); })();
   function updateBnav(){ var nb=document.getElementById('bnav'); if(!nb) return; var cur2=onPass&&atHome?'pass':(atHome?bnavSel:''); nb.querySelectorAll('button').forEach(function(x){ var on=x.getAttribute('data-t')===cur2; x.classList.toggle('on',on); if(on) x.setAttribute('aria-current','page'); else x.removeAttribute('aria-current'); if(x.getAttribute('data-t')==='pass'){ if(on) passSeenSet(); var nd=!on&&passNew(); x.classList.toggle('dot',nd); if(nd) x.setAttribute('aria-label','Passport, new stamps'); else x.removeAttribute('aria-label'); } }); }
   function passNew(){ try{ return totalStamps()>parseInt(localStorage.getItem('stp-pass-seen')||'0',10)||Object.keys(bdGet()).length>parseInt(localStorage.getItem('stp-bseen')||'0',10); }catch(e){ return false; } }
   function passSeenSet(){ try{ localStorage.setItem('stp-pass-seen',String(totalStamps())); localStorage.setItem('stp-bseen',String(Object.keys(bdGet()).length)); }catch(e){} }
   function tripHtml(){
-    var t=tripGet();
-    if(!t.length) return '<div class="bempty"><h3>Plan a trip</h3><p>Tap the star on any town to save it here. You will see how many stamps are left in each place, like a checklist for the road.</p></div>';
+    var t=tripGet(), sv=savedList();
+    var svHtml=sv.length?'<p class="mono savedh">Saved stops</p><ul class="tlist">'+sv.map(function(x){ var st=CITIES[x.k].stops[x.i], dn=ALL[x.k].done[x.i]; return '<li class="trow'+(dn?' done':'')+'"><button class="trowb" data-a="neargo" data-c="'+x.k+'" data-i="'+x.i+'" data-far="1"><span class="tcheck" aria-hidden="true">'+(dn?'&#10003;':'')+'</span><span class="tn"><strong>'+st.name+'</strong><span class="sub">'+CITIES[x.k].name+(dn?' · Stamped':'')+'</span></span><span class="go">Open ›</span></button><button class="tstar on" data-a="savestop" data-c="'+x.k+'" data-i="'+x.i+'" aria-pressed="true" aria-label="Remove '+st.name.replace(/"/g,'&quot;')+' from saved stops">★</button></li>'; }).join('')+'</ul>':'';
+    if(!t.length&&!sv.length) return '<div class="bempty"><h3>Plan a trip</h3><p>Tap the star on any town, or Save on any stop, to keep it here. You will see how many stamps are left in each place, like a checklist for the road.</p></div>';
+    if(!t.length) return '<div class="trip" id="trip">'+svHtml+'</div>';
     var left=0, rows=t.map(function(k){ var c=CITIES[k], d=sum(ALL[k].done), n=c.stops.length, r=n-d; left+=r; var pc=Math.round(d/n*100);
       return '<li class="trow'+(r?'':' done')+'"><button class="trowb" data-a="city" data-c="'+k+'"><span class="tcheck" aria-hidden="true">'+(r?'':'&#10003;')+'</span><span class="tn"><strong>'+c.name+'</strong><span class="sub">'+(TSTATE[k]?TSTATE[k]+' · ':'')+(r?r+' of '+n+' stamps to go':'All stamped')+'</span><span class="pbar" aria-hidden="true"><i style="width:'+pc+'%"></i></span></span><span class="go">Open ›</span></button><button class="tstar on" data-a="trip" data-c="'+k+'" aria-pressed="true" aria-label="Remove '+c.name+' from my trip">★</button></li>'; }).join('');
-    return '<div class="trip" id="trip"><p class="tripsum"><strong>'+t.length+(t.length===1?' town':' towns')+'</strong> · '+left+' stamps to collect</p><ul class="tlist">'+rows+'</ul></div>';
+    return '<div class="trip" id="trip"><p class="tripsum"><strong>'+t.length+(t.length===1?' town':' towns')+'</strong> · '+left+' stamps to collect</p><ul class="tlist">'+rows+'</ul>'+svHtml+'</div>';
   }
   var STATE_ORDER=null;
   function chipsHtml(){
@@ -2102,7 +2110,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   })();
   function viewStop(){
     var st=STOPS[cur.i], d=S.done[cur.i];
-    var h='<div class="stophead"><button class="link" data-a="exit">‹ '+(tab==='cards'?'Time Cards':'Trail')+'</button><span class="sh-r"><button class="link" data-a="home">Home</button><span class="mono">'+st.tag+'</span></span></div>';
+    var h='<div class="stophead"><button class="link" data-a="exit">‹ '+(tab==='cards'?'Time Cards':'Trail')+'</button><span class="sh-r">'+(!d&&!cur.demo?'<button class="link" data-a="savestop" data-c="'+cityId+'" data-i="'+cur.i+'" aria-pressed="'+(isSaved(cityId,cur.i)?'true':'false')+'">'+(isSaved(cityId,cur.i)?'&#9733; Saved':'&#9734; Save')+'</button>':'')+'<button class="link" data-a="home">Home</button><span class="mono">'+st.tag+'</span></span></div>';
     h+='<h1 id="stopTitle" tabindex="-1">'+st.name+'</h1>';
     if(cur.demo) h+='<p class="demo-banner" role="status"><strong>Exploring from home.</strong> Read the story, answer the question and fade the photos. Get it right and you earn a virtual stamp, worth 25 XP. The full stamp (100 XP) is for real visits. Go there to earn it.</p>';
     h+=stepper();
@@ -2288,6 +2296,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     if(a==='sharefile'){ if(fadeFile&&navigator.share) navigator.share({files:[fadeFile.f],text:fadeFile.t}).catch(function(){}); return; }
     if(a==='sharefade'){ fadeShare(b); return; }
     if(a==='spotpick'){ var sp=STOPS[cur.i]&&STOPS[cur.i].spot, box=document.getElementById('spot'); if(!sp||!box) return; var k=+b.getAttribute('data-k'), fb=box.querySelector('.sfb'); if(k===sp.answer){ box.querySelectorAll('.spo').forEach(function(x){ x.disabled=true; x.classList.remove('wrong'); }); b.classList.add('right'); fb.textContent='Right. '+sp.why; } else { b.classList.add('wrong'); b.disabled=true; fb.textContent='Not that one. Slide the photo again and try another.'; } return; }
+    if(a==='savestop'){ var sk=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), key=savedKey(sk,si), sa=savedRaw(), sx=sa.indexOf(key); if(!key) return; if(sx>-1) sa.splice(sx,1); else sa.push(key); savedSet(sa); var sy=window.scrollY; render(false); window.scrollTo(0,sy); toast(sx>-1?'Removed from saved stops.':'Saved. Find it under Towns, My trip.'); return; }
     if(a==='trip'){ var tk=b.getAttribute('data-c'), ta=tripGet(), ti=ta.indexOf(tk); if(ti>-1) ta.splice(ti,1); else ta.push(tk); tripSet(ta); var sv=window.scrollY; render(); window.scrollTo(0,sv); toast(ti>-1?'Removed from your trip.':'Added to your trip.'); return; }
     if(a==='schip'){ var inp=document.getElementById('townSearch'); if(inp){ var sv2=b.getAttribute('data-s'); inp.value=(inp.value.trim().toLowerCase()===sv2.toLowerCase())?'':sv2; inp.dispatchEvent(new Event('input',{bubbles:true})); } return; }
     if(a==='gomissions'){ setBtab('towns'); var mm=document.getElementById('missions'); if(mm&&mm.scrollIntoView) mm.scrollIntoView({behavior:'smooth',block:'start'}); return; }

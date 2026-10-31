@@ -262,3 +262,4 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Slider hint (w04): a 'Drag to travel back' tag sits on the Then/Now photo until the slider is used once (localStorage stp-dragged); test added.
 - Spot the change (p15): added to Boston, New York and Chicago (12 more stops, 40 total), from sourced pack text only.
 - Spot the change (p15): added to San Francisco, Washington DC and Honolulu (12 more stops, 52 total), from sourced pack text only.
+- Save a stop (r05): stop screen has Save/Saved (aria-pressed) for unstamped stops; saved stops (localStorage stp-saved, 'k:stopid') list under Towns > My trip with Open and unstar. Not on Home yet.
