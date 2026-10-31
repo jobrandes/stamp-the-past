@@ -144,7 +144,7 @@ with sync_playwright() as p:
     need(gp.locator('.opt').count()==0,'no auto-check before the person has ever allowed location')
     # verify later on an already stamped stop
     gp=geo_ctx(39.52812,-119.81366,done=1); gp.click('.stop >> nth=0'); need(gp.locator('[data-a=geo]').count()==1,'stamped stop offers Verify this visit')
-    gp.click('.stophead [data-a=exit]'); need('verify when you visit' in gp.inner_text('#main').lower(),'stamped but unverified stops are tagged in the list'); gp.click('.stop >> nth=0')
+    gp.click('.stophead [data-a=exit]'); need('verify on a visit' in gp.inner_text('#main').lower(),'stamped but unverified stops are tagged in the list'); gp.click('.stop >> nth=0')
     gp.click('[data-a=geo]'); gp.wait_for_timeout(700)
     need(gp.locator('[data-a=geo]').count()==0,'verify later removes the button once confirmed')
     gp.click('.stophead [data-a=exit]'); need('visit verified' in gp.inner_text('#main').lower(),'late verification shows on the trail')

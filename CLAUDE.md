@@ -276,3 +276,4 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - x07: Finished-stop "What next" panel (`nextPanel`) now shows "N of M stamps in TOWN", a progress bar and the next badge goal above the Next stop button.
 - Spot the change (p15): added to Philadelphia (`philly`), Seattle, Portland (OR) and Denver (16 more stops, 68 total), from sourced pack text only.
 - Spot the change (p15): added to Atlanta, Nashville, New Orleans (`nola`) and Baltimore (16 more stops, 84 total), from sourced pack text only.
+- Stop-list chips (x08): status and chips now sit in one `.srow` flex row (nowrap pills, 6px gap); "Tap to verify when you visit" became a quieter "Verify on a visit" (`.vchip.soft`) so Puzzle stands out. Test text updated.

@@ -974,3 +974,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .nextstop .nprog{margin:6px 0 4px;font-size:0.9375rem}
 .nextstop .bt-p{margin:0 0 8px}
 .nextstop .btn{margin-top:8px}
+
+.srow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
+.srow .status,.srow .vchip{margin:0;white-space:nowrap}
+.vchip.soft{border-color:var(--line);color:var(--muted);font-weight:500}
