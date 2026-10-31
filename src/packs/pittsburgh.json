@@ -141,6 +141,17 @@
     "b": "1935",
     "la": "Opened",
     "lb": "Electric power"
+   },
+   "spot": {
+    "q": "The Monongahela Incline opened on May 28, 1870. What was it the first of?",
+    "options": [
+     "The first subway in the country",
+     "The first cable car in America",
+     "The first elevator in a skyscraper",
+     "The first incline built for carrying passengers"
+    ],
+    "answer": 3,
+    "why": "It was the first incline built for carrying passengers. German immigrants had crowded into Pittsburgh for factory jobs, and the only space left was on the steep hills."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1976",
     "la": "Opened",
     "lb": "National Historic Landmark"
+   },
+   "spot": {
+    "q": "The Smithfield Street Bridge is the third bridge on this spot. What happened to the wooden bridge built in 1818?",
+    "options": [
+     "A flood washed it away",
+     "It burned in the Great Fire of 1845",
+     "It collapsed under a train",
+     "It was torn down for steel"
+    ],
+    "answer": 1,
+    "why": "A wooden bridge from 1818 burned in the Great Fire of 1845. A wire-rope suspension bridge by John Roebling came next, and the 1883 bridge reused its stone piers."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1888",
     "la": "Cornerstone",
     "lb": "Completed"
+   },
+   "spot": {
+    "q": "What happened to the earlier Greek Revival courthouse on May 7, 1882?",
+    "options": [
+     "It burned",
+     "It flooded",
+     "It was demolished for a road",
+     "It was sold to the railroad"
+    ],
+    "answer": 0,
+    "why": "The earlier courthouse, finished in 1841, burned on May 7, 1882. The county then held a design competition, and H. H. Richardson won it."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1894",
     "la": "Built",
     "lb": "Given to the DAR"
+   },
+   "spot": {
+    "q": "In 1902 Henry Clay Frick offered the Daughters of the American Revolution $25,000 to move the Block House. What happened?",
+    "options": [
+     "They took the money and moved it",
+     "The city moved it by train",
+     "They refused, and the Pennsylvania Supreme Court sided with them",
+     "Frick tore it down"
+    ],
+    "answer": 2,
+    "why": "The Daughters refused, and after a long court fight the Pennsylvania Supreme Court sided with them. The Block House stayed put."
    }
   }
  ],

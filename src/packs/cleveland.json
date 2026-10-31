@@ -141,6 +141,17 @@
     "b": "1930",
     "la": "Tower completed",
     "lb": "Terminal dedicated"
+   },
+   "spot": {
+    "q": "When it was finished the Terminal Tower was the second-tallest building in the world. Until 1964 it stayed the tallest where?",
+    "options": [
+     "In North America outside New York City",
+     "In Ohio only",
+     "In the Midwest only",
+     "In the world"
+    ],
+    "answer": 0,
+    "why": "It stayed the tallest in North America outside New York City until 1964."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1894",
     "la": "First meeting",
     "lb": "Dedicated"
+   },
+   "spot": {
+    "q": "The original plan was a statue in the center of Public Square. Who did that plan lose out to?",
+    "options": [
+     "The city's mayor",
+     "A hotel developer",
+     "The railroad companies, who claimed the intersection for streetcar lines",
+     "The Civil War veterans"
+    ],
+    "answer": 2,
+    "why": "The plan lost out to the railroad companies, who claimed the busy intersection for streetcar lines."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1999",
     "la": "Church dedicated",
     "lb": "New steeple"
+   },
+   "spot": {
+    "q": "A fire in 1857 brought down the church's 250-foot steeple. What was added in 1999?",
+    "options": [
+     "Nothing, the steeple never returned",
+     "A modern glass steeple",
+     "A bell tower from another church",
+     "A copy of the original steeple"
+    ],
+    "answer": 3,
+    "why": "The only big change since 1884 is the steeple. A copy of the original was added in 1999, as part of a $2.4 million renovation."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "2001",
     "la": "Opened",
     "lb": "Hotel opens"
+   },
+   "spot": {
+    "q": "Which famous building in Milan inspired the Cleveland Arcade?",
+    "options": [
+     "The Duomo",
+     "The Galleria Vittorio Emanuele II",
+     "La Scala",
+     "The Sforza Castle"
+    ],
+    "answer": 1,
+    "why": "The Arcade was modeled after the Galleria Vittorio Emanuele II in Milan. It opened on May 30, 1890."
    }
   }
  ],

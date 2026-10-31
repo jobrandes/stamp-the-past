@@ -141,6 +141,17 @@
     "b": "1989",
     "la": "Completed",
     "lb": "Landmark status"
+   },
+   "spot": {
+    "q": "At night colored lights make the Fisher Building's roof tiles look gold. What color are the tiles?",
+    "options": [
+     "Black",
+     "Copper",
+     "Green",
+     "Blue"
+    ],
+    "answer": 2,
+    "why": "The gold-leaf tiles were covered with asphalt during World War II and replaced with green tiles. Since the 1980s, colored lights have made them look gold at night."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "2004",
     "la": "Rebuilding plan",
     "lb": "Park dedicated"
+   },
+   "spot": {
+    "q": "Detroit's coordinate system starts at Campus Martius. How far north of it is Eight Mile Road?",
+    "options": [
+     "One mile",
+     "Four miles",
+     "Twelve miles",
+     "Eight miles"
+    ],
+    "answer": 3,
+    "why": "Seven Mile Road is seven miles north, Eight Mile Road is eight miles north, and so on."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "2014",
     "la": "Painted",
     "lb": "Landmark status"
+   },
+   "spot": {
+    "q": "In 1933 some people demanded that one panel of Diego Rivera's murals be destroyed. What did it show?",
+    "options": [
+     "A factory fire",
+     "A Christ-like child being vaccinated",
+     "A portrait of Henry Ford",
+     "A map of Mexico"
+    ],
+    "answer": 1,
+    "why": "The target was a panel showing a Christ-like child being vaccinated. Edsel Ford and Wilhelm Valentiner refused to destroy it."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "2024",
     "la": "Opened",
     "lb": "Reopened"
+   },
+   "spot": {
+    "q": "Michigan Central Station sat vacant for about 30 years after its last train in 1988. Who reopened it in June 2024?",
+    "options": [
+     "Ford",
+     "The city of Detroit",
+     "Amtrak",
+     "General Motors"
+    ],
+    "answer": 0,
+    "why": "Ford bought it from the Moroun family in 2018 and reopened it in June 2024 as part of a $950 million campus project."
    }
   }
  ],
