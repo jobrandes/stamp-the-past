@@ -213,7 +213,7 @@ details ul{margin:0 0 4px;padding-left:20px;display:flex;flex-direction:column;g
   padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .bar-in{max-width:600px;margin:0 auto;display:flex;gap:10px}
 .bar-in .btn{flex:1 1 0;width:auto;min-height:48px}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:0.9375rem;opacity:0;pointer-events:none;max-width:calc(100% - 32px);text-align:center;z-index:20}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:18px;width:max-content;font-weight:600;font-size:0.9375rem;opacity:0;pointer-events:none;max-width:calc(100% - 32px);text-align:center;z-index:20}
 .toast.show{opacity:1}
 @media (prefers-reduced-motion:no-preference){
   .toast{transition:opacity .2s}
