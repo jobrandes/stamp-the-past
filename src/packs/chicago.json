@@ -141,6 +141,17 @@
         "b": "2006",
         "la": "Partly unveiled",
         "lb": "Dedicated"
+      },
+      "spot": {
+        "q": "Cloud Gate is still being built in the 2004 photo. What did the public nickname it while it was under construction?",
+        "options": [
+          "The Mirror",
+          "The Kettle",
+          "The Drop",
+          "The Bean"
+        ],
+        "answer": 3,
+        "why": "The public nicknamed it The Bean during construction. The official title is Cloud Gate."
       }
     },
     {
@@ -232,6 +243,17 @@
         "b": "1907",
         "la": "Built",
         "lb": "Wright's lobby"
+      },
+      "spot": {
+        "q": "Which part of the Rookery did Frank Lloyd Wright redesign between 1905 and 1907?",
+        "options": [
+          "The roof",
+          "The lobby",
+          "The outside walls",
+          "The basement"
+        ],
+        "answer": 1,
+        "why": "Frank Lloyd Wright redesigned the lobby between 1905 and 1907."
       }
     },
     {
@@ -323,6 +345,17 @@
         "b": "150 ft",
         "la": "Dedicated",
         "lb": "Tallest jet"
+      },
+      "spot": {
+        "q": "The four pairs of sea horses on Buckingham Fountain stand for the four states that touch Lake Michigan. Which of these is one of them?",
+        "options": [
+          "Ohio",
+          "Minnesota",
+          "Wisconsin",
+          "Iowa"
+        ],
+        "answer": 2,
+        "why": "The sea horses stand for Illinois, Wisconsin, Michigan and Indiana."
       }
     },
     {
@@ -414,6 +447,17 @@
         "b": "1895",
         "la": "Palm House",
         "lb": "Fern Room"
+      },
+      "spot": {
+        "q": "One of the conservatory's original halls has a new name today. Which one?",
+        "options": [
+          "The Tropical Room, now the Orchid Room",
+          "The Fern Room, now the Palm House",
+          "The Palm House, now the Display House",
+          "The Display House, now the Fern Room"
+        ],
+        "answer": 0,
+        "why": "The Tropical Room, which opened in 1895, is now called the Orchid Room."
       }
     }
   ],

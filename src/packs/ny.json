@@ -94,6 +94,17 @@
     "b": "1915",
     "la": "Opened",
     "lb": "Renamed"
+   },
+   "spot": {
+    "q": "The bridge in this print opened in 1883 under a different name than it has today. What was it first called?",
+    "options": [
+     "The Roebling Bridge",
+     "The New York and Brooklyn Bridge",
+     "The East River Crossing",
+     "The Barnum Bridge"
+    ],
+    "answer": 1,
+    "why": "It was first called the New York and Brooklyn Bridge and got its current name in 1915."
    }
   },
   {
@@ -185,6 +196,17 @@
     "b": "2007",
     "la": "Opened",
     "lb": "Today"
+   },
+   "spot": {
+    "q": "The concourse still looks grand in the modern photo. What did the owner want to do to it in the 1970s?",
+    "options": [
+     "Cover it with a glass roof",
+     "Sell the ceiling to a museum",
+     "Close the station for good",
+     "Tear it down and build a tower"
+    ],
+    "answer": 3,
+    "why": "The owner wanted to tear down the main concourse and build a tower. Jacqueline Kennedy Onassis helped lead the fight to save it."
    }
   },
   {
@@ -276,6 +298,17 @@
     "b": "1966",
     "la": "Opened",
     "lb": "City landmark"
+   },
+   "spot": {
+    "q": "People gave the Flatiron Building a nickname soon after it opened. Why did they call it Burnham's Folly?",
+    "options": [
+     "They doubted a building so thin could stand",
+     "The owner went bankrupt",
+     "It was finished in a rush",
+     "It leaned over the street"
+    ],
+    "answer": 0,
+    "why": "Early on people doubted a building so thin could stand, so they called it Burnham's Folly."
    }
   },
   {
@@ -367,6 +400,17 @@
     "b": "1906",
     "la": "Dedicated",
     "lb": "Fully green"
+   },
+   "spot": {
+    "q": "In the c. 1900 print the copper statue is already changing color. What color was it when it was new?",
+    "options": [
+     "Bright green",
+     "Pale blue",
+     "Shiny reddish-brown",
+     "Dull grey"
+    ],
+    "answer": 2,
+    "why": "The statue was shiny reddish-brown copper at first. The green came from oxidation and covered it by 1906."
    }
   }
  ],

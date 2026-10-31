@@ -93,6 +93,17 @@
     "b": "1776",
     "la": "Built",
     "lb": "Declaration read"
+   },
+   "spot": {
+    "q": "The first lion and unicorn on the roofline are not the ones you see today. What happened to the originals?",
+    "options": [
+     "Shipped back to London",
+     "Melted down for cannon",
+     "Torn down and burned in 1776",
+     "Stored in the basement"
+    ],
+    "answer": 2,
+    "why": "They were torn down and burned in 1776. Replicas went back up in the 1800s and 1900s."
    }
   },
   {
@@ -188,6 +199,17 @@
     "b": "1806",
     "la": "Opened",
     "lb": "Expanded"
+   },
+   "spot": {
+    "q": "Faneuil Hall in the c. 1900 postcard is wider than the building that opened in 1742. What changed in 1806?",
+    "options": [
+     "It was doubled in width and a third floor was added",
+     "It was moved a block east",
+     "Its gilded grasshopper was taken down",
+     "It was rebuilt in brick"
+    ],
+    "answer": 0,
+    "why": "Charles Bulfinch doubled the hall's width and added a third floor in 1806."
    }
   },
   {
@@ -279,6 +301,17 @@
     "b": "1908",
     "la": "Built, about",
     "lb": "Opened as a museum"
+   },
+   "spot": {
+    "q": "The Paul Revere House looks very old in the 1912 photo, but much of its outside is not original. Why?",
+    "options": [
+     "It was moved from another street",
+     "Much of the outside was replaced in the 1907 to 1908 restoration",
+     "A hurricane damaged it in 1954",
+     "It was rebuilt after a fire in 1912"
+    ],
+    "answer": 1,
+    "why": "In 1907 a memorial association bought and restored the house, and much of the outside was replaced. It opened as a museum in 1908."
    }
   },
   {
@@ -370,6 +403,17 @@
     "b": "1775",
     "la": "First service",
     "lb": "The lanterns"
+   },
+   "spot": {
+    "q": "The steeple in the c. 1900 print is not the one standing today. What happened to it?",
+    "options": [
+     "Lightning split it in 1900",
+     "It was taken down for repairs in 1923",
+     "The British shelled it in 1775",
+     "Hurricane Carol knocked it down in 1954"
+    ],
+    "answer": 3,
+    "why": "Hurricane Carol knocked down the replacement steeple in 1954, and a new one went up in 1955."
    }
   }
  ],
