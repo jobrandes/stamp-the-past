@@ -847,7 +847,7 @@ body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area
 .bt-i{display:flex;flex-direction:column;gap:3px;min-width:0}
 .bt-i strong{font:800 1.125rem/1.1 var(--font-display);text-transform:uppercase}
 .bt-d{color:var(--muted);font-size:0.8125rem;line-height:1.35;overflow-wrap:anywhere}
-.bt-s{color:var(--muted);font-size:0.6875rem}
+.bt-s{color:var(--muted);font-size:0.8125rem;line-height:1.3}
 .bt.on .bt-s{color:var(--good)}
 .bt-p{display:block;height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:2px}
 .bt-p i{display:block;height:100%;background:var(--accent);border-radius:999px}
@@ -971,7 +971,7 @@ body.inboss .hero h1,body.inboss .hero h1.long,body.inboss .hero h1.xl{font-size
 body.inboss .hero > .mono,body.inboss .hero .xp,body.inboss .hero .bulbs,body.inboss .hero .hero-credit,body.inboss .hero .rank-row{display:none}
 body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 
-.stickgo{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.stickgo.pin{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 8px 22px rgba(0,0,0,.28)}
 .bsnack{pointer-events:none}.bsnack button,.bsnack a{pointer-events:auto}
 .stat .sgoal{margin:2px 0 0;font-size:0.8125rem;color:var(--muted)}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}
@@ -1262,11 +1262,12 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     return {k:tk,i:ni};
   }
   var nearAll=false;
+  function nearArr(){ var arr=[], nx=nextRef(); if(!geoPos) return arr; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ if(!st.geo||ALL[k].done[i]||(nx&&nx.k===k&&nx.i===i)) return; var d=distM(geoPos.lat,geoPos.lon,st.geo[0],st.geo[1]); if(d<=150000) arr.push({c:k,i:i,d:d}); }); });
+    arr.sort(function(x,y){ return x.d-y.d; }); return arr; }
   function nearListHtml(){
     if(atHome===false||geoDenied||!navigator.geolocation) return '';
     if(!geoPos){ return geoGranted()?'':'<section class="card nearlist"><p class="mono">Stops near me</p><button class="btn ghost" data-a="nearme">Show the closest stops</button><p class="hint">Optional. Your location stays on this phone and is never sent anywhere.</p></section>'; }
-    var arr=[], nx=nextRef(); ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ if(!st.geo||ALL[k].done[i]||(nx&&nx.k===k&&nx.i===i)) return; var d=distM(geoPos.lat,geoPos.lon,st.geo[0],st.geo[1]); if(d<=150000) arr.push({c:k,i:i,d:d}); }); });
-    arr.sort(function(x,y){ return x.d-y.d; }); var more=arr.length>3&&!nearAll; arr=arr.slice(0,nearAll?8:3);
+    var arr=nearArr(); var more=arr.length>3&&!nearAll; arr=arr.slice(0,nearAll?8:3);
     if(!arr.length) return '<section class="card nearlist"><p class="mono">Stops near me</p><p>No unstamped stop within 90 miles of you. Pick a town from Towns to plan a trip.</p></section>';
     return '<section class="nearlist" aria-label="Stops near you"><p class="mono">Closest to you</p>'+arr.map(function(x){ var st=CITIES[x.c].stops[x.i]; return '<button class="rcard" data-a="neargo" data-c="'+x.c+'" data-i="'+x.i+'" data-far="1"><span><strong>'+st.name+'</strong><span class="rsub">'+CITIES[x.c].name+' · '+nice(x.d)+'</span></span><span class="go">Open ›</span></button>'; }).join('')+(more?'<button class="btn ghost" data-a="nearall">See more nearby stops</button>':'')+'</section>';
   }
@@ -1703,7 +1704,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     var sw=streakWeeks(), ms=monthStamps(), bits=[];
     if(sw>0) bits.push('<strong>'+sw+(sw===1?' week':' weeks')+' in a row</strong> with a new stamp');
     if(ms>0) bits.push('<strong>'+ms+'</strong> '+(ms===1?'stamp':'stamps')+' this month');
-    var goal=best?'<button class="rcard" data-a="city" data-c="'+best.k+'"><span><strong>Next goal: finish '+CITIES[best.k].name+'</strong><span class="rsub">'+best.left+' more '+(best.left===1?'stamp':'stamps')+' to complete it</span></span><span class="go">Go ›</span></button>':'<p class="rsub">Pick a new town below to start your next goal.</p>';
+    var goal=best?'<button class="rcard" data-a="city" data-c="'+best.k+'"><span><strong>Quickest town to finish: '+CITIES[best.k].name+'</strong><span class="rsub">'+best.left+' more '+(best.left===1?'stamp':'stamps')+' to complete it</span></span><span class="go">Go ›</span></button>':'<p class="rsub">Pick a new town below to start your next goal.</p>';
     return '<section class="goal"><p class="mono">Your progress</p>'+(bits.length?'<p class="gbits">'+bits.join(' · ')+'</p>':'')+goal+tw+'</section>';
   }
   // one calm featured trail per week (rotates, same for everyone, no timers)
@@ -1765,7 +1766,8 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   /* phone UX audit u08: one real photo and sourced fact from the current town, changing daily, for returning players */
   function featuredHtml(){
     try{ var nx=nextRef(), fk=nx?nx.k:cityId, c=CITIES[fk]; if(!c||!c.stops||!c.stops.length) return '';
-      var open=[]; c.stops.forEach(function(st,i){ if(!ALL[fk].done[i]&&!(nx&&nx.i===i)) open.push(i); });
+      var shown={}; if(!(atHome===false||geoDenied||!navigator.geolocation)) nearArr().slice(0,nearAll?8:3).forEach(function(x){ shown[x.c+':'+x.i]=1; });
+      var open=[]; c.stops.forEach(function(st,i){ if(!ALL[fk].done[i]&&!(nx&&nx.i===i)&&!shown[fk+':'+i]) open.push(i); });
       var pool=open.length?open:c.stops.map(function(x,i){ return i; }).filter(function(i){ return !(nx&&nx.k===fk&&nx.i===i); }); if(!pool.length) return '';
       var day=Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5), i=pool[day%pool.length], st=c.stops[i];
       var ph=st.now&&st.now.ph, src=ph&&PHOTOS[ph.k]; if(!src) return '';
@@ -2117,8 +2119,8 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 
     if(cur.step===0){
       h+='<div class="banner">'+visual(st,'now',st.name+' today')+'<span class="tagline">'+(hasPh(st,'now')?'Photo':'Illustration')+'</span></div><p class="credit">'+credit(st,'now')+'</p>';
-      h+='<section class="card"><p class="mono">Find it</p><p>'+st.clue+'</p>'+(!d&&!cur.demo?'<p class="hint stopmeta">Go there for the real stamp. About '+stopMins(st)+' minutes once you arrive. Or explore from home.</p>':'')+vnote(st)
-        +'<button class="btn stickgo" data-a="step" data-n="1">I am here. Show me the question</button>'+(!d&&!cur.demo?'<p class="hint">Tapping this is on your honor. Verifying with your location is optional and earns a gold stamp.</p>':'')+(st.geo&&!d&&!cur.demo&&!geoDenied?'<button class="btn ghost" data-a="geo">'+(geoGranted()?'Re-check my location':'Verify with my location (optional)')+'</button><p class="hint">Your location is checked on this phone and never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+(st.geo&&st.geo.length>1?'https://www.google.com/maps/dir/?api=1&amp;destination='+st.geo[0]+','+st.geo[1]:'https://www.google.com/maps/search/?api=1&amp;query='+encodeURIComponent(st.map))+'">Get directions in Maps</a>'+(d?'':'<button class="btn ghost" data-a="demo">'+(virtHas(cityId,cur.i)?'Virtual stamp saved. Explore again':'Not there? Explore from home')+'</button>')+'</section>';
+      h+='<section class="card"><p class="mono">Find it</p><p class="clue">'+st.clue+'</p>'
+        +'<button class="btn stickgo" data-a="step" data-n="1">I am here. Show me the question</button>'+(!d&&!cur.demo?'<p class="hint">Tapping this is on your honor. Verifying with your location is optional and earns a gold stamp.</p>':'')+(!d&&!cur.demo?'<p class="hint stopmeta">Go there for the real stamp. About '+stopMins(st)+' minutes once you arrive. Or explore from home.</p>':'')+vnote(st)+(st.geo&&!d&&!cur.demo&&!geoDenied?'<button class="btn ghost" data-a="geo">'+(geoGranted()?'Re-check my location':'Verify with my location (optional)')+'</button><p class="hint">Your location is checked on this phone and never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+(st.geo&&st.geo.length>1?'https://www.google.com/maps/dir/?api=1&amp;destination='+st.geo[0]+','+st.geo[1]:'https://www.google.com/maps/search/?api=1&amp;query='+encodeURIComponent(st.map))+'">Get directions in Maps</a>'+(d?'':'<button class="btn ghost" data-a="demo">'+(virtHas(cityId,cur.i)?'Virtual stamp saved. Explore again':'Not there? Explore from home')+'</button>')+'</section>';
     }
     if(cur.step===1){
       h+='<section class="card"><p class="mono">Check in</p>';
@@ -2193,6 +2195,9 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     return h;
   }
 
+  function pinGo(){ var b=document.querySelector('.stickgo'); if(!b) return; var c=b.previousElementSibling; if(!c) return;
+    var line=window.innerHeight-12-b.offsetHeight-8; b.classList.toggle('pin',c.getBoundingClientRect().bottom<=line); }
+  window.addEventListener('scroll',pinGo,{passive:true}); window.addEventListener('resize',pinGo);
   function render(focusTitle){
     updateHeader();
     document.body.classList.toggle('ishome',atHome); document.body.classList.toggle('ispass',atHome&&onPass); document.body.classList.remove('navhide'); updateBnav();
@@ -2224,6 +2229,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
         var go=function(ts){ if(!t0) t0=ts; var k=(ts-t0)/1100; if(k>=1){ rg.value=0; if(tp) tp.style.opacity=0; return; } var v=Math.sin(k*Math.PI)*45; rg.value=v; if(tp) tp.style.opacity=v/100; requestAnimationFrame(go); };
         setTimeout(function(){ requestAnimationFrame(go); },500); }
     }
+    pinGo();
     if(focusTitle){
       var t=document.getElementById('stopTitle');
       if(t) t.focus({preventScroll:true});

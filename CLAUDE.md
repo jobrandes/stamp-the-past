@@ -263,3 +263,9 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Spot the change (p15): added to Boston, New York and Chicago (12 more stops, 40 total), from sourced pack text only.
 - Spot the change (p15): added to San Francisco, Washington DC and Honolulu (12 more stops, 52 total), from sourced pack text only.
 - Save a stop (r05): stop screen has Save/Saved (aria-pressed) for unstamped stops; saved stops (localStorage stp-saved, 'k:stopid') list under Towns > My trip with Open and unstar. Not on Home yet.
+
+## Phone review #3 fixes (x01-x04)
+- x01: the "I am here" button now sits right after the clue and only pins (`.stickgo.pin`, toggled by `pinGo()` on scroll/resize/render) once the clue is above the pin line, so it never covers unread clue text. Test checks 390x844, 375x667, 360x740.
+- x02: Story of the day skips stops shown in "Closest to you" (shared `nearArr()`).
+- x03: Towns card now reads "Quickest town to finish: X" so it does not clash with Home's Next stop.
+- x04: Passport badge progress labels (`.bt-s`) bumped to 13px.

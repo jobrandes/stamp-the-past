@@ -841,7 +841,7 @@ body::before{content:"";position:fixed;left:0;right:0;top:0;height:env(safe-area
 .bt-i{display:flex;flex-direction:column;gap:3px;min-width:0}
 .bt-i strong{font:800 1.125rem/1.1 var(--font-display);text-transform:uppercase}
 .bt-d{color:var(--muted);font-size:0.8125rem;line-height:1.35;overflow-wrap:anywhere}
-.bt-s{color:var(--muted);font-size:0.6875rem}
+.bt-s{color:var(--muted);font-size:0.8125rem;line-height:1.3}
 .bt.on .bt-s{color:var(--good)}
 .bt-p{display:block;height:8px;border-radius:999px;background:var(--surface-2);overflow:hidden;margin-top:2px}
 .bt-p i{display:block;height:100%;background:var(--accent);border-radius:999px}
@@ -965,7 +965,7 @@ body.inboss .hero h1,body.inboss .hero h1.long,body.inboss .hero h1.xl{font-size
 body.inboss .hero > .mono,body.inboss .hero .xp,body.inboss .hero .bulbs,body.inboss .hero .hero-credit,body.inboss .hero .rank-row{display:none}
 body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 
-.stickgo{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.stickgo.pin{position:sticky;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:6;box-shadow:0 8px 22px rgba(0,0,0,.28)}
 .bsnack{pointer-events:none}.bsnack button,.bsnack a{pointer-events:auto}
 .stat .sgoal{margin:2px 0 0;font-size:0.8125rem;color:var(--muted)}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}

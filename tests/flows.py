@@ -256,11 +256,15 @@ with sync_playwright() as p:
         pg.click('#bnav [data-t=%s]'%t); pg.wait_for_timeout(150)
         gap=pg.evaluate("(()=>{const n=document.querySelector('#bnav').getBoundingClientRect();return parseFloat(getComputedStyle(document.body).paddingBottom)-(innerHeight-n.top)})()")
         need(gap>=16,'bottom bar leaves room under the last card on '+t)
-    # check-in button stays reachable on the first screen of a stop (pinned to the bottom while the clue is read)
-    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[0,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
-    pg.click('.stop >> nth=0'); pg.wait_for_timeout(300)
-    bt=pg.evaluate("(()=>{const r=[...document.querySelectorAll('button')].find(b=>/I am here/i.test(b.textContent)).getBoundingClientRect();return [r.top,r.bottom,innerHeight]})()")
-    need(bt[0]>0 and bt[1]<=bt[2],'I am here button is on screen without scrolling')
+    # check-in button never covers the clue; once the clue is read it pins to the bottom
+    for vw,vh in [(390,844),(375,667),(360,740)]:
+        pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[0,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+        pg.set_viewport_size({'width':vw,'height':vh}); pg.click('.stop >> nth=0'); pg.wait_for_timeout(300)
+        ov=pg.evaluate("(()=>{const b=document.querySelector('.stickgo').getBoundingClientRect(),c=document.querySelector('.stickgo').previousElementSibling.getBoundingClientRect();return Math.min(b.bottom,c.bottom)-Math.max(b.top,c.top)})()")
+        need(ov<=0,'check-in button does not cover the clue at %dx%d'%(vw,vh))
+        pg.evaluate("(()=>{const c=document.querySelector('.stickgo').previousElementSibling.getBoundingClientRect();scrollBy(0,c.bottom-innerHeight/2)})()"); pg.wait_for_timeout(200)
+        bt=pg.evaluate("(()=>{const r=document.querySelector('.stickgo').getBoundingClientRect();return [r.top,r.bottom,innerHeight]})()")
+        need(bt[0]>=0 and bt[1]<=bt[2],'check-in button on screen after scrolling at %dx%d'%(vw,vh))
     # Home shows one near-term badge goal; Passport names the town you are working on
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,1],'claims':[0]*8},'sparks':{'done':[1,0,0,0],'claims':[0]*8}}}})
     pg.click('#bnav [data-t=home]'); pg.wait_for_timeout(200)
