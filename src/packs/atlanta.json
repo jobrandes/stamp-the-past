@@ -141,6 +141,17 @@
     "b": "1999",
     "la": "Founded",
     "lb": "Horizon Sanctuary"
+   },
+   "spot": {
+    "q": "Whose funeral was held at Ebenezer Baptist Church on April 9, 1968?",
+    "options": [
+     "The founder, Pastor John A. Parker",
+     "A U.S. president",
+     "Martin Luther King Jr.",
+     "The church's first organist"
+    ],
+    "answer": 2,
+    "why": "Martin Luther King Jr.'s funeral was held at Ebenezer on April 9, 1968. He had served as co-pastor with his father from 1960 until his assassination."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1958",
     "la": "Completed",
     "lb": "Dome gilded"
+   },
+   "spot": {
+    "q": "The dome on the Capitol is gilded. Where did its gold leaf come from?",
+    "options": [
+     "Native gold from near Dahlonega in Lumpkin County",
+     "Spain",
+     "Melted-down coins",
+     "California"
+    ],
+    "answer": 0,
+    "why": "The dome was gilded in a 1958 renovation with native gold leaf from near Dahlonega in Lumpkin County. The original dome was terra cotta covered with tin."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1976",
     "la": "Built",
     "lb": "National Register"
+   },
+   "spot": {
+    "q": "The Flatiron Building went up five years before New York's. What is it described as?",
+    "options": [
+     "The tallest building in Georgia",
+     "The first hotel in Atlanta",
+     "A former state capitol",
+     "The city's oldest standing skyscraper"
+    ],
+    "answer": 3,
+    "why": "It was built in 1897, five years before New York's Flatiron Building, and is described as Atlanta's oldest standing skyscraper."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1983",
     "la": "Exposition",
     "lb": "Conservancy formed"
+   },
+   "spot": {
+    "q": "Before it was a city park, what event took place on this land in 1895?",
+    "options": [
+     "The Olympic Games",
+     "The Cotton States and International Exposition",
+     "The Battle of Atlanta",
+     "A railroad fair"
+    ],
+    "answer": 1,
+    "why": "Piedmont Park sits on the site of the 1895 Cotton States and International Exposition. The city bought the land in 1904."
    }
   }
  ],

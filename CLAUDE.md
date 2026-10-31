@@ -275,3 +275,4 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - x06: Saved stops: Home shows "Your saved stops: N" card (`savedCardHtml`, action `gotrip` opens Towns > My trip); My trip tab count includes saved stops; saved list shows minutes per stop, total time on site and is sorted closest-first when location is on; toast points to Home > My trip.
 - x07: Finished-stop "What next" panel (`nextPanel`) now shows "N of M stamps in TOWN", a progress bar and the next badge goal above the Next stop button.
 - Spot the change (p15): added to Philadelphia (`philly`), Seattle, Portland (OR) and Denver (16 more stops, 68 total), from sourced pack text only.
+- Spot the change (p15): added to Atlanta, Nashville, New Orleans (`nola`) and Baltimore (16 more stops, 84 total), from sourced pack text only.

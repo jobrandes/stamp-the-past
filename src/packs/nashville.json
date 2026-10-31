@@ -141,6 +141,17 @@
         "b": "1859",
         "la": "Construction begins",
         "lb": "Construction ends"
+      },
+      "spot": {
+        "q": "Tennessee's Capitol is one of eleven state capitols missing something. What?",
+        "options": [
+          "A basement",
+          "A dome",
+          "A flagpole",
+          "A clock"
+        ],
+        "answer": 1,
+        "why": "It is one of eleven state capitols with no dome. Its cupola is modeled on the Choragic Monument of Lysicrates."
       }
     },
     {
@@ -232,6 +243,17 @@
         "b": "1986",
         "la": "Opens as a station",
         "lb": "Reopens as a hotel"
+      },
+      "spot": {
+        "q": "The station in the old photo went quiet when the last passenger trains left in the late 1970s. What did it become in 1986?",
+        "options": [
+          "A museum",
+          "A bus depot",
+          "A courthouse",
+          "The Union Station Hotel"
+        ],
+        "answer": 3,
+        "why": "After several years of abandonment, the station reopened in 1986 as the Union Station Hotel. In 2012 it became a Marriott Autograph Collection hotel."
       }
     },
     {
@@ -323,6 +345,17 @@
         "b": "1937",
         "la": "Square set aside",
         "lb": "Courthouse built"
+      },
+      "spot": {
+        "q": "The 1936-37 courthouse on Public Square was the first building in Davidson County with what?",
+        "options": [
+          "Central air conditioning",
+          "Electric lights",
+          "An elevator",
+          "A clock tower"
+        ],
+        "answer": 0,
+        "why": "It was the first building in Davidson County with central air conditioning. It is an eight-story Art Deco building covered in Indiana limestone."
       }
     },
     {
@@ -414,6 +447,17 @@
         "b": "1931",
         "la": "Built for the Exposition",
         "lb": "Rebuilt interior finished"
+      },
+      "spot": {
+        "q": "The Parthenon was built in 1897 and was not meant to last. Why is it still standing?",
+        "options": [
+          "It was meant as a permanent museum from the start",
+          "The city won it in a lawsuit",
+          "It was so popular that it was left standing, then rebuilt in concrete",
+          "A fire saved it"
+        ],
+        "answer": 2,
+        "why": "It was built of plaster, wood and brick for the Tennessee Centennial Exposition, but it was so popular it was left standing. After weather damaged it, it was rebuilt in concrete."
       }
     }
   ],

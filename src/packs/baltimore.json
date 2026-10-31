@@ -141,6 +141,17 @@
     "b": "1851",
     "la": "First passenger trains",
     "lb": "Station built"
+   },
+   "spot": {
+    "q": "On May 24, 1844 Samuel Morse's telegraph sent its first message to this site. What did it say?",
+    "options": [
+     "What hath God wrought?",
+     "Come here, Watson",
+     "The British are coming",
+     "Hello, Baltimore"
+    ],
+    "answer": 0,
+    "why": "The first message, 'What hath God wrought?', went from Washington, D.C. to this site on May 24, 1844."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1829",
     "la": "Cornerstone",
     "lb": "Masonry finished"
+   },
+   "spot": {
+    "q": "Robert Mills's first design put a statue of Washington on top, riding in what?",
+    "options": [
+     "A ship",
+     "A balloon",
+     "A two-horse carriage",
+     "A four-horse chariot"
+    ],
+    "answer": 3,
+    "why": "Mills's first design had a statue of Washington in a four-horse chariot on top, but the plan changed because of concerns about cost and height."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1814",
     "la": "Designed",
     "lb": "Bombardment"
+   },
+   "spot": {
+    "q": "In September 1814 British warships bombarded Fort McHenry. For how long?",
+    "options": [
+     "One hour",
+     "Three days",
+     "25 hours",
+     "One week"
+    ],
+    "answer": 2,
+    "why": "The bombardment on September 13 and 14, 1814 lasted 25 hours. A 30 by 42 foot flag was raised on the morning of September 14."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1878",
     "la": "Gift",
     "lb": "Library opens"
+   },
+   "spot": {
+    "q": "Who gave $300,000 to start the Peabody Institute in 1857?",
+    "options": [
+     "Johns Hopkins",
+     "George Peabody, a Baltimore merchant",
+     "Edmund George Lind",
+     "Samuel Morse"
+    ],
+    "answer": 1,
+    "why": "George Peabody, a Baltimore merchant, gave $300,000 in 1857. The Civil War delayed the plans, and the institute was established in 1866."
    }
   }
  ],

@@ -141,6 +141,17 @@
         "b": "1851",
         "la": "Troops reviewed",
         "lb": "Renamed"
+      },
+      "spot": {
+        "q": "Until 1851 this square had a different name. What was it?",
+        "options": [
+          "Place Royale",
+          "Congo Square",
+          "Plaza Mayor",
+          "Place d'Armes"
+        ],
+        "answer": 3,
+        "why": "The square kept the Place d'Armes name until 1851, when the Andrew Jackson statue was erected and it became Jackson Square."
       }
     },
     {
@@ -232,6 +243,17 @@
         "b": "1850",
         "la": "Fire destroys church",
         "lb": "Present building"
+      },
+      "spot": {
+        "q": "Benjamin Henry Latrobe designed a central tower for the cathedral in 1819. What happened to it?",
+        "options": [
+          "Lightning struck it in 1850",
+          "It was never built",
+          "It collapsed in 1850 during rebuilding",
+          "It still stands"
+        ],
+        "answer": 2,
+        "why": "The central tower designed by Latrobe in 1819 collapsed in 1850 during rebuilding. The present building dates mostly to 1850."
       }
     },
     {
@@ -323,6 +345,17 @@
         "b": "1994",
         "la": "Completed",
         "lb": "Reopened after fire"
+      },
+      "spot": {
+        "q": "A fire on May 11, 1988 damaged the Cabildo. What did it destroy?",
+        "options": [
+          "The whole building",
+          "The cupola and the entire third floor",
+          "The courtroom",
+          "Only the roof tiles"
+        ],
+        "answer": 1,
+        "why": "The fire destroyed the cupola and the entire third floor. The building reopened in 1994 after restoration."
       }
     },
     {
@@ -414,6 +447,17 @@
         "b": "1930s",
         "la": "Dedicated",
         "lb": "WPA renovation"
+      },
+      "spot": {
+        "q": "How many blocks does the French Market span?",
+        "options": [
+          "Six",
+          "Two",
+          "Twelve",
+          "One"
+        ],
+        "answer": 0,
+        "why": "The market spans six blocks, from Cafe du Monde to the flea market stalls across from the New Orleans Mint."
       }
     }
   ],
