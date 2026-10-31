@@ -141,6 +141,17 @@
     "b": "1914",
     "la": "First station",
     "lb": "Current hall"
+   },
+   "spot": {
+    "q": "The 1908 photo shows a big arch in front of the station. What did its two sides say?",
+    "options": [
+     "Gold and Silver",
+     "Hello and Goodbye",
+     "Welcome and Mizpah",
+     "Denver and Home"
+    ],
+    "answer": 2,
+    "why": "One side said 'Welcome' and the other said 'Mizpah', a farewell word. The arch was torn down in 1931 because it was considered a traffic hazard."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1959",
     "la": "Opened",
     "lb": "Broncos meeting"
+   },
+   "spot": {
+    "q": "When it was finished in 1892, what was the Brown Palace?",
+    "options": [
+     "The tallest building in Denver",
+     "The widest building in Colorado",
+     "A railroad station",
+     "The first building with electric lights"
+    ],
+    "answer": 0,
+    "why": "When it was finished, it was the tallest building in Denver. Frank Edbrooke designed it in a triangle shape."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1906",
     "la": "Private mint",
     "lb": "Coins from Colfax"
+   },
+   "spot": {
+    "q": "The mint building on Colfax Avenue is based on what?",
+    "options": [
+     "The Doge's Palace in Venice",
+     "Versailles in France",
+     "A castle in Scotland",
+     "The Palazzo Medici-Riccardi in Florence, Italy"
+    ],
+    "answer": 3,
+    "why": "The building is based on the Palazzo Medici-Riccardi in Florence, Italy. The first coins were struck there on February 1, 1906."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1908",
     "la": "Cemetery opened",
     "lb": "Pavilion built"
+   },
+   "spot": {
+    "q": "The 1911 photo shows the marble pavilion in a park. What was this land before it was a park?",
+    "options": [
+     "A railyard",
+     "A cemetery",
+     "A gold mine",
+     "A fairground"
+    ],
+    "answer": 1,
+    "why": "The land that is now Cheesman Park was once a cemetery, opened in 1858. Congress let the city turn it into a park in 1890."
    }
   }
  ],

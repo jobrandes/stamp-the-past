@@ -141,6 +141,17 @@
     "b": "1962",
     "la": "Construction began",
     "lb": "Opened"
+   },
+   "spot": {
+    "q": "The 1961 photo shows the tower going up. Whose idea was a flying saucer holding the restaurant and observation deck?",
+    "options": [
+     "Edward E. Carlson's",
+     "John Graham's",
+     "Victor Steinbrueck's",
+     "Frank Goodwin's"
+    ],
+    "answer": 1,
+    "why": "John Graham's concept was the flying saucer. Edward E. Carlson sketched a tethered balloon on a napkin, and Victor Steinbrueck added the hourglass profile and tripod design."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1971",
     "la": "Opened",
     "lb": "Preservation vote"
+   },
+   "spot": {
+    "q": "The early photo shows vendors on Pike Place. What did voters do for the Market in 1971?",
+    "options": [
+     "Moved it to the waterfront",
+     "Sold it to a developer",
+     "Turned it into a private company",
+     "Created a historic district and kept the market in public hands"
+    ],
+    "answer": 3,
+    "why": "On November 2, 1971, voters passed a preservation initiative by a 2-to-1 margin. It created a historic district and kept the market in public hands."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1931",
     "la": "Opened",
     "lb": "Lost tallest-west title"
+   },
+   "spot": {
+    "q": "In 1914 Smith Tower was a record-setter. Which record is true?",
+    "options": [
+     "It was the tallest building west of the Mississippi River until 1931",
+     "It was the tallest building in North America until 1931",
+     "It was the tallest wooden building in the world",
+     "It was the tallest building in the world until 1931"
+    ],
+    "answer": 0,
+    "why": "It was the tallest building west of the Mississippi River until the Kansas City Power & Light Building was finished in 1931."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1970",
     "la": "Founded",
     "lb": "Historic district"
+   },
+   "spot": {
+    "q": "The 1901 photo shows brick buildings in Pioneer Square. What destroyed the old wooden district first?",
+    "options": [
+     "A flood in 1890",
+     "A sawmill explosion in 1852",
+     "The Great Seattle Fire of June 6, 1889",
+     "An earthquake in 1901"
+    ],
+    "answer": 2,
+    "why": "The Great Seattle Fire of June 6, 1889 destroyed Pioneer Square. By the end of 1890, dozens of brick and stone buildings had replaced the wood ones."
    }
   }
  ],

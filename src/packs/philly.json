@@ -141,6 +141,17 @@
         "b": "1787",
         "la": "Declaration adopted",
         "lb": "Constitution drafted"
+      },
+      "spot": {
+        "q": "The hall's tall steeple was added in 1828. What happened to the original wooden steeple?",
+        "options": [
+          "Lightning struck it",
+          "The wood rotted and it was removed in 1781",
+          "British soldiers pulled it down",
+          "A fire burned it"
+        ],
+        "answer": 1,
+        "why": "The original wooden steeple rotted and was removed in 1781. William Strickland added the new, more elaborate steeple in 1828."
       }
     },
     {
@@ -232,6 +243,17 @@
         "b": "2003",
         "la": "Cast in London",
         "lb": "Moved to its current home"
+      },
+      "spot": {
+        "q": "A crowd gathered around the bell in 1951. Since then it moved to a new home. When did it move to the Liberty Bell Center?",
+        "options": [
+          "In 1976, for the Bicentennial",
+          "In 1828, with the new steeple",
+          "In October 2003",
+          "It has never moved"
+        ],
+        "answer": 2,
+        "why": "The bell moved to the Liberty Bell Center in October 2003."
       }
     },
     {
@@ -323,6 +345,17 @@
         "b": "1941",
         "la": "Front built (about)",
         "lb": "Given to the city"
+      },
+      "spot": {
+        "q": "The 1903 sign called this the 'Birthplace of Old Glory.' What does the best archival evidence suggest?",
+        "options": [
+          "Betsy Ross lived in the house next door, which was later torn down",
+          "She was born in this house in 1740",
+          "She never set foot in Philadelphia",
+          "She lived here until 1903"
+        ],
+        "answer": 0,
+        "why": "The best archival evidence suggests she lived in the house next door, which was later torn down. The flag story traces to her relatives and the 1876 Centennial, and historians call it controversial."
       }
     },
     {
@@ -414,6 +447,17 @@
         "b": "1970",
         "la": "Congress met",
         "lb": "Landmark status"
+      },
+      "spot": {
+        "q": "Who met inside Carpenters' Hall in the fall of 1774?",
+        "options": [
+          "The Constitutional Convention",
+          "The Pennsylvania Assembly",
+          "The generals of the Continental Army",
+          "The First Continental Congress"
+        ],
+        "answer": 3,
+        "why": "The First Continental Congress met there from September 5 to October 26, 1774."
       }
     }
   ],

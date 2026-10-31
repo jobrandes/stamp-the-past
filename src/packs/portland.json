@@ -141,6 +141,17 @@
     "b": "1903",
     "la": "Construction begins",
     "lb": "Final stage built"
+   },
+   "spot": {
+    "q": "In March 1933 the city engineer proposed tearing the courthouse down. For what?",
+    "options": [
+     "A new post office",
+     "A public park",
+     "A bigger courthouse",
+     "A parking garage"
+    ],
+    "answer": 3,
+    "why": "City engineer Olaf Laurgaard proposed tearing it down for a parking garage. Architect A. E. Doyle and local groups opposed the idea, and the building stayed."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1895",
     "la": "Construction first begins",
     "lb": "Completed"
+   },
+   "spot": {
+    "q": "The first City Hall design was cancelled and torn out. What did people say it looked like?",
+    "options": [
+     "A castle",
+     "The Kremlin",
+     "A cathedral",
+     "A train station"
+    ],
+    "answer": 1,
+    "why": "Henry J. Hefty's showy design looked like the Kremlin. People did not like it, so the contract was cancelled and Whidden and Lewis designed the City Hall you see today."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "2005",
     "la": "Dedicated",
     "lb": "Restored"
+   },
+   "spot": {
+    "q": "Skidmore Fountain was dedicated in 1888. Who was it meant to give a drink to?",
+    "options": [
+     "Horses, men and dogs",
+     "Only horses",
+     "Firefighters",
+     "Steamboat crews"
+    ],
+    "answer": 0,
+    "why": "It was meant for horses, men and dogs to drink from. At the dedication, Henry Weinhard offered to pump beer into it."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1896",
     "la": "Construction begins",
     "lb": "Station opens"
+   },
+   "spot": {
+    "q": "The postcard shows the station's clock tower. How often is its Seth Thomas clock wound?",
+    "options": [
+     "Every day",
+     "Once a month",
+     "Every seven days",
+     "Once a year"
+    ],
+    "answer": 2,
+    "why": "The clock is wound every seven days. Its counterweight of about 1,000 pounds drops almost 50 feet in a week."
    }
   }
  ],
