@@ -283,6 +283,16 @@ with sync_playwright() as p:
     need(pg.locator('#report').count()==1,'Report dialog opens from the menu')
     pg.keyboard.press('Escape'); pg.wait_for_timeout(250)
     need(pg.locator('#report').count()==0 and pg.evaluate("document.activeElement.classList.contains('menubtn')"),'Escape closes Report and focus returns to the Menu button')
+    # slider hint: a 'Drag to travel back' tag shows on the photo until the slider is used once
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,1],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.stop >> nth=0'); pg.wait_for_timeout(250)
+    for _ in range(4):
+        if pg.locator('.cmp').count(): break
+        for sel in ('[data-a=step]','text=Unlock the story'):
+            if pg.locator(sel).count(): pg.locator(sel).first.click(); pg.wait_for_timeout(200)
+    need(pg.locator('.cmp .dragtip').count()==1,'slider shows a drag tag the first time')
+    bx=pg.locator('.cmp .box').first.bounding_box(); pg.mouse.move(bx['x']+bx['width']*.8,bx['y']+bx['height']/2); pg.mouse.down(); pg.mouse.move(bx['x']+bx['width']*.3,bx['y']+bx['height']/2); pg.mouse.up()
+    need(pg.locator('.cmp .dragtip').count()==0,'drag tag goes away once the slider is used')
     # spot the change (Reno, Phoenix, Sacramento): wrong answer is struck out, right answer explains itself
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}})
     pg.click('.stop >> nth=0'); pg.click('text=I am here')

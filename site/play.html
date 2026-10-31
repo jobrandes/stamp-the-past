@@ -975,6 +975,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .bsnack{pointer-events:none}.bsnack button,.bsnack a{pointer-events:auto}
 .stat .sgoal{margin:2px 0 0;font-size:0.8125rem;color:var(--muted)}
 .passhead .pcur{margin:12px 0 0;font-size:0.9375rem;color:#f2cf72}
+.cmp .dragtip{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);z-index:2;pointer-events:none;background:rgba(10,20,35,.82);color:#fff;font:600 0.75rem var(--font-mono);letter-spacing:.06em;padding:6px 12px;border-radius:999px;white-space:nowrap;max-width:calc(100% - 20px)}
 </style></head><body>
 
 <div class="app">
@@ -1052,7 +1053,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   }
   function compare(st){
     if(!(hasPh(st,'then')&&hasPh(st,'now'))) return '';
-    return '<section class="cmp" aria-label="Then and now slider"><div class="box"><img src="'+PHOTOS[st.now.ph.k]+'" alt="'+st.now.label+', today"><img class="top" src="'+PHOTOS[st.then.ph.k]+'" alt="'+st.then.label+', '+st.then.yr+'"></div><div class="row"><span>Now</span><input type="range" min="0" max="100" value="0" aria-label="Fade from now to then" data-cmp="1"><span>Then</span></div><p class="hint">Swipe the photo or drag the slider to travel back to '+st.then.yr+'.'+(st.spot?' Then spot the change below.':'')+'</p><button class="btn small sharefade" data-a="sharefade" data-n="'+st.now.ph.k+'" data-t="'+st.then.ph.k+'" data-y="'+String(st.then.yr).replace(/"/g,'')+'" data-s="'+String(st.name).replace(/"/g,'&quot;')+'" data-c="'+String(city().name).replace(/"/g,'&quot;')+'">Share this fade</button>'+spotHtml(st)+'</section>';
+    return '<section class="cmp" aria-label="Then and now slider"><div class="box"><img src="'+PHOTOS[st.now.ph.k]+'" alt="'+st.now.label+', today"><img class="top" src="'+PHOTOS[st.then.ph.k]+'" alt="'+st.then.label+', '+st.then.yr+'">'+(slDragged()?'':'<span class="dragtip" aria-hidden="true">&lsaquo; Drag to travel back &rsaquo;</span>')+'</div><div class="row"><span>Now</span><input type="range" min="0" max="100" value="0" aria-label="Fade from now to then" data-cmp="1"><span>Then</span></div><p class="hint">Swipe the photo or drag the slider to travel back to '+st.then.yr+'.'+(st.spot?' Then spot the change below.':'')+'</p><button class="btn small sharefade" data-a="sharefade" data-n="'+st.now.ph.k+'" data-t="'+st.then.ph.k+'" data-y="'+String(st.then.yr).replace(/"/g,'')+'" data-s="'+String(st.name).replace(/"/g,'&quot;')+'" data-c="'+String(city().name).replace(/"/g,'&quot;')+'">Share this fade</button>'+spotHtml(st)+'</section>';
   }
 
   /* story: the first few sentences up front, the rest under "Read more" (the full text is always in the page for search engines and screen readers) */
@@ -1098,10 +1099,12 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
       document.querySelectorAll('#missions details.reg').forEach(function(d){ var vis=0; d.querySelectorAll('li').forEach(function(li){ var m=!v||(li.textContent+' '+(li.getAttribute('data-q')||'')).toLowerCase().indexOf(v)>-1; li.hidden=!m; if(m) vis++; }); d.hidden=!!v&&!vis; if(v) d.open=vis>0; if(vis) any=true; });
       var nn=document.getElementById('townNone'); if(nn) nn.hidden=!v||any; return; }
     var t=e.target; if(!t||!t.getAttribute||!t.getAttribute('data-cmp')) return;
-    var top=t.closest('.cmp').querySelector('.top'); if(top) top.style.opacity=(t.value/100);
+    var top=t.closest('.cmp').querySelector('.top'); if(top) top.style.opacity=(t.value/100); slUsed(t.closest('.cmp'));
   });
+  function slDragged(){ try{ return localStorage.getItem('stp-dragged')==='1'; }catch(e){ return false; } }
+  function slUsed(c){ try{ localStorage.setItem('stp-dragged','1'); }catch(e){} var t=c&&c.querySelector('.dragtip'); if(t) t.remove(); }
   (function(){var drag=null;
-    function setv(box,x){var r=box.getBoundingClientRect();var v=Math.max(0,Math.min(100,(x-r.left)/r.width*100));var c=box.closest('.cmp');var inp=c.querySelector('input[data-cmp]');var top=c.querySelector('.top');if(inp)inp.value=v;if(top)top.style.opacity=v/100;}
+    function setv(box,x){var r=box.getBoundingClientRect();var v=Math.max(0,Math.min(100,(x-r.left)/r.width*100));var c=box.closest('.cmp');var inp=c.querySelector('input[data-cmp]');var top=c.querySelector('.top');if(inp)inp.value=v;if(top)top.style.opacity=v/100;slUsed(c);}
     document.addEventListener('pointerdown',function(e){var b=e.target.closest&&e.target.closest('.cmp .box');if(!b)return;drag=b;try{b.setPointerCapture(e.pointerId);}catch(_){}setv(b,e.clientX);});
     document.addEventListener('pointermove',function(e){if(drag)setv(drag,e.clientX);});
     function end(){drag=null;}document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
