@@ -145,6 +145,17 @@
         "b": "1978",
         "la": "Palace completed",
         "lb": "Opened as a museum"
+      },
+      "spot": {
+        "q": "After the monarchy was overthrown in 1893, what did the palace serve as until 1969?",
+        "options": [
+          "A hotel",
+          "A school",
+          "A military hospital",
+          "The capitol of Hawaiʻi"
+        ],
+        "answer": 3,
+        "why": "After 1893 the palace served as the capitol of Hawaiʻi until 1969."
       }
     },
     {
@@ -240,6 +251,17 @@
         "b": "1883",
         "la": "Hale dedicated",
         "lb": "Statue unveiled"
+      },
+      "spot": {
+        "q": "The golden Kamehameha statue in the 2007 photo is a replacement. What happened to the first one?",
+        "options": [
+          "It was melted down for coins",
+          "It was stolen in 1893",
+          "It sank in a shipwreck, was recovered, and now stands on Hawaiʻi Island",
+          "It was never finished"
+        ],
+        "answer": 2,
+        "why": "The first cast sank in a shipwreck near the Falkland Islands. It was recovered and now stands in Kapaʻau on Hawaiʻi Island."
       }
     },
     {
@@ -335,6 +357,17 @@
         "b": "1941",
         "la": "Tower opens",
         "lb": "Painted camouflage"
+      },
+      "spot": {
+        "q": "After the attack on Pearl Harbor in December 1941, how was the Aloha Tower painted?",
+        "options": [
+          "Bright white",
+          "Camouflage",
+          "Black",
+          "Red and white stripes"
+        ],
+        "answer": 1,
+        "why": "After the attack the tower was painted in camouflage, and Coast Guardsmen took positions around it."
       }
     },
     {
@@ -430,6 +463,17 @@
         "b": "Today",
         "la": "Church completed",
         "lb": "Still holding services"
+      },
+      "spot": {
+        "q": "What is the stone church built from?",
+        "options": [
+          "Coral rock cut from an offshore reef",
+          "Imported red brick",
+          "Volcanic basalt blocks",
+          "Koa wood"
+        ],
+        "answer": 0,
+        "why": "Hawaiian divers cut about 14,000 slabs of coral rock from an offshore reef."
       }
     }
   ],

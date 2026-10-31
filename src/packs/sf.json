@@ -141,6 +141,17 @@
     "b": "1937",
     "la": "Construction began",
     "lb": "Opened"
+   },
+   "spot": {
+    "q": "The Navy suggested black and yellow stripes for the bridge. What color did architect Irving Morrow choose instead?",
+    "options": [
+     "Silver grey",
+     "International Orange",
+     "Forest green",
+     "Deep red"
+    ],
+    "answer": 1,
+    "why": "Morrow picked International Orange because it suits the setting and shows up in fog."
    }
   },
   {
@@ -232,6 +243,17 @@
     "b": "1992",
     "la": "Opened",
     "lb": "Freeway gone"
+   },
+   "spot": {
+    "q": "The 1906 photo shows Market Street and the Ferry Building after the earthquake. What hid the building from Market Street starting in the late 1950s?",
+    "options": [
+     "A skyscraper",
+     "A railway yard",
+     "A sports stadium",
+     "A freeway"
+    ],
+    "answer": 3,
+    "why": "A freeway built in the late 1950s hid it. The 1989 quake damaged that freeway, and it was gone by 1992."
    }
   },
   {
@@ -323,6 +345,17 @@
     "b": "1934",
     "la": "Completed",
     "lb": "Murals finished"
+   },
+   "spot": {
+    "q": "Where did the money to build Coit Tower come from?",
+    "options": [
+     "The city sold bonds",
+     "A federal grant",
+     "A bequest from Lillie Hitchcock Coit",
+     "Profits from a world's fair"
+    ],
+    "answer": 2,
+    "why": "Lillie Hitchcock Coit left one third of her fortune, about $118,000, for adding to the beauty of the city."
    }
   },
   {
@@ -414,6 +447,17 @@
     "b": "1967",
     "la": "Built for the fair",
     "lb": "Rebuilt in concrete"
+   },
+   "spot": {
+    "q": "The 1915 postcard shows a Palace of Fine Arts built to be temporary, of plaster-fiber over wood. What was it rebuilt in between 1964 and 1967?",
+    "options": [
+     "Concrete",
+     "Marble",
+     "Steel plates",
+     "Brick"
+    ],
+    "answer": 0,
+    "why": "The original decayed and closed in 1952. It was rebuilt in concrete, with groundbreaking in 1964 and completion in 1967."
    }
   }
  ],

@@ -93,6 +93,17 @@
     "b": "1922",
     "la": "Under construction",
     "lb": "Dedicated"
+   },
+   "spot": {
+    "q": "The memorial in the 1917 photo is still being built. What do its 36 columns stand for?",
+    "options": [
+     "The 36 months of construction",
+     "Lincoln's age when he entered politics",
+     "The 36 sculptors who worked on it",
+     "The 36 states in the Union when Lincoln died"
+    ],
+    "answer": 3,
+    "why": "The 36 columns stand for the 36 states in the Union when Lincoln died."
    }
   },
   {
@@ -184,6 +195,17 @@
     "b": "1888",
     "la": "Cornerstone",
     "lb": "Opened to the public"
+   },
+   "spot": {
+    "q": "Look about a third of the way up the monument. The stone changes color. Why?",
+    "options": [
+     "Different quarries supplied the stone before and after a pause in building",
+     "Paint was added in 1903",
+     "Rain stained the upper half",
+     "The top was replaced after the 2011 earthquake"
+    ],
+    "answer": 0,
+    "why": "Work stopped from 1854 until 1877, and different quarries supplied the stone before and after the pause."
    }
   },
   {
@@ -275,6 +297,17 @@
     "b": "1866",
     "la": "Cornerstone",
     "lb": "Cast-iron dome"
+   },
+   "spot": {
+    "q": "The cast-iron dome in the 1902 photo replaced the Capitol's old dome. Who designed it?",
+    "options": [
+     "William Thornton",
+     "Henry Bacon",
+     "John Russell Pope",
+     "Thomas U. Walter"
+    ],
+    "answer": 3,
+    "why": "The cast-iron dome was designed by Thomas U. Walter. The decision to replace the old dome was made in 1855."
    }
   },
   {
@@ -366,6 +399,17 @@
     "b": "1947",
     "la": "Dedicated",
     "lb": "Bronze statue"
+   },
+   "spot": {
+    "q": "In 1938 women chained themselves to cherry trees at the memorial site. What eased the opposition?",
+    "options": [
+     "The memorial was moved to another site",
+     "Revised plans showed the trees could be kept",
+     "A court ordered the protesters to leave",
+     "The trees were cut down and replanted"
+    ],
+    "answer": 1,
+    "why": "Opposition eased once revised plans showed the trees could be kept."
    }
   }
  ],
