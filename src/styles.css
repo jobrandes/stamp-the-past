@@ -997,3 +997,9 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .nbcard .btn,.nbvisit .btn,.nbaccess .btn{margin-top:2px}
 .nbtrow{margin-bottom:10px}
 .nbh2{font-size:1.375rem;font-weight:700}
+
+/* ra04: inside a stop the badge note sits at the top and never over the feedback */
+body.instop .bsnack,body.inboss .bsnack{bottom:auto;top:calc(8px + env(safe-area-inset-top,0px))}
+body.instop .bsn-d,body.inboss .bsn-d{display:none}
+@keyframes bsdn{from{transform:translate(-50%,-24px) scale(.94);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}

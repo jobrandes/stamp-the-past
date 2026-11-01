@@ -1003,6 +1003,12 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .nbcard .btn,.nbvisit .btn,.nbaccess .btn{margin-top:2px}
 .nbtrow{margin-bottom:10px}
 .nbh2{font-size:1.375rem;font-weight:700}
+
+/* ra04: inside a stop the badge note sits at the top and never over the feedback */
+body.instop .bsnack,body.inboss .bsnack{bottom:auto;top:calc(8px + env(safe-area-inset-top,0px))}
+body.instop .bsn-d,body.inboss .bsn-d{display:none}
+@keyframes bsdn{from{transform:translate(-50%,-24px) scale(.94);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 </style>
 
 <div class="app">
@@ -2202,6 +2208,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
   function factAnswer(ci,k){
     var st=STOPS[cur.i], c=st.claims[ci], gi=cur.i*2+ci;
     if(S.claims[gi]) return;
+    closeBpop();
     if(k===c.a){
       S.claims[gi]=1; streak++; cur.fbad=false; save(); render();
       toast('Right. +25 XP'+(streak>1?' ('+streak+' in a row)':''));
@@ -2407,7 +2414,7 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
     if(a==='shareclose'){ shareClose(); return; }
     if(a==='sharefile'){ if(fadeFile&&navigator.share) navigator.share({files:[fadeFile.f],text:fadeFile.t}).catch(function(){}); return; }
     if(a==='sharefade'){ fadeShare(b); return; }
-    if(a==='spotpick'){ var sp=STOPS[cur.i]&&STOPS[cur.i].spot, box=document.getElementById('spot'); if(!sp||!box) return; var k=+b.getAttribute('data-k'), fb=box.querySelector('.sfb'); if(k===sp.answer){ box.querySelectorAll('.spo').forEach(function(x){ x.disabled=true; x.classList.remove('wrong'); }); b.classList.add('right'); fb.textContent='Right. '+sp.why; } else { b.classList.add('wrong'); b.disabled=true; fb.textContent='Not that one. Slide the photo again and try another.'; } return; }
+    if(a==='spotpick'){ closeBpop(); var sp=STOPS[cur.i]&&STOPS[cur.i].spot, box=document.getElementById('spot'); if(!sp||!box) return; var k=+b.getAttribute('data-k'), fb=box.querySelector('.sfb'); if(k===sp.answer){ box.querySelectorAll('.spo').forEach(function(x){ x.disabled=true; x.classList.remove('wrong'); }); b.classList.add('right'); fb.textContent='Right. '+sp.why; } else { b.classList.add('wrong'); b.disabled=true; fb.textContent='Not that one. Slide the photo again and try another.'; } return; }
     if(a==='savestop'){ var sk=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), key=savedKey(sk,si), sa=savedRaw(), sx=sa.indexOf(key); if(!key) return; if(sx>-1) sa.splice(sx,1); else sa.push(key); savedSet(sa); var sy=window.scrollY; render(false); window.scrollTo(0,sy); toast(sx>-1?'Removed from saved stops.':'Saved. Find it on Home under My trip.'); return; }
     if(a==='trip'){ var tk=b.getAttribute('data-c'), ta=tripGet(), ti=ta.indexOf(tk); if(ti>-1) ta.splice(ti,1); else ta.push(tk); tripSet(ta); var sv=window.scrollY; render(); window.scrollTo(0,sv); toast(ti>-1?'Removed from your trip.':'Added to your trip.'); return; }
     if(a==='schip'){ var inp=document.getElementById('townSearch'); if(inp){ var sv2=b.getAttribute('data-s'); inp.value=(inp.value.trim().toLowerCase()===sv2.toLowerCase())?'':sv2; inp.dispatchEvent(new Event('input',{bubbles:true})); } return; }

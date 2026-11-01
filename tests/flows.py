@@ -222,12 +222,27 @@ with sync_playwright() as p:
     pg.wait_for_selector('#bpop',timeout=6000)
     need('first stamp' in pg.inner_text('#bpop').lower(),'first stamp unlocks the First Stamp badge')
     need('earned at the reno arch' in pg.inner_text('#bpop').lower(),'badge popup names the stop that earned it')
+    bb=pg.evaluate("(()=>{var r=document.getElementById('bpop').getBoundingClientRect();return [r.top,r.bottom,innerHeight]})()")
+    need(bb[0]<40 and bb[1]<bb[2]*0.4,'ra04: inside a stop the badge popup sits at the top, not over the answers and feedback, got %s'%bb)
     pp=pg.evaluate('window._pings'); need('stamp' in pp and 'first-stamp' in pp,'stamping sends anonymous stamp and first-stamp counts, got %s'%pp)
     need(pg.evaluate("JSON.parse(localStorage.getItem('stp-badges')||'{}').first")!=None,'earned badge is saved')
     need(pg.locator('#celeb').count()==0 and pg.locator('#bpop [data-a=trophy]').count()==1,'badge popup does not block the screen')
     pg.click('#bpop [data-a=trophy]'); pg.wait_for_timeout(300)
     need(pg.locator('#trophy').count()==1 and 'of 40 badges' in pg.inner_text('#trophy').lower(),'Trophy Case opens from the badge popup and counts badges')
     need('level 2' in pg.inner_text('.xlv').lower() or 'level\n2' in pg.inner_text('.xlv').lower(),'150 XP puts a new explorer at level 2')
+    # ra04: the badge note must not sit on the story screen's feedback, and answering a puzzle clears it
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}})
+    pg.click('.stop >> nth=0'); pg.click('text=I am here')
+    for k in range(4):
+        pg.locator('.opt').nth(k).click()
+        if pg.query_selector('.opt.right'): break
+    pg.wait_for_selector('#bpop',timeout=6000)
+    pg.click('text=Unlock the story'); pg.wait_for_timeout(300)
+    need(pg.locator('#bpop').count()==1,'ra04: badge popup is still up on the story screen')
+    bb2=pg.evaluate("(()=>{var r=document.getElementById('bpop').getBoundingClientRect();return [r.top,r.bottom,innerHeight]})()")
+    need(bb2[0]<40 and bb2[1]<bb2[2]*0.4,'ra04: popup stays at the top on the story screen, got %s'%bb2)
+    need(pg.locator('#spot .spo').count()>0,'ra04: Reno Arch story shows its puzzle')
+    pg.click('#spot .spo >> nth=0'); need(pg.locator('#bpop').count()==0,'ra04: answering the puzzle clears the badge popup')
     # existing players are not buried in popups: badges they already earned are filed quietly
     pg=new({'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,1,1,1],'claims':[1,1,1,1,1,1,1,1]}}}}); pg.wait_for_timeout(2600)
     need(pg.locator('#bpop').count()==0,'first run with existing progress shows no badge popup')

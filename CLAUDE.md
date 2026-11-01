@@ -290,3 +290,7 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - ra02: `openStop()` leaves Home state first (`atHome=false`, `onPass/onNear=false`, tab trail), so the celebration's "Play the final challenge" works after finishing a town that was started from Home (render drops `boss` while `atHome`).
 - ra03: preview-mode question feedback says "virtual stamp, worth 25 XP" (was "badge and 100 XP").
 - Tests in tests/flows.py (ra01/ra02/ra03) fail on the old code and pass now.
+
+## Audit wave 2 (Oct 31 2026)
+- ra04: inside a stop (`body.instop`/`inboss`) the badge snackbar `.bsnack` sits at the TOP (below the safe area, detail line hidden) instead of over the answers; answering a Spot-the-change puzzle (`spotpick`) or a fact-check (`factAnswer`) calls `closeBpop()`. Tests in tests/flows.py fail on the old CSS (popup was at y 606-768 of 844).
+- rb07: tests/nearby.py now scrolls to the bottom of every Nearby screen at 320-1280 px and at 200% text and requires the last content to end 8+ px above the bottom bar. Still not covered: the menu drawer and stop screens (no bottom bar there).

@@ -116,6 +116,8 @@ with sync_playwright() as p:
             need(ow<=1,f'{label} at {w}px has no sideways scroll ({ow}px)')
             small=pg.evaluate("[...document.querySelectorAll('#main button, #main a.btn')].filter(e=>e.offsetParent!==null).map(e=>[e.getBoundingClientRect().height,e.getBoundingClientRect().width,(e.textContent||'').trim().slice(0,24)]).filter(x=>x[0]<44)")
             need(not small,f'{label} at {w}px: touch targets under 44px high: {small}')
+            clr=pg.evaluate("(()=>{window.scrollTo(0,document.documentElement.scrollHeight);const n=document.querySelector('#bnav');if(!n||getComputedStyle(n).display==='none'||n.offsetParent===null&&getComputedStyle(n).position!=='fixed')return 99;const nt=n.getBoundingClientRect().top;let m=0;document.querySelectorAll('#main *').forEach(e=>{const r=e.getBoundingClientRect();if(r.height>0&&r.width>0&&getComputedStyle(e).visibility!=='hidden')m=Math.max(m,r.bottom)});return nt-m})()")
+            need(clr>=8,f'rb07: {label} at {w}px: last content ends {clr}px above the bottom bar (needs 8+)')
         pg.click('[data-a=nbopen] >> nth=0'); check('ask screen')
         pg.click('[data-a=nbnoloc]'); check('place picker')
         pg.click('[data-a=nbarea]'); check('place view')
@@ -124,7 +126,12 @@ with sync_playwright() as p:
     # larger text
     pg=new(); pg.evaluate("document.documentElement.style.fontSize='32px'"); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     need(pg.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")<=1,'nearby list fits at 200% text')
+    def clr2(label):
+        c=pg.evaluate("(()=>{window.scrollTo(0,document.documentElement.scrollHeight);const n=document.querySelector('#bnav');if(!n||getComputedStyle(n).display==='none')return 99;let m=0;document.querySelectorAll('#main *').forEach(e=>{const r=e.getBoundingClientRect();if(r.height>0&&r.width>0)m=Math.max(m,r.bottom)});return n.getBoundingClientRect().top-m})()")
+        need(c>=8,f'rb07: {label} at 200% text: last content ends {c}px above the bottom bar')
+    clr2('nearby list')
     pg.locator('.nbrow[data-a=nbstory]').first.click(); need(pg.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")<=1,'Story card fits at 200% text')
+    clr2('Story card')
     b.close()
 srv.terminate()
 need(not errs,f'page errors: {errs[:3]}')
