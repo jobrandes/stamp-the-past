@@ -271,6 +271,259 @@
     "page": "https://commons.wikimedia.org/wiki/File:Chapel of the Transfiguration, Tahoe City.jpg",
     "note": "resized"
    }
+  },
+  {
+   "id": "truckeejail",
+   "name": "Old Truckee Jail",
+   "area": "Truckee",
+   "town": "tahoe",
+   "geo": [
+    39.32777,
+    -120.18674,
+    150
+   ],
+   "addr": "10142 Jibboom Street, Truckee, CA",
+   "invite": "A stone-and-brick jail that ran from 1875 to 1964, which is a long time to keep people in one small building.",
+   "story": [
+    "Construction began on August 11, 1875, and the jail was ready for use on September 22. The contract went to James Stewart, described as Truckee's premier stonemason, with a bid of $1,235 not counting the ironwork.",
+    "It was used continuously until May 1964. The historical society says Baby Face Nelson and Ma Spinelli and her gang were held here. Old-timers say Machine Gun Kelly spent a night after a shoplifting arrest, but that is a story, not a confirmed fact.",
+    "Today it is the Old Jail Museum, run by the Truckee-Donner Historical Society."
+   ],
+   "facts": [
+    {
+     "t": "Construction began August 11, 1875, and the jail was ready September 22, 1875.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The contract went to the stonemason James Stewart, with a bid of $1,235 not counting the ironwork.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The jail was used continuously from 1875 until May 1964.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Baby Face Nelson and Ma Spinelli's gang are listed as prisoners; the Machine Gun Kelly overnight stay is an unconfirmed local story.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The address is 10142 Jibboom Street.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "An E Clampus Vitus plaque was put up in 1966 and re-dedicated July 4, 1978.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "The museum is generally open on summer weekends and is run by volunteers, so openings depend on who is available. The historical society's page gives two different sets of hours, so check its calendar or call (530) 582-0893 before you go. You can see the outside any time.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the Truckee-Donner Historical Society's page and NoeHill; the hours are inconsistent on the society's own page, so none are stated. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Truckee-Donner Historical Society: Old Truckee Jail Museum",
+     "u": "https://www.truckeehistory.org/old-truckee-jail-museum.html"
+    },
+    {
+     "t": "NoeHill: Old Truckee Jail",
+     "u": "https://noehill.com/nevada_county_california/poi_old_truckee_jail.asp"
+    }
+   ],
+   "ph": {
+    "k": "tt_jl",
+    "alt": "The brick-and-stone Old Jail Museum on Jibboom Street with its wooden front and sign",
+    "by": "Steezy Gordita",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Old Jail Museum - Truckee - California 02.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "truckeedepot",
+   "name": "Truckee Train Depot",
+   "area": "Truckee",
+   "town": "tahoe",
+   "geo": [
+    39.3275,
+    -120.1856,
+    120
+   ],
+   "addr": "10065 Donner Pass Road, Truckee, CA",
+   "invite": "A depot built after the hotel that held the old station burned down, still meeting trains on the first transcontinental line.",
+   "story": [
+    "After the transcontinental railroad was finished in 1869, Truckee's passenger depot and ticket office moved into the ground floor of J. F. Moody's Truckee Hotel. The hotel burned in early spring 1900.",
+    "The present depot went up that summer. The historical society says it follows Southern Pacific's standard One Story Combination Depot No. 23 design. A second source dates it only to around 1900, so treat the exact year as approximate.",
+    "Nevada County bought and remodeled the station in 1985. Today it is a transportation center, with the Amtrak California Zephyr, buses, a visitor information room and a local history museum."
+   ],
+   "facts": [
+    {
+     "t": "After 1869 the passenger depot moved into the ground floor of J. F. Moody's Truckee Hotel, which burned in early spring 1900.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The present depot was built in the summer of 1900 (the other source says around 1900).",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It follows Southern Pacific's standard One Story Combination Depot No. 23 design.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was placed on the California List of Historic Landmarks in 1976.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Nevada County bought and remodeled it in 1985, and it is now a transportation center with Amtrak, buses, a visitor room and a museum.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The address is 10065 Donner Pass Road, and it contributes to the Brickelltown Historic District.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "A working station at 10065 Donner Pass Road. Amtrak's California Zephyr stops here, so be careful around the tracks and platform. The visitor room and museum have their own hours, which were not confirmed, so check with the Truckee-Donner Historical Society.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the Truckee-Donner Historical Society's depot page and NoeHill; the build year differs slightly between them and is worded as approximate. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Truckee-Donner Historical Society: Truckee Train Depot",
+     "u": "https://www.truckeehistory.org/truckee-train-depot.html"
+    },
+    {
+     "t": "NoeHill: Truckee Passenger Depot",
+     "u": "https://www.noehill.com/nevada_county_california/poi_truckee_passenger_depot.asp"
+    }
+   ],
+   "ph": {
+    "k": "tt_dp",
+    "alt": "The yellow Truckee depot and an orange caboose in the snow",
+    "by": "Loco Steve",
+    "lic": "CC BY 2.0",
+    "lu": "https://creativecommons.org/licenses/by/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Truckee Depot CA. - December 2010.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "donner",
+   "name": "Donner Memorial State Park",
+   "area": "Truckee",
+   "town": "tahoe",
+   "geo": [
+    39.32412,
+    -120.23216,
+    300
+   ],
+   "addr": "12593 Donner Pass Road, Truckee, CA 96161",
+   "invite": "A state park around the Donner Party's winter camp, with a 1918 pioneer monument and a visitor center that tells more than one story.",
+   "story": [
+    "Ninety people were in the Donner Party in the winter of 1846 to 1847, and 42 of them died, mostly from starvation and exposure.",
+    "The Pioneer Monument was dedicated on June 6, 1918, and the Native Sons of the Golden West built it. The state lists it as California Historical Landmark 134. The pedestal is 22 feet high, and the statue adds about 17.5 feet.",
+    "The visitor center opened on June 6, 2015, and replaced the Emigrant Trail Museum from 1962. State Parks says its exhibits also cover the Washoe people, Chinese railroad workers and early motoring over Donner Pass."
+   ],
+   "facts": [
+    {
+     "t": "Ninety people were in the Donner Party in 1846 to 1847, and 42 died, mostly of starvation and exposure.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Pioneer Monument was dedicated June 6, 1918; the pedestal is 22 feet and the statue adds 17.5 feet.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The monument was built in 1918 by the Native Sons of the Golden West and is California Historical Landmark 134.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The visitor center opened June 6, 2015, replacing the 1962 Emigrant Trail Museum.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Exhibits cover the Donner Party, the Washoe people, Chinese railroad workers and early motoring over Donner Pass.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The park was established in 1928.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "State Parks lists the visitor center as open 10 a.m. to 5 p.m. and day-use parking at $10 per vehicle.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "A state park at 12593 Donner Pass Road. State Parks lists the visitor center as open 10 a.m. to 5 p.m. (closed Thanksgiving, Christmas and New Year's Day) and day-use parking at $10 per vehicle, from a 2024 info sheet. Check the State Parks page for current hours and fees. This is the site of a real tragedy, so treat it quietly.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and a 2024 California State Parks info sheet, which is where the hours and fee come from. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Donner Memorial State Park",
+     "u": "https://en.wikipedia.org/wiki/Donner_Memorial_State_Park"
+    },
+    {
+     "t": "California State Parks: Donner Memorial State Park info sheet (2024)",
+     "u": "https://www.parks.ca.gov/pages/503/files/DonnerMemorialSP_InfoSheet_8.5x14_102924_FINAL.pdf"
+    }
+   ],
+   "ph": {
+    "k": "tt_dm2",
+    "alt": "The brown Donner Memorial State Park entrance sign with a covered wagon, set in a stone planter among pines",
+    "by": "Noah_Loverbear",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Donner Memorial State Park - panoramio (5).jpg",
+    "note": "resized"
+   }
   }
  ]
 }

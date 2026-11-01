@@ -711,3 +711,6 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | sq_gm | https://commons.wikimedia.org/wiki/File:Governor's Mansion Sacramento corner.jpg | David Sawyer | CC BY-SA 2.0 | resized |
 | sq_cm2 | https://commons.wikimedia.org/wiki/File:Sacramento Historic City Cemetery 02.jpg | Joe Mabel | CC BY-SA 4.0 | resized |
 | sq_cb | https://commons.wikimedia.org/wiki/File:Blessed Sacrament Cathedral in Sacramento California 02.jpg | Always dreamin | CC BY-SA 4.0 | resized |
+| tt_jl | https://commons.wikimedia.org/wiki/File:Old Jail Museum - Truckee - California 02.jpg | Steezy Gordita | CC BY-SA 4.0 | resized |
+| tt_dp | https://commons.wikimedia.org/wiki/File:Truckee Depot CA. - December 2010.jpg | Loco Steve | CC BY 2.0 | resized |
+| tt_dm2 | https://commons.wikimedia.org/wiki/File:Donner Memorial State Park - panoramio (5).jpg | Noah_Loverbear | CC BY-SA 3.0 | resized |
