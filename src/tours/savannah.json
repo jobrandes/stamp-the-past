@@ -185,10 +185,10 @@
     100
    ],
    "addr": "124 Abercorn St, Savannah, GA 31401",
-   "invite": "A grand house by an English architect who drew the plans without ever visiting, with a carriage house that tells the other half of the story.",
+   "invite": "A grand house by an English architect who drew the first plans in England, with a carriage house that tells the other half of the story.",
    "story": [
-    "The English architect William Jay of Bath designed this house, and he drew the plans while still in England. Construction ran from 1816 to 1819.",
-    "In 1951 Margaret Thomas, the granddaughter of the original owner, left the house to the Telfair Academy of Arts and Sciences. It is now a historic house museum run by Telfair Museums, and a National Historic Landmark since May 11, 1976.",
+    "The English architect William Jay of Bath designed this house and drew the plans while still in England, then came to Savannah while it was being built. Shipping merchant Richard Richardson commissioned it, and construction ran from 1816 to 1819.",
+    "Attorney George Welshman Owens bought the house in 1830, and his family kept it for decades. In 1951 his granddaughter Margaret Thomas left it to the Telfair Academy of Arts and Sciences. It is now a historic house museum run by Telfair Museums, and a National Historic Landmark since May 11, 1976.",
     "Renovations in the 1990s uncovered one of the oldest and best preserved urban slave quarters in the American South. The museum's exhibits tell the story of the free and enslaved people who lived and worked on the site, so the tour covers the people the grand rooms depended on, too."
    ],
    "facts": [
@@ -205,9 +205,10 @@
      ]
     },
     {
-     "t": "Margaret Thomas left the house to the Telfair Academy of Arts and Sciences in 1951.",
+     "t": "Margaret Thomas, granddaughter of George Owens, left the house to the Telfair Academy of Arts and Sciences in 1951.",
      "src": [
-      0
+      0,
+      1
      ]
     },
     {
@@ -228,9 +229,16 @@
       0,
       1
      ]
+    },
+    {
+     "t": "Richard Richardson commissioned the house around 1816; George Owens bought it in 1830.",
+     "src": [
+      0,
+      1
+     ]
     }
    ],
-   "access": "Look from the public sidewalk on Abercorn Street at Oglethorpe Square. Tours are run by Telfair Museums; the page I read lists no current hours or prices, so check telfair.org before going.",
+   "access": "Look from the public sidewalk on Abercorn Street at Oglethorpe Square. Tours are run by Telfair Museums; no current hours or prices were listed, so check telfair.org before going.",
    "access_check": {
     "on": "2026-11-01",
     "by": "Claude",
@@ -313,7 +321,7 @@
      ]
     }
    ],
-   "access": "Look from the public sidewalk at Bull Street and Oglethorpe Avenue. Hours, prices and accessibility details are on the museum's own pages, which the page I read links to but does not list, so check juliettegordonlowbirthplace.org first.",
+   "access": "Look from the public sidewalk at Bull Street and Oglethorpe Avenue. Hours, prices and accessibility details are on the museum's own pages, so check juliettegordonlowbirthplace.org first.",
    "access_check": {
     "on": "2026-11-01",
     "by": "Claude",
@@ -404,7 +412,7 @@
      ]
     }
    ],
-   "access": "A working cultural center. One visitor guide lists Tuesday to Saturday, noon to 5 p.m., with paid admission; confirm hours and prices at beachinstitute.org before going. Parking and accessibility details were not stated on the pages I read.",
+   "access": "A working cultural center. One visitor guide lists Tuesday to Saturday, noon to 5 p.m., with paid admission; confirm hours and prices at beachinstitute.org before going. Parking and accessibility details were not stated in the sources.",
    "access_check": {
     "on": "2026-11-01",
     "by": "Claude",

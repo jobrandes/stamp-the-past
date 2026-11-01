@@ -331,7 +331,7 @@
     var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
     h+='<p class="nbnote">Browse freely. Open any place, read its story, tick it off if you visit. Nothing here earns a stamp, and nothing needs your location.</p><h2 class="nbh">Places to explore</h2>';
     h+=list.map(function(sp){ return nbRow({kind:'story',s:sp,teaser:1}); }).join('');
-    h+='<h2 class="nbh">Missions: earn stamps</h2><p class="nbnote">The four-stop mission is unchanged. Questions, stamps, XP and badges live there.</p>';
+    h+='<h2 class="nbh">Missions: earn stamps</h2><p class="nbnote">Visit in person and play the four-stop mission to earn stamps, XP and badges.</p>';
     h+=c.stops.map(function(st,i){ return nbRow({kind:'town',c:k,i:i}); }).join('');
     return h+'</section>';
   }

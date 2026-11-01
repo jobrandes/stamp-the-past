@@ -174,8 +174,8 @@
    "invite": "Find the corner of Court Street and Arlington Avenue. This house has been moved twice, and it is not even on its original lot.",
    "story": [
     "Myron Lake ran a toll bridge across the Truckee River for travelers heading to Virginia City, and the spot was known as Lake's Crossing. In 1862 he sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.",
-    "The house was built in 1877 for the Marsh family and designed by John S. Sturgeon. Lake bought it in 1879. It first stood at the northwest corner of California Avenue and Virginia Street.",
-    "To save it from demolition, it was moved in 1971 to the Convention Center area. On July 11, 2004, it was moved again, about 3.1 miles up Virginia Street, to the spot where you are standing."
+    "Myron Lake ran a toll bridge across the Truckee River for travelers heading to Virginia City, and the spot was known as Lake's Crossing. In 1868 he struck a deal with Charles Crocker of the Central Pacific Railroad, giving the railroad a right-of-way and selling it about 160 acres, and the railroad's town grew into Reno.",
+    "The house was built in 1877 by Washington J. Marsh and designed by John S. Sturgeon. Lake bought it in 1879 for $5,000. It first stood at the northwest corner of California Avenue and Virginia Street."
    ],
    "facts": [
     {
@@ -185,16 +185,15 @@
      ]
     },
     {
-     "t": "In 1862 Lake sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.",
+     "t": "In 1868 Lake gave the Central Pacific a right-of-way and sold it about 160 acres; the railroad's town grew into Reno.",
      "src": [
-      1
+      2
      ]
     },
     {
-     "t": "The house was built in 1877 for the Marsh family, designed by John S. Sturgeon, and Lake bought it in 1879.",
+     "t": "The house was built in 1877 by Washington J. Marsh, designed by John S. Sturgeon, and Lake bought it in 1879 for $5,000.",
      "src": [
-      0,
-      1
+      0
      ]
     },
     {
@@ -211,7 +210,7 @@
      ]
     }
    ],
-   "access": "Look at it from the public sidewalk on Court Street. The two pages I read disagree about the inside: one says self-guided tours, the other says visits by appointment only. Check with the owners before planning to go in.",
+   "access": "Look at it from the public sidewalk on Court Street. Sources disagree about the inside: one says self-guided tours, another says visits by appointment only. Check with the owners before planning to go in.",
    "access_check": {
     "on": "2026-10-31",
     "by": "Claude",
@@ -225,6 +224,10 @@
     {
      "t": "Arts for All Nevada: The Lake Mansion",
      "u": "https://www.artsforallnevada.org/?p=29"
+    },
+    {
+     "t": "Nevada Appeal: Reno's controversial founder Myron Lake and his Reno mansion",
+     "u": "https://nevadaappeal.com/news/2020/aug/12/renos-controversial-founder-myron-lake-and-his-ren"
     }
    ],
    "town": "reno",
@@ -288,7 +291,7 @@
      ]
     }
    ],
-   "access": "Look from the public sidewalk on Victorian Avenue. I could not find opening hours on the museum's website, so call 775-355-1144 or check it before going in.",
+   "access": "Look from the public sidewalk on Victorian Avenue. Opening hours are not listed on the museum's website, so call 775-355-1144 before going in.",
    "access_check": {
     "on": "2026-10-31",
     "by": "Claude",
@@ -906,8 +909,8 @@
    "invite": "A 1932 church that replaced one lost to fire, designed by the same architect as half of Nevada.",
    "story": [
     "This Mediterranean Revival church was dedicated on February 22, 1932. Frederick Joseph DeLongchamps, a prominent Nevada architect, designed it. The style is relatively rare in northern Nevada.",
-    "It replaced a 1905 church at 729 F Street. It was among the first Catholic churches built in Nevada after the state became a diocese in 1931, and the National Register form calls it the oldest extant Catholic church in Sparks. It was listed on December 23, 1992.",
-    "A porch and vestibule added in 1970 for wheelchair access partly hide the original facade. The Catholic parish later moved elsewhere, so the old building houses a different congregation, which is one more reason to look from the sidewalk."
+    "It replaced the first Catholic church in Sparks, a wood-frame building from 1905 at 729 F Street that burned on Easter Sunday 1930. It was among the first Catholic churches built in Nevada after the state became a diocese in 1931, and the National Register form calls it the oldest surviving Catholic church in Sparks. It was listed on December 23, 1992.",
+    "A porch and vestibule added in 1970 for wheelchair access partly hide the original facade. The 1992 form describes it as a church in continuous use, so look from the sidewalk and respect services."
    ],
    "facts": [
     {
@@ -923,7 +926,7 @@
      ]
     },
     {
-     "t": "An earlier church stood at 729 F Street.",
+     "t": "The earlier 1905 wood-frame church at 729 F Street burned on Easter Sunday 1930.",
      "src": [
       0
      ]
