@@ -704,3 +704,10 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | cc_pr | https://commons.wikimedia.org/wiki/File:Nevada State Printing Office.jpg | Aaron A. Gallup (HABS) | Public domain | 1972 survey photo, resized |
 | cc_rk | https://commons.wikimedia.org/wiki/File:Rinckel Mansion.jpg | Aaron A. Gallup (HABS) | Public domain | 1972 survey photo, resized |
 | vx_sm | https://commons.wikimedia.org/wiki/File:St. Mary's in the Mountains Catholic Church Virginia City Nevada.jpg | Photographyfaust | CC BY-SA 4.0 | resized |
+| tv_vk | https://commons.wikimedia.org/wiki/File:Vikingsholm from shore.jpg | Kevin Payravi | CC BY-SA 4.0 | resized |
+| tv_ch | https://commons.wikimedia.org/wiki/File:Chapel of the Transfiguration, Tahoe City.jpg | Dicklyon | CC BY-SA 4.0 | resized |
+| tv_pe | https://commons.wikimedia.org/wiki/File:Side View of the Pope Estate.JPG | Mistshine | CC BY-SA 3.0 | resized |
+| sq_st | https://commons.wikimedia.org/wiki/File:Leland Stanford Mansion, Sacramento, California (51031203081).jpg | Ken Lund | CC BY-SA 2.0 | resized |
+| sq_gm | https://commons.wikimedia.org/wiki/File:Governor's Mansion Sacramento corner.jpg | David Sawyer | CC BY-SA 2.0 | resized |
+| sq_cm2 | https://commons.wikimedia.org/wiki/File:Sacramento Historic City Cemetery 02.jpg | Joe Mabel | CC BY-SA 4.0 | resized |
+| sq_cb | https://commons.wikimedia.org/wiki/File:Blessed Sacrament Cathedral in Sacramento California 02.jpg | Always dreamin | CC BY-SA 4.0 | resized |

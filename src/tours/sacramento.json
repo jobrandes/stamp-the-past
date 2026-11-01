@@ -1,0 +1,343 @@
+{
+ "id": "sacramento",
+ "name": "Sacramento",
+ "towns": [
+  "sacramento"
+ ],
+ "stops": [
+  {
+   "id": "stanford",
+   "name": "Leland Stanford Mansion",
+   "area": "Downtown Sacramento",
+   "town": "sacramento",
+   "geo": [
+    38.57617,
+    -121.49788,
+    100
+   ],
+   "addr": "800 N Street, Sacramento, CA 95814",
+   "invite": "A merchant's 1856 house that became a governor's office, got lifted 12 feet in the air and then grew almost five times bigger.",
+   "story": [
+    "A Sacramento merchant named Fogus built the house in 1856. Leland Stanford bought it in June 1861, shortly before he was elected governor, and it served as his office and home. Two governors after him, Frederick Low and Henry Haight, also used it as their office.",
+    "In 1871 and 1872 the Stanford family remodeled it, raised it twelve feet, added a story at the bottom and one at the top, and grew it from about 4,000 to 19,000 square feet.",
+    "The mansion was donated to the Catholic Diocese in 1900. California bought it in 1978, spent 1991 to 2005 on a $22 million renovation, and opened public tours in September 2005."
+   ],
+   "facts": [
+    {
+     "t": "The house was built in 1856 by a Sacramento merchant named Fogus (the sources spell his first name Shelton and Sheldon).",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Leland Stanford bought it in June 1861, shortly before he was elected governor.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Stanford, Frederick Low and Henry Haight all used it as the governor's office.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "In 1871 to 1872 the house was raised twelve feet and enlarged from 4,000 to 19,000 square feet.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was donated to the Catholic Diocese in 1900 and bought by California in 1978.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Renovation ran 1991 to 2005 and cost $22 million; public tours opened in September 2005.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "State Parks says tours are free for all visitors, with reservations required.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "The mansion is a state historic park at 800 N Street, and it is also used for official state functions, which can change or cancel tours. State Parks has described tours as free with reservations required. Check the State Parks page for current times before you go.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and a California State Parks news release; the tour wording came from a recent event release, so current hours were not confirmed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Leland Stanford Mansion",
+     "u": "https://en.wikipedia.org/wiki/Leland_Stanford_Mansion"
+    },
+    {
+     "t": "California State Parks news release: Leland Stanford Mansion",
+     "u": "https://www.parks.ca.gov/NewsRelease/1588"
+    }
+   ],
+   "ph": {
+    "k": "sq_st",
+    "alt": "The ornate front of the Leland Stanford Mansion with lit lamps at its entrance and a curved stair",
+    "by": "Ken Lund",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Leland Stanford Mansion, Sacramento, California (51031203081).jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "govmansion",
+   "name": "Governor's Mansion",
+   "area": "Downtown Sacramento",
+   "town": "sacramento",
+   "geo": [
+    38.58,
+    -121.48472,
+    100
+   ],
+   "addr": "1526 H Street, Sacramento, CA 95814",
+   "invite": "A thirty-room Victorian that the state bought in 1903 and filled with thirteen governors' families.",
+   "story": [
+    "Albert Gallatin, a hardware merchant, had the house built in 1877. The architect was Nathaniel Goodell, and it is a three-story, thirty-room Victorian in the Second Empire and Italianate styles.",
+    "Gallatin sold it in 1887 to the businessman Joseph Steffens, father of the journalist Lincoln Steffens.",
+    "California bought the house in August 1903 for $32,500. George Pardee was the first of 13 governors and their families to live there. It was added to the National Register of Historic Places in 1970."
+   ],
+   "facts": [
+    {
+     "t": "Albert Gallatin had the house built in 1877; the architect was Nathaniel Goodell.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It is a three-story, thirty-room Victorian in the Second Empire and Italianate styles.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Gallatin sold it in 1887 to Joseph Steffens, father of the journalist Lincoln Steffens.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "California bought the house in August 1903 for $32,500.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "George Pardee was the first of 13 governors and their families to live there.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on November 10, 1970.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The mansion is a state historic park at 1526 H Street, and State Parks runs it as a house museum. We could not confirm current tour days or prices, so check the State Parks page before you go. From the sidewalk you can see the outside at any time.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and a California State Parks release from 2003; the release is old, so no hours or prices are stated. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Governor's Mansion State Historic Park",
+     "u": "https://en.wikipedia.org/wiki/Governor%27s_Mansion_State_Historic_Park"
+    },
+    {
+     "t": "California State Parks release on the Governor's Mansion (2003)",
+     "u": "https://www.parks.ca.gov/pages/712/files/101403.pdf"
+    }
+   ],
+   "ph": {
+    "k": "sq_gm",
+    "alt": "The white Governor's Mansion with its tower rising behind trees, seen across a Sacramento street corner",
+    "by": "David Sawyer",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Governor's Mansion Sacramento corner.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "cemetery",
+   "name": "Sacramento Historic City Cemetery",
+   "area": "Midtown Sacramento",
+   "town": "sacramento",
+   "geo": [
+    38.5625,
+    -121.50111,
+    300
+   ],
+   "addr": "1000 Broadway, Sacramento, CA 95818",
+   "invite": "An 1849 gold-rush cemetery that the city keeps open as an outdoor museum, with a Crocker and a Sutter among its residents.",
+   "story": [
+    "The cemetery was founded in 1849, when John Augustus Sutter Jr. donated 10 acres to the city. Margaret Crocker later donated 23 acres in 1880, and the cemetery reached 60 acres at its largest. It covers about 44 acres today.",
+    "Among the people buried here are Edwin B. Crocker, the judge who founded what is now the Crocker Art Museum, and Sutter Jr., who planned the city of Sacramento. Several California governors rest here too.",
+    "The cemetery's own site calls it an outdoor museum of California history from the Gold Rush to the present. It went onto the National Register of Historic Places in 2014."
+   ],
+   "facts": [
+    {
+     "t": "The cemetery was founded in 1849, when John Augustus Sutter Jr. donated 10 acres to the city.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Margaret Crocker donated 23 acres in 1880, and the cemetery reached 60 acres; it covers about 44 acres now.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Edwin B. Crocker, who founded the Crocker Art Museum, is buried here, along with John Augustus Sutter Jr.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on November 5, 2014.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The cemetery's site calls it an outdoor museum of California history from the Gold Rush through today.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Posted hours are 7 a.m. to 5 p.m. from November through March and 7 a.m. to 7 p.m. from April through October.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "An active historic cemetery at 1000 Broadway, open daily during posted hours: 7 a.m. to 5 p.m. November through March, and 7 a.m. to 7 p.m. April through October. Walk on the paths, be quiet and respectful, and leave the graves as you found them. Hours may change, so check the cemetery's site.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the Old City Cemetery Committee's site, where the hours come from. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Sacramento Historic City Cemetery",
+     "u": "https://en.wikipedia.org/wiki/Sacramento_Historic_City_Cemetery"
+    },
+    {
+     "t": "Historic Old City Cemetery (Old City Cemetery Committee)",
+     "u": "https://historicoldcitycemetery.org/"
+    }
+   ],
+   "ph": {
+    "k": "sq_cm2",
+    "alt": "Old gravestones and monuments under bare trees and cedars in the Sacramento Historic City Cemetery",
+    "by": "Joe Mabel",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Sacramento Historic City Cemetery 02.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "cathedral",
+   "name": "Cathedral of the Blessed Sacrament",
+   "area": "Downtown Sacramento",
+   "town": "sacramento",
+   "geo": [
+    38.579,
+    -121.492,
+    100
+   ],
+   "addr": "1019 11th Street, Sacramento, CA 95814",
+   "invite": "A cathedral finished in 1889, modeled on a church in Paris, with an Italian Renaissance front and a Victorian interior.",
+   "story": [
+    "The architect was Bryan J. Klinch of San Francisco, and the design was modeled on the Eglise de la Trinité in Paris. Wikipedia describes an Italian Renaissance exterior and a Victorian interior.",
+    "The cornerstone was laid on June 12, 1887, and the cathedral was dedicated on June 30, 1889.",
+    "Today it is the mother church of the Roman Catholic Diocese of Sacramento."
+   ],
+   "facts": [
+    {
+     "t": "The architect was Bryan J. Klinch, from San Francisco.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The design was modeled on the Eglise de la Trinité in Paris.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The cornerstone was laid on June 12, 1887, and the cathedral was dedicated on June 30, 1889.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It has an Italian Renaissance exterior and a Victorian interior.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It is the mother church of the Roman Catholic Diocese of Sacramento.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The cathedral lists weekday hours of 10 a.m. to 4 p.m.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "A working cathedral at 1019 11th Street (Wikipedia gives 1017, so follow the cathedral's own address). Its history page lists weekday hours of 10 a.m. to 4 p.m. Do not walk in during Mass or a service, and check the cathedral's site for current times.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the cathedral's own history page; hours and address come from the cathedral's page. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Cathedral of the Blessed Sacrament (Sacramento)",
+     "u": "https://en.wikipedia.org/wiki/Cathedral_of_the_Blessed_Sacrament_(Sacramento,_California)"
+    },
+    {
+     "t": "Cathedral of the Blessed Sacrament: history",
+     "u": "https://www.cathedralsacramento.org/history"
+    }
+   ],
+   "ph": {
+    "k": "sq_cb",
+    "alt": "The domed Cathedral of the Blessed Sacrament and its bell tower beside a parking lot in downtown Sacramento",
+    "by": "Always dreamin",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Blessed Sacrament Cathedral in Sacramento California 02.jpg",
+    "note": "resized"
+   }
+  }
+ ]
+}

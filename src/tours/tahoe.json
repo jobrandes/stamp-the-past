@@ -1,0 +1,276 @@
+{
+ "id": "tahoe",
+ "name": "Lake Tahoe",
+ "towns": [
+  "tahoe",
+  "tahoeicons"
+ ],
+ "stops": [
+  {
+   "id": "vikingsholm",
+   "name": "Vikingsholm",
+   "area": "Emerald Bay",
+   "town": "tahoeicons",
+   "geo": [
+    38.9522,
+    -120.1068,
+    150
+   ],
+   "addr": "Vikingsholm, Emerald Bay State Park, Highway 89, South Lake Tahoe, CA",
+   "invite": "A Scandinavian-style stone castle on Emerald Bay that took about 200 workers and one very determined summer resident.",
+   "story": [
+    "Lora Josephine Knight built Vikingsholm as a summer home. She and her architect traveled to Scandinavia before construction, and the foundation was laid in 1928. About 200 workers finished it in 1929.",
+    "The architects were Lennart Palme and Matt Green. Some parts contain no nails or spikes, and most materials were local.",
+    "California bought the land from the lumberman Harvey West in 1953, for half its appraised value. Vikingsholm is part of Emerald Bay State Park and was added to the National Register of Historic Places in 1996. Knight's teahouse sits on Fannette Island in the bay, and you can only reach it by boat."
+   ],
+   "facts": [
+    {
+     "t": "Lora Josephine Knight built Vikingsholm as a summer home.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The foundation was laid in 1928 and about 200 workers completed the building in 1929.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The architects were Lennart Palme and Matt Green.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "California bought the land from Harvey West in 1953 for half its appraised value.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on October 10, 1996.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The state park describes it as a Scandinavian-style castle, and the hike down is steep, about two miles round trip.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "Vikingsholm sits at the bottom of a steep trail from the Highway 89 lot, with no rides back up. State Parks says to skip the hike if you have medical or mobility concerns. Tours are run by the Sierra State Parks Foundation, first come first served, seasonally. Check the park page for current dates before you go.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the California State Parks Emerald Bay page; tour season text there was for 2026 and may change. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Vikingsholm",
+     "u": "https://en.wikipedia.org/wiki/Vikingsholm"
+    },
+    {
+     "t": "California State Parks: Emerald Bay State Park",
+     "u": "https://www.parks.ca.gov/?page_id=506"
+    }
+   ],
+   "ph": {
+    "k": "tv_vk",
+    "alt": "The gray stone turret and steep shingle roofs of Vikingsholm seen through pine trees",
+    "by": "Kevin Payravi",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Vikingsholm from shore.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "pope",
+   "name": "Pope Estate at Tallac",
+   "area": "South Lake Tahoe",
+   "town": "tahoeicons",
+   "geo": [
+    38.9372,
+    -120.0436,
+    250
+   ],
+   "addr": "Tallac Historic Site, 1 Heritage Way, South Lake Tahoe, CA 96150",
+   "invite": "A shingled summer estate from Tahoe's grand-resort era, now a free-to-wander historic site with seasonal tours.",
+   "story": [
+    "The Pope Estate is a summer home in the Tallac Historic Site, a cluster of three lakeside estates. The Tevis family owned it, and Wikipedia describes its builder as Lloyd Tevis, a former president of Wells Fargo Bank. Sources disagree on the date: one gives the 1880s, and the site's own page gives 1894.",
+    "It is built entirely of wood with shingle siding, and the grounds include servants' cabins. George A. Pope of the Talbot and Pope Lumber company bought the home in 1923, and the Pope family sold it in 1965.",
+    "Next door, Elias J. \"Lucky\" Baldwin bought land here in 1872 and finished a big Tallac Hotel in 1899. His daughter Anita had the hotel demolished in 1920. The Tallac Historic Site went onto the National Register of Historic Places in 1987."
+   ],
+   "facts": [
+    {
+     "t": "The Pope Estate is a shingle-sided wooden home with servants' cabins on the grounds.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Tevis family owned the property, and Baldwin sold it to them in 1899.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "George A. Pope bought the home in 1923, and the Pope family sold it in 1965.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Wikipedia says the home was built in the 1880s; the Tallac site says 1894.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Elias J. Baldwin bought the remaining 138 acres in 1872 and completed the Tallac Hotel in 1899.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Anita Baldwin demolished the Tallac Hotel in 1920.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The estate was added to the National Register of Historic Places on April 1, 1987.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Guided tours and programs run seasonally, May through October, and have fees.",
+     "src": [
+      2
+     ]
+    }
+   ],
+   "access": "The site is at 1 Heritage Way. The museum was closed for the season when checked, but parking, trails and restrooms stay open. Guided Pope House tours run seasonally from May through October for a fee, so check with the Tallac Museum before planning around a tour.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story and access read against Wikipedia's Pope Estate page and the Taylor-Tallac Association's site pages; tour dates change by season. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Pope Estate",
+     "u": "https://en.wikipedia.org/wiki/Pope_Estate"
+    },
+    {
+     "t": "Tallac Historic Site: history",
+     "u": "https://taylortallac.org/?p=1710"
+    },
+    {
+     "t": "Tallac Historic Site: visiting",
+     "u": "https://taylortallac.org/?p=986"
+    }
+   ],
+   "ph": {
+    "k": "tv_pe",
+    "alt": "The Pope Estate, a shingled lakeside house among tall pines",
+    "by": "Mistshine",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Side View of the Pope Estate.JPG",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "chapel",
+   "name": "Chapel of the Transfiguration",
+   "area": "Tahoe City",
+   "town": "tahoe",
+   "geo": [
+    39.1533,
+    -120.1472,
+    100
+   ],
+   "addr": "855 West Lake Blvd, Tahoe City, CA 96145",
+   "invite": "A rough-stone outdoor chapel built in a single summer in 1909, with pews outside and doors that open to the pines.",
+   "story": [
+    "The Bliss family donated two acres in 1908, and Robert Montgomery Watson and his youngest son built the chapel during the summer of 1909. They used rough rubble stone, peeled logs and a steep shingled roof.",
+    "The National Register nomination credits the architects Walter Danforth Bliss and William Faville. It is a small building, about 676 square feet, with a stone altar at the front.",
+    "It served summer congregations, and weddings were held there. The chapel was added to the National Register of Historic Places in 2011."
+   ],
+   "facts": [
+    {
+     "t": "The Bliss family donated the land in 1908, and construction took place in summer 1909.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Robert Montgomery Watson and his youngest son, Robert H. Watson, built the chapel.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The nomination credits Walter Danforth Bliss and William Faville as architects.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The building is about 676 square feet, with rubble stone walls and a stone altar.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on August 18, 2011.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "It was used for summer services and weddings.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "The chapel is at 855 West Lake Boulevard. It is an outdoor chapel used for services, so be quiet and respectful, and check with the church before going if you want to see the inside or if a service might be on.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the National Register nomination, a local history page and Wikipedia; no hours were found, so a visit time is not stated. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "National Register nomination: Chapel of the Transfiguration",
+     "u": "https://npgallery.nps.gov/GetAsset/7e76e8e9-6420-4fba-a4e0-56edf7b9d018"
+    },
+    {
+     "t": "Historic American blog: the little stone church in the woods",
+     "u": "https://haerr.blogspot.com/2021/07/the-little-stone-church-in-woods.html"
+    },
+    {
+     "t": "Wikipedia: Chapel of the Transfiguration (Tahoe City, California)",
+     "u": "https://en.wikipedia.org/wiki/Chapel_of_the_Transfiguration_(Tahoe_City,_California)"
+    }
+   ],
+   "ph": {
+    "k": "tv_ch",
+    "alt": "The rough-stone chapel with a steep roof and rows of wooden pews outdoors among pines",
+    "by": "Dicklyon",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Chapel of the Transfiguration, Tahoe City.jpg",
+    "note": "resized"
+   }
+  }
+ ]
+}
