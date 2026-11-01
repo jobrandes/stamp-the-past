@@ -20,7 +20,7 @@
    "story": [
     "Savannah's second burying ground took its first burials around 1750 and stayed in use until it was closed to burials in 1853. The city says it covers about six acres and holds more than nine thousand graves.",
     "The ground has gone by several names, including the Old Cemetery and Christ Church Cemetery. It became a city park in 1896, which is why it looks like a park with tombstones in it.",
-    "It also holds a large mass grave of yellow-fever victims. One story says Union soldiers who occupied Savannah on December 24, 1864 sheltered in the tombs and altered some stone dates. Accounts describe that damage as alleged, so treat it as a story, not a verdict."
+    "It also holds a large mass grave of yellow-fever victims. One story says Union soldiers who occupied Savannah in December 1864 sheltered in the tombs and altered some stone dates. Accounts describe that damage as alleged, so treat it as a story, not a verdict."
    ],
    "facts": [
     {
@@ -56,7 +56,7 @@
      ]
     },
     {
-     "t": "Union troops occupied Savannah on December 24, 1864; soldiers allegedly altered some gravestone dates.",
+     "t": "Union troops occupied Savannah in December 1864; soldiers allegedly altered some gravestone dates.",
      "src": [
       3
      ]
@@ -111,7 +111,7 @@
    "story": [
     "Master builder Isaiah Davenport, a New England native, built this house around 1820. For over a century it was just another old house in a growing city.",
     "In 1955 it was slated for demolition to make way for a parking lot. Seven women stopped the wrecking crew, bought the house, and founded the Historic Savannah Foundation to do it.",
-    "The foundation still owns and runs it. The house opened as a museum in 1963, and the group that saved one house went on to help save a lot more of the city."
+    "In the 1950s a funeral home planned to buy the house and tear it down for a parking lot. In 1955 seven women founded the Historic Savannah Foundation and bought the house to save it."
    ],
    "facts": [
     {
@@ -122,15 +122,15 @@
      ]
     },
     {
-     "t": "In 1955 it was slated for demolition to make way for a parking lot.",
+     "t": "In the 1950s a funeral home planned to demolish the house for a parking lot.",
      "src": [
-      0
+      2
      ]
     },
     {
-     "t": "Seven women stopped the demolition, bought the house and founded the Historic Savannah Foundation.",
+     "t": "Seven women founded the Historic Savannah Foundation in 1955 and bought the house.",
      "src": [
-      0
+      2
      ]
     },
     {
@@ -162,6 +162,10 @@
     {
      "t": "Wikipedia: Isaiah Davenport House",
      "u": "https://en.wikipedia.org/wiki/Isaiah_Davenport_House"
+    },
+    {
+     "t": "Wikipedia: Historic Savannah Foundation",
+     "u": "https://en.wikipedia.org/wiki/Historic_Savannah_Foundation"
     }
    ],
    "ph": {
@@ -368,8 +372,8 @@
    "addr": "502 E Harris St, Savannah, GA 31401",
    "invite": "Savannah's first permanent school built for Black students after the Civil War, now a gallery with 40 carved presidents.",
    "story": [
-    "The Beach Institute began in 1867 as the first school in Savannah built specifically for the education of African Americans. It was named for Alfred Ely Beach, the editor of Scientific American, who gave $13,000 toward the building. John Boutell of Atlanta designed it.",
-    "After the Civil War the Freedmen's Bureau, the American Missionary Association and the Savannah Educational Association built the school and a teachers' house with the labor of newly freed people. The building was rebuilt after a fire in 1878.",
+    "The Beach Institute began in 1867 as the first school in Savannah built specifically for the education of African Americans. It was named for Alfred Ely Beach, the editor of Scientific American, who donated money for the property. John Boutell designed the two-story frame building.",
+    "The Freedmen's Bureau built the school, with major funding from the American Missionary Association. A fire in 1878 damaged the building and temporarily halted classes.",
     "Savannah College of Art and Design bought the empty building in 1988 and later donated it to the King-Tisdell Cottage Foundation, which reopened it as a cultural center in 1990. Inside are rotating exhibitions and a collection of 40 carved busts of U.S. presidents by Savannah sculptor Ulysses Davis."
    ],
    "facts": [
@@ -380,22 +384,22 @@
      ]
     },
     {
-     "t": "It is named for Alfred Ely Beach, editor of Scientific American; he donated $13,000 and John Boutell of Atlanta designed it.",
+     "t": "It is named for Alfred Ely Beach, editor of Scientific American, who donated money for the property; John Boutell designed it.",
      "src": [
       0,
-      1
+      2
      ]
     },
     {
-     "t": "The Freedmen's Bureau, the American Missionary Association and the Savannah Educational Association built it with the labor of newly freed people.",
+     "t": "The Freedmen's Bureau built it with major funding from the American Missionary Association.",
      "src": [
-      0
+      2
      ]
     },
     {
-     "t": "The building was rebuilt after a fire in 1878.",
+     "t": "A fire in 1878 damaged the building and temporarily halted classes.",
      "src": [
-      1
+      2
      ]
     },
     {

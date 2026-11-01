@@ -1514,7 +1514,13 @@
     if(a==='resetyes'){ ALL[cityId]=blank(); S=ALL[cityId]; save(); confirmReset=false; render(); toast('Progress erased'); return; }
   });
 
-  load(); applyCity(); render(); maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
+  var deepExp=null;
+  try{ var hm=/^#explore-([a-z0-9-]+)$/.exec(location.hash||''); if(hm&&CITIES[hm[1]]&&townStory(hm[1]).length) deepExp=hm[1]; }catch(e){}
+  load(); applyCity();
+  if(deepExp){ /* link like /play#explore-savannah opens that town's Explore history list directly */
+    atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:deepExp}; confirmReset=false; applyCity();
+  }
+  render(); if(!deepExp) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
   if(NG){ try{ NG.addListener('stopTap',function(){ bgOpenPending(); }); }catch(e){} }
   if(NG&&!BGALERTS){ try{ NG.disable(); }catch(e){} } /* clear any region monitoring an older build registered */
 })();
