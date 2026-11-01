@@ -345,3 +345,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Story screen: slider and story first, optional "Verify this visit" card sits above the Next button. Correct answers show a "Why this is right" line from `q.verify` (`whyLine`).
 - "explore from home" in Find-it is a tappable link; landing/parents wording no longer says "teen"; Story card says "Details read against official pages on <date>. Not walked yet."; blank Passport shows one friendly line instead of four zeros; badge snackbar 5 s (7 s on stops); Explore history highlights the Towns tab; on phones only the active region chip shows in a town header.
 - Not done: per-stop accessibility notes (need Jo-Anne's walk).
+
+## Verified-visit pin (Nov 1 2026)
+- GPS-verified stamps show a small gold location pin (`gpin()`, `.gpin`) on the corner in the Passport grid, the stop list and the town Stamps tab. Real unverified stamps look as before; virtual stamps stay faded. Triggered by Jo-Anne's Sparks Marina check on her phone (Nov 1): the verified stamp looked identical to the others.
