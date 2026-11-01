@@ -1310,7 +1310,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
   }
   function whyLine(st){
-    var v=(st.q.verify||'').replace(/\s*Confirm on site\.?/g,'').replace(/\s*Written from sources, not yet checked on site\.?/g,'').trim();
+    var v=(st.q.verify||'').replace(/\s*Confirm[^.]*on site\.?/gi,'').replace(/\s*Written from sources, not yet checked on site\.?/g,'').trim();
     return v?'<p class="whyline"><b>Why this is right.</b> '+v+'</p>':'';
   }
   function lateVerify(st,d){
@@ -2326,7 +2326,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       }).join('')+'</fieldset>';
       if(d){
         h+=whyLine(st);
-        h+='<div class="earned pop"><div class="bbox lg'+(cur.demo?' virt':'')+'">'+badge(st.id,true)+(cur.demo?'<i class="vtag">Virtual</i>':'')+'</div><div><strong>'+(cur.demo?'Virtual stamp earned':(geoVerified(cityId,cur.i)?'Badge earned: visit verified':'Badge earned'))+'</strong><span>'+(cur.demo?'+25 XP. Go there for the full stamp (100 XP).':st.badge)+'</span></div></div><button class="btn" data-a="step" data-n="2">Unlock the story</button>';
+        h+='<div class="earned pop"><div class="bbox lg'+(cur.demo?' virt':'')+'">'+badge(st.id,true)+(cur.demo?'<i class="vtag">Virtual</i>':'')+gpin(cityId,cur.i,!cur.demo)+'</div><div><strong>'+(cur.demo?'Virtual stamp earned':(geoVerified(cityId,cur.i)?'Badge earned: visit verified':'Badge earned'))+'</strong><span>'+(cur.demo?'+25 XP. Go there for the full stamp (100 XP).':st.badge)+'</span></div></div><button class="btn" data-a="step" data-n="2">Unlock the story</button>';
       } else {
         h+='<p class="feedback'+(cur.wrong.length?' bad':'')+'" aria-live="polite">'+(cur.wrong.length?'Not yet. '+st.q.hint:(cur.demo?'Get it right to earn a virtual stamp, worth 25 XP.':'Get it right to earn the '+st.badge+' badge and 100 XP.'))+'</p>';
       }
