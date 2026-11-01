@@ -318,3 +318,8 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 - Spot the change (p15, Oct 31): added to Los Angeles, Minneapolis and Santa Fe (12 more stops, 128 total in 32 towns), same rules as before.
 - Test harness: tests/flows.py now serves src/_flow.html over a local http server instead of file://. Chromium lost file:// localStorage across reloads about 1 run in 5 (0 of 30 over http), which made the flows suite flaky at the "last town persists across reload" step.
+
+## Explore history (Nov 1 2026, branch explore-history-savannah-reno-sparks, NOT merged to main)
+- Each town with Story stops shows an "Explore history" row on its Trail page (`exploreRow`, `viewCityExplore`, handlers `nbcity`/`nbcityback`; `nv.mode==='city'`). It lists that town's Story stops (no location, no stamps, no XP) apart from the four-stop mission. Story stops need a `town` field. No change to the mission model, save code or progress.
+- Counts: Savannah 10 (4 missions + 6 new, `src/tours/savannah.json`), Reno 10 (4 + 6, 3 new), Sparks 10 (4 + 6, 5 new), all in `src/tours/`. No photos yet (Story cards show none; a free photo needs the browser download route). Every new stop lists facts mapped to fetched sources; unverifiable items were dropped (Waving Girl statue location, Nevada Historical Society).
+- Known: sparksmuseum map point moved to the National Register list coordinates; the Wikipedia list coordinates for Glendale School are wrong (old site), so the museum's are used. Juliette Low Birthplace coordinates are the historic-district centre. None of the new places have been walked.

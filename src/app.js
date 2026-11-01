@@ -287,7 +287,7 @@
   /* ---------- Nearby stops: a discovery list of town stops and Story stops (no route, no stamp, no XP for Story stops) ---------- */
   var TOURS=DATA.tours||[], STORY=[];
   TOURS.forEach(function(t){ t.stops.forEach(function(sp){ sp.tour=t.id; STORY.push(sp); }); });
-  var onNear=false, nv={mode:'ask',tour:null,sid:null,msg:''};
+  var onNear=false, nv={mode:'ask',tour:null,sid:null,msg:'',town:null};
   function nbGet(){ try{ var o=JSON.parse(localStorage.getItem('stp-tour')||'{}'); return (o&&typeof o==='object'&&o.v&&typeof o.v==='object')?o.v:{}; }catch(e){ return {}; } }
   function nbSet(v){ try{ localStorage.setItem('stp-tour',JSON.stringify({v:v})); }catch(e){} }
   function nbKey(sp){ return sp.tour+':'+sp.id; }
@@ -308,7 +308,7 @@
       return '<button class="rcard nbrow" data-a="nbtown" data-c="'+x.c+'" data-i="'+x.i+'"><span><strong>'+st.name+'</strong><span class="rsub">Town mission · '+CITIES[x.c].name+dist+'</span><span class="nbst'+(done?' on':'')+'">'+(done?'Stamped':'Not stamped')+'</span></span><span class="go">Open ›</span></button>';
     }
     var sp=x.s, v=!!nbGet()[nbKey(sp)];
-    return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span><span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+nbFirst(sp.access)+'</span></span><span class="go">Open ›</span></button>';
+    return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span><span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+(x.teaser?sp.invite:nbFirst(sp.access))+'</span></span><span class="go">Open ›</span></button>';
   }
   function nbCardHtml(){
     if(!STORY.length) return '';
@@ -318,12 +318,29 @@
     if(!STORY.length) return '';
     return '<button class="rcard nbtrow" data-a="nbopen"><span><strong>Nearby stops</strong><span class="rsub">Town missions and Story stops around you</span></span><span class="go">Explore ›</span></button>';
   }
+
+  /* Explore history: per-town free reading list (Story stops), kept apart from the four-stop mission. No location, no stamps, no XP. */
+  function townStory(k){ return STORY.filter(function(sp){ return sp.town===k; }); }
+  function exploreRow(k){
+    var n=townStory(k).length; if(!n) return '';
+    var seen=0, v=nbGet(); townStory(k).forEach(function(sp){ if(v[nbKey(sp)]) seen++; });
+    return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more places in '+CITIES[k].name+' to read. No mission, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
+  }
+  function viewCityExplore(k){
+    var list=townStory(k), c=CITIES[k], v=nbGet();
+    var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
+    h+='<p class="nbnote">Browse freely. Open any place, read its story, tick it off if you visit. Nothing here earns a stamp, and nothing needs your location.</p><h2 class="nbh">Places to explore</h2>';
+    h+=list.map(function(sp){ return nbRow({kind:'story',s:sp,teaser:1}); }).join('');
+    h+='<h2 class="nbh">Missions: earn stamps</h2><p class="nbnote">The four-stop mission is unchanged. Questions, stamps, XP and badges live there.</p>';
+    h+=c.stops.map(function(st,i){ return nbRow({kind:'town',c:k,i:i}); }).join('');
+    return h+'</section>';
+  }
   function viewStory(sp){
     var v=nbGet()[nbKey(sp)], d=nbDist(sp), ac=sp.access_check||{};
     var ph='';
     if(sp.ph&&PHOTOS[sp.ph.k]) ph='<figure class="nbfig"><img src="'+PHOTOS[sp.ph.k]+'" alt="'+(sp.ph.alt||sp.name)+'"><figcaption>Photo: '+sp.ph.by+', <a href="'+sp.ph.page+'" target="_blank" rel="noopener">'+sp.ph.lic+'</a></figcaption></figure>';
     var dir='https://www.google.com/maps/dir/?api=1&amp;destination='+encodeURIComponent(sp.addr)+'&amp;travelmode=walking';
-    return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ Closest stops</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
+    return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ '+(nv.mode==='city'?'Explore '+CITIES[nv.town].name:'Closest stops')+'</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
       +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
       +ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
@@ -332,6 +349,7 @@
   }
   function viewNear(){
     var sp=nv.sid?nbStory(nv.sid):null; if(sp) return viewStory(sp);
+    if(nv.mode==='city'&&nv.town&&CITIES[nv.town]) return viewCityExplore(nv.town);
     var noloc=geoDenied||!navigator.geolocation, mode=nv.mode;
     if(geoPos&&mode==='ask') mode='list';
     if(mode==='ask'&&noloc) mode='pick';
@@ -613,11 +631,13 @@
     if(allDone()){
       h+='<section class="done-banner pop" aria-label="Mission complete"><div class="bbox lg">'+badge('master',true)+'</div><div><h2>'+city().explorer+'</h2><p>'+city().afterDone+'</p></div></section>';
       if(((DATA.boss||{})[cityId]||[]).length){ var bb=bossBest()[cityId]; h+='<section class="card"><p class="mono">Final challenge</p><p>Four questions across every stop. No hints, no do-overs inside a run.'+(bb!==undefined?' Your best: <strong>'+bb+' of 4</strong>.':'')+'</p>'+(sealTier(bb)?'<div class="sealwrap">'+seal(sealTier(bb),64)+'<strong>'+SEALS[sealTier(bb)][3]+'</strong></div>':'<p class="why">Score 2 of 4 or better to earn a seal.</p>')+'<button class="btn" data-a="boss">'+(bb!==undefined?'Play again':'Start the final challenge')+'</button></section>'; }
+      h+=exploreRow(cityId);
     } else {
       var nm=STOPS.map(function(s){ return s.name; }); var lst=nm.slice(0,-1).join(', ')+' and '+nm[nm.length-1];
       /* audit rb02: the next stop comes first so the action is on the first screen; the four stops are not listed twice (the hero and the list below already show them) and the final-challenge note sits under the list */
       var ni=S.done.indexOf(0);
       if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
+      h+=exploreRow(cityId);
       h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+'</section>';
     }
     h+=bkNudgeHtml();
@@ -1415,6 +1435,8 @@
       navigator.geolocation.getCurrentPosition(function(pos){ try{ localStorage.setItem('stp-geo-ok','1'); }catch(e){} geoStartWatch(); onFix(pos); nearPaint(); },function(err){ if(err&&err.code===1){ geoDenied=true; toast('Location is off for this app, which is fine. Pick a town from Towns.'); } else toast('Could not get your location. Try again outside.'); nearPaint(); },{enableHighAccuracy:false,timeout:15000,maximumAge:60000});
       return;
     }
+    if(a==='nbcity'){ var ck=b.getAttribute('data-c'); if(ck&&CITIES[ck]){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:ck}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
+    if(a==='nbcityback'){ var bk=b.getAttribute('data-c'); if(bk&&CITIES[bk]){ railRegion=null; setCity(bk); } return; }
     if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbloc'){
       if(!navigator.geolocation){ nv.mode='pick'; nv.msg='This device cannot share its location. Pick a place instead.'; render(true); return; }
