@@ -337,6 +337,36 @@ with sync_playwright() as p:
     # file:// pages cannot export canvas pictures, so there the button must fail politely; on the web it opens the share window (checked by hand over http)
     need(pg.locator('#sharem').count()==1 or 'could not' in pg.inner_text('#toast').lower(),'Share this fade either opens the share window or says why not')
     pg.evaluate("var e=document.getElementById('sharem'); if(e) e.querySelector('[data-a=shareclose]').click()")
+    # audit ra01: Passport's "Go to my next stop" agrees with Home's Next stop (it used to reopen the finished first stop)
+    for done in ([1,0,0,0],[1,1,0,0],[0,0,1,0]):
+        pg=new({'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':done,'claims':[0,0,0,0,0,0,0,0]}}}})
+        homec=pg.get_attribute('.bigbtn[data-a=nextstop]','data-c'); homei=pg.get_attribute('.bigbtn[data-a=nextstop]','data-i')
+        pg.click('#bnav [data-t=pass]'); need(pg.locator('.passhead [data-a=nextstop]').count()==1,f'Passport offers a next-stop button ({done})')
+        need(pg.get_attribute('.passhead [data-a=nextstop]','data-c')==homec and pg.get_attribute('.passhead [data-a=nextstop]','data-i')==homei,f'Passport and Home name the same next stop ({done})')
+        pg.click('.passhead [data-a=nextstop]'); pg.wait_for_timeout(250)
+        need(pg.locator('#stopTitle').count()==1 and pg.evaluate("document.querySelectorAll('.earned').length")==0,f'Passport next stop opens an unfinished stop ({done})')
+        want=['The Reno Arch','Reno Train Depot','Virginia Street Bridge','Wingfield Park'][int(homei)]
+        need(pg.inner_text('#stopTitle').strip().lower()==want.lower(),f'Passport next stop opens {want}, got {pg.inner_text("#stopTitle")} ({done})')
+    # audit ra02: finish a town through Home > Next stop, then the celebration's final challenge starts the challenge (it used to bounce back to a stop)
+    pg=new({'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.bigbtn[data-a=nextstop]'); pg.wait_for_timeout(250); pg.click('text=I am here')
+    for k in range(4):
+        pg.locator('.opt').nth(k).click()
+        if pg.query_selector('.opt.right'): break
+    pg.wait_for_selector('#celeb',timeout=3000); pg.click('#celeb [data-a=celebboss]'); pg.wait_for_timeout(400)
+    need(pg.locator('#celeb').count()==0 and 'question 1 of' in pg.inner_text('#main').lower(),'Home Next stop > 4th stamp > celebration > final challenge starts the challenge')
+    # same path from Nearby stops and from the saved-stops card must also leave Home state
+    pg=new({'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.bigbtn[data-a=nextstop]'); pg.wait_for_timeout(250)
+    need(pg.inner_text('#cityName').lower()=='reno' and pg.locator('#bnav').is_hidden(),'Home Next stop opens the stop inside the town, not in Home state')
+    # audit ra03: Explore from home only promises what it gives (a virtual stamp, 25 XP), before and after answering
+    pg=new(); pg.click('.town >> nth=0'); pg.click('[data-a=open] >> nth=0'); pg.click('[data-a=demo]'); pg.click('text=I am here') if pg.locator('text=I am here').count() else None
+    pre=pg.inner_text('#main').lower()
+    need('badge and 100 xp' not in pre and 'virtual stamp, worth 25 xp' in pre,'preview question promises a virtual stamp worth 25 XP, not a badge and 100 XP')
+    for k in range(4):
+        if pg.locator('.earned').count(): break
+        pg.click('.opt >> nth=%d'%k)
+    post=pg.inner_text('#main').lower(); need('+25 xp' in post and 'virtual stamp earned' in post,'preview result matches the 25 XP promise')
     b.close()
 bad+= [f'page error: {e}' for e in errs]
 print('FLOWS: '+('OK' if not bad else 'FAILED'))

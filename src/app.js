@@ -570,7 +570,7 @@
     var got=0,total=0,full=0,seals=0,b=bossBest();
     ORDER.forEach(function(k){ total+=CITIES[k].stops.length; var d=sum(ALL[k].done); got+=d; if(d===CITIES[k].stops.length) full++; if(sealTier(b[k])) seals++; });
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
-    var h='<section class="passhead"><p class="mono">Stamp the Past</p><h1 class="hh2">Your passport</h1><div class="pstats"><div><b>'+got+'</b><span>of '+total+' stamps</span></div><div><b>'+full+'</b><span>of '+ORDER.length+' towns done</span></div><div><b>'+seals+'</b><span>challenge seals</span></div><div><b>'+totalPts()+'</b><span>challenge points</span></div></div>'+curTownLine()+(seals===0?'<p class="pnote">Challenge seals and points come from a town\'s final challenge. Stamp every stop in a town to unlock it.</p><button class="btn small" data-a="'+(got>0?'nextstop':'gomissions')+'">'+(got>0?'Go to my next stop':'Pick a town')+'</button>':'')+(got>0?'<button class="btn small" data-a="share" data-k="" style="margin-top:12px">Share my passport</button>':'')+'</section>';
+    var h='<section class="passhead"><p class="mono">Stamp the Past</p><h1 class="hh2">Your passport</h1><div class="pstats"><div><b>'+got+'</b><span>of '+total+' stamps</span></div><div><b>'+full+'</b><span>of '+ORDER.length+' towns done</span></div><div><b>'+seals+'</b><span>challenge seals</span></div><div><b>'+totalPts()+'</b><span>challenge points</span></div></div>'+curTownLine()+(seals===0?'<p class="pnote">Challenge seals and points come from a town\'s final challenge. Stamp every stop in a town to unlock it.</p><button class="btn small" data-a="'+(got>0?'nextstop':'gomissions')+'"'+(got>0&&nextRef()?' data-c="'+nextRef().k+'" data-i="'+nextRef().i+'"':'')+'>'+(got>0?'Go to my next stop':'Pick a town')+'</button>':'')+(got>0?'<button class="btn small" data-a="share" data-k="" style="margin-top:12px">Share my passport</button>':'')+'</section>';
     var bd=bdAll(); h+=levelHtml(bd.s)+trophyHtml(bd);
     h+='<section class="passport" id="passport">'+regs.map(function(r){ var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }); if(!rk.length) return ''; var g=0,t=0; rk.forEach(function(k){ g+=sum(ALL[k].done); t+=CITIES[k].stops.length; }); return '<details class="reg ppreg"'+(g>0?' open':'')+'><summary class="region"><span>'+r+'</span><span class="rcount">'+g+' of '+t+' stamps</span></summary>'+rk.filter(function(k){ return sum(ALL[k].done)>0; }).map(function(k){
       var c=CITIES[k], d=sum(ALL[k].done);
@@ -1196,7 +1196,7 @@
       if(d){
         h+='<div class="earned pop"><div class="bbox lg'+(cur.demo?' virt':'')+'">'+badge(st.id,true)+(cur.demo?'<i class="vtag">Virtual</i>':'')+'</div><div><strong>'+(cur.demo?'Virtual stamp earned':(geoVerified(cityId,cur.i)?'Badge earned: visit verified':'Badge earned'))+'</strong><span>'+(cur.demo?'+25 XP. Go there for the full stamp (100 XP).':st.badge)+'</span></div></div><button class="btn" data-a="step" data-n="2">Unlock the story</button>';
       } else {
-        h+='<p class="feedback'+(cur.wrong.length?' bad':'')+'" aria-live="polite">'+(cur.wrong.length?'Not yet. '+st.q.hint:'Get it right to earn the '+st.badge+' badge and 100 XP.')+'</p>';
+        h+='<p class="feedback'+(cur.wrong.length?' bad':'')+'" aria-live="polite">'+(cur.wrong.length?'Not yet. '+st.q.hint:(cur.demo?'Get it right to earn a virtual stamp, worth 25 XP.':'Get it right to earn the '+st.badge+' badge and 100 XP.'))+'</p>';
       }
       h+='</section>';
     }
@@ -1310,6 +1310,7 @@
   function exitStop(){ leave(); render(); window.scrollTo(0,0); }
   function openStop(i,step){
     endDemo();
+    if(atHome){ atHome=false; onPass=false; onNear=false; tab='trail'; confirmReset=false; save(); applyCity(); }
     var entry=(step!==undefined?step:(S.done[i]?2:0));
     cur={i:i,step:entry,entry:entry,wrong:[],picks:[],checked:false};
     if(!pushed){ try{ history.pushState({stop:1},'','#stop'); pushed=true; }catch(e){} }
@@ -1338,7 +1339,7 @@
     if(a==='theme'){ var tv=b.getAttribute('data-t'); try{ if(tv==='system') localStorage.removeItem('stp-theme'); else localStorage.setItem('stp-theme',tv); }catch(x){} themeApply(tv); b.parentNode.querySelectorAll('.seg').forEach(function(x){ var on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false'); }); return; }
     if(document.getElementById('menu')&&['backup','share','replaytour','report'].indexOf(a)>-1) closeMenu();
     if(a==='home'){ goHome(); return; }
-    if(a==='nextstop'){ var nc=b.getAttribute('data-c'); if(nc&&CITIES[nc]&&nc!==cityId){ railRegion=null; setCity(nc); } openStop(+b.getAttribute('data-i'),0); return; }
+    if(a==='nextstop'){ var nc=b.getAttribute('data-c'), nsi=b.getAttribute('data-i'); if(atHome&&!nc&&nsi===null){ var nr0=nextRef(); if(nr0){ nc=nr0.k; nsi=String(nr0.i); } } if(nc&&CITIES[nc]&&nc!==cityId){ railRegion=null; setCity(nc); } openStop(+nsi,0); return; }
     if(a==='bossgo'){ leave(); boss={pid:cityId,i:0,score:0,pick:null}; render(); window.scrollTo(0,0); return; }
     if(a==='boss'||a==='bossagain'){ boss={pid:cityId,i:0,score:0,pick:null}; render(); window.scrollTo(0,0); return; }
     if(a==='bossexit'){ boss=null; render(); window.scrollTo(0,0); return; }
