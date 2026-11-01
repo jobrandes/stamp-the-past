@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A curved railroad bridge now just for walking and biking.",
    "map": "Stone Arch Bridge, Minneapolis, MN",
-   "geo": [44.98083, -93.25361, 300],
+   "geo": [
+    44.98083,
+    -93.25361,
+    300
+   ],
    "clue": "Walk to the old railroad bridge that curves across the Mississippi River next to Saint Anthony Falls.",
    "safety": "The bridge is shared with bikes. Stay to the right, keep back from railings and watch your step.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "1994",
     "la": "Railroad bridge",
     "lb": "Pedestrian path"
+   },
+   "spot": {
+    "q": "James J. Hill finished the Stone Arch Bridge in 1883, and the Park Board turned it into a bike and walking path in 1994. How many years is that?",
+    "options": [
+     "71 years",
+     "91 years",
+     "111 years",
+     "131 years"
+    ],
+    "answer": 2,
+    "why": "1994 minus 1883 is 111 years."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "The mill that blew up, and the ruins they built a museum inside.",
    "map": "Mill City Museum, 704 S 2nd St, Minneapolis, MN",
-   "geo": [44.9788, -93.25723, 150],
+   "geo": [
+    44.9788,
+    -93.25723,
+    150
+   ],
    "clue": "Find the museum built inside the ruins of a giant flour mill on the river, just west of the Stone Arch Bridge.",
    "safety": "Museum hours and ticket rules apply. Stay on public paths and outside any fenced ruins.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "2003",
     "la": "Mill built",
     "lb": "Museum opened"
+   },
+   "spot": {
+    "q": "The 1878 photo shows the Washburn A Mill after the flour dust explosion. Fourteen workers died instantly and four more died in the fire. How many died in all?",
+    "options": [
+     "14",
+     "18",
+     "22",
+     "28"
+    ],
+    "answer": 1,
+    "why": "Fourteen died instantly and four more in the fire, so eighteen workers died."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "The only big waterfall on the Mississippi, and the reason there was a mill city.",
    "map": "Saint Anthony Falls, Minneapolis, MN",
-   "geo": [44.98167, -93.25861, 300],
+   "geo": [
+    44.98167,
+    -93.25861,
+    300
+   ],
    "clue": "Walk to the river just upstream of the Stone Arch Bridge, where the water drops over a wide apron beside the old mills.",
    "safety": "Stay behind railings and on marked paths. Do not climb on the apron or lock walls. Wet stone is slippery.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1963",
     "la": "Named",
     "lb": "Locks completed"
+   },
+   "spot": {
+    "q": "Saint Anthony Falls has a total drop of 49 feet. The natural falls were about 35 feet. About how many feet does the upper dam add?",
+    "options": [
+     "4 feet",
+     "9 feet",
+     "11 feet",
+     "14 feet"
+    ],
+    "answer": 3,
+    "why": "49 minus 35 is 14 feet from the upper dam."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "America's first basilica, with a dome you can see from the highway.",
    "map": "Basilica of Saint Mary, 1600 Hennepin Ave, Minneapolis, MN",
-   "geo": [44.97306, -93.28639, 150],
+   "geo": [
+    44.97306,
+    -93.28639,
+    150
+   ],
    "clue": "Go to Hennepin Avenue near Loring Park and find the big domed church between 16th and 17th Streets.",
    "safety": "It is an active church. Be quiet and respectful, check visiting hours, and use crosswalks on Hennepin.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1926",
     "la": "Construction began",
     "lb": "Named a basilica"
+   },
+   "spot": {
+    "q": "The 1907 photo shows the groundbreaking. Construction ran until the first Mass in 1914. About how many years did it take?",
+    "options": [
+     "7 years",
+     "9 years",
+     "11 years",
+     "14 years"
+    ],
+    "answer": 0,
+    "why": "Construction ran from 1907 to 1914, which is 7 years."
    }
   }
  ],

@@ -6,7 +6,15 @@ R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/'
 src=open(R+'index.html').read()
 open(R+'src/_flow.html','w').write('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>'+src+'</body></html>')
 NT=len(json.load(open(R+'src/packs/index.json'))['order'])
-U='file://'+R+'src/_flow.html'
+# Serve over http, not file://: Chromium can lose file:// localStorage across a reload (about 1 run in 5), which made reload tests flaky.
+import threading,functools,http.server,socketserver
+class _Q(http.server.SimpleHTTPRequestHandler):
+    def log_message(self,*a): pass
+class _S(http.server.ThreadingHTTPServer):
+    def handle_error(self,*a): pass
+_srv=_S(('127.0.0.1',0),functools.partial(_Q,directory=R))
+threading.Thread(target=_srv.serve_forever,daemon=True).start()
+U='http://127.0.0.1:%d/src/_flow.html'%_srv.server_address[1]
 bad=[];errs=[]
 def need(c,m):
     if not c: bad.append(m)

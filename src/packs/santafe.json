@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "The end of the Santa Fe Trail, and the town square for four centuries.",
    "map": "Santa Fe Plaza, 100 Old Santa Fe Trail, Santa Fe, NM",
-   "geo": [35.68743, -105.93852, 300],
+   "geo": [
+    35.68743,
+    -105.93852,
+    300
+   ],
    "clue": "Go to the middle of downtown. Look for the grassy square with trees, benches and a bandstand, ringed by low buildings.",
    "safety": "Streets around the Plaza have cars and tour carts. Use crosswalks and keep to the sidewalks and paths.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "1912",
     "la": "Trail opens",
     "lb": "Statehood"
+   },
+   "spot": {
+    "q": "The 1885 photo shows the Plaza when New Mexico was still a territory. New Mexico became the 47th state in 1912. How many years later was that?",
+    "options": [
+     "17 years",
+     "27 years",
+     "37 years",
+     "47 years"
+    ],
+    "answer": 1,
+    "why": "1912 minus 1885 is 27 years."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "An inn on the same corner for 400 years, and the last stop of a famous trail.",
    "map": "La Fonda on the Plaza, 100 E San Francisco St, Santa Fe, NM",
-   "geo": [35.68665, -105.9378, 300],
+   "geo": [
+    35.68665,
+    -105.9378,
+    300
+   ],
    "clue": "Go to the southeast corner of the Plaza, where San Francisco Street meets the Old Santa Fe Trail. Look for the stepped, earth-colored hotel.",
    "safety": "The corner has traffic and people with luggage. Use crosswalks, and be polite in the lobby, since it is a working hotel.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "1925",
     "la": "First inn",
     "lb": "Railway buys it"
+   },
+   "spot": {
+    "q": "The United States Hotel burned down in 1912. In 1925 the Santa Fe Railway bought the new hotel that replaced it. How many years later was that?",
+    "options": [
+     "3 years",
+     "8 years",
+     "13 years",
+     "18 years"
+    ],
+    "answer": 2,
+    "why": "1925 minus 1912 is 13 years."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "A very old church that got rebuilt after a rebellion burned it.",
    "map": "San Miguel Chapel, 401 Old Santa Fe Trail, Santa Fe, NM",
-   "geo": [35.68343, -105.93767, 150],
+   "geo": [
+    35.68343,
+    -105.93767,
+    150
+   ],
    "clue": "Go south of the Plaza across the Santa Fe River, on Old Santa Fe Trail. Look for a small brown adobe church with a short front tower.",
    "safety": "The chapel is on a busy street. Use crosswalks, check the visiting hours, and be quiet inside, since it is a place of worship.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1710",
     "la": "First church",
     "lb": "Rebuilt"
+   },
+   "spot": {
+    "q": "San Miguel Chapel was rebuilt in 1710, and its wooden altar screen, the reredos, was added in 1798. How many years later was the screen?",
+    "options": [
+     "58 years",
+     "68 years",
+     "78 years",
+     "88 years"
+    ],
+    "answer": 3,
+    "why": "1798 minus 1710 is 88 years."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "A government building from the 1600s that is still standing on the Plaza.",
    "map": "Palace of the Governors, 105 W Palace Ave, Santa Fe, NM",
-   "geo": [35.68778, -105.9375, 150],
+   "geo": [
+    35.68778,
+    -105.9375,
+    150
+   ],
    "clue": "Go to the north side of the Plaza. Look for a long, low adobe building with a wooden porch running along the whole front.",
    "safety": "Check hours before you go. Keep to the sidewalk, and be careful on the porch, where people walk and sell things.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1909",
     "la": "Construction starts",
     "lb": "Becomes a museum"
+   },
+   "spot": {
+    "q": "Pedro de Peralta began the Palace of the Governors in 1610, and New Mexico was governed from it until 1901. About how many years is that?",
+    "options": [
+     "291 years",
+     "301 years",
+     "311 years",
+     "321 years"
+    ],
+    "answer": 0,
+    "why": "1901 minus 1610 is 291 years."
    }
   }
  ],

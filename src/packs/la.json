@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A plain brick box hiding a five-story glass court and open-cage elevators.",
    "map": "Bradbury Building, 304 S Broadway, Los Angeles, CA",
-   "geo": [34.05054, -118.24786, 150],
+   "geo": [
+    34.05054,
+    -118.24786,
+    150
+   ],
    "clue": "Go downtown to Broadway and 3rd Street and find the plain-looking brick building with an arched entrance. Step inside the lobby court if it is open.",
    "safety": "Downtown is busy. Use crosswalks. The building has offices, so be quiet and follow posted visiting rules.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "1977",
     "la": "Built",
     "lb": "Landmark status"
+   },
+   "spot": {
+    "q": "The 1894 photo shows the Bradbury Building when it opened. It was budgeted at $175,000. About how much did it cost to build?",
+    "options": [
+     "$100,000",
+     "$250,000",
+     "$350,000",
+     "$500,000"
+    ],
+    "answer": 3,
+    "why": "It cost $500,000, about three times its original $175,000 budget."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A giant real estate ad that became a symbol.",
    "map": "Lake Hollywood Park, Los Angeles, CA",
-   "geo": [34.12689, -118.32592, 150],
+   "geo": [
+    34.12689,
+    -118.32592,
+    150
+   ],
    "clue": "Find a public viewing spot, such as Lake Hollywood Park or an overlook in Griffith Park, where you can see the white letters on the hillside. Do not try to climb to the sign.",
    "safety": "The sign is on a protected hillside and hiking up to it is not allowed. View it from a distance. Park legally, stay quiet near homes and do not block narrow residential streets.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "Today",
     "la": "Hollywoodland",
     "lb": "Hollywood"
+   },
+   "spot": {
+    "q": "The 1920s photo shows the sign when it read 'Hollywoodland'. In what year was it built?",
+    "options": [
+     "1903",
+     "1913",
+     "1923",
+     "1933"
+    ],
+    "answer": 2,
+    "why": "Harry Chandler built the sign in 1923 as a billboard for his Hollywoodland development."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "The world's shortest railway, with two cars named Olivet and Sinai.",
    "map": "Angels Flight Railway, 351 S Hill St, Los Angeles, CA",
-   "geo": [34.05134, -118.25021, 150],
+   "geo": [
+    34.05134,
+    -118.25021,
+    150
+   ],
    "clue": "Go downtown to Hill Street near Grand Central Market and find the tiny orange-and-black funicular with two cars.",
    "safety": "Hill Street is busy. Use crosswalks. Check the funicular's status first, because it has closed many times.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1996",
     "la": "Opened",
     "lb": "Reopened"
+   },
+   "spot": {
+    "q": "Angels Flight closed in May 1969 and reopened on February 24, 1996. For about how many years did the cars sit in storage?",
+    "options": [
+     "27 years",
+     "37 years",
+     "47 years",
+     "57 years"
+    ],
+    "answer": 0,
+    "why": "The cars sat in storage for 27 years, from 1969 to 1996."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "The oldest part of Los Angeles, with the oldest house still standing.",
    "map": "Olvera Street, Los Angeles, CA",
-   "geo": [34.0575, -118.238, 300],
+   "geo": [
+    34.0575,
+    -118.238,
+    300
+   ],
    "clue": "Walk across from Union Station to the brick-paved marketplace street beside the old Plaza.",
    "safety": "The street is crowded and has uneven bricks. Use crosswalks to cross Main and Alameda, and watch for kids and carts.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1930",
     "la": "Founded",
     "lb": "Opened as a market"
+   },
+   "spot": {
+    "q": "Christine Sterling began her campaign to save the area in 1926, and the street opened on Easter Sunday 1930. About how many years did that take?",
+    "options": [
+     "2 years",
+     "4 years",
+     "6 years",
+     "8 years"
+    ],
+    "answer": 1,
+    "why": "1930 minus 1926 is 4 years."
    }
   }
  ],
