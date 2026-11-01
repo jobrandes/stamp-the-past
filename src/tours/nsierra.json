@@ -211,6 +211,147 @@
      "u": "https://noehill.com/plumas/cal0196.asp"
     }
    ]
+  },
+  {
+   "id": "beckwourthpass",
+   "name": "Beckwourth Pass",
+   "area": "Chilcoot",
+   "town": "nsierra",
+   "geo": [
+    39.79167,
+    -120.10778,
+    500
+   ],
+   "addr": "State Route 70, Chilcoot, CA 96105",
+   "invite": "The lowest pass in the Sierra Nevada, found by a mountain man who turned it into a wagon road.",
+   "story": [
+    "Beckwourth Pass sits at 5,221 feet at the northeastern edge of Sierra Valley, near the Plumas and Lassen County line. It is about 20 miles east of Portola and 25 miles northwest of Reno.",
+    "James Beckwourth is credited with finding it, in 1850 by Wikipedia and the National Park Service, and in 1851 by the state marker. In 1851 he improved the route into the Beckwourth Trail, which ran from Truckee Meadows (now Sparks, Nevada) through the pass and on to Marysville.",
+    "About 1,200 emigrants used the trail between 1851 and 1854, until it became a toll road. A narrow-gauge railroad used the pass from 1895 to 1916, and the Western Pacific Railroad built the 6,002-foot Chilcoot Tunnel under it in 1906. The Native Daughters of the Golden West placed a plaque here in 1937, and it is California Historical Landmark No. 336."
+   ],
+   "facts": [
+    {
+     "t": "The pass is 5,221 feet high, near the Plumas and Lassen County line, about 25 miles northwest of Reno.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "James Beckwourth is credited with discovering it; the date is given as 1850 by Wikipedia and 1851 on the state marker.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The Beckwourth Trail ran from Truckee Meadows (now Sparks) through the pass to Marysville, and about 1,200 emigrants used it between 1851 and 1854.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Western Pacific Railroad built the 6,002-foot Chilcoot Tunnel under the pass in 1906.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The marker was placed in 1937 by the Native Daughters of the Golden West, and the site is California Historical Landmark No. 336.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "The marker is beside State Route 70 near Chilcoot, a highway pull-off, so take care with traffic and park only where it is safe. Check road conditions in winter. The exact marker spot was not checked.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and NoeHill's landmark page; the pass coordinates come from Wikipedia and the marker position was not checked. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Beckwourth Pass",
+     "u": "https://en.wikipedia.org/wiki/Beckwourth_Pass"
+    },
+    {
+     "t": "NoeHill: California Historical Landmark 336, Beckwourth Pass",
+     "u": "https://noehill.com/plumas/cal0336.asp"
+    }
+   ]
+  },
+  {
+   "id": "beckwourthcabin",
+   "name": "Jim Beckwourth Cabin Museum",
+   "area": "Beckwourth",
+   "town": "nsierra",
+   "geo": [
+    39.8275,
+    -120.4036,
+    1000
+   ],
+   "addr": "1820 Rocky Point Rd, Beckwourth, CA 96129",
+   "invite": "A log cabin museum at the third trading post a mountain man built in Sierra Valley.",
+   "story": [
+    "James Beckwourth built three successive trading posts in the northwest corner of Sierra Valley. The first two burned, and the log cabin here is the third, built after the second fire when trail traffic had declined. He likely had men build it from green logs, and he lived in it for about a year.",
+    "Beckwourth was born in 1798 in Virginia into slavery and was freed by his father in the 1820s. He trapped for the Rocky Mountain Fur Company and lived with a Crow band for years. How he came to join the Crow is disputed, and his autobiography, dictated in the winter of 1854 to 1855 and published in 1856, was doubted from the start.",
+    "He left California in November 1858 and went on to Denver, and he never returned. Plumas County owns the site, which is a museum run by a curator and docents."
+   ],
+   "facts": [
+    {
+     "t": "Beckwourth built three trading posts in Sierra Valley; the first two burned, and the log cabin is the third.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "He dictated his autobiography in the winter of 1854 to 1855, and it was published in 1856.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "He left for Missouri in November 1858, reached Denver in November 1859 and never returned to California.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "He was born in Virginia in 1798 (some sources say 1800) into slavery, and his father freed him through deeds in 1824, 1825 and 1826.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "How Beckwourth came to live with the Crow is contested, and reviewers doubted the accuracy of his autobiography from the start.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Plumas County owns the museum, which is open inside only on summer weekends, with signs outdoors the rest of the year.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The grounds can be visited year-round with signs outside. The inside is open only on summer weekends, noon to 4 p.m., according to the National Park Service. Confirm before you drive out. The map point is a rough estimate of the town, so use the street address.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the National Park Service place page and Wikipedia's James Beckwourth article. Map point is the town of Beckwourth and is only a rough estimate. No free photo found. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "National Park Service: Jim Beckwourth Cabin Museum",
+     "u": "https://www.nps.gov/places/jim-beckwourth-cabin-museum.htm"
+    },
+    {
+     "t": "Wikipedia: James Beckwourth",
+     "u": "https://en.wikipedia.org/wiki/James_Beckwourth"
+    }
+   ]
   }
  ]
 }
