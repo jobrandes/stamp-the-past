@@ -74,7 +74,16 @@
      "u": "https://renohistorical.org/items/show/19"
     }
    ],
-   "town": "reno"
+   "town": "reno",
+   "ph": {
+    "k": "rn_ct",
+    "alt": "The columned Washoe County Courthouse in Reno with its dome",
+    "by": "Ken Lund",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Washoe County Courthouse in Reno, Nevada.jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "riverside",
@@ -141,7 +150,16 @@
      "u": "https://en.wikipedia.org/wiki/Riverside_Hotel_(Reno,_Nevada)"
     }
    ],
-   "town": "reno"
+   "town": "reno",
+   "ph": {
+    "k": "rn_rv",
+    "alt": "The brick Riverside Hotel in Reno",
+    "by": "Visitor7",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:The Riverside Hotel (Reno, Nevada).jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "lakemansion",
@@ -209,7 +227,16 @@
      "u": "https://www.artsforallnevada.org/?p=29"
     }
    ],
-   "town": "reno"
+   "town": "reno",
+   "ph": {
+    "k": "rn_lm",
+    "alt": "The Italianate Lake Mansion in Reno",
+    "by": "Ken Lund",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Lake Mansion, Reno, Nevada (17895044538).jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "sparksmuseum",
@@ -281,7 +308,16 @@
      "u": "https://www.up.com/aboutup/train_town/sparks_nv/index.htm"
     }
    ],
-   "town": "sparks"
+   "town": "sparks",
+   "ph": {
+    "k": "sp_mu",
+    "alt": "The Sparks Heritage Museum, a brick building with a tile roof",
+    "by": "Ken Lund",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Sparks Museum, Sparks, Nevada (6320840650).jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "mapes",
@@ -431,7 +467,16 @@
      "t": "Wikipedia: Saint Thomas Aquinas Cathedral (Reno)",
      "u": "https://en.wikipedia.org/wiki/Saint_Thomas_Aquinas_Cathedral"
     }
-   ]
+   ],
+   "ph": {
+    "k": "rn_ca",
+    "alt": "St. Thomas Aquinas Cathedral in Reno, a red brick church with two white towers",
+    "by": "Mike Searson",
+    "lic": "CC0 1.0",
+    "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:StThomasAquinasCathedral.jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "pioneer",
@@ -510,7 +555,16 @@
      "t": "Wikipedia: Pioneer Center for the Performing Arts",
      "u": "https://en.wikipedia.org/wiki/Pioneer_Center_for_the_Performing_Arts"
     }
-   ]
+   ],
+   "ph": {
+    "k": "rn_pc",
+    "alt": "The gold geodesic dome of the Pioneer Center in Reno",
+    "by": "Ken Lund",
+    "lic": "CC BY-SA 2.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Pioneer Center, Reno, Nevada (6320817504).jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "bankofsparks",
@@ -577,7 +631,16 @@
      "t": "Wikipedia: National Register of Historic Places listings in Washoe County, Nevada",
      "u": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Washoe_County,_Nevada"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sp_bk",
+    "alt": "The stone and brick front of the Bank of Sparks building on Victorian Avenue",
+    "by": "Ammodramus",
+    "lic": "CC0 1.0",
+    "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Bank of Sparks from S 1.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "robison",
@@ -657,7 +720,16 @@
      "t": "Wikipedia: National Register of Historic Places listings in Washoe County, Nevada",
      "u": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Washoe_County,_Nevada"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sp_rb",
+    "alt": "The white two-story Robison House in Sparks behind an iron fence",
+    "by": "Ammodramus",
+    "lic": "CC0 1.0",
+    "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Robison house (Sparks, Nevada) from E 1.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "glendale",
@@ -728,7 +800,16 @@
      "t": "Sparks Heritage Museum",
      "u": "https://sparksmuseum.org/"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sp_gl",
+    "alt": "The small white Glendale School building in Sparks",
+    "by": "Ammodramus",
+    "lic": "CC0 1.0",
+    "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Glendale School (Sparks, Nevada) from NW 1.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "marylee",
@@ -800,7 +881,16 @@
      "t": "Wikipedia: Mary Lee Nichols School",
      "u": "https://en.wikipedia.org/wiki/Mary_Lee_Nichols_School"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sp_ml",
+    "alt": "The low tan Mary Lee Nichols School building in Sparks",
+    "by": "Ammodramus",
+    "lic": "CC0 1.0",
+    "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Nichols school (Sparks, Nevada) from SW 1.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "immaculate",

@@ -64,7 +64,7 @@ with sync_playwright() as p:
     pg.click('.nbcard [data-a=nbopen]'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     pg.locator('.nbrow[data-a=nbstory]').first.click(); pg.wait_for_timeout(200)
     t=txt(pg).lower()
-    need(pg.locator('#main img').count()==0 and 'photo pending' not in t,'a Story stop with no photo shows no image and no placeholder')
+    need('photo pending' not in t and (pg.locator('#main img').count()==0 or ('photo:' in t and pg.locator('.nbfig a').count()>=1)),'a Story stop shows either no image, or a photo with its credit and license link (never a placeholder)')
     need(pg.locator('.nbsrc a').count()>=2 and all(h.startswith('https://') for h in pg.eval_on_selector_all('.nbsrc a','e=>e.map(x=>x.href)')),'Story card lists 2+ https sources')
     need('getting there' in t and 'checked 2026-10-31' in t,'Story card shows the access note and when it was checked')
     href=pg.get_attribute('.nbaccess a.btn','href'); need('travelmode=walking' in href and 'google.com/maps/dir' in href and 'destination=' in href,'directions link is a walking Maps link')

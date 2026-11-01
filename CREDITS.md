@@ -688,3 +688,13 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | sv_jl | https://commons.wikimedia.org/wiki/File:Juliette Gordon Low Birthplace 2019.jpg | KWhiteJGLB | CC BY-SA 4.0 | 2019, resized |
 | sv_bi | https://commons.wikimedia.org/wiki/File:Beach Institute African-American Cultural Center-01.jpg | Myotus | CC BY 4.0 | 2025, resized |
 | sv_mi | https://commons.wikimedia.org/wiki/File:Congregation Mickve Israel, Savannah, GA, US.jpg | Bubba73 (Jud McCranie) | CC BY-SA 4.0 | 2015, resized |
+| rn_ct | https://commons.wikimedia.org/wiki/File:Washoe County Courthouse in Reno, Nevada.jpg | Ken Lund | CC BY-SA 2.0 | 2008, resized |
+| rn_rv | https://commons.wikimedia.org/wiki/File:The Riverside Hotel (Reno, Nevada).jpg | Visitor7 | CC BY-SA 3.0 | 2012, resized |
+| rn_lm | https://commons.wikimedia.org/wiki/File:Lake Mansion, Reno, Nevada (17895044538).jpg | Ken Lund | CC BY-SA 2.0 | 2015, resized |
+| sp_mu | https://commons.wikimedia.org/wiki/File:Sparks Museum, Sparks, Nevada (6320840650).jpg | Ken Lund | CC BY-SA 2.0 | 2011, resized |
+| rn_ca | https://commons.wikimedia.org/wiki/File:StThomasAquinasCathedral.jpg | Mike Searson | CC0 1.0 | 2011, resized |
+| rn_pc | https://commons.wikimedia.org/wiki/File:Pioneer Center, Reno, Nevada (6320817504).jpg | Ken Lund | CC BY-SA 2.0 | 2011, resized |
+| sp_bk | https://commons.wikimedia.org/wiki/File:Bank of Sparks from S 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
+| sp_rb | https://commons.wikimedia.org/wiki/File:Robison house (Sparks, Nevada) from E 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
+| sp_gl | https://commons.wikimedia.org/wiki/File:Glendale School (Sparks, Nevada) from NW 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
+| sp_ml | https://commons.wikimedia.org/wiki/File:Nichols school (Sparks, Nevada) from SW 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
