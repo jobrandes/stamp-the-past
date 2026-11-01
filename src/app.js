@@ -359,7 +359,8 @@
   // Optional alerts when the app is closed (iPhone app only; the phone does the watching, nothing is sent anywhere)
   var NG=null;
   try{ if(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.getPlatform&&Capacitor.getPlatform()==='ios') NG=Capacitor.registerPlugin('StampGeo'); }catch(e){}
-  function bgOn(){ try{ return localStorage.getItem('stp-bg')==='1'; }catch(e){ return false; } }
+  var BGALERTS=false; /* dc01: background alerts are postponed for 1.0; flip to true only after device testing */
+  function bgOn(){ if(!BGALERTS) return false; try{ return localStorage.getItem('stp-bg')==='1'; }catch(e){ return false; } }
   function bgStops(){ var out=[]; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ if(!st.geo||ALL[k].done[i]) return; out.push({id:k+':'+i,n:st.name+', '+CITIES[k].name,lat:st.geo[0],lon:st.geo[1],r:Math.min(st.geo[2],500)}); }); }); return out; }
   function bgSync(){ if(NG&&bgOn()) try{ NG.enable({stops:bgStops()}).catch(function(){}); }catch(e){} }
   function bgOpenPending(){ if(!NG) return; try{ NG.pending().then(function(r){ var id=r&&r.id; if(!id) return; var q=id.split(':'), k=q[0], i=+q[1]; if(CITIES[k]&&CITIES[k].stops[i]){ railRegion=null; if(k!==cityId||atHome) setCity(k); openStop(i,0); } }).catch(function(){}); }catch(e){} }
@@ -645,7 +646,7 @@
      +'<p class="mgroup">Settings</p>'
      +'<div class="mrow"><span id="thl">Appearance</span><div class="segs" role="group" aria-labelledby="thl">'+seg+'</div></div>'
      +(geoGranted()?'<div class="mrow"><span id="lvl">Live location while the app is open</span><div class="segs"><button class="seg on" data-a="livetoggle" aria-labelledby="lvl" aria-pressed="'+liveOn()+'">'+(liveOn()?'On':'Off')+'</button></div></div>':'')
-     +(NG?'<div class="mrow"><span id="bgl">Alert me near stops, even when the app is closed</span><div class="segs"><button class="seg on" data-a="bgtoggle" aria-labelledby="bgl" aria-pressed="'+bgOn()+'">'+(bgOn()?'On':'Off')+'</button></div></div><p class="msub">iPhone asks for "Always" location. It only watches the 20 nearest stops, and nothing leaves your phone.</p>':'')
+     +(NG&&BGALERTS?'<div class="mrow"><span id="bgl">Alert me near stops, even when the app is closed</span><div class="segs"><button class="seg on" data-a="bgtoggle" aria-labelledby="bgl" aria-pressed="'+bgOn()+'">'+(bgOn()?'On':'Off')+'</button></div></div><p class="msub">iPhone asks for "Always" location. It only watches the 20 nearest stops, and nothing leaves your phone.</p>':'')
      +'<p class="mgroup">Help</p>'
      +item('report','Report a problem or send feedback','Tell us what is wrong or confusing')
      +'<details class="mdet mhelp"><summary>Guide and about</summary>'
@@ -1492,4 +1493,5 @@
 
   load(); applyCity(); render(); maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
   if(NG){ try{ NG.addListener('stopTap',function(){ bgOpenPending(); }); }catch(e){} }
+  if(NG&&!BGALERTS){ try{ NG.disable(); }catch(e){} } /* clear any region monitoring an older build registered */
 })();

@@ -407,6 +407,14 @@ with sync_playwright() as p:
         if pg.locator('.feedback.bad').count(): wrong=pg.inner_text('.feedback.bad'); break
         if pg.locator('.opt.right').count(): break
     need(wrong is not None and wrong.lower().startswith('not yet.') and len(wrong)>20,'ra05: a wrong answer shows "Not yet." plus the stop hint: %r'%wrong)
+    # dc01: background alerts are postponed for 1.0, so even the native iPhone app shows no alerts toggle and starts no region monitoring
+    ctx=b.new_context(viewport={'width':390,'height':844},reduced_motion='reduce')
+    ctx.add_init_script("try{localStorage.setItem('then-now-tour','1');localStorage.setItem('stp-bg','1')}catch(e){}; window.__ngcalls=[]; window.Capacitor={isNativePlatform:function(){return true},getPlatform:function(){return 'ios'},registerPlugin:function(n){return new Proxy({}, {get:function(t,k){return function(){window.__ngcalls.push(n+'.'+String(k));return Promise.resolve({})}}})}};")
+    pg=ctx.new_page(); pg.on('pageerror',lambda e:errs.append(str(e))); pg.goto(U); pg.wait_for_timeout(400)
+    pg.click('[data-a=menu]'); pg.wait_for_timeout(250)
+    need('alert me near stops' not in pg.inner_text('#menu').lower() and pg.locator('[data-a=bgtoggle]').count()==0,'dc01: native Menu has no background-alerts toggle (postponed for 1.0)')
+    calls=pg.evaluate("window.__ngcalls")
+    need(not any(c.startswith('StampGeo.enable') for c in calls),'dc01: no region monitoring starts even if an old build left the setting on: %s'%calls)
     # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
     for w,h in ((390,844),(320,640)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
