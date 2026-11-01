@@ -35,7 +35,7 @@ Built by Jo-Anne (builder, on-site verifier) and her 14-year-old son (tester and
 - Validator rules: 3+ distinct correct-answer positions per pack, hint must not give the answer, boss answers not all in one slot, 4 distinct boss options.
 - Home: regions are collapsible groups and rails. The passport has its own page (rail button next to Home, `onPass` state, `viewPass()`), and Home shows a teaser row. The passport is grouped by region (folds, with per-region stamp counts). The hero circles and "How it works" badges follow the current mission. "Try it from home" demo mode earns no saved stamp.
 - Tests: `sh tests/run_all.sh`. If only expected screens change, accept with `python3 tests/snapshot.py index.html tests/baseline.json`.
-- Commit trailers: `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>` and the session link.
+- Commits: author is Jo-Anne Brandes (jobrandes@gmail.com). Do NOT add Co-Authored-By trailers, Claude attribution or session links to commits or PRs (Jo-Anne's standing instruction, Oct 31 2026). Credit goes to Jo-Anne as the builder.
 
 ## Photo pipeline (what works)
 - LoC images: navigate the pane to the cdn.loc.gov URL (it redirects to tile.loc.gov; both need site access), then same-origin fetch of location.href and download via canvas. Commons categories can be listed cross-origin from en.wikipedia with origin=*.
