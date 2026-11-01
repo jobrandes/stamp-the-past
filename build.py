@@ -18,7 +18,15 @@ for k,p in packs.items():
             assert not ph or ph['k'] in photos, f'{k}/{st["id"]}/{era}: missing photo {ph["k"]}'
     assert not p.get('heroKey') or p['heroKey'] in photos, f'{k}: missing hero'
 idx=json.loads(rd('src/packs/index.json'))
-data={'boss':json.loads(rd('src/boss.json')),'right':json.loads(rd('src/right.json')),'order':order,'soon':idx.get('soon',[]),'packs':packs}
+# Story stops live apart from the town packs (src/tours/*.json). Only stops whose access and safety were checked (access_check) ship.
+tours=[]
+for _f in sorted(os.listdir(R+'src/tours')) if os.path.isdir(R+'src/tours') else []:
+    if not _f.endswith('.json'): continue
+    _t=json.loads(rd('src/tours/'+_f)); _t['stops']=[s for s in _t['stops'] if s.get('access_check')]
+    for s in _t['stops']:
+        ph=s.get('ph'); assert not ph or ph['k'] in photos, f'tour {_t["id"]}/{s["id"]}: missing photo {ph["k"]}'
+    if _t['stops']: tours.append(_t)
+data={'boss':json.loads(rd('src/boss.json')),'right':json.loads(rd('src/right.json')),'order':order,'soon':idx.get('soon',[]),'packs':packs,'tours':tours}
 js=rd('src/app.js').replace('__PHOTOS__',json.dumps(photos,ensure_ascii=False,separators=(',',':'))).replace('__DATA__',json.dumps(data,ensure_ascii=False,separators=(',',':')))
 out=rd('src/head.html')+'<style>\n'+rd('src/styles.css')+'</style>'+rd('src/body.html')+'<script>\n'+js+'</script>'
 open(R+'index.html','w').write(out)

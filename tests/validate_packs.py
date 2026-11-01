@@ -51,6 +51,38 @@ for _k in _order:
     for x in _q:
         if len(x['o'])!=4 or len(set(x['o']))!=4 or not 0<=x['a']<4 or not x.get('why'): bad.append(f'BOSS: {_k} bad question')
 
+# Story stops (src/tours/*.json): separate from town packs, never part of the 4-stop XP model
+_td=os.path.join(R,'src','tours'); _nt=0
+if os.path.isdir(_td):
+    for _f in sorted(os.listdir(_td)):
+        if not _f.endswith('.json'): continue
+        _t=json.load(open(os.path.join(_td,_f))); _w0='tour '+_f
+        need(_t.get('id') and _t.get('name'),_w0+': missing id/name')
+        need(isinstance(_t.get('towns'),list) and all(x in order for x in _t['towns']),_w0+': towns must be existing town ids')
+        _ids=set()
+        for st in _t['stops']:
+            _nt+=1; w=_w0+'/'+str(st.get('id'))
+            need(st.get('id') and st['id'] not in _ids,w+': missing or duplicate id'); _ids.add(st.get('id'))
+            for f in ('name','area','addr','invite','access'): need(st.get(f),w+': missing '+f)
+            g=st.get('geo'); need(isinstance(g,list) and len(g)==3 and -90<=g[0]<=90 and -180<=g[1]<=180 and 50<=g[2]<=1000,w+': geo must be [lat, lon, radius_m 50..1000]')
+            need(isinstance(st.get('story'),list) and len(st['story'])>=2 and all(isinstance(x,str) and x for x in st['story']),w+': story needs 2+ paragraphs')
+            need(len(st.get('access',''))>=40,w+': access note must be specific, not a one-word placeholder')
+            ac=st.get('access_check') or {}
+            need(ac.get('on') and ac.get('by') and ac.get('how') and re.match(r'^\d{4}-\d{2}-\d{2}$',ac.get('on','')),w+': access_check {on,by,how} is required before a stop can be published')
+            srcs=st.get('sources') or []
+            need(len(srcs)>=2 and all(x.get('t') and str(x.get('u','')).startswith('https://') for x in srcs),w+': needs 2+ https sources with titles')
+            fa=st.get('facts') or []
+            need(len(fa)>=3,w+': list the claims (facts) with the sources that support each')
+            used=set()
+            for x in fa:
+                need(x.get('t') and x.get('src') and all(isinstance(i,int) and 0<=i<len(srcs) for i in x['src']),w+': every fact needs src indexes that exist')
+                used|=set(x.get('src') or [])
+            need(used==set(range(len(srcs))),w+': every source must support at least one listed fact')
+            ph=st.get('ph')
+            if ph:
+                need(ph.get('k') in photos,w+': photo file missing')
+                for f in ('by','lic','lu','page'): need(ph.get(f),w+': photo credit missing '+f)
+print(f'TOURS: {_nt} story stops checked')
 bad=[b for b in bad if b]
 print('PACKS: '+('OK' if not bad else 'FAILED')+f' ({len(order)} towns)')
 for b in bad: print(' -',b)

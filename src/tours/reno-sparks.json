@@ -1,0 +1,112 @@
+{
+ "id": "reno-sparks",
+ "name": "Reno and Sparks",
+ "towns": ["reno", "sparks"],
+ "stops": [
+  {
+   "id": "courthouse",
+   "name": "Washoe County Courthouse",
+   "area": "Reno",
+   "geo": [39.5236, -119.8126, 150],
+   "addr": "117 S Virginia St, Reno, NV 89501",
+   "invite": "Look up at the copper dome, then find the columns out front. For a few years this was the most photographed doorway in Reno.",
+   "story": [
+    "The first Washoe County courthouse was a red-brick building put up in 1871 to 1873 on an acre that Myron Lake gave the county. It still stands, tucked inside the building you see now.",
+    "The domed building around it came out of a 1909 design competition won by Frederic DeLongchamps, in his first solo commission, and was finished in 1911.",
+    "In the 1930s, Nevada's quick divorces made Reno famous. Nearly 33,000 divorces were granted in these courtrooms, and a staged 1937 photo of a young woman kissing one of the columns ran on the cover of Life magazine."
+   ],
+   "facts": [
+    {"t": "The first red-brick courthouse was built 1871 to 1873 and still stands inside the current building.", "src": [0, 1]},
+    {"t": "Myron Lake gave the acre of land for the first courthouse.", "src": [1]},
+    {"t": "DeLongchamps won the 1909 design competition, his first solo commission; the building was completed in 1911.", "src": [0, 1]},
+    {"t": "Nearly 33,000 divorces were granted in its courtrooms in the 1930s.", "src": [0, 1]},
+    {"t": "A staged 1937 photo of a young woman kissing one of the columns ran on the cover of Life.", "src": [0, 1]}
+   ],
+   "access": "Look from the public sidewalk on Virginia Street. The National Park Service lists the building as open to the public Monday to Friday, 8 a.m. to 5 p.m.; its Courtroom No. 1 was being restored when that page was written.",
+   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the National Park Service and Reno Historical pages. Not walked yet."},
+   "sources": [
+    {"t": "National Park Service: Washoe County Courthouse", "u": "https://www.nps.gov/nr/travel/nevada/was.htm"},
+    {"t": "Reno Historical: Washoe County Courthouse", "u": "https://renohistorical.org/items/show/19"}
+   ]
+  },
+  {
+   "id": "riverside",
+   "name": "Riverside Hotel",
+   "area": "Reno",
+   "geo": [39.5247, -119.8124, 120],
+   "addr": "17 S Virginia St, Reno, NV 89501",
+   "invite": "Stand across from the river and picture a hotel built for people who had to stay in town for weeks. That was the whole business plan.",
+   "story": [
+    "George Wingfield, a mining investor and political power broker, commissioned the Riverside Hotel from architect Frederic DeLongchamps. It was built in 1926 to 1927, next to the courthouse, to house people seeking divorces.",
+    "DeLongchamps mostly designed Classical Revival public buildings. The Riverside is a late Gothic Revival design, which makes it unusual among his work.",
+    "One estimate counted about 4,800 divorce decrees sought in northern Nevada in 1931. Today the building holds apartments and studios for artists."
+   ],
+   "facts": [
+    {"t": "Wingfield commissioned the hotel; DeLongchamps was the architect; it was built 1926 to 1927.", "src": [0, 1]},
+    {"t": "It was built next to the courthouse to house people seeking divorces.", "src": [0]},
+    {"t": "The design is late Gothic Revival, unusual for DeLongchamps.", "src": [0]},
+    {"t": "About 4,800 decrees were sought in northern Nevada in 1931.", "src": [0]},
+    {"t": "The building now houses apartments and studios for artists.", "src": [1]}
+   ],
+   "access": "It is private apartment housing, so enjoy it from the public sidewalk on Virginia Street and stay outside the building.",
+   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the National Register nomination and Wikipedia's current-use note. Not walked yet."},
+   "sources": [
+    {"t": "National Register of Historic Places nomination form: Riverside Hotel (National Park Service)", "u": "https://npgallery.nps.gov/GetAsset/c980bd89-05c7-4ae5-a8fc-ca5bb817b7e9"},
+    {"t": "Wikipedia: Riverside Hotel (Reno, Nevada)", "u": "https://en.wikipedia.org/wiki/Riverside_Hotel_(Reno,_Nevada)"}
+   ]
+  },
+  {
+   "id": "lakemansion",
+   "name": "Lake Mansion",
+   "area": "Reno",
+   "geo": [39.5226, -119.8159, 150],
+   "addr": "250 Court St, Reno, NV 89501",
+   "invite": "Find the corner of Court Street and Arlington Avenue. This house has been moved twice, and it is not even on its original lot.",
+   "story": [
+    "Myron Lake ran a toll bridge across the Truckee River for travelers heading to Virginia City, and the spot was known as Lake's Crossing. In 1862 he sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.",
+    "The house was built in 1877 for the Marsh family and designed by John S. Sturgeon. Lake bought it in 1879. It first stood at the northwest corner of California Avenue and Virginia Street.",
+    "To save it from demolition, it was moved in 1971 to the Convention Center area. On July 11, 2004, it was moved again, about 3.1 miles up Virginia Street, to the spot where you are standing."
+   ],
+   "facts": [
+    {"t": "Lake ran a toll bridge on the way to Virginia City; the spot was called Lake's Crossing.", "src": [1]},
+    {"t": "In 1862 Lake sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.", "src": [1]},
+    {"t": "The house was built in 1877 for the Marsh family, designed by John S. Sturgeon, and Lake bought it in 1879.", "src": [0, 1]},
+    {"t": "It first stood at the northwest corner of California and Virginia Streets.", "src": [0, 1]},
+    {"t": "It was moved in 1971 to avoid demolition and on July 11, 2004 to 250 Court Street.", "src": [0]}
+   ],
+   "access": "Look at it from the public sidewalk on Court Street. The two pages I read disagree about the inside: one says self-guided tours, the other says visits by appointment only. Check with the owners before planning to go in.",
+   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against Reno Historical and Arts for All Nevada; the two pages disagree about interior access, so the note says so. Not walked yet."},
+   "sources": [
+    {"t": "Reno Historical: Lake Mansion", "u": "https://renohistorical.org/items/show/34"},
+    {"t": "Arts for All Nevada: The Lake Mansion", "u": "https://www.artsforallnevada.org/?p=29"}
+   ]
+  },
+  {
+   "id": "sparksmuseum",
+   "name": "Sparks Heritage Museum",
+   "area": "Sparks",
+   "geo": [39.5347, -119.7575, 250],
+   "addr": "814 Victorian Ave, Sparks, NV 89431",
+   "invite": "Look across the street for the old steam locomotive. A whole town was moved here by a railroad, one lot at a time.",
+   "story": [
+    "Around 1903 the Southern Pacific announced it would move its main regional division point from Wadsworth to a site about four miles east of Reno. Employees were offered clear title to a 50-by-140-foot lot, and the railroad offered to move any Wadsworth house for free.",
+    "The new town was first called East Reno, then Harriman, after the railroad's owner. In April 1904 it was renamed Sparks, after Nevada's governor John Sparks. It incorporated on March 15, 1905.",
+    "The museum sits across the street from Locomotive No. 8. Inside are historic photos of the railyard and a large print of the roundhouse, plus the restored 32-foot Last Chance Joe statue, which stood in front of the Nugget for 56 years."
+   ],
+   "facts": [
+    {"t": "Southern Pacific moved its division point from Wadsworth to a site east of Reno around 1903 to 1904.", "src": [1, 2]},
+    {"t": "Employees were offered title to a 50-by-140-foot lot and free moves of Wadsworth houses.", "src": [1]},
+    {"t": "The town was called East Reno, then Harriman, then renamed Sparks in April 1904 for Gov. John Sparks.", "src": [1]},
+    {"t": "Sparks incorporated on March 15, 1905.", "src": [1]},
+    {"t": "The museum is at 814 Victorian Ave., across from Locomotive No. 8, and shows railyard photos, a roundhouse print and Last Chance Joe.", "src": [0, 1]}
+   ],
+   "access": "Look from the public sidewalk on Victorian Avenue. I could not find opening hours on the museum's website, so call 775-355-1144 or check it before going in.",
+   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the museum's website, a Nevada newspaper history column and Union Pacific's Sparks page. Not walked yet. Map position is approximate; Maps directions use the street address."},
+   "sources": [
+    {"t": "Sparks Museum & Cultural Center", "u": "https://sparksmuseum.org/"},
+    {"t": "Rich Moreno: No mystery about the history of Sparks", "u": "https://nnbw.com/news/2019/nov/27/no-mystery-about-the-history-of-sparks"},
+    {"t": "Union Pacific: Train Town USA, Sparks, NV", "u": "https://www.up.com/aboutup/train_town/sparks_nv/index.htm"}
+   ]
+  }
+ ]
+}

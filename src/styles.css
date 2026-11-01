@@ -978,3 +978,22 @@ body.inboss .tabs,body.inboss #cities,body.inboss .bnav{display:none}
 .srow{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;align-items:center}
 .srow .status,.srow .vchip{margin:0;white-space:nowrap}
 .vchip.soft{border-color:var(--line);color:var(--muted);font-weight:500}
+/* Nearby stops (discovery list + Story stop cards) */
+.nbwrap{display:flex;flex-direction:column;gap:12px;padding-bottom:8px}
+.nbwrap>p{margin:0}
+.nbback{align-self:flex-start;text-align:left;min-width:44px}
+.nbnote{color:var(--muted);font-size:0.9375rem}
+.nbh{font:700 0.8125rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:8px 0 0}
+.nbrow strong,.nbtrow strong{font-size:1.125rem}
+.nbrow>span:first-child,.nbtrow>span:first-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.nbst{align-self:flex-start;display:inline-block;padding:1px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted);font:600 0.75rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase}
+.nbst.on{border-color:var(--good);color:var(--good)}
+.nbshort{display:block;color:var(--muted);font-size:0.875rem;line-height:1.35;text-transform:none;font-weight:400;font-family:var(--font-body,inherit)}
+.nbinvite{font-weight:600;border-left:3px solid var(--accent);padding-left:12px}
+.nbfig{margin:0}.nbfig img{display:block;width:100%;max-width:100%;border-radius:12px}.nbfig figcaption{font-size:0.8125rem;color:var(--muted);margin-top:6px}
+.nbsrc{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.nbsrc a,.nbaccess a:not(.btn){color:var(--accent);overflow-wrap:anywhere}
+.nbsrc li{min-height:24px}
+.nbcard .btn,.nbvisit .btn,.nbaccess .btn{margin-top:2px}
+.nbtrow{margin-bottom:10px}
+.nbh2{font-size:1.375rem;font-weight:700}

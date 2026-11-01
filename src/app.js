@@ -189,7 +189,7 @@
   function geoGet(){ try{ var o=JSON.parse(localStorage.getItem('stp-geo')||'{}'); return (o&&typeof o==='object')?o:{}; }catch(e){ return {}; } }
   function geoVerified(k,i){ var st=CITIES[k]&&CITIES[k].stops[i]; return !!(st&&geoGet()[k+':'+st.id]); }
   function distM(a,b,c,d){ var R=6371000,p=Math.PI/180,x=Math.sin((c-a)*p/2),y=Math.sin((d-b)*p/2),h=x*x+Math.cos(a*p)*Math.cos(c*p)*y*y; return 2*R*Math.asin(Math.sqrt(h)); }
-  function nice(m){ return m<1000?'about '+(Math.max(10,Math.round(m/10)*10))+' m ('+Math.round(m*3.281/10)*10+' ft)':'about '+(m/1000).toFixed(1)+' km ('+(m/1609.34).toFixed(1)+' mi)'; }
+  function nice(m){ return m<1000?'about '+(Math.max(10,Math.round(m/10)*10))+' m ('+Math.round(Math.max(10,Math.round(m/10)*10)*3.281/10)*10+' ft)':'about '+(m/1000).toFixed(1)+' km ('+(m/1609.34).toFixed(1)+' mi)'; }
   function geoMsg(t,bad){ var e=document.getElementById('geoMsg'); if(e){ e.textContent=t; e.className='geomsg'+(bad?' bad':''); } }
   var geoDenied=false;
   function geoGranted(){ try{ return localStorage.getItem('stp-geo-ok')==='1'; }catch(e){ return false; } }
@@ -266,6 +266,77 @@
       return '<button class="rcard starttown" data-a="city" data-c="'+k+'"><span><strong>New here? Start in '+c.name+'</strong><span class="rsub">A good first town if you are far from Nevada. '+c.stops.length+' stops, picked from your time zone on this phone.</span></span><span class="go">Go ›</span></button>';
     }catch(e){ return ''; }
   }
+
+  /* ---------- Nearby stops: a discovery list of town stops and Story stops (no route, no stamp, no XP for Story stops) ---------- */
+  var TOURS=DATA.tours||[], STORY=[];
+  TOURS.forEach(function(t){ t.stops.forEach(function(sp){ sp.tour=t.id; STORY.push(sp); }); });
+  var onNear=false, nv={mode:'ask',tour:null,sid:null,msg:''};
+  function nbGet(){ try{ var o=JSON.parse(localStorage.getItem('stp-tour')||'{}'); return (o&&typeof o==='object'&&o.v&&typeof o.v==='object')?o.v:{}; }catch(e){ return {}; } }
+  function nbSet(v){ try{ localStorage.setItem('stp-tour',JSON.stringify({v:v})); }catch(e){} }
+  function nbKey(sp){ return sp.tour+':'+sp.id; }
+  function nbStory(k){ for(var i=0;i<STORY.length;i++) if(nbKey(STORY[i])===k) return STORY[i]; return null; }
+  function nbFirst(t){ var m=/^.*?[.!?](\s|$)/.exec(t); return m?m[0].trim():t; }
+  function nbDist(sp){ return geoPos?distM(geoPos.lat,geoPos.lon,sp.geo[0],sp.geo[1]):null; }
+  /* the 5 closest stops (town stops and Story stops) within about 25 miles: a test maximum, nearest first, straight-line */
+  function nbItems(){
+    var arr=[]; if(!geoPos) return arr;
+    ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ if(!st.geo) return; var d=distM(geoPos.lat,geoPos.lon,st.geo[0],st.geo[1]); if(d<=40000) arr.push({kind:'town',c:k,i:i,d:d}); }); });
+    STORY.forEach(function(sp){ var d=nbDist(sp); if(d<=40000) arr.push({kind:'story',s:sp,d:d}); });
+    arr.sort(function(x,y){ return x.d-y.d; }); return arr.slice(0,5);
+  }
+  function nbRow(x){
+    var dist=(x.d!=null)?' · '+nice(x.d)+', straight-line':'';
+    if(x.kind==='town'){
+      var st=CITIES[x.c].stops[x.i], done=!!ALL[x.c].done[x.i];
+      return '<button class="rcard nbrow" data-a="nbtown" data-c="'+x.c+'" data-i="'+x.i+'"><span><strong>'+st.name+'</strong><span class="rsub">Town mission · '+CITIES[x.c].name+dist+'</span><span class="nbst'+(done?' on':'')+'">'+(done?'Stamped':'Not stamped')+'</span></span><span class="go">Open ›</span></button>';
+    }
+    var sp=x.s, v=!!nbGet()[nbKey(sp)];
+    return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span><span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+nbFirst(sp.access)+'</span></span><span class="go">Open ›</span></button>';
+  }
+  function nbCardHtml(){
+    if(!STORY.length) return '';
+    return '<section class="card nbcard" aria-label="Nearby stops"><p class="mono">Nearby stops</p><h3>Find history around you</h3><p>See town missions and short Story stops close to where you are. Location is optional and stays on this phone.</p><button class="btn" data-a="nbopen">Explore nearby</button></section>';
+  }
+  function nbTownsRow(){
+    if(!STORY.length) return '';
+    return '<button class="rcard nbtrow" data-a="nbopen"><span><strong>Nearby stops</strong><span class="rsub">Town missions and Story stops around you</span></span><span class="go">Explore ›</span></button>';
+  }
+  function viewStory(sp){
+    var v=nbGet()[nbKey(sp)], d=nbDist(sp), ac=sp.access_check||{};
+    var ph='';
+    if(sp.ph&&PHOTOS[sp.ph.k]) ph='<figure class="nbfig"><img src="'+PHOTOS[sp.ph.k]+'" alt="'+(sp.ph.alt||sp.name)+'"><figcaption>Photo: '+sp.ph.by+', <a href="'+sp.ph.page+'" target="_blank" rel="noopener">'+sp.ph.lic+'</a></figcaption></figure>';
+    var dir='https://www.google.com/maps/dir/?api=1&amp;destination='+encodeURIComponent(sp.addr)+'&amp;travelmode=walking';
+    return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ Closest stops</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
+      +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
+      +ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
+      +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
+      +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Checked '+ac.on+': '+ac.how+'</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
+      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section></section>';
+  }
+  function viewNear(){
+    var sp=nv.sid?nbStory(nv.sid):null; if(sp) return viewStory(sp);
+    var noloc=geoDenied||!navigator.geolocation, mode=nv.mode;
+    if(geoPos&&mode==='ask') mode='list';
+    if(mode==='ask'&&noloc) mode='pick';
+    var h='<section class="nbwrap"><button class="link nbback" data-a="home">‹ Home</button><p class="mono">Nearby stops</p><h1 id="stopTitle" tabindex="-1" class="hh2">Closest stops</h1>';
+    if(nv.msg){ h+='<p class="geomsg" role="status">'+nv.msg+'</p>'; nv.msg=''; }
+    if(mode==='ask'){
+      h+='<section class="card"><h2 class="nbh2">Find stops around you</h2><p>Stamp the Past can use your location, only while the app is open, to sort nearby stops by distance. It stays on this phone. Nothing is saved or sent anywhere.</p><button class="btn" data-a="nbloc">Find stops near me</button><button class="btn ghost" data-a="nbnoloc">Continue without location</button><p id="nbMsg" class="geomsg" role="status"></p></section>';
+    } else if(mode==='pick'){
+      h+='<p class="nbnote">No location, no problem. Pick a place and see its stops.</p>'+TOURS.map(function(t){ return '<button class="rcard" data-a="nbarea" data-t="'+t.id+'"><span><strong>'+t.name+'</strong><span class="rsub">Town missions and Story stops</span></span><span class="go">Open ›</span></button>'; }).join('')+'<button class="btn ghost" data-a="nbtowns">Pick any other town</button>'+(noloc?'':'<button class="link" data-a="nbask">Use my location instead</button>');
+    } else if(mode==='area'){
+      var t=null; TOURS.forEach(function(x){ if(x.id===nv.tour) t=x; });
+      if(!t){ nv.mode='pick'; return viewNear(); }
+      var towns=[]; t.towns.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ towns.push({kind:'town',c:k,i:i}); }); });
+      h+='<p class="nbnote">'+t.name+'. These are not in any route order, and distances need location.</p><h2 class="nbh">Town missions</h2>'+towns.map(nbRow).join('')+'<h2 class="nbh">Story stops</h2>'+t.stops.map(function(x){ return nbRow({kind:'story',s:x}); }).join('')+'<button class="link" data-a="nbnoloc">‹ Choose another place</button>';
+    } else {
+      var arr=nbItems();
+      h+='<p class="nbnote">Straight-line estimates, not walking distances. Listed nearest first, not as a route. Up to 5 stops.</p>';
+      if(!arr.length) h+='<section class="card"><p>No stops within about 25 miles of you yet. Pick a place instead.</p><button class="btn ghost" data-a="nbnoloc">Choose a place</button></section>';
+      else h+=arr.map(nbRow).join('')+'<button class="link" data-a="nbloc">Update my location</button><p id="nbMsg" class="geomsg" role="status"></p>';
+    }
+    return h+'</section>';
+  }
   function nearHtml(){ return nearCardHtml()+nearListHtml(); }
   function nearPaint(){ var e=document.getElementById('nearBox'); if(e) e.innerHTML=nearHtml(); }
   // Optional alerts when the app is closed (iPhone app only; the phone does the watching, nothing is sent anywhere)
@@ -334,11 +405,11 @@
   }
   function setCity(id){
     if(!CITIES[id]||(id===cityId&&!atHome)) return;
-    leave(); atHome=false; onPass=false; cityId=id; S=ALL[id]; STOPS=CITIES[id].stops; RANKS=CITIES[id].ranks;
+    leave(); atHome=false; onPass=false; onNear=false; cityId=id; S=ALL[id]; STOPS=CITIES[id].stops; RANKS=CITIES[id].ranks;
     tab='trail'; confirmReset=false; save(); applyCity(); render(); window.scrollTo(0,0);
   }
-  function openPass(){ leave(); atHome=true; onPass=true; confirmReset=false; save(); applyCity(); render(); window.scrollTo(0,0); }
-  function goHome(){ bnavSel='home'; leave(); atHome=true; onPass=false; confirmReset=false; save(); applyCity(); render(); window.scrollTo(0,0); }
+  function openPass(){ leave(); atHome=true; onPass=true; onNear=false; confirmReset=false; save(); applyCity(); render(); window.scrollTo(0,0); }
+  function goHome(){ bnavSel='home'; leave(); atHome=true; onPass=false; onNear=false; confirmReset=false; save(); applyCity(); render(); window.scrollTo(0,0); }
   function updateHeader(){
     var x=xp(), r=rank(x);
     document.getElementById('rankName').textContent=r.name;
@@ -458,8 +529,8 @@
     var res0=null; [cityId].concat(ORDER).forEach(function(k){ if(!res0&&CITIES[k]){ var d0=sum(ALL[k].done); if(d0>0&&d0<CITIES[k].stops.length) res0=k; } });
     var h='<section class="home-hero'+(got>0?' ret':'')+'"><div><div class="wordmark" role="img" aria-label="Stamp the Past">Stamp the Past</div><h1>Go there.<br>Prove it.<br>Stamp it.</h1><p class="sub">A mission game for real places. Travel to the spot, answer what is in front of you, sort fact from tall tale, and watch the past fade into the present.</p><button class="btn heroGo" data-a="gomissions">'+(got>0?'Choose a mission':'Pick a mission')+'</button></div><div class="hstamps" aria-label="Four passport stamps, each a real photo of a landmark">'+stamps+'</div></section>';
     var how=got>0?'':'<section class="howto" aria-label="How it works"><h2>How it works</h2><ol><li><b>Go there.</b> Pick a mission and walk or drive to a real landmark.</li><li><b>Prove it.</b> Tap "I am here", read the story, answer the question in front of you.</li><li><b>Stamp it.</b> Each stamp earns XP, points that raise your level and unlock badges.</li></ol><p class="hint">Not near a mission? Open any stop and tap "Explore from home" to read it and fade the photos. Stamps are saved for real visits.</p></section>';
-    var nearH='<div id="nearBox" class="nearbox">'+nearHtml()+'</div>'+(got===0?startTownHtml():'');
-    h=(got>0?statusHtml(got,total,res0,hk)+bkNudgeHtml()+nearH+featuredHtml()+ringsHtml()+dailyCardHtml()+h:nearH+h+how+ringsHtml()+dailyCardHtml());
+    var nearH='<div id="nearBox" class="nearbox">'+nearHtml()+'</div>'+(got===0?startTownHtml():nbCardHtml());
+    h=(got>0?statusHtml(got,total,res0,hk)+bkNudgeHtml()+nearH+featuredHtml()+ringsHtml()+dailyCardHtml()+h:nearH+h+how+nbCardHtml()+ringsHtml()+dailyCardHtml());
     var vcount=0; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st){ if(st.verified&&st.verified.on) vcount++; }); });
     var res=null; [cityId].concat(ORDER).forEach(function(k){ if(!res&&CITIES[k]){ var d=sum(ALL[k].done); if(d>0&&d<CITIES[k].stops.length) res=k; } });
         var passTop=got>0?'<section class="passport" id="passport"><button class="rcard" data-a="mypass"><span><strong>Your passport</strong><span class="rsub">'+got+' of '+total+' stamps earned'+(totalPts()?' · '+totalPts()+' challenge points':'')+'</span></span><span class="go">Open ›</span></button></section>':'';
@@ -474,7 +545,7 @@
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
-    h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling.</p>'+regs.map(function(r){
+    h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling.</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -606,7 +677,7 @@
   function whereAmI(){
     if(cur) return city().name+' / '+STOPS[cur.i].name+' / step '+(cur.step+1);
     if(boss) return city().name+' / final challenge / question '+(boss.i+1);
-    return atHome?(onPass?'Passport':'Home'):city().name+' / '+tab;
+    return atHome?(onNear?'Nearby stops':(onPass?'Passport':'Home')):city().name+' / '+tab;
   }
   function showReport(){
     var old=document.getElementById('report'); if(old) old.remove();
@@ -1199,7 +1270,7 @@
     m.setAttribute('aria-labelledby','tab-'+tab);
     if(boss&&(atHome||boss.pid!==cityId)) boss=null;
     if(boss) m.innerHTML=viewBoss();
-    else if(atHome&&!cur) m.innerHTML=onPass?viewPass():viewHome();
+    else if(atHome&&!cur) m.innerHTML=onNear?viewNear():(onPass?viewPass():viewHome());
     else if(cur) m.innerHTML=viewStop();
     else if(tab==='trail') m.innerHTML=viewTrail();
     else if(tab==='cards') m.innerHTML=viewCards();
@@ -1277,7 +1348,7 @@
     if(a==='report'){ showReport(); return; }
     if(a==='repclose'){ closeReport(); return; }
     if(a==='repsend'){ sendReport(); return; }
-    if(a==='tournext'){ if(tourI>=TOUR.length-1){ endTour(); if(!atHome||onPass) goHome(); var mm0=document.getElementById('missions'); if(mm0&&mm0.scrollIntoView) mm0.scrollIntoView({behavior:'smooth',block:'start'}); } else { tourI++; showTour(); } return; }
+    if(a==='tournext'){ if(tourI>=TOUR.length-1){ endTour(); if(!atHome||onPass||onNear) goHome(); var mm0=document.getElementById('missions'); if(mm0&&mm0.scrollIntoView) mm0.scrollIntoView({behavior:'smooth',block:'start'}); } else { tourI++; showTour(); } return; }
     if(a==='tourback'){ if(tourI>0){ tourI--; showTour(); } return; }
     if(a==='replaytour'){ replayTour(); return; }
     if(a==='tourskip'){ endTour(); return; }
@@ -1286,8 +1357,8 @@
     if(a==='bnav'){ var bt=b.getAttribute('data-t');
       if(bt==='pass'){ openPass(); return; }
       if(bt==='home'){ bnavSel='home'; goHome(); return; }
-      bnavSel=bt; if(!atHome||onPass) goHome(); setBtab(bt); updateBnav(); var bw=document.getElementById('browse'); if(bw&&bw.scrollIntoView) bw.scrollIntoView({behavior:'smooth',block:'start'}); return; }
-    if(a==='gotrip'){ bnavSel='towns'; if(!atHome||onPass) goHome(); setBtab('trip'); updateBnav(); var bw2=document.getElementById('browse'); if(bw2&&bw2.scrollIntoView) bw2.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+      bnavSel=bt; if(!atHome||onPass||onNear) goHome(); setBtab(bt); updateBnav(); var bw=document.getElementById('browse'); if(bw&&bw.scrollIntoView) bw.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+    if(a==='gotrip'){ bnavSel='towns'; if(!atHome||onPass||onNear) goHome(); setBtab('trip'); updateBnav(); var bw2=document.getElementById('browse'); if(bw2&&bw2.scrollIntoView) bw2.scrollIntoView({behavior:'smooth',block:'start'}); return; }
     if(a==='btab'){ setBtab(b.getAttribute('data-t')); return; }
     if(a==='trail'){ btrail=b.getAttribute('data-t'); document.querySelectorAll('.tcard').forEach(function(c){ var on=c.getAttribute('data-t')===btrail; c.classList.toggle('on',on); c.setAttribute('aria-pressed',on?'true':'false'); }); document.querySelectorAll('.trl').forEach(function(x){ x.hidden=(x.getAttribute('data-trail')!==btrail); }); return; }
     if(a==='share'){ var sk=b.getAttribute('data-k'); if(sk&&CITIES[sk]) shareStamps('town',sk); else shareStamps('passport'); return; }
@@ -1319,6 +1390,23 @@
       navigator.geolocation.getCurrentPosition(function(pos){ try{ localStorage.setItem('stp-geo-ok','1'); }catch(e){} geoStartWatch(); onFix(pos); nearPaint(); },function(err){ if(err&&err.code===1){ geoDenied=true; toast('Location is off for this app, which is fine. Pick a town from Towns.'); } else toast('Could not get your location. Try again outside.'); nearPaint(); },{enableHighAccuracy:false,timeout:15000,maximumAge:60000});
       return;
     }
+    if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
+    if(a==='nbloc'){
+      if(!navigator.geolocation){ nv.mode='pick'; nv.msg='This device cannot share its location. Pick a place instead.'; render(true); return; }
+      var nm=document.getElementById('nbMsg'); if(nm){ nm.textContent='Checking your location. It stays on this phone.'; }
+      navigator.geolocation.getCurrentPosition(function(pos){ try{ localStorage.setItem('stp-geo-ok','1'); }catch(e){} geoStartWatch(); onFix(pos); nv.mode='list'; if(onNear&&!nv.sid) render(true); },function(err){
+        if(err&&err.code===1) geoDenied=true; nv.mode='pick'; nv.msg=(err&&err.code===1)?'Location is off for this app, which is fine. Pick a place instead.':'Could not get your location. Pick a place instead, or try again.';
+        if(onNear&&!nv.sid) render(true); },{enableHighAccuracy:false,timeout:15000,maximumAge:60000});
+      return;
+    }
+    if(a==='nbnoloc'){ nv.mode='pick'; nv.tour=null; nv.sid=null; render(true); window.scrollTo(0,0); return; }
+    if(a==='nbask'){ nv.mode='ask'; render(true); window.scrollTo(0,0); return; }
+    if(a==='nbarea'){ nv.mode='area'; nv.tour=b.getAttribute('data-t'); render(true); window.scrollTo(0,0); return; }
+    if(a==='nbstory'){ nv.sid=b.getAttribute('data-s'); render(true); window.scrollTo(0,0); return; }
+    if(a==='nbback'){ nv.sid=null; render(true); window.scrollTo(0,0); return; }
+    if(a==='nbtown'){ var tc=b.getAttribute('data-c'), ti=+b.getAttribute('data-i'); if(tc&&CITIES[tc]){ railRegion=null; setCity(tc); openStop(ti,0); } return; }
+    if(a==='nbvisit'){ var vk=b.getAttribute('data-s'), vv=nbGet(); if(vv[vk]) delete vv[vk]; else { vv[vk]=dstr(new Date()); toast('Marked visited on this device.'); } nbSet(vv); render(false); return; }
+    if(a==='nbtowns'){ bnavSel='towns'; goHome(); setBtab('towns'); updateBnav(); var nbw=document.getElementById('browse'); if(nbw&&nbw.scrollIntoView) nbw.scrollIntoView({behavior:'smooth',block:'start'}); return; }
     if(a==='neargo'){ var nc2=b.getAttribute('data-c'), ni=+b.getAttribute('data-i'); var inr=!b.getAttribute('data-far'); if(nc2&&CITIES[nc2]){ railRegion=null; if(nc2!==cityId||atHome) setCity(nc2); openStop(ni,0); if(inr&&!S.done[ni]){ cur.gv=true; setStep(1); } } return; }
     if(a==='bgtoggle'){ var on=!bgOn(); try{ localStorage.setItem('stp-bg',on?'1':'0'); }catch(x){} if(on) bgSync(); else if(NG) try{ NG.disable(); }catch(x){} b.setAttribute('aria-pressed',on); b.textContent=on?'On':'Off'; return; }
     if(a==='livetoggle'){ try{ localStorage.setItem('stp-geo-live',liveOn()?'0':'1'); }catch(x){} if(liveOn()) geoStartWatch(); else { geoStopWatch(); nearHit=null; } b.setAttribute('aria-pressed',liveOn()); b.textContent=liveOn()?'On':'Off'; return; }
