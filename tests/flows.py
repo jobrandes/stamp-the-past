@@ -387,6 +387,26 @@ with sync_playwright() as p:
     tw=pg.inner_text('#bp-trails').lower()
     need('across the country' in tw and tw.index('across the country')<tw.index('collect a theme')+200,'rb04: Trails tab says places are collected across the country, near Pick a trail')
     need('collect a theme, not just a town' in tw,'rb04: Trails tab keeps its theme description')
+    # audit rb06: the Menu close button stays reachable after scrolling, at small widths and large text
+    for w,h,fs in ((320,568,16),(390,844,16),(320,568,32)):
+        pg=new(); pg.set_viewport_size({'width':w,'height':h})
+        if fs!=16: pg.add_style_tag(content='html{font-size:%dpx !important}'%fs)
+        pg.click('[data-a=menu]')
+        pg.wait_for_timeout(250)
+        pg.evaluate("var p=document.querySelector('.menu-panel'); p.scrollTop=p.scrollHeight")
+        pg.wait_for_timeout(150)
+        bx=pg.locator('.menu-x').bounding_box()
+        need(bx is not None and bx['y']>=0 and bx['y']+bx['height']<=h and bx['width']>=44 and bx['height']>=44,'rb06: Menu close stays on screen and 44px after scrolling the panel to the bottom (%dx%d, %dpx text): %s'%(w,h,fs,bx))
+        pg.keyboard.press('Escape'); pg.wait_for_timeout(150); need(pg.locator('#menu').count()==0,'rb06: Escape closes the Menu (%d)'%w)
+    # audit ra05: a wrong answer shows that stop's hint (without giving the answer away), and a right one still stamps
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[0,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('.stop >> nth=0'); pg.click('text=I am here'); pg.wait_for_timeout(200)
+    n=pg.locator('.opt').count(); wrong=None
+    for k in range(n):
+        pg.locator('.opt').nth(k).click(); pg.wait_for_timeout(120)
+        if pg.locator('.feedback.bad').count(): wrong=pg.inner_text('.feedback.bad'); break
+        if pg.locator('.opt.right').count(): break
+    need(wrong is not None and wrong.lower().startswith('not yet.') and len(wrong)>20,'ra05: a wrong answer shows "Not yet." plus the stop hint: %r'%wrong)
     # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
     for w,h in ((390,844),(320,640)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})

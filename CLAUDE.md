@@ -300,3 +300,8 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - rb01: town cards show a `.tsize` line (straight-line miles + walkable/drive, or "short stroll") via `tourMiles`/`tourBrief`; tiles go square under 340px.
 - rb02: a town's first screen has a "Start here"/"Next stop" row (`.nextrow`) above the fold; duplicate "On your list" line removed; final-challenge note moved below the stop list; `#xpText` sits on a dark pill (44 of 59 towns failed 4.5:1 before, worst 2.66).
 - rb03: Find-it photo is a 16:9 crop (max 30vh) with a "Clue below" cue. Tests in tests/flows.py (rb01-rb04) fail on the old code. Awaiting phone verification.
+
+## Quick wins (Oct 31 2026)
+- rb06: Menu header (`.menu-head`) is sticky so the close button stays on screen after scrolling the panel (it was at y=-338 at 320x568). Test in tests/flows.py at 320x568, 390x844 and 320x568 with 32px text; fails on the old CSS.
+- ra05: added a regression test that a wrong answer shows "Not yet." plus the stop hint. Other strengths (Next stop, saved stops count and time, gold seal, Story stops no XP/backup) were already covered.
+- sdk01: Apple requires the iOS 26 SDK or later for uploads (since Apr 28 2026). The Xcode project pins no SDK; Jo-Anne should confirm her Xcode is 26 or newer.
