@@ -682,3 +682,9 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | sc_tb_now | https://commons.wikimedia.org/wiki/File:Tower Bridge Sacramento edit.jpg | Michael Grindstaff of Sacramento, CA (edited) | Public domain | 2006 |
 | sc_cr_then | https://commons.wikimedia.org/wiki/File:Historic American Building Survey Society of Calif. Pioneers Collection Photo of 1886 NORTHEAST CORNER OF CROCKER HOUSE - Crocker Art Gallery, 216 O Street, Sacramento, Sacramento HABS CAL,34-SAC,20-3.tif | Society of California Pioneers (via Historic American Buildings Survey) | Public domain | 1886, resized, from a scan |
 | sc_cr_now | https://commons.wikimedia.org/wiki/File:Crocker Art Museum old and new.jpg | Cullen328 | CC BY-SA 3.0 | 2014 |
+| sv_cp | https://commons.wikimedia.org/wiki/File:Savannah, GA - Historic District - Colonial Park Cemetery (1).jpg | Jrozwado | CC BY-SA 4.0 | 2008, resized |
+| sv_dh | https://commons.wikimedia.org/wiki/File:Isaiahdavenporthouse2009.JPG | Cybersquire79 | CC BY-SA 3.0 US | 2009, resized |
+| sv_ot | https://commons.wikimedia.org/wiki/File:Owens Thomas House-Savannah,GA.JPG | Adam L. Clevenger | CC BY-SA 3.0 | 2009, resized |
+| sv_jl | https://commons.wikimedia.org/wiki/File:Juliette Gordon Low Birthplace 2019.jpg | KWhiteJGLB | CC BY-SA 4.0 | 2019, resized |
+| sv_bi | https://commons.wikimedia.org/wiki/File:Beach Institute African-American Cultural Center-01.jpg | Myotus | CC BY 4.0 | 2025, resized |
+| sv_mi | https://commons.wikimedia.org/wiki/File:Congregation Mickve Israel, Savannah, GA, US.jpg | Bubba73 (Jud McCranie) | CC BY-SA 4.0 | 2015, resized |

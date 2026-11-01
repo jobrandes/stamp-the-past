@@ -85,7 +85,16 @@
      "t": "Wikipedia: Colonial Park Cemetery",
      "u": "https://en.wikipedia.org/wiki/Colonial_Park_Cemetery"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_cp",
+    "alt": "Colonial Park Cemetery, Savannah, with iron-fenced graves and old trees",
+    "by": "Jrozwado",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Savannah, GA - Historic District - Colonial Park Cemetery (1).jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "davenport",
@@ -154,7 +163,16 @@
      "t": "Wikipedia: Isaiah Davenport House",
      "u": "https://en.wikipedia.org/wiki/Isaiah_Davenport_House"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_dh",
+    "alt": "The brick Davenport House on East State Street, Savannah",
+    "by": "Cybersquire79",
+    "lic": "CC BY-SA 3.0 US",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/us/",
+    "page": "https://commons.wikimedia.org/wiki/File:Isaiahdavenporthouse2009.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "owensthomas",
@@ -227,7 +245,16 @@
      "t": "Telfair Museums: Owens-Thomas House & Slave Quarters",
      "u": "https://www.telfair.org/owens-thomas-house/"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_ot",
+    "alt": "The Owens-Thomas House facade in Savannah",
+    "by": "Adam L. Clevenger",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Owens Thomas House-Savannah,GA.JPG",
+    "note": "resized"
+   }
   },
   {
    "id": "lowbirthplace",
@@ -309,7 +336,16 @@
      "t": "Wikipedia: Juliette Gordon Low Historic District",
      "u": "https://en.wikipedia.org/wiki/Juliette_Gordon_Low_Historic_District"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_jl",
+    "alt": "Street view of the Juliette Gordon Low Birthplace in Savannah",
+    "by": "KWhiteJGLB",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Juliette Gordon Low Birthplace 2019.jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "beach",
@@ -387,7 +423,16 @@
      "t": "Wikipedia: Beach Institute African-American Cultural Center",
      "u": "https://en.wikipedia.org/wiki/Beach_Institute_African-American_Cultural_Center"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_bi",
+    "alt": "The Beach Institute building at Harris and Price Streets, Savannah",
+    "by": "Myotus",
+    "lic": "CC BY 4.0",
+    "lu": "https://creativecommons.org/licenses/by/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Beach Institute African-American Cultural Center-01.jpg",
+    "note": "resized"
+   }
   },
   {
    "id": "mickveisrael",
@@ -470,7 +515,16 @@
      "t": "Georgia Historical Society: Congregation Mickve Israel",
      "u": "https://www.georgiahistory.com/resource/congregation-mickve-israel/"
     }
-   ]
+   ],
+   "ph": {
+    "k": "sv_mi",
+    "alt": "Congregation Mickve Israel, Savannah",
+    "by": "Bubba73 (Jud McCranie)",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Congregation Mickve Israel, Savannah, GA, US.jpg",
+    "note": "resized"
+   }
   }
  ]
 }
