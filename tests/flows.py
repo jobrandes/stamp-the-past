@@ -415,6 +415,18 @@ with sync_playwright() as p:
     need('alert me near stops' not in pg.inner_text('#menu').lower() and pg.locator('[data-a=bgtoggle]').count()==0,'dc01: native Menu has no background-alerts toggle (postponed for 1.0)')
     calls=pg.evaluate("window.__ngcalls")
     need(not any(c.startswith('StampGeo.enable') for c in calls),'dc01: no region monitoring starts even if an old build left the setting on: %s'%calls)
+    # sc01: both backup cards say what the code brings back and what stays only on the phone
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('#bnav [data-t=pass]'); pg.wait_for_timeout(250)
+    d=pg.locator('#backup details.codekeeps')
+    need(d.count()==1,'sc01: Passport backup card has a "what the code keeps" section')
+    if d.count():
+        d.locator('summary').click(); t=d.inner_text().lower()
+        need('stamps' in t and 'fact-check' in t and 'virtual stamps' in t and 'saved stops' in t and 'challenge' in t and 'stays on this phone' in t,'sc01: the section lists what is restored and what is not: %r'%t[:200])
+        need(d.locator('summary').bounding_box()['height']>=44,'sc01: the summary is a 44px tap target')
+    pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
+    pg.click('#tab-rewards'); pg.wait_for_timeout(200)
+    need(pg.locator('details.codekeeps').count()==1,'sc01: the town Stamps tab backup card has it too')
     # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
     for w,h in ((390,844),(320,640)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
