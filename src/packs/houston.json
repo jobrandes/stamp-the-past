@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A hotel built on the spot where Texas once had its capitol.",
    "map": "The Rice, 909 Texas Ave, Houston, TX",
-   "geo": [29.76049, -95.36271, 150],
+   "geo": [
+    29.76049,
+    -95.36271,
+    150
+   ],
    "clue": "Go to Texas Avenue between Travis and Main Streets. Look for the tall, tan building made of two tall wings, with a flat top.",
    "safety": "Texas Avenue has traffic and light rail. Use crosswalks, and remember this is now an apartment building, so stay on the sidewalk.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "1998",
     "la": "Current building opens",
     "lb": "Reopens as apartments"
+   },
+   "spot": {
+    "q": "The Rice reopened in 1998 as apartments after closing in 1977. About how long did the building stand empty in between?",
+    "options": [
+     "7 years",
+     "14 years",
+     "21 years",
+     "35 years"
+    ],
+    "answer": 2,
+    "why": "The hotel closed in 1977 and reopened in 1998, so it stood empty for twenty-one years."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A park where four different city halls and markets used to stand.",
    "map": "Market Square Park, Congress Ave and Travis St, Houston, TX",
-   "geo": [29.76266, -95.36234, 300],
+   "geo": [
+    29.76266,
+    -95.36234,
+    300
+   ],
    "clue": "Go to the park bounded by Travis and Milam Streets and Congress and Preston Avenues. Look for a green square with oak trees, a brick path and a tall metal sculpture.",
    "safety": "Downtown streets are busy. Use crosswalks, stay on the paths, and watch for bikes and dogs.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "1904",
     "la": "First market house",
     "lb": "Fourth city hall"
+   },
+   "spot": {
+    "q": "The 1895 snowy photo shows an earlier city hall. The fourth one, designed by George E. Dickey, went up in 1904 after a fire. How many years before that did the fire happen?",
+    "options": [
+     "1 year",
+     "3 years",
+     "9 years",
+     "15 years"
+    ],
+    "answer": 1,
+    "why": "The fire was in 1901 and the fourth city hall was built in 1904, three years later."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "A grand 1911 train station that now sits inside a baseball park.",
    "map": "Union Station, 501 Crawford St, Houston, TX",
-   "geo": [29.75694, -95.35639, 150],
+   "geo": [
+    29.75694,
+    -95.35639,
+    150
+   ],
    "clue": "Go to the baseball park downtown, at Crawford and Texas Streets. Look for the old brick-and-stone station building attached to it.",
    "safety": "This is a busy district, especially on game days. Use crosswalks, stay out of the traffic, and check hours before going in.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1911",
     "la": "Design commissioned",
     "lb": "Dedicated"
+   },
+   "spot": {
+    "q": "Union Station was meant to cost $1 million. About how much did it end up costing?",
+    "options": [
+     "$2 million",
+     "$3 million",
+     "$4 million",
+     "$5 million"
+    ],
+    "answer": 3,
+    "why": "It ended up costing about five times the planned $1 million."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "A red-brick building where cotton prices were decided.",
    "map": "Cotton Exchange Building, 202 Travis St, Houston, TX",
-   "geo": [29.7635, -95.3613, 150],
+   "geo": [
+    29.7635,
+    -95.3613,
+    150
+   ],
    "clue": "Go to the corner of Travis and Franklin Streets. Look for an ornate red-brick building with lots of decorative brick and an arched entrance.",
    "safety": "Downtown streets are busy. Use crosswalks, and view the building from the public sidewalk.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1924",
     "la": "Built",
     "lb": "Exchange moves out"
+   },
+   "spot": {
+    "q": "The 1907 postcard shows the remodeled Cotton Exchange with a fourth floor added. How many floors did the 1884 building have?",
+    "options": [
+     "2",
+     "3",
+     "4",
+     "5"
+    ],
+    "answer": 1,
+    "why": "Eugene Heiner designed a three-story building in 1884, and the fourth floor came with the 1907 remodel."
    }
   }
  ],

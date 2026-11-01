@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A tiny studio where Elvis, Johnny Cash and others got their start.",
    "map": "Sun Studio, 706 Union Ave, Memphis, TN",
-   "geo": [35.13925, -90.03768, 150],
+   "geo": [
+    35.13925,
+    -90.03768,
+    150
+   ],
    "clue": "Find the small corner building on Union Avenue with the bright yellow-and-black sign.",
    "safety": "Union Avenue is a busy road. Use crosswalks. Tours need tickets, and the studio is still in use.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "2003",
     "la": "Opened",
     "lb": "Landmark"
+   },
+   "spot": {
+    "q": "The 1937 photo shows Union Avenue before Sun Studio existed. Sun opened on January 3, 1950, and Elvis Presley recorded there in 1953. How many years after it opened was that?",
+    "options": [
+     "3 years",
+     "5 years",
+     "7 years",
+     "9 years"
+    ],
+    "answer": 0,
+    "why": "The studio opened in 1950 and Elvis recorded there in 1953, three years later."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A street the U.S. Congress officially named the Home of the Blues.",
    "map": "Beale Street, Memphis, TN",
-   "geo": [35.13975, -90.05269, 300],
+   "geo": [
+    35.13975,
+    -90.05269,
+    300
+   ],
    "clue": "Go downtown and walk the pedestrian blocks of Beale Street, lit with neon signs.",
    "safety": "The street is crowded at night. Keep your belongings close, stay in a group and use crosswalks.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "1977",
     "la": "Laid out",
     "lb": "Home of the Blues"
+   },
+   "spot": {
+    "q": "Robertson Topp laid out Beale Street in 1841, and Congress declared it the Home of the Blues in 1977. About how many years apart is that?",
+    "options": [
+     "36 years",
+     "96 years",
+     "136 years",
+     "176 years"
+    ],
+    "answer": 2,
+    "why": "1977 minus 1841 is 136 years."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "The mansion Elvis bought for $102,500 when he was 22.",
    "map": "Graceland, 3764 Elvis Presley Blvd, Memphis, TN",
-   "geo": [35.04594, -90.02294, 150],
+   "geo": [
+    35.04594,
+    -90.02294,
+    150
+   ],
    "clue": "Go south of downtown on Elvis Presley Boulevard and look for the white mansion behind a wrought-iron gate.",
    "safety": "Elvis Presley Boulevard is a busy road. Tours need tickets. Do not climb the wall or write on it without permission.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1982",
     "la": "Elvis buys it",
     "lb": "Public opening"
+   },
+   "spot": {
+    "q": "Ruth and Thomas Moore built Graceland in 1939, and Elvis bought it in 1957. How many years had the house stood by then?",
+    "options": [
+     "8 years",
+     "18 years",
+     "28 years",
+     "38 years"
+    ],
+    "answer": 1,
+    "why": "1957 minus 1939 is 18 years."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "Where fortunes were made on cotton, until trading went digital in 1978.",
    "map": "Cotton Exchange Building, 65 Union Ave, Memphis, TN",
-   "geo": [35.1433, -90.0546, 150],
+   "geo": [
+    35.1433,
+    -90.0546,
+    150
+   ],
    "clue": "Go downtown to the corner of Front Street and Union Avenue and find the old exchange building.",
    "safety": "Front Street and Union Avenue are busy. Use crosswalks. The museum has its own hours and tickets.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1978",
     "la": "Founded",
     "lb": "Floor trading ended"
+   },
+   "spot": {
+    "q": "The Memphis Cotton Exchange was founded in 1874, and floor trading ended in 1978 when computers took over. How many years is that?",
+    "options": [
+     "54 years",
+     "74 years",
+     "84 years",
+     "104 years"
+    ],
+    "answer": 3,
+    "why": "1978 minus 1874 is 104 years."
    }
   }
  ],

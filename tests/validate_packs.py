@@ -41,6 +41,12 @@ for cid in order:
             k,pos=p['badgeMap'][st['id']]; need(k in photos,f'{w}: badge photo missing')
             need(re.match(r'^\d+% \d+%$',pos),f'{w}: bad badge position')
 # final challenge questions
+# spot-the-change puzzles: 4 distinct options, a valid answer slot, a reason, and (per town that has any) not every answer in one slot
+for _cid in order:
+    _p=json.load(open(R+f'src/packs/{_cid}.json')); _sp=[st['spot'] for st in _p['stops'] if st.get('spot')]
+    for _s in _sp:
+        need(_s.get('q') and _s.get('why') and len(_s.get('options',[]))==4 and len(set(_s['options']))==4 and isinstance(_s.get('answer'),int) and 0<=_s['answer']<4,f'SPOT: {_cid} has a malformed puzzle')
+    if len(_sp)==4: need(len({_s['answer'] for _s in _sp})>=2,f'SPOT: {_cid} puzzle answers all in one slot')
 import json as _j,os as _o
 _b=_j.load(open(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)),'..','src','boss.json')))
 _order=_j.load(open(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)),'..','src','packs','index.json')))['order']

@@ -149,12 +149,12 @@
    "spot": {
     "q": "The 1908 photo shows the capitol with palms and a dirt road. The architect's original plan had wings and a big dome. What happened to them?",
     "options": [
-     "Money was short, so the wings were dropped and a small metal top was used",
      "They were built, then torn down in 1912",
      "Voters asked for a plain flat roof",
+     "Money was short, so the wings were dropped and a small metal top was used",
      "They were moved to Tucson"
     ],
-    "answer": 0,
+    "answer": 2,
     "why": "Money ran short, so the wings were dropped and a small metal top replaced the big dome. The building was finished in 1900."
    }
   },
@@ -255,12 +255,12 @@
    "spot": {
     "q": "The 1940 photo shows the Rosson House, now a museum. Who was Dr. Roland Lee Rosson?",
     "options": [
-     "A doctor and politician who became Phoenix mayor in 1895",
      "A railroad owner from San Francisco",
+     "A doctor and politician who became Phoenix mayor in 1895",
      "A cattle rancher and sheriff",
      "The architect who designed the house"
     ],
-    "answer": 0,
+    "answer": 1,
     "why": "He was a doctor and politician, elected mayor on May 7, 1895. He resigned on April 6, 1896. The architect was A. P. Petit."
    }
   },
@@ -361,12 +361,12 @@
    "spot": {
     "q": "Many people say Frank Lloyd Wright designed the Biltmore. Who does Wikipedia say the architect was?",
     "options": [
-     "Albert Chase McArthur",
      "William Wrigley Jr.",
      "John McEntee Bowman",
-     "Clark Gable"
+     "Clark Gable",
+     "Albert Chase McArthur"
     ],
-    "answer": 0,
+    "answer": 3,
     "why": "Albert Chase McArthur, who had been a draftsman for Wright. Wright consulted for four months in 1928 on the patterned textile block system."
    }
   },

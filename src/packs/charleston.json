@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "Thirteen houses painted in pastel colors that were once nearly a slum.",
    "map": "Rainbow Row, 79-107 East Bay St, Charleston, SC",
-   "geo": [32.77556, -79.92722, 300],
+   "geo": [
+    32.77556,
+    -79.92722,
+    300
+   ],
    "clue": "Go to East Bay Street, north of Tradd Street. Look for a long row of connected houses in pink, blue, green and yellow.",
    "safety": "East Bay Street has traffic and parked cars. Use crosswalks and look from the sidewalk. These houses are private homes, so do not knock or step onto the porches.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -141,6 +145,17 @@
     "b": "1931",
     "la": "Fire destroys the area",
     "lb": "First house painted pink"
+   },
+   "spot": {
+    "q": "The 1902 photo shows East Bay Street before the pastel colors. Dorothy Haskell Porcher Legge painted 99 to 101 East Bay pink in 1931. About how many years later was that?",
+    "options": [
+     "9 years",
+     "19 years",
+     "29 years",
+     "39 years"
+    ],
+    "answer": 2,
+    "why": "1931 minus 1902 is 29 years."
    }
   },
   {
@@ -151,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A colonial building that was a prison, a post office and a tea warehouse.",
    "map": "Old Exchange & Provost Dungeon, 122 E Bay St, Charleston, SC",
-   "geo": [32.77685, -79.92687, 150],
+   "geo": [
+    32.77685,
+    -79.92687,
+    150
+   ],
    "clue": "Go to the corner of East Bay and Broad Streets. Look for a two-story building with three round arches at the bottom and a little cupola on the roof.",
    "safety": "East Bay and Broad Streets are busy. Use crosswalks, and check the museum's hours before going inside.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -232,6 +251,17 @@
     "b": "1913",
     "la": "Built",
     "lb": "Daughters of the American Revolution take over"
+   },
+   "spot": {
+    "q": "The Old Exchange served as a jail after the British captured the city in 1780. A 2012 study documented at least how many prisoners held there?",
+    "options": [
+     "12",
+     "40",
+     "70",
+     "120"
+    ],
+    "answer": 3,
+    "why": "A 2012 study documented at least 120 prisoners held at the Exchange."
    }
   },
   {
@@ -242,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "A seaside park full of cannons and mortars at the tip of the city.",
    "map": "White Point Garden, Murray Blvd, Charleston, SC",
-   "geo": [32.7698, -79.9304, 300],
+   "geo": [
+    32.7698,
+    -79.9304,
+    300
+   ],
    "clue": "Go to the very southern tip of Charleston, where East Battery meets South Battery. Look for a big green park with oak trees, old cannons and a monument.",
    "safety": "Stay back from the seawall and the water. Watch for horse carriages and bikes, and do not climb on the cannons or the monuments.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -323,6 +357,17 @@
     "b": "1881",
     "la": "Bathing house built",
     "lb": "Bathing house removed"
+   },
+   "spot": {
+    "q": "Two guns from the USS Keokuk were installed in White Point Garden in 1900. The Keokuk sank in April 1863. How many years between the two?",
+    "options": [
+     "27 years",
+     "37 years",
+     "47 years",
+     "57 years"
+    ],
+    "answer": 1,
+    "why": "1900 minus 1863 is 37 years."
    }
   },
   {
@@ -333,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "The oldest surviving church in Charleston, with a steeple that guided sailors.",
    "map": "St. Michael's Church, 80 Meeting St, Charleston, SC",
-   "geo": [32.77632, -79.93076, 150],
+   "geo": [
+    32.77632,
+    -79.93076,
+    150
+   ],
    "clue": "Go to the corner of Broad and Meeting Streets. Look for a white church with a columned front porch and a tall, tiered steeple.",
    "safety": "Broad and Meeting Streets are busy. Use crosswalks, be respectful because it is an active church, and check the hours before going inside.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -414,6 +463,17 @@
     "b": "1961",
     "la": "Construction begins",
     "lb": "National Historic Landmark"
+   },
+   "spot": {
+    "q": "St. Michael's looked much the same in the 1905 postcard. In which pew number did George Washington worship during his 1791 visit?",
+    "options": [
+     "12",
+     "27",
+     "38",
+     "43"
+    ],
+    "answer": 3,
+    "why": "George Washington worshipped in pew number 43."
    }
   }
  ],

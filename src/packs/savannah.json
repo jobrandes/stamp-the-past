@@ -1,421 +1,481 @@
 {
-  "id": "savannah",
-  "name": "Savannah",
-  "explorer": "Hostess City Explorer",
-  "initials": "SAV",
-  "ranks": [
-    [
-      0,
-      "Visitor"
-    ],
-    [
-      100,
-      "Square Walker"
-    ],
-    [
-      250,
-      "Landmark Hunter"
-    ],
-    [
-      450,
-      "Savannah Scholar"
-    ],
-    [
-      600,
-      "Savannah Historian"
-    ]
+ "id": "savannah",
+ "name": "Savannah",
+ "explorer": "Hostess City Explorer",
+ "initials": "SAV",
+ "ranks": [
+  [
+   0,
+   "Visitor"
   ],
-  "heroAlt": "The fountain in Forsyth Park",
-  "heroLi": "<li>Header: Jennifer Morrow · CC BY 2.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg\">Source</a> · resized</li>",
-  "heroCredit": "Photo: Jennifer Morrow · <a target=\"_blank\" rel=\"noopener\" href=\"https://creativecommons.org/licenses/by/2.0/\">CC BY 2.0</a> · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg\">Source</a>",
-  "mission": "Find four landmarks around Savannah. At each one, check in to earn its badge, unlock its story, and collect a Time Card. Do them in any order. Everything stays on this phone.",
-  "afterDone": "All four badges earned. The rest of Savannah is waiting.",
-  "safetyNote": "<li>Savannah is hot and humid in summer. Bring water, use crosswalks, and watch your step on cobblestones and uneven sidewalks.</li>",
-  "badgeMap": {
-    "forsyth": [
-      "sv_fp_now",
-      "50% 45%"
+  [
+   100,
+   "Square Walker"
+  ],
+  [
+   250,
+   "Landmark Hunter"
+  ],
+  [
+   450,
+   "Savannah Scholar"
+  ],
+  [
+   600,
+   "Savannah Historian"
+  ]
+ ],
+ "heroAlt": "The fountain in Forsyth Park",
+ "heroLi": "<li>Header: Jennifer Morrow · CC BY 2.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg\">Source</a> · resized</li>",
+ "heroCredit": "Photo: Jennifer Morrow · <a target=\"_blank\" rel=\"noopener\" href=\"https://creativecommons.org/licenses/by/2.0/\">CC BY 2.0</a> · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg\">Source</a>",
+ "mission": "Find four landmarks around Savannah. At each one, check in to earn its badge, unlock its story, and collect a Time Card. Do them in any order. Everything stays on this phone.",
+ "afterDone": "All four badges earned. The rest of Savannah is waiting.",
+ "safetyNote": "<li>Savannah is hot and humid in summer. Bring water, use crosswalks, and watch your step on cobblestones and uneven sidewalks.</li>",
+ "badgeMap": {
+  "forsyth": [
+   "sv_fp_now",
+   "50% 45%"
+  ],
+  "riverstreet": [
+   "sv_rs_now",
+   "50% 50%"
+  ],
+  "cathedral": [
+   "sv_ca_now",
+   "50% 40%"
+  ],
+  "pulaski": [
+   "sv_pu_now",
+   "50% 45%"
+  ]
+ },
+ "level": "Classics",
+ "region": "The South",
+ "stops": [
+  {
+   "id": "forsyth",
+   "name": "Forsyth Park Fountain",
+   "short": "Forsyth Fountain",
+   "badge": "Forsyth Fountain",
+   "tag": "Stop 1 of 4",
+   "teaser": "A white iron fountain that turns green every St. Patrick's Day.",
+   "map": "Forsyth Park Fountain, Forsyth Park, Savannah, GA",
+   "geo": [
+    32.0676,
+    -81.0963,
+    300
+   ],
+   "clue": "Find the big park at the south end of the historic district and head for the large white fountain in the middle.",
+   "safety": "Watch for bikes and joggers on the park paths. Stay out of the fountain.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "What color is the fountain, normally?",
+    "options": [
+     "White",
+     "Green",
+     "Black",
+     "Gold"
     ],
-    "riverstreet": [
-      "sv_rs_now",
-      "50% 50%"
-    ],
-    "cathedral": [
-      "sv_ca_now",
-      "50% 40%"
-    ],
-    "pulaski": [
-      "sv_pu_now",
-      "50% 45%"
-    ]
-  },
-  "level": "Classics",
-  "region": "The South",
-  "stops": [
-    {
-      "id": "forsyth",
-      "name": "Forsyth Park Fountain",
-      "short": "Forsyth Fountain",
-      "badge": "Forsyth Fountain",
-      "tag": "Stop 1 of 4",
-      "teaser": "A white iron fountain that turns green every St. Patrick's Day.",
-      "map": "Forsyth Park Fountain, Forsyth Park, Savannah, GA",
-      "geo": [32.0676, -81.0963, 300],
-      "clue": "Find the big park at the south end of the historic district and head for the large white fountain in the middle.",
-      "safety": "Watch for bikes and joggers on the park paths. Stay out of the fountain.",
-      "field": "Field notes pending: nobody has walked this stop for the app yet.",
-      "q": {
-        "prompt": "What color is the fountain, normally?",
-        "options": [
-          "White",
-          "Green",
-          "Black",
-          "Gold"
-        ],
-        "answer": 0,
-        "hint": "On St. Patrick's Day it is a different color.",
-        "verify": "Wikipedia says the fountain is turned green on St. Patrick's Day. Confirm the normal color. Written from sources, not yet checked on site."
-      },
-      "then": {
-        "yr": "about 1870",
-        "label": "The fountain then",
-        "line": "A stereoview of the fountain from about 1870.",
-        "link": {
-          "t": "Look for historic photos at the Library of Congress",
-          "u": "https://www.loc.gov/pictures/"
-        },
-        "ph": {
-          "k": "sv_fp_then",
-          "by": "J. A. Palmer",
-          "lic": "Public domain",
-          "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:Fountain_in_Forsyth_Park,_Savannah,_Ga,_by_J._A._Palmer.jpg",
-          "note": "resized"
-        }
-      },
-      "now": {
-        "yr": "2010",
-        "head": "Today",
-        "label": "The fountain today",
-        "line": "The white iron fountain in Forsyth Park. Photo from 2010.",
-        "ph": {
-          "k": "sv_fp_now",
-          "by": "Jennifer Morrow",
-          "lic": "CC BY 2.0",
-          "lu": "https://creativecommons.org/licenses/by/2.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg",
-          "note": "resized"
-        }
-      },
-      "story": [
-        "Forsyth Park began in the 1840s on 10 acres given by William Brown Hodgson. It was expanded and named for Georgia Governor John Forsyth in 1851. It covers 30 acres.",
-        "The fountain was installed in 1858 and cast by Janes, Beebe & Company. Its design comes from the work of French sculptor Michel Lienard and resembles fountains at the Place de la Concorde in Paris.",
-        "The Confederate Memorial was unveiled in 1874 and a bronze soldier was added in 1879. The Fragrant Garden was designed for the blind, and the fountain is ceremonially turned green for St. Patrick's Day."
-      ],
-      "fact": "The fountain is turned green for St. Patrick's Day.",
-      "disputed": "Many sources say Forsyth donated the land. Wikipedia says William Brown Hodgson gave the first 10 acres.",
-      "claims": [
-        {
-          "t": "The Forsyth Park fountain was installed in 1858.",
-          "a": 0,
-          "why": "Wikipedia: installed in 1858."
-        },
-        {
-          "t": "Governor Forsyth donated the first 10 acres.",
-          "a": 2,
-          "why": "William Brown Hodgson donated the first 10 acres."
-        }
-      ],
-      "sources": [
-        {
-          "t": "Wikipedia: Forsyth Park",
-          "u": "https://en.wikipedia.org/wiki/Forsyth_Park"
-        },
-        {
-          "t": "Wikipedia: Savannah Historic District",
-          "u": "https://en.wikipedia.org/wiki/Savannah_Historic_District"
-        }
-      ],
-      "card": {
-        "a": "1851",
-        "b": "1858",
-        "la": "Park named",
-        "lb": "Fountain installed"
-      }
+    "answer": 0,
+    "hint": "On St. Patrick's Day it is a different color.",
+    "verify": "Wikipedia says the fountain is turned green on St. Patrick's Day. Confirm the normal color. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "yr": "about 1870",
+    "label": "The fountain then",
+    "line": "A stereoview of the fountain from about 1870.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/"
     },
-    {
-      "id": "riverstreet",
-      "name": "River Street",
-      "short": "River Street",
-      "badge": "River Street",
-      "tag": "Stop 2 of 4",
-      "teaser": "A cobbled street where giant ships pass within a few yards.",
-      "map": "River Street, Savannah, GA",
-      "geo": [32.08101, -81.09052, 300],
-      "clue": "Take the steps or ramp down the bluff to the cobbled street on the Savannah River, lined with old cotton warehouses.",
-      "safety": "The cobblestones are uneven and slippery when wet. Watch for streetcar tracks and keep back from the river edge.",
-      "field": "Field notes pending: nobody has walked this stop for the app yet.",
-      "q": {
-        "prompt": "Looking at the river, what kind of vessels pass close to the promenade?",
-        "options": [
-          "Kayaks",
-          "Large cargo ships",
-          "Ferries only",
-          "Sailboats only"
-        ],
-        "answer": 1,
-        "hint": "Think of the Port of Savannah.",
-        "verify": "Wikipedia says large tankers and container ships sometimes pass within yards of the promenade. Written from sources, not yet checked on site."
-      },
-      "then": {
-        "yr": "1934",
-        "label": "The warehouses then",
-        "line": "A 1934 survey photograph of a stone cotton warehouse on River Street, with a larger warehouse beside it.",
-        "link": {
-          "t": "Look for historic photos at the Library of Congress",
-          "u": "https://www.loc.gov/pictures/"
-        },
-        "ph": {
-          "k": "sv_rs_then",
-          "by": "Branan Sanders, Historic American Buildings Survey",
-          "lic": "Public domain",
-          "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:Historic_American_Buildings_Survey_Branan_Sanders,_Photographer_March_1934_FRONT_VIEW_-_Factor's_Warehouse,_River_Street_West,_Savannah,_Chatham_County,_GA_HABS_GA,26-SAV,51-1.tif",
-          "note": "resized, cropped"
-        }
-      },
-      "now": {
-        "yr": "2017",
-        "head": "Today",
-        "label": "The street today",
-        "line": "The cobbled street and old warehouses along the river. Photo from 2017.",
-        "ph": {
-          "k": "sv_rs_now",
-          "by": "Seasider53",
-          "lic": "CC BY-SA 4.0",
-          "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:River_Street,_Savannah,_Georgia,_2017.jpg",
-          "note": "resized"
-        }
-      },
-      "story": [
-        "River Street is about 2 miles long along the Savannah River, according to Wikipedia. The south side has rows of former cotton warehouses, some dating from the 1850s.",
-        "Factors Walk is built on the middle level of the sloping bluff, with warehouses beneath and Bay Street above. Cotton brokers, called factors, bargained there. The name Factors Row preserves the industry's name.",
-        "The pavement is Belgian block with streetcar tracks set in. Large tankers and container ships heading to and from the Port of Savannah sometimes pass within yards of the promenade."
-      ],
-      "fact": "The warehouses were built for the cotton trade.",
-      "disputed": "A popular claim says the cobblestones are old ship ballast stones. Wikipedia describes Belgian block paving instead.",
-      "claims": [
-        {
-          "t": "River Street has former cotton warehouses.",
-          "a": 0,
-          "why": "Wikipedia: terraces of former King Cotton warehouses."
-        },
-        {
-          "t": "The paving is all old ship ballast.",
-          "a": 1,
-          "why": "A popular story, but Wikipedia describes Belgian block paving."
-        }
-      ],
-      "sources": [
-        {
-          "t": "Wikipedia: River Street (Savannah, Georgia)",
-          "u": "https://en.wikipedia.org/wiki/River_Street_(Savannah,_Georgia)"
-        },
-        {
-          "t": "Wikipedia: Factors Walk",
-          "u": "https://en.wikipedia.org/wiki/Factors_Walk"
-        }
-      ],
-      "card": {
-        "a": "1850s",
-        "b": "Today",
-        "la": "Warehouses",
-        "lb": "Waterfront"
-      }
-    },
-    {
-      "id": "cathedral",
-      "name": "Cathedral of St. John the Baptist",
-      "short": "Cathedral",
-      "badge": "Cathedral",
-      "tag": "Stop 3 of 4",
-      "teaser": "Spires over Lafayette Square, rebuilt after a fire.",
-      "map": "Cathedral Basilica of St. John the Baptist, 222 E Harris St, Savannah, GA",
-      "geo": [32.07333, -81.09088, 150],
-      "clue": "Go to Lafayette Square and find the big Gothic church with tall spires.",
-      "safety": "It is an active church. Be quiet and respectful, check visiting hours, and watch for traffic around the square.",
-      "field": "Field notes pending: nobody has walked this stop for the app yet.",
-      "q": {
-        "prompt": "How many tall spires rise from the front of the cathedral?",
-        "options": [
-          "1",
-          "2",
-          "3",
-          "4"
-        ],
-        "answer": 1,
-        "hint": "Look at the front tower area.",
-        "verify": "Wikipedia mentions the cathedral's spires. Count on site. Written from sources, not yet checked on site."
-      },
-      "then": {
-        "yr": "before 1914",
-        "label": "The cathedral then",
-        "line": "A printed view of the cathedral and its two spires, published before 1914.",
-        "link": {
-          "t": "Look for historic photos at the Library of Congress",
-          "u": "https://www.loc.gov/pictures/"
-        },
-        "ph": {
-          "k": "sv_ca_then",
-          "by": "Unknown (print published before 1914)",
-          "lic": "Public domain",
-          "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:Cathedral_of_St._John_the_Baptist,_Savannah,_Georgia.jpg",
-          "note": "resized"
-        }
-      },
-      "now": {
-        "yr": "2015",
-        "head": "Today",
-        "label": "Inside the cathedral",
-        "line": "A stained-glass window inside the cathedral. Photo from 2015.",
-        "ph": {
-          "k": "sv_ca_now",
-          "by": "Dsdugan",
-          "lic": "CC0",
-          "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:Savannah_cathedral_2015_17_052.jpg",
-          "note": "resized"
-        }
-      },
-      "story": [
-        "The parish started in 1799. The present cathedral was dedicated on April 30, 1876, and Ephraim Francis Baldwin was its architect, in Gothic Revival style.",
-        "A fire destroyed the interior on February 6, 1898. The first Mass in the rebuilt building was held in December 1899, and it was rededicated on October 28, 1900.",
-        "It is 214 feet tall overall and has 81 stained-glass windows. Windows installed in 1904 came from Austria-Hungary. Pope Francis made it a minor basilica in January 2020."
-      ],
-      "fact": "It became a minor basilica in 2020.",
-      "disputed": "Older guides say the basilica title dates to the 1990s. Wikipedia says January 2020.",
-      "claims": [
-        {
-          "t": "The cathedral was dedicated in 1876.",
-          "a": 0,
-          "why": "Wikipedia: dedicated April 30, 1876."
-        },
-        {
-          "t": "The cathedral was named a basilica in 1996.",
-          "a": 2,
-          "why": "Pope Francis elevated it in January 2020."
-        }
-      ],
-      "sources": [
-        {
-          "t": "Wikipedia: Cathedral Basilica of St. John the Baptist",
-          "u": "https://en.wikipedia.org/wiki/Cathedral_Basilica_of_St._John_the_Baptist_(Savannah,_Georgia)"
-        },
-        {
-          "t": "Wikipedia: Lafayette Square (Savannah)",
-          "u": "https://en.wikipedia.org/wiki/Lafayette_Square_(Savannah,_Georgia)"
-        }
-      ],
-      "card": {
-        "a": "1876",
-        "b": "1900",
-        "la": "Dedicated",
-        "lb": "Rededicated"
-      }
-    },
-    {
-      "id": "pulaski",
-      "name": "Fort Pulaski",
-      "short": "Fort Pulaski",
-      "badge": "Fort Pulaski",
-      "tag": "Stop 4 of 4",
-      "teaser": "A fort with 11-foot walls that fell in 30 hours.",
-      "map": "Fort Pulaski National Monument, Cockspur Island, GA",
-      "geo": [32.02706, -80.89086, 300],
-      "clue": "Drive east of Savannah toward Tybee Island to Cockspur Island and find the brick fort surrounded by a moat.",
-      "safety": "It is a national park site on an island. Watch for traffic on the highway, stay on trails and bring water and sun protection.",
-      "field": "Field notes pending: nobody has walked this stop for the app yet.",
-      "q": {
-        "prompt": "In 1862, what new kind of weapon breached the fort's thick brick walls?",
-        "options": [
-          "Wooden catapults",
-          "Floating mines",
-          "Hot-air balloons",
-          "Rifled cannons"
-        ],
-        "answer": 3,
-        "hint": "Their barrels had spiral grooves inside.",
-        "verify": "Wikipedia and the Georgia Encyclopedia both say Union rifled cannon breached the wall. Written from sources, not yet checked on site."
-      },
-      "then": {
-        "yr": "1862",
-        "label": "After the siege",
-        "line": "The damaged corner wall after the 1862 siege.",
-        "link": {
-          "t": "Look for historic photos at the Library of Congress",
-          "u": "https://www.loc.gov/pictures/"
-        },
-        "ph": {
-          "k": "sv_pu_then",
-          "by": "Unknown",
-          "lic": "Public domain",
-          "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:FTPulaski1862a01.jpg",
-          "note": "resized"
-        }
-      },
-      "now": {
-        "yr": "Today",
-        "head": "Today",
-        "label": "The fort today",
-        "line": "The brick fort sits on Cockspur Island.",
-        "ph": {
-          "k": "sv_pu_now",
-          "by": "Jud McCranie",
-          "lic": "CC BY 3.0",
-          "lu": "https://creativecommons.org/licenses/by/3.0/",
-          "page": "https://commons.wikimedia.org/wiki/File:FtPulaskiFront.jpg",
-          "note": "resized"
-        }
-      },
-      "story": [
-        "Fort Pulaski was built from 1829 to 1847 on Cockspur Island at the mouth of the Savannah River. It was named in 1833 for Casimir Pulaski, a Polish-born soldier who fought in the American Revolution. About 25 million bricks went into it, supported by wooden pilings sunk up to 70 feet.",
-        "As a young second lieutenant, Robert E. Lee worked on its construction under Major Samuel Babcock. Sources disagree on how thick the walls were, from about 7½ to 11 feet.",
-        "In April 1862, Union forces used 36 guns, including James rifled cannons and Parrott rifles, to breach the corner wall within about 30 hours. Colonel Charles H. Olmstead surrendered reluctantly. Only two soldiers were killed. The success of rifled cannon rendered brick forts obsolete. It became a national monument on October 15, 1924."
-      ],
-      "fact": "Only two soldiers were killed in the siege.",
-      "disputed": "Dates for the surrender differ slightly. The siege began on April 10, 1862, and a photo of the surrender room is dated April 11.",
-      "claims": [
-        {
-          "t": "Fort Pulaski was breached by rifled cannon in 1862.",
-          "a": 0,
-          "why": "Wikipedia: the corner wall was breached within 30 hours."
-        },
-        {
-          "t": "Robert E. Lee designed Fort Pulaski.",
-          "a": 2,
-          "why": "He worked on construction as a young lieutenant, but did not design it."
-        }
-      ],
-      "sources": [
-        {
-          "t": "Wikipedia: Fort Pulaski National Monument",
-          "u": "https://en.wikipedia.org/wiki/Fort_Pulaski_National_Monument"
-        },
-        {
-          "t": "Georgia Encyclopedia: Fort Pulaski",
-          "u": "https://www.georgiaencyclopedia.org/articles/counties-cities-neighborhoods/chatham-county/m-851"
-        }
-      ],
-      "card": {
-        "a": "1829",
-        "b": "1862",
-        "la": "Construction began",
-        "lb": "Siege"
-      }
+    "ph": {
+     "k": "sv_fp_then",
+     "by": "J. A. Palmer",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Fountain_in_Forsyth_Park,_Savannah,_Ga,_by_J._A._Palmer.jpg",
+     "note": "resized"
     }
-  ],
-  "heroKey": "sv_fp_now"
+   },
+   "now": {
+    "yr": "2010",
+    "head": "Today",
+    "label": "The fountain today",
+    "line": "The white iron fountain in Forsyth Park. Photo from 2010.",
+    "ph": {
+     "k": "sv_fp_now",
+     "by": "Jennifer Morrow",
+     "lic": "CC BY 2.0",
+     "lu": "https://creativecommons.org/licenses/by/2.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Forsyth_Park_Fountain_(1).jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Forsyth Park began in the 1840s on 10 acres given by William Brown Hodgson. It was expanded and named for Georgia Governor John Forsyth in 1851. It covers 30 acres.",
+    "The fountain was installed in 1858 and cast by Janes, Beebe & Company. Its design comes from the work of French sculptor Michel Lienard and resembles fountains at the Place de la Concorde in Paris.",
+    "The Confederate Memorial was unveiled in 1874 and a bronze soldier was added in 1879. The Fragrant Garden was designed for the blind, and the fountain is ceremonially turned green for St. Patrick's Day."
+   ],
+   "fact": "The fountain is turned green for St. Patrick's Day.",
+   "disputed": "Many sources say Forsyth donated the land. Wikipedia says William Brown Hodgson gave the first 10 acres.",
+   "claims": [
+    {
+     "t": "The Forsyth Park fountain was installed in 1858.",
+     "a": 0,
+     "why": "Wikipedia: installed in 1858."
+    },
+    {
+     "t": "Governor Forsyth donated the first 10 acres.",
+     "a": 2,
+     "why": "William Brown Hodgson donated the first 10 acres."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Forsyth Park",
+     "u": "https://en.wikipedia.org/wiki/Forsyth_Park"
+    },
+    {
+     "t": "Wikipedia: Savannah Historic District",
+     "u": "https://en.wikipedia.org/wiki/Savannah_Historic_District"
+    }
+   ],
+   "card": {
+    "a": "1851",
+    "b": "1858",
+    "la": "Park named",
+    "lb": "Fountain installed"
+   },
+   "spot": {
+    "q": "The fountain in the 1870 stereoview was installed in 1858, and the Confederate Memorial was unveiled in 1874. How many years later was the memorial?",
+    "options": [
+     "6 years",
+     "11 years",
+     "16 years",
+     "21 years"
+    ],
+    "answer": 2,
+    "why": "1874 minus 1858 is 16 years."
+   }
+  },
+  {
+   "id": "riverstreet",
+   "name": "River Street",
+   "short": "River Street",
+   "badge": "River Street",
+   "tag": "Stop 2 of 4",
+   "teaser": "A cobbled street where giant ships pass within a few yards.",
+   "map": "River Street, Savannah, GA",
+   "geo": [
+    32.08101,
+    -81.09052,
+    300
+   ],
+   "clue": "Take the steps or ramp down the bluff to the cobbled street on the Savannah River, lined with old cotton warehouses.",
+   "safety": "The cobblestones are uneven and slippery when wet. Watch for streetcar tracks and keep back from the river edge.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "Looking at the river, what kind of vessels pass close to the promenade?",
+    "options": [
+     "Kayaks",
+     "Large cargo ships",
+     "Ferries only",
+     "Sailboats only"
+    ],
+    "answer": 1,
+    "hint": "Think of the Port of Savannah.",
+    "verify": "Wikipedia says large tankers and container ships sometimes pass within yards of the promenade. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "yr": "1934",
+    "label": "The warehouses then",
+    "line": "A 1934 survey photograph of a stone cotton warehouse on River Street, with a larger warehouse beside it.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/"
+    },
+    "ph": {
+     "k": "sv_rs_then",
+     "by": "Branan Sanders, Historic American Buildings Survey",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Historic_American_Buildings_Survey_Branan_Sanders,_Photographer_March_1934_FRONT_VIEW_-_Factor's_Warehouse,_River_Street_West,_Savannah,_Chatham_County,_GA_HABS_GA,26-SAV,51-1.tif",
+     "note": "resized, cropped"
+    }
+   },
+   "now": {
+    "yr": "2017",
+    "head": "Today",
+    "label": "The street today",
+    "line": "The cobbled street and old warehouses along the river. Photo from 2017.",
+    "ph": {
+     "k": "sv_rs_now",
+     "by": "Seasider53",
+     "lic": "CC BY-SA 4.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:River_Street,_Savannah,_Georgia,_2017.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "River Street is about 2 miles long along the Savannah River, according to Wikipedia. The south side has rows of former cotton warehouses, some dating from the 1850s.",
+    "Factors Walk is built on the middle level of the sloping bluff, with warehouses beneath and Bay Street above. Cotton brokers, called factors, bargained there. The name Factors Row preserves the industry's name.",
+    "The pavement is Belgian block with streetcar tracks set in. Large tankers and container ships heading to and from the Port of Savannah sometimes pass within yards of the promenade."
+   ],
+   "fact": "The warehouses were built for the cotton trade.",
+   "disputed": "A popular claim says the cobblestones are old ship ballast stones. Wikipedia describes Belgian block paving instead.",
+   "claims": [
+    {
+     "t": "River Street has former cotton warehouses.",
+     "a": 0,
+     "why": "Wikipedia: terraces of former King Cotton warehouses."
+    },
+    {
+     "t": "The paving is all old ship ballast.",
+     "a": 1,
+     "why": "A popular story, but Wikipedia describes Belgian block paving."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: River Street (Savannah, Georgia)",
+     "u": "https://en.wikipedia.org/wiki/River_Street_(Savannah,_Georgia)"
+    },
+    {
+     "t": "Wikipedia: Factors Walk",
+     "u": "https://en.wikipedia.org/wiki/Factors_Walk"
+    }
+   ],
+   "card": {
+    "a": "1850s",
+    "b": "Today",
+    "la": "Warehouses",
+    "lb": "Waterfront"
+   },
+   "spot": {
+    "q": "The 1934 photo shows a cotton warehouse on River Street. Where does Factors Walk sit on the bluff?",
+    "options": [
+     "On the top level, beside Bay Street",
+     "On the middle level, with warehouses beneath",
+     "Down at the water's edge",
+     "Out on a pier over the river"
+    ],
+    "answer": 1,
+    "why": "Factors Walk is built on the middle level of the sloping bluff, with warehouses beneath and Bay Street above."
+   }
+  },
+  {
+   "id": "cathedral",
+   "name": "Cathedral of St. John the Baptist",
+   "short": "Cathedral",
+   "badge": "Cathedral",
+   "tag": "Stop 3 of 4",
+   "teaser": "Spires over Lafayette Square, rebuilt after a fire.",
+   "map": "Cathedral Basilica of St. John the Baptist, 222 E Harris St, Savannah, GA",
+   "geo": [
+    32.07333,
+    -81.09088,
+    150
+   ],
+   "clue": "Go to Lafayette Square and find the big Gothic church with tall spires.",
+   "safety": "It is an active church. Be quiet and respectful, check visiting hours, and watch for traffic around the square.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "How many tall spires rise from the front of the cathedral?",
+    "options": [
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "answer": 1,
+    "hint": "Look at the front tower area.",
+    "verify": "Wikipedia mentions the cathedral's spires. Count on site. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "yr": "before 1914",
+    "label": "The cathedral then",
+    "line": "A printed view of the cathedral and its two spires, published before 1914.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/"
+    },
+    "ph": {
+     "k": "sv_ca_then",
+     "by": "Unknown (print published before 1914)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Cathedral_of_St._John_the_Baptist,_Savannah,_Georgia.jpg",
+     "note": "resized"
+    }
+   },
+   "now": {
+    "yr": "2015",
+    "head": "Today",
+    "label": "Inside the cathedral",
+    "line": "A stained-glass window inside the cathedral. Photo from 2015.",
+    "ph": {
+     "k": "sv_ca_now",
+     "by": "Dsdugan",
+     "lic": "CC0",
+     "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Savannah_cathedral_2015_17_052.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "The parish started in 1799. The present cathedral was dedicated on April 30, 1876, and Ephraim Francis Baldwin was its architect, in Gothic Revival style.",
+    "A fire destroyed the interior on February 6, 1898. The first Mass in the rebuilt building was held in December 1899, and it was rededicated on October 28, 1900.",
+    "It is 214 feet tall overall and has 81 stained-glass windows. Windows installed in 1904 came from Austria-Hungary. Pope Francis made it a minor basilica in January 2020."
+   ],
+   "fact": "It became a minor basilica in 2020.",
+   "disputed": "Older guides say the basilica title dates to the 1990s. Wikipedia says January 2020.",
+   "claims": [
+    {
+     "t": "The cathedral was dedicated in 1876.",
+     "a": 0,
+     "why": "Wikipedia: dedicated April 30, 1876."
+    },
+    {
+     "t": "The cathedral was named a basilica in 1996.",
+     "a": 2,
+     "why": "Pope Francis elevated it in January 2020."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Cathedral Basilica of St. John the Baptist",
+     "u": "https://en.wikipedia.org/wiki/Cathedral_Basilica_of_St._John_the_Baptist_(Savannah,_Georgia)"
+    },
+    {
+     "t": "Wikipedia: Lafayette Square (Savannah)",
+     "u": "https://en.wikipedia.org/wiki/Lafayette_Square_(Savannah,_Georgia)"
+    }
+   ],
+   "card": {
+    "a": "1876",
+    "b": "1900",
+    "la": "Dedicated",
+    "lb": "Rededicated"
+   },
+   "spot": {
+    "q": "A fire destroyed the cathedral's interior after it was dedicated in 1876. In what year did that fire happen?",
+    "options": [
+     "1876",
+     "1887",
+     "1893",
+     "1898"
+    ],
+    "answer": 3,
+    "why": "The fire on February 6, 1898 destroyed the interior, and it was rededicated in 1900."
+   }
+  },
+  {
+   "id": "pulaski",
+   "name": "Fort Pulaski",
+   "short": "Fort Pulaski",
+   "badge": "Fort Pulaski",
+   "tag": "Stop 4 of 4",
+   "teaser": "A fort with 11-foot walls that fell in 30 hours.",
+   "map": "Fort Pulaski National Monument, Cockspur Island, GA",
+   "geo": [
+    32.02706,
+    -80.89086,
+    300
+   ],
+   "clue": "Drive east of Savannah toward Tybee Island to Cockspur Island and find the brick fort surrounded by a moat.",
+   "safety": "It is a national park site on an island. Watch for traffic on the highway, stay on trails and bring water and sun protection.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "In 1862, what new kind of weapon breached the fort's thick brick walls?",
+    "options": [
+     "Wooden catapults",
+     "Floating mines",
+     "Hot-air balloons",
+     "Rifled cannons"
+    ],
+    "answer": 3,
+    "hint": "Their barrels had spiral grooves inside.",
+    "verify": "Wikipedia and the Georgia Encyclopedia both say Union rifled cannon breached the wall. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "yr": "1862",
+    "label": "After the siege",
+    "line": "The damaged corner wall after the 1862 siege.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/"
+    },
+    "ph": {
+     "k": "sv_pu_then",
+     "by": "Unknown",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:FTPulaski1862a01.jpg",
+     "note": "resized"
+    }
+   },
+   "now": {
+    "yr": "Today",
+    "head": "Today",
+    "label": "The fort today",
+    "line": "The brick fort sits on Cockspur Island.",
+    "ph": {
+     "k": "sv_pu_now",
+     "by": "Jud McCranie",
+     "lic": "CC BY 3.0",
+     "lu": "https://creativecommons.org/licenses/by/3.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:FtPulaskiFront.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Fort Pulaski was built from 1829 to 1847 on Cockspur Island at the mouth of the Savannah River. It was named in 1833 for Casimir Pulaski, a Polish-born soldier who fought in the American Revolution. About 25 million bricks went into it, supported by wooden pilings sunk up to 70 feet.",
+    "As a young second lieutenant, Robert E. Lee worked on its construction under Major Samuel Babcock. Sources disagree on how thick the walls were, from about 7½ to 11 feet.",
+    "In April 1862, Union forces used 36 guns, including James rifled cannons and Parrott rifles, to breach the corner wall within about 30 hours. Colonel Charles H. Olmstead surrendered reluctantly. Only two soldiers were killed. The success of rifled cannon rendered brick forts obsolete. It became a national monument on October 15, 1924."
+   ],
+   "fact": "Only two soldiers were killed in the siege.",
+   "disputed": "Dates for the surrender differ slightly. The siege began on April 10, 1862, and a photo of the surrender room is dated April 11.",
+   "claims": [
+    {
+     "t": "Fort Pulaski was breached by rifled cannon in 1862.",
+     "a": 0,
+     "why": "Wikipedia: the corner wall was breached within 30 hours."
+    },
+    {
+     "t": "Robert E. Lee designed Fort Pulaski.",
+     "a": 2,
+     "why": "He worked on construction as a young lieutenant, but did not design it."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Fort Pulaski National Monument",
+     "u": "https://en.wikipedia.org/wiki/Fort_Pulaski_National_Monument"
+    },
+    {
+     "t": "Georgia Encyclopedia: Fort Pulaski",
+     "u": "https://www.georgiaencyclopedia.org/articles/counties-cities-neighborhoods/chatham-county/m-851"
+    }
+   ],
+   "card": {
+    "a": "1829",
+    "b": "1862",
+    "la": "Construction began",
+    "lb": "Siege"
+   },
+   "spot": {
+    "q": "The 1862 photo shows the fort's damaged corner wall. About how long did the Union guns take to breach it?",
+    "options": [
+     "3 hours",
+     "30 hours",
+     "3 days",
+     "30 days"
+    ],
+    "answer": 1,
+    "why": "Union forces breached the corner wall within about 30 hours."
+   }
+  }
+ ],
+ "heroKey": "sv_fp_now"
 }

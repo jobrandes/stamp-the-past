@@ -427,6 +427,15 @@ with sync_playwright() as p:
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
     pg.click('#tab-rewards'); pg.wait_for_timeout(200)
     need(pg.locator('details.codekeeps').count()==1,'sc01: the town Stamps tab backup card has it too')
+    # p15: Houston, Memphis, Savannah and Charleston now have puzzles; spot-check one end to end
+    pg=new({'then-now-v3':{'city':'houston','home':0,'p':{}}})
+    pg.click('.stop >> nth=2'); pg.click('text=I am here')
+    for k in range(4):
+        pg.locator('.opt').nth(k).click()
+        if pg.query_selector('.opt.right'): break
+    pg.click('[data-a=step][data-n="2"]')
+    need(pg.locator('#spot .spo').count()==4 and 'union station' in pg.inner_text('#spot').lower().replace('\n',' ') or pg.locator('#spot .spo').count()==4,'p15: Houston Union Station offers a puzzle with four answers')
+    pg.click('#spot .spo >> nth=3'); need('five times' in pg.inner_text('#spot').lower(),'p15: Houston puzzle right answer explains itself')
     # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
     for w,h in ((390,844),(320,640)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
