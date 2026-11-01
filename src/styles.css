@@ -1016,3 +1016,6 @@ body.instop .bsnack,body.inboss .bsnack{bottom:auto;top:calc(8px + env(safe-area
 body.instop .bsn-d,body.inboss .bsn-d{display:none}
 @keyframes bsdn{from{transform:translate(-50%,-24px) scale(.94);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
 body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
+
+.sens{display:flex;flex-direction:column;gap:.25rem;margin:0 0 1rem;padding:.75rem 1rem;border-left:4px solid var(--accent,#b45309);border-radius:.5rem;background:var(--card,rgba(120,120,120,.12));font-size:.9375rem}
+.sens b{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}

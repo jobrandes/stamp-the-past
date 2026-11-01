@@ -42,6 +42,7 @@ p{margin:12px 0 0}a{color:var(--accent)}
 .cap b{display:block;color:var(--ink);font-size:15px}
 .cap small{display:block;margin-top:4px;font:500 11px/1.4 'IBM Plex Mono',ui-monospace,Menlo,monospace;overflow-wrap:anywhere}
 .story p{font-size:18px}
+.sens{margin:0 0 16px;padding:12px 16px;border-left:4px solid #b45309;border-radius:8px;background:rgba(120,120,120,.12);font-size:16px}.sens b{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .dyk{border-left:4px solid var(--gold);background:var(--surface-2);border-radius:0 10px 10px 0;padding:12px 16px;margin-top:20px}
 .box2{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:14px 16px;margin-top:14px}
 ul.fc{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
@@ -148,6 +149,7 @@ def build(R,packs,order,tstate,tfull,common_ids=None):
             caps='<div class="caps"><div class="cap"><b>Then, %s</b>%s<small>%s</small></div><div class="cap"><b>Today, %s</b>%s<small>%s</small></div></div>'%(
                 E(th['yr']),E(th['line']),credit(tph),E(nw['yr']),E(nw['line']),credit(nph))
             story=''.join('<p>%s</p>'%E(x) for x in s['story'])
+            if s.get('sens'): story='<aside class="sens" role="note"><b>Sensitive history</b> '+E(s['sens'])+'</aside>'+story
             fcs=''
             if s.get('claims'):
                 lab={0:'Solid',1:'Disputed',2:'Not true'}

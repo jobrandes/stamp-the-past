@@ -1,0 +1,455 @@
+{
+ "id": "nsierra",
+ "name": "Northern Sierra",
+ "explorer": "Sierra Trailfinder",
+ "initials": "NSI",
+ "ranks": [
+  [
+   0,
+   "Visitor"
+  ],
+  [
+   100,
+   "Trail Walker"
+  ],
+  [
+   250,
+   "Camp Scout"
+  ],
+  [
+   450,
+   "Mother Lode Scholar"
+  ],
+  [
+   600,
+   "Sierra Historian"
+  ]
+ ],
+ "heroKey": "ns_hero",
+ "heroAlt": "Main Street in Sierra City, California, with a wooden restaurant building and balcony beside Highway 49",
+ "heroLi": "<li>Header: Kobnach · CC BY-SA 4.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Main street sierra city 3.jpg\">Source</a> · resized, cropped</li>",
+ "heroCredit": "Photo: Kobnach · CC BY-SA 4.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Main street sierra city 3.jpg\">Source</a>",
+ "mission": "Find four places on the California side of the northern Sierra, from the log fort in Susanville to the gold towns of Sierra County. At each one, check in to earn its badge, unlock its story, and collect a Time Card. Do them in any order. These towns are hours apart, so plan a drive. Everything stays on this phone.",
+ "afterDone": "All four badges earned. The northern Sierra keeps a lot of history in small towns.",
+ "safetyNote": "<li>Mountain roads in Sierra County can be narrow and winding, and snow can close them in winter. Check road and opening conditions before you go. Stay on sidewalks and designated paths.</li>",
+ "badgeMap": {
+  "fort": [
+   "ns_rf_now",
+   "50% 50%"
+  ],
+  "courthouse": [
+   "ns_ch_now",
+   "50% 40%"
+  ],
+  "mainstreet": [
+   "ns_sc_now",
+   "50% 50%"
+  ],
+  "kentucky": [
+   "ns_km_now",
+   "50% 50%"
+  ]
+ },
+ "level": "Hidden Gems",
+ "region": "The West",
+ "stops": [
+  {
+   "id": "fort",
+   "name": "Roop's Fort",
+   "short": "Roop's Fort",
+   "badge": "Roop's Fort",
+   "tag": "Stop 1 of 4",
+   "teaser": "A log cabin in Susanville that was once a trading post, a territorial capital and a front line.",
+   "map": "Roop's Fort, North Weatherlow Street, Susanville, CA",
+   "geo": [
+    40.41889,
+    -120.65556,
+    150
+   ],
+   "clue": "Look for a low log building with a green roof on North Weatherlow Street in Susanville, between Main and Nevada Streets. It sits behind a yard with old trees.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "In what year did Isaac Roop build the log fort in what is now Susanville?",
+    "options": [
+     "1849",
+     "1854",
+     "1863",
+     "1874"
+    ],
+    "answer": 1,
+    "hint": "It was built before the Civil War began.",
+    "verify": "The California Historical Landmark entry says built in 1854 (July 1854 in the state citation); Wikipedia agrees. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "ns_rf_then",
+     "by": "Historic American Buildings Survey (photographer not named)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Lassen Co. Folder Taken 1939 - Fort Defiance, Susanville, Lassen County, CA HABS CAL,18-SUSA.V,1-2.tif",
+     "note": "resized"
+    },
+    "yr": "1939",
+    "label": "The fort in a 1939 survey photo",
+    "line": "A black-and-white survey photo of the log building, listed by the survey as Fort Defiance, Susanville. The 1939 date is when the survey folder was taken, not necessarily when this frame was shot.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Roop%27s%20Fort%20Susanville&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2013",
+    "head": "Today",
+    "label": "Roop's Fort now",
+    "line": "The same kind of log building with a green roof, standing in a yard with old trees.",
+    "ph": {
+     "k": "ns_rf_now",
+     "by": "Finetooth",
+     "lic": "CC BY-SA 3.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Roop's Fort.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Isaac Roop built this log building in 1854 in what is now Susanville. It was first called Roop House and served as a stopping place for emigrant wagon trains. Wikipedia calls it the first building built by white settlers in Lassen County.",
+    "In 1861 the area was organized as the Nataqua Territory, with its capitol in this building, and it was then incorporated as Roop County, named for Isaac Roop.",
+    "In 1863 California and Nevada both claimed the Susanville area, and Nevadans used the fort during what became known as the Sagebrush War. California's claim won out, and the area became part of Lassen County in 1864. The fort is on the National Register of Historic Places (added May 2, 1974) and is California Historical Landmark No. 76."
+   ],
+   "fact": "The building is also known as Fort Defiance, Roop House and Roop's Trading Post.",
+   "disputed": "Sources disagree on two things. The month the fort was built is June 1854 in one account and July 1854 in the state citation. The Sagebrush War is described as California against Nevada by Wikipedia, as a fight between citizens of Plumas and Lassen Counties on the state plaque, and as starting when Plumas County officials issued arrest warrants in 1863 in a Lassen Historical Museum account. This app does not pick between them. The fort is part of the Lassen Historical Museum, so check its hours before you go.",
+   "claims": [
+    {
+     "t": "Roop's Fort is on the National Register of Historic Places, added May 2, 1974.",
+     "a": 0,
+     "why": "Wikipedia lists it on the National Register (reference 74000516), added May 2, 1974."
+    },
+    {
+     "t": "The Sagebrush War of 1863 was a fight between California and Nevada.",
+     "a": 1,
+     "why": "Wikipedia describes a California and Nevada dispute, but the state plaque names citizens of Plumas and Lassen Counties, and a museum account says it began when Plumas County officials issued arrest warrants. Sources differ."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Roop's Fort",
+     "u": "https://en.wikipedia.org/wiki/Roop%27s_Fort"
+    },
+    {
+     "t": "NoeHill: California Historical Landmark 76, Roop's Fort",
+     "u": "https://noehill.com/lassen/cal0076.asp"
+    },
+    {
+     "t": "Northern Nevada Business Weekly: The story of Isaac Roop and Susanville unfolds at the Lassen Historical Museum",
+     "u": "https://nnbw.com/news/2019/dec/11/the-story-of-isaac-roop-and-susanville-unfolds-at-"
+    }
+   ],
+   "card": {
+    "a": "1854",
+    "b": "1974",
+    "la": "Built by Isaac Roop",
+    "lb": "Added to the National Register"
+   }
+  },
+  {
+   "id": "courthouse",
+   "name": "Sierra County Courthouse and Gallows",
+   "short": "Courthouse and Gallows",
+   "badge": "Courthouse and Gallows",
+   "tag": "Stop 2 of 4",
+   "teaser": "A gold rush county seat with a courthouse that burned and a gallows that survived.",
+   "map": "Sierra County Courthouse, Courthouse Square, Downieville, CA",
+   "geo": [
+    39.55833,
+    -120.82944,
+    200
+   ],
+   "clue": "Find the courthouse at Courthouse Square in Downieville. The wooden gallows stands beside it, with a metal plaque.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "How many times was the Downieville gallows used for a hanging?",
+    "options": [
+     "Never",
+     "Twice",
+     "Once",
+     "Eleven times"
+    ],
+    "answer": 2,
+    "hint": "It was built to be taken apart and stored, which hints it was not needed often.",
+    "verify": "The California landmark plaque text says the 1885 hanging was the only time this gallows was used. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "ns_ch_then",
+     "by": "Roger Sturtevant (Historic American Buildings Survey)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 VIEW FROM NORTH-EAST (FRONT) - Downieville Courthouse, Downieville, Sierra County, CA HABS CAL,46-DOWNV,4-1.tif",
+     "note": "resized"
+    },
+    "yr": "1934",
+    "label": "The old courthouse, 1934",
+    "line": "A survey photo of the 1854 courthouse from the northeast, with two cars parked in front. The building burned in 1947.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Downieville%20Courthouse&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2007",
+    "head": "Today",
+    "label": "The courthouse square now",
+    "line": "A later courthouse, not the 1854 building in the old photo. The old one burned in 1947.",
+    "ph": {
+     "k": "ns_ch_now",
+     "by": "Ken Lund",
+     "lic": "CC BY-SA 2.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Sierra County Courthouse. Downieville, California 2.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Downieville was founded in late 1849 and was first called The Forks, because it sits where the Downie River meets the North Fork of the Yuba River. It was then named for Major William Downie. By 1851 it had more than 5,000 people, and it is still the county seat of Sierra County.",
+    "The county built a courthouse in 1854. In 1885 it built a wooden gallows designed to be taken apart and stored. It was used once, on November 27, 1885, for a 20-year-old man convicted of murdering a dairyman at Webber Lake. Changes in state law in 1891 ended local executions in California.",
+    "The gallows was kept in the courthouse attic until it was found in 1927, then rebuilt beside the courthouse. The courthouse was destroyed by fire in 1947, but the gallows survived. It was restored in 1988 and is California Historical Landmark No. 971 and on the National Register of Historic Places (1990).",
+    "Downieville's gold rush history also has a darker day. On July 5, 1851, a mob hanged Josefa Segovia, a Californio woman, from the Jersey Bridge after a mock trial. She was accused of stabbing a miner named Frederick Cannon. She is described as the only known woman lynched in California. Accounts of what led up to it differ, and some historians doubt she was the killer. A marker on Main Street, dedicated in 2024, remembers her."
+   ],
+   "fact": "The gallows was built so it could be taken apart, stored and put back together.",
+   "disputed": "Sources spell the name of the man hanged in 1885 two ways (O'Neal and O'Neill), so this app does not use it. For the 1851 lynching, accounts differ on what led up to it, on whether Segovia was the person who killed Cannon, on her last words and even on her name (Josefa Segovia, Juanita or Josefa Loaiza).",
+   "claims": [
+    {
+     "t": "The Downieville gallows was used for one hanging, in 1885.",
+     "a": 0,
+     "why": "The state landmark plaque says it was the only time the gallows was used."
+    },
+    {
+     "t": "The old courthouse and the gallows both burned down in 1947.",
+     "a": 2,
+     "why": "The 1854 courthouse was destroyed by the 1947 fire, but the gallows survived."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Sierra County Sheriff's Gallows",
+     "u": "https://en.wikipedia.org/wiki/Sierra_County_Sheriff%27s_Gallows"
+    },
+    {
+     "t": "NoeHill: California Historical Landmark 971, Sierra County Sheriff's Gallows",
+     "u": "https://noehill.com/sierra/cal0971.asp"
+    },
+    {
+     "t": "Wikipedia: Josefa Segovia",
+     "u": "https://en.wikipedia.org/wiki/Josefa_Segovia"
+    },
+    {
+     "t": "Wikipedia: Downieville, California",
+     "u": "https://en.wikipedia.org/wiki/Downieville,_California"
+    }
+   ],
+   "card": {
+    "a": "1885",
+    "b": "1947",
+    "la": "Gallows built",
+    "lb": "Old courthouse burned"
+   },
+   "sens": "This stop's history includes an execution and a mob killing. It is told briefly and factually. You can skip any part."
+  },
+  {
+   "id": "mainstreet",
+   "name": "Main Street, Sierra City",
+   "short": "Main Street",
+   "badge": "Main Street",
+   "tag": "Stop 3 of 4",
+   "teaser": "A mountain town that an avalanche wiped out, then rebuilt along the highway.",
+   "map": "Main Street, Sierra City, CA 96125",
+   "geo": [
+    39.5733,
+    -120.6369,
+    250
+   ],
+   "clue": "Walk Main Street, which is also Highway 49, in Sierra City. Look for the old brick and wooden storefronts with balconies. The jagged Sierra Buttes rise above town.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "What destroyed the first settlement at Sierra City in the winter of 1852 to 1853?",
+    "options": [
+     "An avalanche",
+     "A fire",
+     "A flood",
+     "An earthquake"
+    ],
+    "answer": 0,
+    "hint": "It was a winter disaster, not a summer one.",
+    "verify": "Wikipedia and Western Mining History both say an avalanche destroyed the town in the winter of 1852-53. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "ns_sc_then",
+     "by": "Roger Sturtevant (Historic American Buildings Survey)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 GENERAL VIEW - Main Street (Commercial Buildings), Sierra City, Sierra County, CA HABS CAL,46-SIRCI,6-1.tif",
+     "note": "resized"
+    },
+    "yr": "1934",
+    "label": "Main Street, 1934",
+    "line": "A survey photo looking along Main Street, with wooden storefronts and balconies. It is a street view, so it does not necessarily show the same buildings as today's photo.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Sierra%20City%20Main%20Street&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2019",
+    "head": "Today",
+    "label": "Main Street now",
+    "line": "A wooden building with a white balcony and a restaurant sign, beside the highway. Not necessarily a building in the old photo.",
+    "ph": {
+     "k": "ns_sc_now",
+     "by": "Kobnach",
+     "lic": "CC BY-SA 4.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Main street sierra city 2.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Prospectors arrived in spring 1850, and a settlement was founded that year. In the winter of 1852 to 1853, an avalanche destroyed it. It was rebuilt several years later near the Sierra Buttes, and had about 3,000 people at its peak.",
+    "The Sierra City area produced more than $30 million in gold over the years. The town sits on Highway 49, about twelve miles northeast of Downieville. The 2020 census counted 235 people.",
+    "On Main Street are the Masonic Lodge No. 164 and the Old Sierra City Hotel, built in 1886. The three-story brick Busch & Heringlake Building, laid with local bricks in 1871 and used by Wells Fargo Express, burned in 1948."
+   ],
+   "fact": "The Sierra Buttes above town rise to 7,818 feet.",
+   "disputed": "The town's peak population (about 3,000) has no stated year in the sources. Wikipedia mentions a two-story brick Busch Building on Main Street, but a state marker describes a three-story Busch & Heringlake Building that burned in 1948, so this app leaves that building out of the stop. The 1934 photo is a general street view and may not show the buildings in today's photo.",
+   "claims": [
+    {
+     "t": "An avalanche destroyed the first Sierra City in the winter of 1852 to 1853.",
+     "a": 0,
+     "why": "Wikipedia says an avalanche destroyed the settlement that winter, and it was not rebuilt for several years."
+    },
+    {
+     "t": "The Old Sierra City Hotel was built during the 1850s gold rush.",
+     "a": 2,
+     "why": "Wikipedia gives its date as 1886."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Sierra City, California",
+     "u": "https://en.wikipedia.org/wiki/Sierra_City,_California"
+    },
+    {
+     "t": "Western Mining History: Sierra City",
+     "u": "https://westernmininghistory.com/towns/california/sierra-city"
+    },
+    {
+     "t": "HMDB: Busch & Heringlake Building marker, Sierra City",
+     "u": "https://www.hmdb.org/m.asp?m=61190"
+    }
+   ],
+   "card": {
+    "a": "1850",
+    "b": "1886",
+    "la": "Settlement founded",
+    "lb": "Old Sierra City Hotel built"
+   }
+  },
+  {
+   "id": "kentucky",
+   "name": "Kentucky Mine and Stamp Mill",
+   "short": "Kentucky Mine",
+   "badge": "Kentucky Mine",
+   "tag": "Stop 4 of 4",
+   "teaser": "A gold mine and a mill that still drops its stamps for visitors.",
+   "map": "Kentucky Mine Historic Park and Museum, 100 Kentucky Mine Rd, Sierra City, CA",
+   "geo": [
+    39.5724,
+    -120.6221,
+    300
+   ],
+   "clue": "Follow the signs off Highway 49 just outside Sierra City to Kentucky Mine Road. Look for the big wooden stamp mill building on the hillside above the museum.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "After it was expanded in 1888, how many stamps did the Kentucky Mine's first stamp mill have?",
+    "options": [
+     "5",
+     "8",
+     "12",
+     "10"
+    ],
+    "answer": 3,
+    "hint": "The mill started smaller, in the 1860s.",
+    "verify": "A 2019 Northern Nevada Business Weekly article gives a five-stamp mill from the 1860s expanded in 1888, and the Sierra County Historical Society describes ten stamps. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "ns_km_then",
+     "by": "Roger Sturtevant (Historic American Buildings Survey)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 VIEW FROM SOUTH-WEST - Old Mine, Sierra City, Sierra County, CA HABS CAL,46-SIRCI,5-1.tif",
+     "note": "resized"
+    },
+    "yr": "1934",
+    "label": "An old mine at Sierra City, 1934",
+    "line": "A survey photo of an old mine and its wooden buildings at Sierra City. The survey does not say it is the Kentucky Mine, so this is a looser match.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Old%20Mine%20Sierra%20City&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2012",
+    "head": "Today",
+    "label": "The Kentucky Mine now",
+    "line": "The weathered wooden stamp mill in autumn, with fallen leaves in front.",
+    "ph": {
+     "k": "ns_km_now",
+     "by": "Carol M. Highsmith",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Kentucky Mine and Museum in Sierra City, California LCCN2013633861.tif",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Gold was discovered near Sierra City in the early 1850s, and the Kentucky Consolidated Mining Company formed in 1853. An early stamp mill built in the 1860s had five stamps and was expanded to ten in 1888.",
+    "Emil Loeffler began working the mine again in 1920 and started a new mill in 1928 that took five years to build. The mine and mill ran until 1944, and the family worked them off and on until 1953.",
+    "Sierra County bought the site in 1974 and restored it. Today it is a historic park and museum, with a three-story mill and a museum in a replica of the 19th-century Bigelow House hotel. Guided tours run the stamp mill, and the drop of the stamps is loud."
+   ],
+   "fact": "At full speed the mill's stamps could be heard for miles.",
+   "disputed": "The sources give two different counts for the number of stamps in the first mill and the number at full operation (five expanded to ten, versus ten 1,000-pound stamps at its peak). The mine's opening hours change by season, so check before you go.",
+   "claims": [
+    {
+     "t": "The Kentucky Mine and mill ran until 1944.",
+     "a": 0,
+     "why": "A 2019 article says the mine and mill ran until 1944, and the family worked them sporadically until 1953."
+    },
+    {
+     "t": "Sierra County bought the Kentucky Mine site in 1874.",
+     "a": 2,
+     "why": "The county bought and restored it in 1974."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Northern Nevada Business Weekly: Kentucky Mine museum offers glimpses of another time",
+     "u": "https://nnbw.com/news/2019/apr/24/kentucky-mine-museum-offers-glimpses-of-another-ti"
+    },
+    {
+     "t": "Sierra County Historical Society: Kentucky Mine Historic Park and Museum",
+     "u": "https://www.sierracountyhistory.org/?p=222"
+    }
+   ],
+   "card": {
+    "a": "1853",
+    "b": "1974",
+    "la": "Mining company formed",
+    "lb": "County buys the site"
+   }
+  }
+ ]
+}

@@ -1,0 +1,216 @@
+{
+ "id": "nsierra",
+ "name": "Northern Sierra",
+ "towns": [
+  "nsierra"
+ ],
+ "stops": [
+  {
+   "id": "dmuseum",
+   "name": "Downieville Museum",
+   "area": "Downieville",
+   "town": "nsierra",
+   "geo": [
+    39.5604,
+    -120.8275,
+    150
+   ],
+   "addr": "330 Main Street, Downieville, CA 95936",
+   "invite": "A gold rush store built of flat stones in 1852, which survived fires that took most of the town.",
+   "story": [
+    "The museum building dates to 1852, making it one of Downieville's first buildings. It was first used as a Chinese store, was known as the Old Slate Store, and later became the J.M.B. Meroux Building.",
+    "Its walls are made entirely of flat rocks laid horizontally, and the stone helped it survive fires that destroyed most of the town. The Meroux family gave the building to the community, and it has operated as a museum since 1932.",
+    "The core collection came from relics gathered by former Sheriff George C. Bynon. An older newspaper article describes exhibits such as ledgers, an 1874 map of Sierra County, gold scales and old firefighting gear."
+   ],
+   "facts": [
+    {
+     "t": "The building dates to 1852 and was first used as a Chinese store, later called the Old Slate Store.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Its walls are made of flat rocks laid horizontally, and the stone helped it survive fires that destroyed most of the town.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Meroux family gave the building to the community, and it has been a museum since 1932.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The core collection is relics gathered by former Sheriff George C. Bynon.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "A 1970 article, reprinted in 2023, lists ledgers, an 1874 map of Sierra County, a gold scale and old fire hoses among its exhibits.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "The museum is on Main Street in Downieville. A 1970 article gave seasonal hours, which may have changed, so check with the museum or Sierra County before you go. It is not confirmed to be open year-round.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against NoeHill and a Mountain Messenger article reprinted in 2023 (the 1970 hours were not used). No current hours found. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "NoeHill: Downieville Museum",
+     "u": "https://noehill.com/sierra/poi_downieville_museum.asp"
+    },
+    {
+     "t": "The Mountain Messenger: A visit to the Downieville Museum",
+     "u": "https://www.themountainmessenger.org/article/a-visit-to-the-downieville-museum"
+    }
+   ],
+   "ph": {
+    "k": "ns_dm",
+    "alt": "The Downieville Museum, a stone building on Main Street",
+    "by": "Yngvadottir",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Downieville Museum.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "segovia",
+   "name": "Josefa Segovia Marker",
+   "area": "Downieville",
+   "town": "nsierra",
+   "geo": [
+    39.5604,
+    -120.8275,
+    150
+   ],
+   "addr": "326 Main Street, Downieville, CA 95936",
+   "sens": "This stop is about a lynching. It is told briefly and factually. You can skip any part.",
+   "invite": "A 2024 marker on Main Street remembers a woman hanged by a mob in 1851.",
+   "story": [
+    "On July 5, 1851, a mob of Anglo-American miners hanged Josefa Segovia from the Jersey Bridge in Downieville after a mock trial. She was a Mexican-Californian woman, probably in her early to mid twenties, accused of stabbing a miner named Frederick Cannon.",
+    "Accounts differ about what happened the day before and on the day itself, and some modern writers doubt that she was the person who killed Cannon. Her name is also debated: she appears as Josefa Segovia, Juanita and Josefa Loaiza. She is described as the only known woman lynched in California, though the record is incomplete.",
+    "The marker was dedicated on August 24, 2024, by two chapters of E Clampus Vitus, a historical fraternal society. It is listed on Main Street in front of 326 Main Street, in the Downieville historic riverfront district."
+   ],
+   "facts": [
+    {
+     "t": "A mob hanged Josefa Segovia from the Jersey Bridge in Downieville on July 5, 1851, after a mock trial.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "She was accused of stabbing a miner named Frederick Cannon; some modern commentators doubt she was the one who killed him.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Her name is debated, and she appears as Josefa Segovia, Juanita and Josefa Loaiza.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The marker was dedicated on August 24, 2024, by two E Clampus Vitus chapters.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The marker is outdoors on Main Street, east of Commercial Street, and was listed as in front of the restaurant at 326 Main Street. Business names can change, so go by the street number. It is on a public street.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Marker listing and Wikipedia article read; the marker's wording was summarized, not copied. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "HMDB: Josefa Segovia Historical Marker, Downieville",
+     "u": "https://www.hmdb.org/m.asp?m=282479"
+    },
+    {
+     "t": "Wikipedia: Josefa Segovia",
+     "u": "https://en.wikipedia.org/wiki/Josefa_Segovia"
+    }
+   ]
+  },
+  {
+   "id": "plumaseureka",
+   "name": "Plumas-Eureka State Park",
+   "area": "Blairsden",
+   "town": "nsierra",
+   "geo": [
+    39.7611,
+    -120.7067,
+    600
+   ],
+   "addr": "County Road A14, Blairsden, CA 96103",
+   "invite": "A mining camp park with stamp mills and a miner's bunkhouse museum, in the mountains of Plumas County.",
+   "story": [
+    "The park is about five miles west of Blairsden on County Road A-14. It interprets the Gold Rush mining era, and the state landmark text here mentions Jamison City, which produced a famous 52-pound nugget, and the Eureka Mill and mine, which yielded $17 million.",
+    "The same landmark text calls Johnsville, then Johnstown, a well preserved town from 1849. The historic area has a museum in the miner's bunkhouse, the Mohawk Stamp Mill, the Bushman five-stamp mill, stables, a blacksmith shop and a mine office.",
+    "Eureka Peak, once called Gold Mountain, was the site of some of the first organized ski races in North America. The park is open to the public except during the winter season."
+   ],
+   "facts": [
+    {
+     "t": "The park is about five miles west of Blairsden on County Road A-14, in Plumas County.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "California Historical Landmark No. 196 mentions Jamison City and its 52-pound nugget, and the Eureka Mill and mine yielding $17 million.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The historic area has a museum in the miner's bunkhouse, the Mohawk Stamp Mill and the Bushman five-stamp mill.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Eureka Peak, formerly Gold Mountain, hosted some of the first organized ski races in North America.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The park is open to the public except during the winter season.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The park is on County Road A-14 in Plumas County and is open except during the winter season, when snow can limit access. Check California State Parks for current hours, fees and which buildings are open before you drive up.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and NoeHill's landmark text; current hours were not confirmed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Plumas-Eureka State Park",
+     "u": "https://en.wikipedia.org/wiki/Plumas-Eureka_State_Park"
+    },
+    {
+     "t": "NoeHill: California Historical Landmark 196",
+     "u": "https://noehill.com/plumas/cal0196.asp"
+    }
+   ]
+  }
+ ]
+}

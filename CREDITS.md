@@ -714,3 +714,13 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | tt_jl | https://commons.wikimedia.org/wiki/File:Old Jail Museum - Truckee - California 02.jpg | Steezy Gordita | CC BY-SA 4.0 | resized |
 | tt_dp | https://commons.wikimedia.org/wiki/File:Truckee Depot CA. - December 2010.jpg | Loco Steve | CC BY 2.0 | resized |
 | tt_dm2 | https://commons.wikimedia.org/wiki/File:Donner Memorial State Park - panoramio (5).jpg | Noah_Loverbear | CC BY-SA 3.0 | resized |
+| ns_hero | https://commons.wikimedia.org/wiki/File:Main street sierra city 3.jpg | Kobnach | CC BY-SA 4.0 | resized |
+| ns_rf_then | https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Lassen Co. Folder Taken 1939 - Fort Defiance, Susanville, Lassen County, CA HABS CAL,18-SUSA.V,1-2.tif | Historic American Buildings Survey (photographer not named) | Public domain | resized |
+| ns_rf_now | https://commons.wikimedia.org/wiki/File:Roop's Fort.jpg | Finetooth | CC BY-SA 3.0 | resized |
+| ns_ch_then | https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 VIEW FROM NORTH-EAST (FRONT) - Downieville Courthouse, Downieville, Sierra County, CA HABS CAL,46-DOWNV,4-1.tif | Roger Sturtevant (Historic American Buildings Survey) | Public domain | resized |
+| ns_ch_now | https://commons.wikimedia.org/wiki/File:Sierra County Courthouse. Downieville, California 2.jpg | Ken Lund | CC BY-SA 2.0 | resized |
+| ns_sc_then | https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 GENERAL VIEW - Main Street (Commercial Buildings), Sierra City, Sierra County, CA HABS CAL,46-SIRCI,6-1.tif | Roger Sturtevant (Historic American Buildings Survey) | Public domain | resized |
+| ns_sc_now | https://commons.wikimedia.org/wiki/File:Main street sierra city 2.jpg | Kobnach | CC BY-SA 4.0 | resized |
+| ns_km_then | https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 VIEW FROM SOUTH-WEST - Old Mine, Sierra City, Sierra County, CA HABS CAL,46-SIRCI,5-1.tif | Roger Sturtevant (Historic American Buildings Survey) | Public domain | resized |
+| ns_km_now | https://commons.wikimedia.org/wiki/File:Kentucky Mine and Museum in Sierra City, California LCCN2013633861.tif | Carol M. Highsmith | Public domain | resized |
+| ns_dm | https://commons.wikimedia.org/wiki/File:Downieville Museum.jpg | Yngvadottir | CC BY-SA 4.0 | resized |

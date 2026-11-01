@@ -1389,7 +1389,7 @@
     "Thomas Jefferson"
    ],
    "a": 3,
-   "why": "Thomas Jefferson, together with Charles-Louis Cl\u00e9risseau."
+   "why": "Thomas Jefferson, together with Charles-Louis Clérisseau."
   },
   {
    "q": "What neighborhood is named for St. John's Church?",
@@ -1411,7 +1411,7 @@
     "The Boston Public Library"
    ],
    "a": 1,
-   "why": "Carr\u00e8re and Hastings designed the New York Public Library."
+   "why": "Carrère and Hastings designed the New York Public Library."
   },
   {
    "q": "Main Street Station was built by Seaboard and which other railroad?",
@@ -2504,7 +2504,7 @@
     "CM"
    ],
    "a": 0,
-   "why": "Coins struck here from 1870 to 1893 carry the \u201cCC\u201d mark."
+   "why": "Coins struck here from 1870 to 1893 carry the “CC” mark."
   },
   {
    "q": "In what year did the Stewart Indian School close?",
@@ -2542,7 +2542,7 @@
    "why": "Wikipedia gives 184 feet, topped with a 40-foot flag mast."
   },
   {
-   "q": "In what year did \u02bbIolani Palace open to the public as a museum?",
+   "q": "In what year did ʻIolani Palace open to the public as a museum?",
    "o": [
     "1969",
     "1978",
@@ -2555,24 +2555,24 @@
   {
    "q": "Where does the original statue of Kamehameha I, recovered after the shipwreck, stand today?",
    "o": [
-    "Waik\u012bk\u012b Beach",
+    "Waikīkī Beach",
     "Pearl Harbor",
     "Lahaina on Maui",
-    "Kapa\u02bbau on Hawai\u02bbi Island"
+    "Kapaʻau on Hawaiʻi Island"
    ],
    "a": 3,
-   "why": "The recovered first cast stands in Kapa\u02bbau, North Kohala."
+   "why": "The recovered first cast stands in Kapaʻau, North Kohala."
   },
   {
-   "q": "Kawaiaha\u02bbo comes from \"ka wai a Ha\u02bbo.\" What does that mean?",
+   "q": "Kawaiahaʻo comes from \"ka wai a Haʻo.\" What does that mean?",
    "o": [
-    "The water of Ha\u02bbo",
+    "The water of Haʻo",
     "The stone of the king",
     "The house of prayer",
     "The bell of the chiefs"
    ],
    "a": 0,
-   "why": "The church sits on the site of a spring and pool of a chiefess named Ha\u02bbo."
+   "why": "The church sits on the site of a spring and pool of a chiefess named Haʻo."
   }
  ],
  "skagway": [
@@ -2711,6 +2711,52 @@
    ],
    "a": 1,
    "why": "Gwathmey Siegel & Associates designed the expansion, which opened October 10, 2010."
+  }
+ ],
+ "nsierra": [
+  {
+   "q": "Who was Roop County, Nevada, named for?",
+   "o": [
+    "Major William Downie",
+    "Isaac Roop",
+    "Emil Loeffler",
+    "Philo Haven"
+   ],
+   "a": 1,
+   "why": "Wikipedia says Roop County was named for Isaac Roop, who built Roop's Fort."
+  },
+  {
+   "q": "What happened to the 1854 Sierra County Courthouse in 1947?",
+   "o": [
+    "It was moved",
+    "It was sold",
+    "It was painted white",
+    "It was destroyed by fire"
+   ],
+   "a": 3,
+   "why": "The old courthouse was destroyed by fire in 1947, but the gallows survived."
+  },
+  {
+   "q": "What was Downieville first called?",
+   "o": [
+    "The Forks",
+    "Gold Flat",
+    "Yuba City",
+    "Sierra Buttes"
+   ],
+   "a": 0,
+   "why": "Wikipedia says it was first called The Forks, for where the Downie River meets the North Fork of the Yuba River."
+  },
+  {
+   "q": "In what year did Sierra County buy the Kentucky Mine site and restore it?",
+   "o": [
+    "1853",
+    "1920",
+    "1944",
+    "1974"
+   ],
+   "a": 3,
+   "why": "A 2019 article says the county bought the site in 1974 and restored it."
   }
  ]
 }
