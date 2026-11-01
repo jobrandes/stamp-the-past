@@ -169,7 +169,7 @@ with sync_playwright() as p:
     gp.click('[data-a=neargo]'); gp.wait_for_timeout(500); need(gp.locator('.opt').count()>0,'tapping the Home card jumps to the question')
     ctx,gp=live_ctx(0.0,-30.0); gp.wait_for_timeout(1200)
     need('within 90 miles' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()==0,'live location: nothing pushy when no stop is near')
-    ctx,gp=live_ctx(39.5325,-119.81366); gp.wait_for_timeout(1200); need('closest to you' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()>0,'live location: shows the nearest stop distance')
+    ctx,gp=live_ctx(39.5325,-119.81366); gp.wait_for_timeout(1200); need('closest first' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()>0,'live location: shows the nearest stop distance')
     need(gp.locator('#nearBox .rcard[data-a=neargo]').count()<=3,'Home shows at most 3 nearby stops first')
     if gp.locator('#nearBox [data-a=nearall]').count():
         gp.click('#nearBox [data-a=nearall]'); need(gp.locator('#nearBox .rcard[data-a=neargo]').count()>3,'See more nearby stops shows the rest')
@@ -210,7 +210,7 @@ with sync_playwright() as p:
     pg.fill('#codeIn','TN3-'+'-'.join(['000000000000']*(NT+1))); pg.click('text=Restore'); need('more towns' in pg.inner_text('#codeMsg').lower(),'code with too many towns is rejected with a clear message')
     # try it from home: preview unlocks the story but saves nothing
     pg=new(); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
-    need(pg.locator('[data-a=demo]').count()==1,'unstamped stop offers Explore from home')
+    need(pg.locator('[data-a=demo]').count()>=1,'unstamped stop offers Explore from home')
     pg.click('[data-a=demo]'); need(pg.locator('.demo-banner').count()==1,'demo shows a preview banner')
     for k in range(4):
         if pg.locator('.earned').count(): break

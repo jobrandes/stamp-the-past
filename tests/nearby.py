@@ -38,7 +38,7 @@ with sync_playwright() as p:
     # 2. nothing is asked until the tap
     pg.click('.nbcard [data-a=nbopen]'); pg.wait_for_timeout(200)
     t=txt(pg).lower()
-    need('closest stops' in t and 'find stops near me' in t and 'continue without location' in t,'ask screen offers both choices')
+    need('nearby stops' in t and 'find stops near me' in t and 'continue without location' in t,'ask screen offers both choices')
     need('stays on this phone' in t and 'only while the app is open' in t,'ask screen explains why location is needed')
     need(pg.evaluate("window.__geo.get+window.__geo.watch")==0,'opening the screen does not request location')
     need(pg.evaluate("document.activeElement&&document.activeElement.id")=='stopTitle','focus moves to the screen title')
@@ -66,7 +66,7 @@ with sync_playwright() as p:
     t=txt(pg).lower()
     need('photo pending' not in t and (pg.locator('#main img').count()==0 or ('photo:' in t and pg.locator('.nbfig a').count()>=1)),'a Story stop shows either no image, or a photo with its credit and license link (never a placeholder)')
     need(pg.locator('.nbsrc a').count()>=2 and all(h.startswith('https://') for h in pg.eval_on_selector_all('.nbsrc a','e=>e.map(x=>x.href)')),'Story card lists 2+ https sources')
-    need('getting there' in t and 'checked 2026-10-31' in t,'Story card shows the access note and when it was checked')
+    need('getting there' in t and 'official pages on 2026-10-31' in t,'Story card shows the access note and when it was checked')
     href=pg.get_attribute('.nbaccess a.btn','href'); need('travelmode=walking' in href and 'google.com/maps/dir' in href and 'destination=' in href,'directions link is a walking Maps link')
     need(pg.get_attribute('.nbaccess a.btn','target')=='_blank','Maps opens outside the app')
     need('opens in maps, outside this app' in t,'card says Maps opens outside the app')

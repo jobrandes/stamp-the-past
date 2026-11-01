@@ -339,3 +339,9 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Also close by (Nov 1 2026)
 - Each town's "Your mission" card has an expandable, collapsed "Also close by: N history places" row (`closeBy(k)`/`closeByHtml(k)` in app.js, `.alsonear`): Story stops from ANY tour within 800 m of one of the town's four stops, nearest first (max 8), straight-line, no stamps or XP. Built from the data, so new Explore places appear on their own; shows nothing when none are close. Tapping a place opens its Story card (`nbtownstory`), back goes to that town's Explore list. Tests in tests/nearby.py section 9.
+
+## Independent review fixes (Nov 1 2026)
+- One Nearby entry on Home: the inline "Show the closest stops" card is gone (the `nbCardHtml` card is the single entry; labels now say "Nearby stops").
+- Story screen: slider and story first, optional "Verify this visit" card sits above the Next button. Correct answers show a "Why this is right" line from `q.verify` (`whyLine`).
+- "explore from home" in Find-it is a tappable link; landing/parents wording no longer says "teen"; Story card says "Details read against official pages on <date>. Not walked yet."; blank Passport shows one friendly line instead of four zeros; badge snackbar 5 s (7 s on stops); Explore history highlights the Towns tab; on phones only the active region chip shows in a town header.
+- Not done: per-stop accessibility notes (need Jo-Anne's walk).

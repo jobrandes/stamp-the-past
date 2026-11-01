@@ -1028,6 +1028,9 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .alsonear{margin:.75rem 0 0;border-top:1px solid rgba(120,120,120,.25);padding-top:.5rem}.alsonear>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;font-size:.9375rem}.alsonear .nbrow{margin-top:.5rem}
 .alsonear>summary{justify-content:space-between;list-style:none}.alsonear>summary::-webkit-details-marker{display:none}.alsonear>summary::after{content:"+";font-size:1.25rem;margin-left:.5rem}.alsonear[open]>summary::after{content:"\2212"}
+.whyline{margin:8px 0 12px;font-size:0.875rem;color:var(--muted);line-height:1.45}.whyline b{color:var(--ink)}
+.stopmeta .link{display:inline;min-height:0;padding:0;text-decoration:underline;font:inherit}
+@media (max-width:600px){#cities .rtab[aria-pressed="false"]{display:none}}
 </style>
 
 <div class="app">
@@ -1303,6 +1306,10 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       if(!quiet) geoMsg(err&&err.code===1?'Location is off for this app, which is fine. You can continue without the gold stamp.':'Could not get your location. Try again, or continue without the gold stamp.',true);
     },{enableHighAccuracy:true,timeout:15000,maximumAge:30000});
   }
+  function whyLine(st){
+    var v=(st.q.verify||'').replace(/\s*Confirm on site\.?/g,'').replace(/\s*Written from sources, not yet checked on site\.?/g,'').trim();
+    return v?'<p class="whyline"><b>Why this is right.</b> '+v+'</p>':'';
+  }
   function lateVerify(st,d){
     if(!(d&&st.geo&&!cur.demo)||geoVerified(cityId,cur.i)||geoDenied) return '';
     return '<section class="card"><p class="mono">Verified visit</p><p>You already have this stamp. Standing at '+st.name+' right now? Verify this visit to upgrade it to a gold stamp and earn +50 XP.</p><button class="btn gold" data-a="geo">Verify this visit</button><p class="hint">Optional. Checked on this phone only, never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p></section>';
@@ -1335,10 +1342,10 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     arr.sort(function(x,y){ return x.d-y.d; }); return arr; }
   function nearListHtml(){
     if(atHome===false||geoDenied||!navigator.geolocation) return '';
-    if(!geoPos){ return geoGranted()?'':'<section class="card nearlist"><p class="mono">Stops near me</p><button class="btn ghost" data-a="nearme">Show the closest stops</button><p class="hint">Optional. Your location stays on this phone and is never sent anywhere.</p></section>'; }
+    if(!geoPos){ return ''; /* the single "Nearby stops" card (nbCardHtml) is the one entry point */ }
     var arr=nearArr(); var more=arr.length>3&&!nearAll; arr=arr.slice(0,nearAll?8:3);
-    if(!arr.length) return '<section class="card nearlist"><p class="mono">Stops near me</p><p>No unstamped stop within 90 miles of you. Pick a town from Towns to plan a trip.</p></section>';
-    return '<section class="nearlist" aria-label="Stops near you"><p class="mono">Closest to you</p>'+arr.map(function(x){ var st=CITIES[x.c].stops[x.i]; return '<button class="rcard" data-a="neargo" data-c="'+x.c+'" data-i="'+x.i+'" data-far="1"><span><strong>'+st.name+'</strong><span class="rsub">'+CITIES[x.c].name+' · '+nice(x.d)+'</span></span><span class="go">Open ›</span></button>'; }).join('')+(more?'<button class="btn ghost" data-a="nearall">See more nearby stops</button>':'')+'</section>';
+    if(!arr.length) return '<section class="card nearlist"><p class="mono">Nearby stops</p><p>No unstamped stop within 90 miles of you. Pick a town from Towns to plan a trip.</p></section>';
+    return '<section class="nearlist" aria-label="Stops near you"><p class="mono">Nearby stops, closest first</p>'+arr.map(function(x){ var st=CITIES[x.c].stops[x.i]; return '<button class="rcard" data-a="neargo" data-c="'+x.c+'" data-i="'+x.i+'" data-far="1"><span><strong>'+st.name+'</strong><span class="rsub">'+CITIES[x.c].name+' · '+nice(x.d)+'</span></span><span class="go">Open ›</span></button>'; }).join('')+(more?'<button class="btn ghost" data-a="nearall">See more nearby stops</button>':'')+'</section>';
   }
   /* starting-town suggestion for players far from Nevada: guessed from the phone's time zone on the phone itself, nothing is sent anywhere */
   function startTownHtml(){
@@ -1383,7 +1390,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   }
   function nbTownsRow(){
     if(!STORY.length) return '';
-    return '<button class="rcard nbtrow" data-a="nbopen"><span><strong>Nearby stops</strong><span class="rsub">Town missions and Story stops around you</span></span><span class="go">Explore ›</span></button>';
+    return '<button class="rcard nbtrow" data-a="nbopen"><span><strong>Nearby stops</strong><span class="rsub">Town missions and history places around you</span></span><span class="go">Explore ›</span></button>';
   }
 
   /* Explore history: per-town free reading list (Story stops), kept apart from the four-stop mission. No location, no stamps, no XP. */
@@ -1421,7 +1428,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
       +sensHtml(sp)+ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
-      +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Checked '+ac.on+': '+ac.how+'</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
+      +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
       +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section></section>';
   }
   function viewNear(){
@@ -1430,7 +1437,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     var noloc=geoDenied||!navigator.geolocation, mode=nv.mode;
     if(geoPos&&mode==='ask') mode='list';
     if(mode==='ask'&&noloc) mode='pick';
-    var h='<section class="nbwrap"><button class="link nbback" data-a="home">‹ Home</button><p class="mono">Nearby stops</p><h1 id="stopTitle" tabindex="-1" class="hh2">Closest stops</h1>';
+    var h='<section class="nbwrap"><button class="link nbback" data-a="home">‹ Home</button><p class="mono">Nearby stops</p><h1 id="stopTitle" tabindex="-1" class="hh2">Nearby stops</h1>';
     if(nv.msg){ h+='<p class="geomsg" role="status">'+nv.msg+'</p>'; nv.msg=''; }
     if(mode==='ask'){
       h+='<section class="card"><h2 class="nbh2">Find stops around you</h2><p>Stamp the Past can use your location, only while the app is open, to sort nearby stops by distance. It stays on this phone. Nothing is saved or sent anywhere.</p><button class="btn" data-a="nbloc">Find stops near me</button><button class="btn ghost" data-a="nbnoloc">Continue without location</button><p id="nbMsg" class="geomsg" role="status"></p></section>';
@@ -1671,7 +1678,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     h+='<section class="navy"><p class="mono">How it works</p><h2>Four steps. One stamp.</h2><p class="why" style="color:inherit;opacity:.85">Pictured: your current mission, '+CITIES[hk].name+'.</p><div class="hsteps">'+HT.map(function(t,i){ var st=hs[i]; return '<div class="hstep"><span class="bbox sm" aria-hidden="true">'+badge(st.id,true,hk)+'</span><b>'+(i+1)+'</b><h3>'+t[0]+'</h3><p>'+t[1]+'</p><p class="mono" style="opacity:.8">e.g. '+st.name+'</p></div>'; }).join('')+'</div></section>';
     if(PHOTOS.arch_now&&PHOTOS.sign1973) h+='<section class="hsec"><p class="mono">Then and now</p><h2 class="hh2">Swipe back through time.</h2><p>Swipe the photo or drag the slider. Every stop unlocks a real old photo next to a current one. This one is the Reno Arch, 1973 to 2021.</p><div class="cmp" style="margin-top:12px"><div class="box"><img src="'+PHOTOS.arch_now+'" alt="The Reno Arch in 2021"><img class="top" src="'+PHOTOS.sign1973+'" alt="The Reno sign in 1973"></div><div class="row"><span>Now</span><input type="range" min="0" max="100" value="0" aria-label="Fade from now to 1973" data-cmp="1"><span>1973</span></div></div></section>';
     h+='<section class="hsec"><p class="mono">The part nobody else does</p><h2 class="hh2">Is that actually true?</h2><p>Every story comes with claims to sort: well documented, disputed, or not true. Every answer shows its sources, so the game rewards checking, not guessing.</p><div id="homefof" style="margin-top:12px">'+homeFof()+'</div></section>';
-    h+='<section class="grown"><p class="mono">For parents (the grown-up section)</p><h2 class="hh2">A game that makes your teen read a plaque. Voluntarily.</h2><ul><li>No accounts and no sign-up</li><li>Location is optional, used only on the phone and never sent anywhere</li><li>No photo uploads</li><li>No ads</li><li>Every story shows its sources</li><li>Every photo shows its credit</li>'+(vcount?'<li>'+vcount+' of '+total+' stops verified on site by the makers</li>':'')+'</ul></section>';
+    h+='<section class="grown"><p class="mono">For parents (the grown-up section)</p><h2 class="hh2">A game that gets the whole family reading the plaque. Voluntarily.</h2><ul><li>No accounts and no sign-up</li><li>Location is optional, used only on the phone and never sent anywhere</li><li>No photo uploads</li><li>No ads</li><li>Every story shows its sources</li><li>Every photo shows its credit</li>'+(vcount?'<li>'+vcount+' of '+total+' stops verified on site by the makers</li>':'')+'</ul></section>';
     if(got>0) h+='</details>';
     h+='<p class="home-foot"><strong>Made by a mom and her teenage son.</strong><br>The West, the Midwest, the South, the East and the Southwest so far. More regions on the way.<br><button class="link" data-a="menu">Menu: backup, help, settings</button></p>';
     return h;
@@ -1684,7 +1691,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     var got=0,total=0,full=0,seals=0,b=bossBest();
     ORDER.forEach(function(k){ total+=CITIES[k].stops.length; var d=sum(ALL[k].done); got+=d; if(d===CITIES[k].stops.length) full++; if(sealTier(b[k])) seals++; });
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
-    var h='<section class="passhead"><p class="mono">Stamp the Past</p><h1 class="hh2">Your passport</h1><div class="pstats"><div><b>'+got+'</b><span>of '+total+' stamps</span></div><div><b>'+full+'</b><span>of '+ORDER.length+' towns done</span></div><div><b>'+seals+'</b><span>challenge seals</span></div><div><b>'+totalPts()+'</b><span>challenge points</span></div></div>'+curTownLine()+(seals===0?'<p class="pnote">Challenge seals and points come from a town\'s final challenge. Stamp every stop in a town to unlock it.</p><button class="btn small" data-a="'+(got>0?'nextstop':'gomissions')+'"'+(got>0&&nextRef()?' data-c="'+nextRef().k+'" data-i="'+nextRef().i+'"':'')+'>'+(got>0?'Go to my next stop':'Pick a town')+'</button>':'')+(got>0?'<button class="btn small" data-a="share" data-k="" style="margin-top:12px">Share my passport</button>':'')+'</section>';
+    var h='<section class="passhead"><p class="mono">Stamp the Past</p><h1 class="hh2">Your passport</h1>'+(got===0?'<p class="pnote pblank">Nice and blank. Your first stamp goes here, and the page starts filling up from there. '+total+' stamps are waiting across '+ORDER.length+' towns.</p>':'')+'<div class="pstats"'+(got===0?' hidden':'')+'><div><b>'+got+'</b><span>of '+total+' stamps</span></div><div><b>'+full+'</b><span>of '+ORDER.length+' towns done</span></div><div><b>'+seals+'</b><span>challenge seals</span></div><div><b>'+totalPts()+'</b><span>challenge points</span></div></div>'+curTownLine()+(seals===0?'<p class="pnote">Challenge seals and points come from a town\'s final challenge. Stamp every stop in a town to unlock it.</p><button class="btn small" data-a="'+(got>0?'nextstop':'gomissions')+'"'+(got>0&&nextRef()?' data-c="'+nextRef().k+'" data-i="'+nextRef().i+'"':'')+'>'+(got>0?'Go to my next stop':'Pick a town')+'</button>':'')+(got>0?'<button class="btn small" data-a="share" data-k="" style="margin-top:12px">Share my passport</button>':'')+'</section>';
     var bd=bdAll(); h+=levelHtml(bd.s)+trophyHtml(bd);
     h+='<section class="passport" id="passport">'+regs.map(function(r){ var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }); if(!rk.length) return ''; var g=0,t=0; rk.forEach(function(k){ g+=sum(ALL[k].done); t+=CITIES[k].stops.length; }); return '<details class="reg ppreg"'+(g>0?' open':'')+'><summary class="region"><span>'+r+'</span><span class="rcount">'+g+' of '+t+' stamps</span></summary>'+rk.filter(function(k){ return sum(ALL[k].done)>0; }).map(function(k){
       var c=CITIES[k], d=sum(ALL[k].done);
@@ -1901,7 +1908,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   function savedList(){ var out=[]; savedRaw().forEach(function(key){ var p=key.split(':'), k=p[0], c=CITIES[k]; if(!c) return; for(var i=0;i<c.stops.length;i++){ if(c.stops[i].id===p.slice(1).join(':')){ out.push({k:k,i:i}); break; } } }); return out; }
   var btab='towns', btrail='stations', bnavSel='home';
   (function(){ var ly=0, ut=0; function u(){ ut=Date.now(); } window.addEventListener('touchmove',u,{passive:true}); window.addEventListener('wheel',u,{passive:true}); window.addEventListener('scroll',function(){ var y=window.pageYOffset||0, d=y-ly; if(Math.abs(d)<10) return; ly=y; if(Date.now()-ut>1200) return; document.body.classList.toggle('navhide',d>0&&y>160); },{passive:true}); })();
-  function updateBnav(){ var nb=document.getElementById('bnav'); if(!nb) return; var cur2=onPass&&atHome?'pass':(atHome?bnavSel:''); nb.querySelectorAll('button').forEach(function(x){ var on=x.getAttribute('data-t')===cur2; x.classList.toggle('on',on); if(on) x.setAttribute('aria-current','page'); else x.removeAttribute('aria-current'); if(x.getAttribute('data-t')==='pass'){ if(on) passSeenSet(); var nd=!on&&passNew(); x.classList.toggle('dot',nd); if(nd) x.setAttribute('aria-label','Passport, new stamps'); else x.removeAttribute('aria-label'); } }); }
+  function updateBnav(){ var nb=document.getElementById('bnav'); if(!nb) return; var cur2=onPass&&atHome?'pass':(atHome?(onNear&&nv&&nv.mode==='city'?'towns':bnavSel):''); nb.querySelectorAll('button').forEach(function(x){ var on=x.getAttribute('data-t')===cur2; x.classList.toggle('on',on); if(on) x.setAttribute('aria-current','page'); else x.removeAttribute('aria-current'); if(x.getAttribute('data-t')==='pass'){ if(on) passSeenSet(); var nd=!on&&passNew(); x.classList.toggle('dot',nd); if(nd) x.setAttribute('aria-label','Passport, new stamps'); else x.removeAttribute('aria-label'); } }); }
   function passNew(){ try{ return totalStamps()>parseInt(localStorage.getItem('stp-pass-seen')||'0',10)||Object.keys(bdGet()).length>parseInt(localStorage.getItem('stp-bseen')||'0',10); }catch(e){ return false; } }
   function passSeenSet(){ try{ localStorage.setItem('stp-pass-seen',String(totalStamps())); localStorage.setItem('stp-bseen',String(Object.keys(bdGet()).length)); }catch(e){} }
   function tripHtml(){
@@ -2176,7 +2183,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       if(ps){ var f1=(ps.fact||'').split(/(?<=\.)\s/)[0], pf=(f1.length>20&&f1.length<=120)?' '+f1:''; place='<span class="bsn-p">Earned at '+ps.name+', '+CITIES[cityId].name+'.'+pf+'</span>'; } }catch(e){ place=''; }
     var d=document.createElement('div'); d.id='bpop'; d.className='bsnack'; d.setAttribute('role','status'); d.setAttribute('aria-live','polite');
     d.innerHTML='<span class="bsn-m">'+medal(b0,true,56)+'</span><span class="bsn-t"><span class="mono">'+(q.length===1?'Badge unlocked':q.length+' badges unlocked')+'</span><strong>'+(q.length===1?b0.n:q.slice(0,3).map(function(b){ return b.n; }).join(', ')+(q.length>3?' and more':''))+'</strong><span class="bsn-d">'+(q.length===1?b0.d:'Level '+lv.n+' · '+lv.title)+'</span>'+place+'</span><span class="bsn-b"><button class="btn small" data-a="trophy">See</button><button class="bsn-x" data-a="bpopclose" aria-label="Dismiss">\u00d7</button></span>';
-    document.body.appendChild(d); clearTimeout(bsnT); bsnT=setTimeout(closeBpop,place?13000:9000);
+    document.body.appendChild(d); clearTimeout(bsnT); bsnT=setTimeout(closeBpop,place?7000:5000);
     try{ haptic('success'); }catch(e){}
   }
   function closeBpop(){ clearTimeout(bsnT); var e=document.getElementById('bpop'); if(e){ e.remove(); setTimeout(flushBadges,300); } }
@@ -2304,7 +2311,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     if(cur.step===0){
       h+='<div class="banner b0">'+visual(st,'now',st.name+' today')+'<span class="tagline">'+(hasPh(st,'now')?'Photo':'Illustration')+'</span><span class="cue" aria-hidden="true">Clue below &darr;</span></div><p class="credit">'+credit(st,'now')+'</p>';
       h+='<section class="card"><p class="mono">Find it</p><p class="clue">'+st.clue+'</p>'
-        +'<button class="btn stickgo" data-a="step" data-n="1">I am here. Show me the question</button>'+(!d&&!cur.demo?'<p class="hint">Tapping this is on your honor. Verifying with your location is optional and earns a gold stamp.</p>':'')+(!d&&!cur.demo?'<p class="hint stopmeta">Go there for the real stamp. About '+stopMins(st)+' minutes once you arrive. Or explore from home.</p>':'')+vnote(st)+(st.geo&&!d&&!cur.demo&&!geoDenied?'<button class="btn ghost" data-a="geo">'+(geoGranted()?'Re-check my location':'Verify with my location (optional)')+'</button><p class="hint">Your location is checked on this phone and never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+(st.geo&&st.geo.length>1?'https://www.google.com/maps/dir/?api=1&amp;destination='+st.geo[0]+','+st.geo[1]:'https://www.google.com/maps/search/?api=1&amp;query='+encodeURIComponent(st.map))+'">Get directions in Maps</a>'+(d?'':'<button class="btn ghost" data-a="demo">'+(virtHas(cityId,cur.i)?'Virtual stamp saved. Explore again':'Not there? Explore from home')+'</button>')+'</section>';
+        +'<button class="btn stickgo" data-a="step" data-n="1">I am here. Show me the question</button>'+(!d&&!cur.demo?'<p class="hint">Tapping this is on your honor. Verifying with your location is optional and earns a gold stamp.</p>':'')+(!d&&!cur.demo?'<p class="hint stopmeta">Go there for the real stamp. About '+stopMins(st)+' minutes once you arrive. Or <button class="link" data-a="demo">explore from home</button>.</p>':'')+vnote(st)+(st.geo&&!d&&!cur.demo&&!geoDenied?'<button class="btn ghost" data-a="geo">'+(geoGranted()?'Re-check my location':'Verify with my location (optional)')+'</button><p class="hint">Your location is checked on this phone and never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+(st.geo&&st.geo.length>1?'https://www.google.com/maps/dir/?api=1&amp;destination='+st.geo[0]+','+st.geo[1]:'https://www.google.com/maps/search/?api=1&amp;query='+encodeURIComponent(st.map))+'">Get directions in Maps</a>'+(d?'':'<button class="btn ghost" data-a="demo">'+(virtHas(cityId,cur.i)?'Virtual stamp saved. Explore again':'Not there? Explore from home')+'</button>')+'</section>';
     }
     if(cur.step===1){
       h+='<section class="card"><p class="mono">Check in</p>';
@@ -2315,6 +2322,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
         return '<button type="button" class="'+cls+'" data-a="pick" data-k="'+k+'"'+(d?' disabled':'')+'><span>'+o+'</span>'+mark+'</button>';
       }).join('')+'</fieldset>';
       if(d){
+        h+=whyLine(st);
         h+='<div class="earned pop"><div class="bbox lg'+(cur.demo?' virt':'')+'">'+badge(st.id,true)+(cur.demo?'<i class="vtag">Virtual</i>':'')+'</div><div><strong>'+(cur.demo?'Virtual stamp earned':(geoVerified(cityId,cur.i)?'Badge earned: visit verified':'Badge earned'))+'</strong><span>'+(cur.demo?'+25 XP. Go there for the full stamp (100 XP).':st.badge)+'</span></div></div><button class="btn" data-a="step" data-n="2">Unlock the story</button>';
       } else {
         h+='<p class="feedback'+(cur.wrong.length?' bad':'')+'" aria-live="polite">'+(cur.wrong.length?'Not yet. '+st.q.hint:(cur.demo?'Get it right to earn a virtual stamp, worth 25 XP.':'Get it right to earn the '+st.badge+' badge and 100 XP.'))+'</p>';
@@ -2322,7 +2330,6 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       h+='</section>';
     }
     if(cur.step===2 && d){
-      h+=lateVerify(st,d);
       h+='<div class="stopcols"><div class="sc-l">';
       h+=compare(st);
       if(hasPh(st,'then')&&hasPh(st,'now')){
@@ -2337,6 +2344,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       if(st.disputed) h+='<aside class="argue" aria-label="Historians argue about this"><div class="argue-h"><span class="argue-ic" aria-hidden="true">?</span><span><b>Historians argue about this</b><em>Not everything here is settled.</em></span></div><p>'+st.disputed+'</p><p class="argue-go">Think you can tell solid from shaky? The Source check is next.</p></aside>';
       h+='<div class="fact"><span class="mono">Did you know</span><span>'+st.fact+'</span></div>';
       h+='<details class="card"><summary>Sources</summary><ul class="srcs">'+st.sources.map(function(s){return '<li><a target="_blank" rel="noopener" href="'+s.u+'">'+s.t+'</a></li>';}).join('')+'</ul></details>';
+      h+=lateVerify(st,d);
       h+='<button class="btn" data-a="step" data-n="3">Next: sort fact from fiction (up to 50 XP)</button>';
       h+='</div></div>';
     }

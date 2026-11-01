@@ -1022,3 +1022,6 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .alsonear{margin:.75rem 0 0;border-top:1px solid rgba(120,120,120,.25);padding-top:.5rem}.alsonear>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;font-size:.9375rem}.alsonear .nbrow{margin-top:.5rem}
 .alsonear>summary{justify-content:space-between;list-style:none}.alsonear>summary::-webkit-details-marker{display:none}.alsonear>summary::after{content:"+";font-size:1.25rem;margin-left:.5rem}.alsonear[open]>summary::after{content:"\2212"}
+.whyline{margin:8px 0 12px;font-size:0.875rem;color:var(--muted);line-height:1.45}.whyline b{color:var(--ink)}
+.stopmeta .link{display:inline;min-height:0;padding:0;text-decoration:underline;font:inherit}
+@media (max-width:600px){#cities .rtab[aria-pressed="false"]{display:none}}
