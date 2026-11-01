@@ -1025,6 +1025,9 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .sens{display:flex;flex-direction:column;gap:.25rem;margin:0 0 1rem;padding:.75rem 1rem;border-left:4px solid var(--accent,#b45309);border-radius:.5rem;background:var(--card,rgba(120,120,120,.12));font-size:.9375rem}
 .sens b{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+
+.alsonear{margin:.75rem 0 0;border-top:1px solid rgba(120,120,120,.25);padding-top:.5rem}.alsonear>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;font-size:.9375rem}.alsonear .nbrow{margin-top:.5rem}
+.alsonear>summary{justify-content:space-between;list-style:none}.alsonear>summary::-webkit-details-marker{display:none}.alsonear>summary::after{content:"+";font-size:1.25rem;margin-left:.5rem}.alsonear[open]>summary::after{content:"\2212"}
 </style></head><body>
 
 <div class="app">
@@ -1390,6 +1393,16 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     var seen=0, v=nbGet(); townStory(k).forEach(function(sp){ if(v[nbKey(sp)]) seen++; });
     return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more places in '+CITIES[k].name+' to read. No mission, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
   }
+  /* Also close by: Story stops within ~0.5 mile of any of a town's four stops, as an expandable optional row on the mission card. Built from the data, so new Explore places appear on their own. */
+  function closeBy(k){
+    var c=CITIES[k], out=[]; if(!c||!STORY.length) return out;
+    STORY.forEach(function(sp){ if(!sp.geo) return; var best=null,bn=''; c.stops.forEach(function(st){ if(!st.geo) return; var d=distM(st.geo[0],st.geo[1],sp.geo[0],sp.geo[1]); if(best===null||d<best){ best=d; bn=st.short||st.name; } }); if(best!==null&&best<=800) out.push({s:sp,d:best,from:bn}); });
+    out.sort(function(a,b){ return a.d-b.d; }); return out.slice(0,8);
+  }
+  function closeByHtml(k){
+    var L=closeBy(k); if(!L.length) return ''; var v=nbGet();
+    return '<details class="alsonear"><summary>Also close by: '+L.length+' history place'+(L.length>1?'s':'')+'</summary><p class="nbnote">Optional reading, no stamps or XP. Straight-line estimates.</p>'+L.map(function(x){ var dn=nice(x.d); return '<button class="rcard nbrow" data-a="nbtownstory" data-c="'+k+'" data-s="'+nbKey(x.s)+'"><span><strong>'+x.s.name+'</strong><span class="rsub">'+x.s.area+' · '+dn+' from '+x.from+'</span>'+(v[nbKey(x.s)]?'<span class="nbst on">Visited</span>':'')+'</span><span class="go">Read ›</span></button>'; }).join('')+'</details>';
+  }
   function viewCityExplore(k){
     var list=townStory(k), c=CITIES[k], v=nbGet();
     var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
@@ -1702,7 +1715,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       var ni=S.done.indexOf(0);
       if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
       h+=exploreRow(cityId);
-      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+'</section>';
+      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+closeByHtml(cityId)+'</section>';
     }
     h+=bkNudgeHtml();
     h+='<ul class="stops">'+STOPS.map(function(s,i){
@@ -2500,6 +2513,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       return;
     }
     if(a==='nbcity'){ var ck=b.getAttribute('data-c'); if(ck&&CITIES[ck]){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:ck}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
+    if(a==='nbtownstory'){ var tk=b.getAttribute('data-c'), sk=b.getAttribute('data-s'); if(tk&&CITIES[tk]&&nbStory(sk)){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:sk,msg:'',town:tk}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbcityback'){ var bk=b.getAttribute('data-c'); if(bk&&CITIES[bk]){ railRegion=null; setCity(bk); } return; }
     if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbloc'){

@@ -100,7 +100,7 @@ with sync_playwright() as p:
     t=txt(pg).lower(); need('location is off for this app' in t and 'reno and sparks' in t,'denied location explains itself and offers places')
     pg.click('[data-a=nbarea][data-t=reno-sparks]'); need(pg.locator('.nbrow[data-a=nbstory]').count()==12,'Story stops still reachable after a denial')
     # 7. nothing nearby
-    pg=new(lat=0.0,lon=0.0); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.card [data-a=nbnoloc]')
+    pg=new(lat=0.0,lon=0.0); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.card [data-a=nbnoloc]'); pg.wait_for_timeout(500)
     need('no stops within about 25 miles' in txt(pg).lower(),'nothing nearby gets a clear message and a way out')
     # 8. nothing leaves the phone and the data is in the one built file
     pg=new(); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow'); pg.locator('.nbrow[data-a=nbstory]').first.click()
@@ -177,6 +177,22 @@ with sync_playwright() as p:
         ctx.close()
     ctx=b.new_context(viewport={'width':390,'height':844},reduced_motion='reduce'); pg=ctx.new_page(); pg.goto(U+'#explore-nowhere'); pg.wait_for_timeout(400)
     need('places to read' not in txt(pg).lower(),'an unknown #explore- name falls back to the normal Home'); ctx.close()
+    # 9. Also close by: expandable optional row on a town's mission card (built from the Explore data)
+    for w,h in [(320,568),(390,844),(1280,900)]:
+        pg=new(allow=False,w=w,h=h,seed={'then-now-v3':{'city':'reno','home':False,'p':{'reno':{'done':[0,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}}); pg.wait_for_timeout(400)
+        d=pg.locator('details.alsonear')
+        need(d.count()==1 and d.get_attribute('open') is None,'closeby (%dpx): Reno shows a collapsed "Also close by" row'%w)
+        need('also close by' in d.inner_text().lower(),'closeby (%dpx): row is labelled'%w)
+        d.locator('summary').click(); pg.wait_for_timeout(150)
+        need(d.locator('.nbrow').count()>=3 and 'no stamps' in d.inner_text().lower(),'closeby (%dpx): expands to places and says no stamps'%w)
+        need(pg.evaluate("document.documentElement.scrollWidth")<=w+1,'closeby (%dpx): no sideways scroll'%w)
+        need(d.locator('summary').bounding_box()['height']>=44,'closeby (%dpx): summary is a 44px target'%w)
+        if w==390:
+            d.locator('.nbrow').first.click(); pg.wait_for_timeout(250)
+            need(pg.locator('.nbsrc a').count()>=2 and pg.locator('.nbback').count()==1,'closeby: tapping a place opens its Story card with sources and a back link')
+            need(pg.evaluate("(()=>{var o=JSON.parse(localStorage.getItem('then-now-v3')||'{}');var r=(o.p||{}).reno;return !r||r.done.every(function(x){return !x})})()"),'closeby: reading a place earns no stamp')
+    pg=new(allow=False,seed={'then-now-v3':{'city':'tahoe','home':False,'p':{}}}); pg.wait_for_timeout(300)
+    need(pg.locator('details.alsonear').count()==0,'closeby: a town with nothing within half a mile shows no row')
     b.close()
 srv.terminate()
 need(not errs,f'page errors: {errs[:3]}')

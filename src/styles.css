@@ -1019,3 +1019,6 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .sens{display:flex;flex-direction:column;gap:.25rem;margin:0 0 1rem;padding:.75rem 1rem;border-left:4px solid var(--accent,#b45309);border-radius:.5rem;background:var(--card,rgba(120,120,120,.12));font-size:.9375rem}
 .sens b{font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+
+.alsonear{margin:.75rem 0 0;border-top:1px solid rgba(120,120,120,.25);padding-top:.5rem}.alsonear>summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;font-size:.9375rem}.alsonear .nbrow{margin-top:.5rem}
+.alsonear>summary{justify-content:space-between;list-style:none}.alsonear>summary::-webkit-details-marker{display:none}.alsonear>summary::after{content:"+";font-size:1.25rem;margin-left:.5rem}.alsonear[open]>summary::after{content:"\2212"}

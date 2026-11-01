@@ -336,3 +336,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Honest labels: courthouse 'now' is a later building (the 1854 one burned in 1947, the gallows survived); Sierra City 1934 photo is a street view; Kentucky Mine 'then' is a 1934 HABS "Old Mine, Sierra City" photo that is not confirmed as that mine. The Wikipedia 'Busch Building' claim conflicts with a state marker (three-story Busch & Heringlake, burned 1948), so it is left out. The name of the man hanged in 1885 is spelled two ways (O'Neal/O'Neill) so it is not used. Sagebrush War accounts differ (see the stop's `disputed`).
 - Dropped for no second source or no free photo: Susanville depot, Old Sierra City Hotel, Portola railroad museum. Reddit posts for Sacramento and Tahoe were on hold until this was done.
 
+
+## Also close by (Nov 1 2026)
+- Each town's "Your mission" card has an expandable, collapsed "Also close by: N history places" row (`closeBy(k)`/`closeByHtml(k)` in app.js, `.alsonear`): Story stops from ANY tour within 800 m of one of the town's four stops, nearest first (max 8), straight-line, no stamps or XP. Built from the data, so new Explore places appear on their own; shows nothing when none are close. Tapping a place opens its Story card (`nbtownstory`), back goes to that town's Explore list. Tests in tests/nearby.py section 9.
