@@ -1,13 +1,20 @@
 {
  "id": "reno-sparks",
  "name": "Reno and Sparks",
- "towns": ["reno", "sparks"],
+ "towns": [
+  "reno",
+  "sparks"
+ ],
  "stops": [
   {
    "id": "courthouse",
    "name": "Washoe County Courthouse",
    "area": "Reno",
-   "geo": [39.5236, -119.8126, 150],
+   "geo": [
+    39.5236,
+    -119.8126,
+    150
+   ],
    "addr": "117 S Virginia St, Reno, NV 89501",
    "invite": "Look up at the copper dome, then find the columns out front. For a few years this was the most photographed doorway in Reno.",
    "story": [
@@ -16,24 +23,68 @@
     "In the 1930s, Nevada's quick divorces made Reno famous. Nearly 33,000 divorces were granted in these courtrooms, and a staged 1937 photo of a young woman kissing one of the columns ran on the cover of Life magazine."
    ],
    "facts": [
-    {"t": "The first red-brick courthouse was built 1871 to 1873 and still stands inside the current building.", "src": [0, 1]},
-    {"t": "Myron Lake gave the acre of land for the first courthouse.", "src": [1]},
-    {"t": "DeLongchamps won the 1909 design competition, his first solo commission; the building was completed in 1911.", "src": [0, 1]},
-    {"t": "Nearly 33,000 divorces were granted in its courtrooms in the 1930s.", "src": [0, 1]},
-    {"t": "A staged 1937 photo of a young woman kissing one of the columns ran on the cover of Life.", "src": [0, 1]}
+    {
+     "t": "The first red-brick courthouse was built 1871 to 1873 and still stands inside the current building.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Myron Lake gave the acre of land for the first courthouse.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "DeLongchamps won the 1909 design competition, his first solo commission; the building was completed in 1911.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Nearly 33,000 divorces were granted in its courtrooms in the 1930s.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "A staged 1937 photo of a young woman kissing one of the columns ran on the cover of Life.",
+     "src": [
+      0,
+      1
+     ]
+    }
    ],
    "access": "Look from the public sidewalk on Virginia Street. The National Park Service lists the building as open to the public Monday to Friday, 8 a.m. to 5 p.m.; its Courtroom No. 1 was being restored when that page was written.",
-   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the National Park Service and Reno Historical pages. Not walked yet."},
+   "access_check": {
+    "on": "2026-10-31",
+    "by": "Claude",
+    "how": "Read against the National Park Service and Reno Historical pages. Not walked yet."
+   },
    "sources": [
-    {"t": "National Park Service: Washoe County Courthouse", "u": "https://www.nps.gov/nr/travel/nevada/was.htm"},
-    {"t": "Reno Historical: Washoe County Courthouse", "u": "https://renohistorical.org/items/show/19"}
-   ]
+    {
+     "t": "National Park Service: Washoe County Courthouse",
+     "u": "https://www.nps.gov/nr/travel/nevada/was.htm"
+    },
+    {
+     "t": "Reno Historical: Washoe County Courthouse",
+     "u": "https://renohistorical.org/items/show/19"
+    }
+   ],
+   "town": "reno"
   },
   {
    "id": "riverside",
    "name": "Riverside Hotel",
    "area": "Reno",
-   "geo": [39.5247, -119.8124, 120],
+   "geo": [
+    39.5247,
+    -119.8124,
+    120
+   ],
    "addr": "17 S Virginia St, Reno, NV 89501",
    "invite": "Stand across from the river and picture a hotel built for people who had to stay in town for weeks. That was the whole business plan.",
    "story": [
@@ -42,24 +93,65 @@
     "One estimate counted about 4,800 divorce decrees sought in northern Nevada in 1931. Today the building holds apartments and studios for artists."
    ],
    "facts": [
-    {"t": "Wingfield commissioned the hotel; DeLongchamps was the architect; it was built 1926 to 1927.", "src": [0, 1]},
-    {"t": "It was built next to the courthouse to house people seeking divorces.", "src": [0]},
-    {"t": "The design is late Gothic Revival, unusual for DeLongchamps.", "src": [0]},
-    {"t": "About 4,800 decrees were sought in northern Nevada in 1931.", "src": [0]},
-    {"t": "The building now houses apartments and studios for artists.", "src": [1]}
+    {
+     "t": "Wingfield commissioned the hotel; DeLongchamps was the architect; it was built 1926 to 1927.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was built next to the courthouse to house people seeking divorces.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The design is late Gothic Revival, unusual for DeLongchamps.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "About 4,800 decrees were sought in northern Nevada in 1931.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The building now houses apartments and studios for artists.",
+     "src": [
+      1
+     ]
+    }
    ],
    "access": "It is private apartment housing, so enjoy it from the public sidewalk on Virginia Street and stay outside the building.",
-   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the National Register nomination and Wikipedia's current-use note. Not walked yet."},
+   "access_check": {
+    "on": "2026-10-31",
+    "by": "Claude",
+    "how": "Read against the National Register nomination and Wikipedia's current-use note. Not walked yet."
+   },
    "sources": [
-    {"t": "National Register of Historic Places nomination form: Riverside Hotel (National Park Service)", "u": "https://npgallery.nps.gov/GetAsset/c980bd89-05c7-4ae5-a8fc-ca5bb817b7e9"},
-    {"t": "Wikipedia: Riverside Hotel (Reno, Nevada)", "u": "https://en.wikipedia.org/wiki/Riverside_Hotel_(Reno,_Nevada)"}
-   ]
+    {
+     "t": "National Register of Historic Places nomination form: Riverside Hotel (National Park Service)",
+     "u": "https://npgallery.nps.gov/GetAsset/c980bd89-05c7-4ae5-a8fc-ca5bb817b7e9"
+    },
+    {
+     "t": "Wikipedia: Riverside Hotel (Reno, Nevada)",
+     "u": "https://en.wikipedia.org/wiki/Riverside_Hotel_(Reno,_Nevada)"
+    }
+   ],
+   "town": "reno"
   },
   {
    "id": "lakemansion",
    "name": "Lake Mansion",
    "area": "Reno",
-   "geo": [39.5226, -119.8159, 150],
+   "geo": [
+    39.5226,
+    -119.8159,
+    150
+   ],
    "addr": "250 Court St, Reno, NV 89501",
    "invite": "Find the corner of Court Street and Arlington Avenue. This house has been moved twice, and it is not even on its original lot.",
    "story": [
@@ -68,24 +160,66 @@
     "To save it from demolition, it was moved in 1971 to the Convention Center area. On July 11, 2004, it was moved again, about 3.1 miles up Virginia Street, to the spot where you are standing."
    ],
    "facts": [
-    {"t": "Lake ran a toll bridge on the way to Virginia City; the spot was called Lake's Crossing.", "src": [1]},
-    {"t": "In 1862 Lake sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.", "src": [1]},
-    {"t": "The house was built in 1877 for the Marsh family, designed by John S. Sturgeon, and Lake bought it in 1879.", "src": [0, 1]},
-    {"t": "It first stood at the northwest corner of California and Virginia Streets.", "src": [0, 1]},
-    {"t": "It was moved in 1971 to avoid demolition and on July 11, 2004 to 250 Court Street.", "src": [0]}
+    {
+     "t": "Lake ran a toll bridge on the way to Virginia City; the spot was called Lake's Crossing.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "In 1862 Lake sold 160 acres to Charles Crocker of the Central Pacific Railroad, and the railroad developed that land into Reno.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The house was built in 1877 for the Marsh family, designed by John S. Sturgeon, and Lake bought it in 1879.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It first stood at the northwest corner of California and Virginia Streets.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was moved in 1971 to avoid demolition and on July 11, 2004 to 250 Court Street.",
+     "src": [
+      0
+     ]
+    }
    ],
    "access": "Look at it from the public sidewalk on Court Street. The two pages I read disagree about the inside: one says self-guided tours, the other says visits by appointment only. Check with the owners before planning to go in.",
-   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against Reno Historical and Arts for All Nevada; the two pages disagree about interior access, so the note says so. Not walked yet."},
+   "access_check": {
+    "on": "2026-10-31",
+    "by": "Claude",
+    "how": "Read against Reno Historical and Arts for All Nevada; the two pages disagree about interior access, so the note says so. Not walked yet."
+   },
    "sources": [
-    {"t": "Reno Historical: Lake Mansion", "u": "https://renohistorical.org/items/show/34"},
-    {"t": "Arts for All Nevada: The Lake Mansion", "u": "https://www.artsforallnevada.org/?p=29"}
-   ]
+    {
+     "t": "Reno Historical: Lake Mansion",
+     "u": "https://renohistorical.org/items/show/34"
+    },
+    {
+     "t": "Arts for All Nevada: The Lake Mansion",
+     "u": "https://www.artsforallnevada.org/?p=29"
+    }
+   ],
+   "town": "reno"
   },
   {
    "id": "sparksmuseum",
    "name": "Sparks Heritage Museum",
    "area": "Sparks",
-   "geo": [39.5347, -119.7575, 250],
+   "geo": [
+    39.5353,
+    -119.7522,
+    250
+   ],
    "addr": "814 Victorian Ave, Sparks, NV 89431",
    "invite": "Look across the street for the old steam locomotive. A whole town was moved here by a railroad, one lot at a time.",
    "story": [
@@ -94,18 +228,651 @@
     "The museum sits across the street from Locomotive No. 8. Inside are historic photos of the railyard and a large print of the roundhouse, plus the restored 32-foot Last Chance Joe statue, which stood in front of the Nugget for 56 years."
    ],
    "facts": [
-    {"t": "Southern Pacific moved its division point from Wadsworth to a site east of Reno around 1903 to 1904.", "src": [1, 2]},
-    {"t": "Employees were offered title to a 50-by-140-foot lot and free moves of Wadsworth houses.", "src": [1]},
-    {"t": "The town was called East Reno, then Harriman, then renamed Sparks in April 1904 for Gov. John Sparks.", "src": [1]},
-    {"t": "Sparks incorporated on March 15, 1905.", "src": [1]},
-    {"t": "The museum is at 814 Victorian Ave., across from Locomotive No. 8, and shows railyard photos, a roundhouse print and Last Chance Joe.", "src": [0, 1]}
+    {
+     "t": "Southern Pacific moved its division point from Wadsworth to a site east of Reno around 1903 to 1904.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "Employees were offered title to a 50-by-140-foot lot and free moves of Wadsworth houses.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The town was called East Reno, then Harriman, then renamed Sparks in April 1904 for Gov. John Sparks.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Sparks incorporated on March 15, 1905.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The museum is at 814 Victorian Ave., across from Locomotive No. 8, and shows railyard photos, a roundhouse print and Last Chance Joe.",
+     "src": [
+      0,
+      1
+     ]
+    }
    ],
    "access": "Look from the public sidewalk on Victorian Avenue. I could not find opening hours on the museum's website, so call 775-355-1144 or check it before going in.",
-   "access_check": {"on": "2026-10-31", "by": "Claude", "how": "Read against the museum's website, a Nevada newspaper history column and Union Pacific's Sparks page. Not walked yet. Map position is approximate; Maps directions use the street address."},
+   "access_check": {
+    "on": "2026-10-31",
+    "by": "Claude",
+    "how": "Read against the museum's website, a Nevada newspaper history column and Union Pacific's Sparks page. Not walked yet. Map position is approximate; Maps directions use the street address. Map point updated Nov 1 2026 to the National Register list coordinates for the Sparks library building (39.5353, -119.7522)."
+   },
    "sources": [
-    {"t": "Sparks Museum & Cultural Center", "u": "https://sparksmuseum.org/"},
-    {"t": "Rich Moreno: No mystery about the history of Sparks", "u": "https://nnbw.com/news/2019/nov/27/no-mystery-about-the-history-of-sparks"},
-    {"t": "Union Pacific: Train Town USA, Sparks, NV", "u": "https://www.up.com/aboutup/train_town/sparks_nv/index.htm"}
+    {
+     "t": "Sparks Museum & Cultural Center",
+     "u": "https://sparksmuseum.org/"
+    },
+    {
+     "t": "Rich Moreno: No mystery about the history of Sparks",
+     "u": "https://nnbw.com/news/2019/nov/27/no-mystery-about-the-history-of-sparks"
+    },
+    {
+     "t": "Union Pacific: Train Town USA, Sparks, NV",
+     "u": "https://www.up.com/aboutup/train_town/sparks_nv/index.htm"
+    }
+   ],
+   "town": "sparks"
+  },
+  {
+   "id": "mapes",
+   "name": "Mapes Hotel Site",
+   "area": "Reno",
+   "town": "reno",
+   "geo": [
+    39.52566,
+    -119.8126,
+    120
+   ],
+   "addr": "10 N Virginia St, Reno, NV",
+   "invite": "A famous hotel stood here, then went out with the biggest bang of Super Bowl Sunday 2000.",
+   "story": [
+    "The Mapes Hotel officially opened on December 17, 1947. Charles Mapes Sr. and his wife Gladys bought the parcel in 1937 and hired F. H. Slocombe, an architect from Oakland, California. Charles Mapes Jr. finished the project after his father died and wartime material shortages delayed it.",
+    "The hotel closed for good in 1982. The Reno Redevelopment Agency bought the property in 1996, and in 1999 the Reno City Council voted to demolish it despite a preservation campaign.",
+    "It was imploded on the morning of Super Bowl Sunday, January 30, 2000. A public plaza now covers the site, so nothing of the hotel is left to see; the story is the point."
+   ],
+   "facts": [
+    {
+     "t": "The hotel officially opened on December 17, 1947, designed by Oakland architect F. H. Slocombe.",
+     "src": [
+      0,
+      2
+     ]
+    },
+    {
+     "t": "Charles and Gladys Mapes bought the property in 1937; Charles Mapes Jr. finished the project.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The hotel closed for good in 1982.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The Reno Redevelopment Agency bought the property in 1996 and the City Council voted in 1999 to demolish it.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was imploded on Super Bowl Sunday, January 30, 2000.",
+     "src": [
+      0,
+      2
+     ]
+    },
+    {
+     "t": "The site later became a public plaza.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The site is a public plaza at Virginia Street, downtown. Nothing of the hotel remains. What stands on the plaza has changed over the years, so look at what is there rather than relying on this card.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Reno Historical, a Clio entry and Wikipedia. The sources differ on what stood on the site afterward, so the card says only 'a public plaza'. Coordinates are Wikipedia's. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Reno Historical: Mapes Hotel",
+     "u": "https://www.renohistorical.org/items/show/9"
+    },
+    {
+     "t": "Clio: Site of the Mapes Hotel (demolished)",
+     "u": "https://theclio.com/entry/48321"
+    },
+    {
+     "t": "Wikipedia: Mapes Hotel",
+     "u": "https://en.wikipedia.org/wiki/Mapes_Hotel"
+    }
+   ]
+  },
+  {
+   "id": "cathedral",
+   "name": "St. Thomas Aquinas Cathedral",
+   "area": "Reno",
+   "town": "reno",
+   "geo": [
+    39.5258,
+    -119.8174,
+    120
+   ],
+   "addr": "310 W 2nd St, Reno, NV",
+   "invite": "Reno's cathedral, a National Register listing since 2022, and for decades the only Catholic church in town.",
+   "story": [
+    "The cathedral stands at West Second Street and Arlington Avenue. Wikipedia gives the cornerstone as June 1906 and the dedication as June 21, 1908, while Nevada's State Historic Preservation Office says it was completed and dedicated in 1910. The sources disagree, so both are shown.",
+    "It was elevated to cathedral status in 1931 and was Reno's only Catholic church until 1938. The school and rectory beside it were designed in 1931 by Frederic DeLongchamps, a noted Nevada architect.",
+    "The National Park Service added the cathedral complex to the National Register of Historic Places in 2022. The state calls it one of Reno's most spectacular architectural treasures."
+   ],
+   "facts": [
+    {
+     "t": "Wikipedia gives the cornerstone as June 1906 and the dedication as June 21, 1908; the state preservation office says completed and dedicated in 1910.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It became a cathedral in 1931 and was Reno's only Catholic church until 1938.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Frederic DeLongchamps designed the adjacent school and rectory in 1931.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The cathedral complex was added to the National Register of Historic Places in 2022.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The cathedral is at 310 West 2nd Street, at the corner of West Second Street and Arlington Avenue.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "An active cathedral and school complex. Look from the public sidewalk at West Second Street and Arlington Avenue. Service times are on stacathedral.com; please be quiet near services.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the Nevada State Historic Preservation Office announcement and Wikipedia. The two disagree on the dedication year (1908 vs 1910) and the card says so. Coordinates are Wikipedia's. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Nevada DCNR: St. Thomas Aquinas Cathedral listed in the National Register",
+     "u": "https://dcnr.nv.gov/news/st-thomas-aquinas-cathedral-listed-in-national-register-of-historic-places"
+    },
+    {
+     "t": "Wikipedia: Saint Thomas Aquinas Cathedral (Reno)",
+     "u": "https://en.wikipedia.org/wiki/Saint_Thomas_Aquinas_Cathedral"
+    }
+   ]
+  },
+  {
+   "id": "pioneer",
+   "name": "Pioneer Center Dome",
+   "area": "Reno",
+   "town": "reno",
+   "geo": [
+    39.52417,
+    -119.81028,
+    120
+   ],
+   "addr": "100 S Virginia St, Reno, NV",
+   "invite": "A gold geodesic dome in the middle of downtown. Yes, Reno has a golden turtle.",
+   "story": [
+    "The Pioneer Theater was completed in December 1967 and opened its doors in January 1968. Its roof is a 140-foot-diameter, gold-anodized geodesic dome made of 500 faceted panels.",
+    "The Washoe County Fair and Recreation Board hired the Oklahoma City firm Bozalis, Dickinson and Roloff. Board chairman William Gravelle first proposed an aluminum dome in 1964, calling it revolutionary and beautiful. Temcor, a California company co-founded by a student of Buckminster Fuller, fabricated the dome.",
+    "Locals unofficially called it the Golden Turtle. The building was added to the National Register of Historic Places on January 19, 2005, and it is still a performing arts venue."
+   ],
+   "facts": [
+    {
+     "t": "The theater was completed in December 1967 and opened in January 1968.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The dome is 140 feet across, gold-anodized, with 500 faceted panels.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The architects were Bozalis, Dickinson and Roloff of Oklahoma City; Temcor of Torrance, California fabricated the dome.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "William Gravelle proposed the aluminum dome to the board in 1964.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The dome was unofficially called the Golden Turtle, and the building was added to the National Register on January 19, 2005.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "The address is 100 S. Virginia Street.",
+     "src": [
+      0,
+      2
+     ]
+    }
+   ],
+   "access": "Look at the dome from the public sidewalk on Virginia Street. It is a working theater, so you only get inside with an event ticket; check pioneercenter.com for what is on.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the National Park Service Reno itinerary, the Pioneer Center's own history blog and Wikipedia. The NPS page says Temcor's co-founder studied under Fuller; it does not say Fuller worked on this building, so the card does not either. Coordinates are the National Register list's. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "National Park Service: Pioneer Theater-Auditorium",
+     "u": "https://www.nps.gov/nr/travel/nevada/pio.htm"
+    },
+    {
+     "t": "Pioneer Center: The history of the dome",
+     "u": "https://blog.pioneercenter.com/the-history-of-the-dome/"
+    },
+    {
+     "t": "Wikipedia: Pioneer Center for the Performing Arts",
+     "u": "https://en.wikipedia.org/wiki/Pioneer_Center_for_the_Performing_Arts"
+    }
+   ]
+  },
+  {
+   "id": "bankofsparks",
+   "name": "Bank of Sparks",
+   "area": "Sparks",
+   "town": "sparks",
+   "geo": [
+    39.535004,
+    -119.755419,
+    100
+   ],
+   "addr": "948 Victorian Ave, Sparks, NV 89431",
+   "invite": "The first bank in Sparks, with a carousel on its back wall that has nothing to do with money.",
+   "story": [
+    "Built in 1905, the Bank of Sparks was the first bank in the city. It served residents and railroad workers.",
+    "It was a bank until 1950, when the Sparks Bootery moved in. Owner Harry Foote then added a rear section for a children's clothing store, completed in 1955, and its front featured artwork of animals often found on a carousel.",
+    "The building was listed on the National Register of Historic Places on September 28, 2007, for its uncommon architecture and long history."
+   ],
+   "facts": [
+    {
+     "t": "The Bank of Sparks was built in 1905 and was the first bank in the city, serving residents and railroad workers.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It functioned as a bank until 1950, when the Sparks Bootery moved in.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Harry Foote added a rear section for a children's clothing store; completed in 1955, its front featured carousel-style animal artwork.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was listed on the National Register of Historic Places on September 28, 2007.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The address is 948 Victorian Avenue.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on Victorian Avenue. It is on a working street; please do not assume any business inside is open to visitors.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against NoeHill's National Register entry and the Wikipedia National Register list (date, address, coordinates). The two sources do not agree on the listing date in other places I saw, so only the Wikipedia list date is used. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "NoeHill: Bank of Sparks",
+     "u": "https://noehill.com/nv_washoe/nat2007001013.asp"
+    },
+    {
+     "t": "Wikipedia: National Register of Historic Places listings in Washoe County, Nevada",
+     "u": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Washoe_County,_Nevada"
+    }
+   ]
+  },
+  {
+   "id": "robison",
+   "name": "Robison House",
+   "area": "Sparks",
+   "town": "sparks",
+   "geo": [
+    39.5371,
+    -119.7597,
+    100
+   ],
+   "addr": "409 13th St, Sparks, NV 89431",
+   "invite": "A mansion-like house built to sell lots, with a side story about Nevada's quickie divorces.",
+   "story": [
+    "The Robison House was built around 1904 in the Colonial Revival style, apparently for George A. Robison. It stands in Robison's Addition, a development by his father, George W. Robison. Images of the mansion-like house were used to advertise lots there.",
+    "It was in one of the first neighborhoods subdivided and settled in Sparks.",
+    "The property also includes small rental cottages tied to Reno's divorce trade. They were apparently in use from the late 1920s and 1930s, giving people the short, six-week residency Nevada then required for a quick divorce. The house was listed on the National Register of Historic Places on September 29, 2006."
+   ],
+   "facts": [
+    {
+     "t": "The house was built around 1904, in Colonial Revival style, apparently for George A. Robison.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It stands in Robison's Addition, developed by George W. Robison, and images of it were used to advertise lots.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was in one of the first neighborhoods subdivided and settled in Sparks.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The property includes small rental cottages used in Reno's divorce trade, apparently from the late 1920s and 1930s.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was listed on the National Register on September 29, 2006.",
+     "src": [
+      0,
+      2
+     ]
+    },
+    {
+     "t": "The address is 409 13th Street.",
+     "src": [
+      1,
+      2
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on 13th Street. Current use is not stated in the sources, so treat it as private property and do not go onto the grounds.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia, NoeHill's National Register entry and the Wikipedia Washoe list (date and coordinates). Current use is not stated anywhere I read, so none is claimed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Robison House (Sparks, Nevada)",
+     "u": "https://en.wikipedia.org/wiki/Robison_House_(Sparks,_Nevada)"
+    },
+    {
+     "t": "NoeHill: Robison House",
+     "u": "https://noehill.com/nv_washoe/nat2006000895.asp"
+    },
+    {
+     "t": "Wikipedia: National Register of Historic Places listings in Washoe County, Nevada",
+     "u": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Washoe_County,_Nevada"
+    }
+   ]
+  },
+  {
+   "id": "glendale",
+   "name": "Glendale School",
+   "area": "Sparks",
+   "town": "sparks",
+   "geo": [
+    39.5353,
+    -119.7522,
+    250
+   ],
+   "addr": "Victorian Square, Sparks, NV 89431",
+   "invite": "A one-room schoolhouse from 1864 that has been moved twice and now sits in downtown Sparks.",
+   "story": [
+    "The Glendale School was erected in 1864 at a cost of $1,466 and opened in April 1864 with four students. It is the oldest remaining schoolhouse in Nevada, according to Wikipedia. It served as a school until 1958 and had only 18 students when it closed.",
+    "It was moved in 1976 to a spot near the Reno-Sparks Convention Center, then moved again in 1993 to Victorian Square in downtown Sparks. It has been restored to its early 20th century appearance and was listed on the National Register of Historic Places on January 30, 1978.",
+    "It is part of the Sparks Heritage Museum complex, just across the street from the museum, and is open for tours by museum representatives."
+   ],
+   "facts": [
+    {
+     "t": "The school was erected in 1864 for $1,466 and opened in April 1864 with four students.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It is described as the oldest remaining schoolhouse in the state, and it served as a school until 1958.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was moved in 1976 and again in 1993 to Victorian Square in Sparks.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was listed on the National Register of Historic Places on January 30, 1978.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The museum's page calls it the historic one-room Glendale Schoolhouse just across the street, available for tours by museum representatives.",
+     "src": [
+      2
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk near Victorian Square, across the street from the Sparks Heritage Museum. Tours are given by museum representatives. The museum's page does not say how to book and currently says the museum is temporarily closed for a re-roofing project, so call or check sparksmuseum.org first.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia, a Nevada Appeal article and the museum's website. The 'oldest' claim is attributed to Wikipedia (uncited there). The map point is the museum's, because the museum says the school is across the street; the Wikipedia list's own coordinates for this school put it in southwest Reno, which looks like an old location, so they were not used. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Glendale School",
+     "u": "https://en.wikipedia.org/wiki/Glendale_School"
+    },
+    {
+     "t": "Nevada Appeal: Historic Glendale School",
+     "u": "https://nevadaappeal.com/news/2015/may/07/historic-glendale-school"
+    },
+    {
+     "t": "Sparks Heritage Museum",
+     "u": "https://sparksmuseum.org/"
+    }
+   ]
+  },
+  {
+   "id": "marylee",
+   "name": "Mary Lee Nichols School",
+   "area": "Sparks",
+   "town": "sparks",
+   "geo": [
+    39.53706,
+    -119.75263,
+    100
+   ],
+   "addr": "400-406 Pyramid Way, Sparks, NV 89431",
+   "invite": "A 1917 school named for a teacher everybody loved, designed by one of Nevada's busiest architects.",
+   "story": [
+    "The Mary Lee Nichols School was built in 1917 and named for the late Mary Lee Nichols, a well-loved primary school teacher in Sparks. Wikipedia credits the design to Nevada architect Frederick DeLongchamps and the building work to U. Bernasconi, with later additions in 1920 and 1927.",
+    "The school was closed and put up for sale in 1966. It was listed on the National Register of Historic Places on October 31, 2002, when it was being modified for the Foster Grandparent program.",
+    "In a 2016 photo on NoeHill the building housed a private business, so it has had more than one second act."
+   ],
+   "facts": [
+    {
+     "t": "The school was built in 1917 and named for Mary Lee Nichols, a well-loved primary school teacher in Sparks.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Wikipedia credits the design to Frederick DeLongchamps and the building to U. Bernasconi, with additions in 1920 and 1927.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "The school was closed and placed up for sale in 1966.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was listed on the National Register on October 31, 2002, when it was being modified for the Foster Grandparent program.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "The address is 400-406 Pyramid Way.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on Pyramid Way. Current use is not confirmed; a 2016 photo shows a private business, so treat it as private property.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against NoeHill, the Wikipedia Washoe list and the Wikipedia article. Architect, builder and additions are attributed to Wikipedia, which does not cite them. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "NoeHill: Mary Lee Nichols School",
+     "u": "https://noehill.com/nv_washoe/nat2002001277.asp"
+    },
+    {
+     "t": "Wikipedia: National Register of Historic Places listings in Washoe County, Nevada",
+     "u": "https://en.wikipedia.org/wiki/National_Register_of_Historic_Places_listings_in_Washoe_County,_Nevada"
+    },
+    {
+     "t": "Wikipedia: Mary Lee Nichols School",
+     "u": "https://en.wikipedia.org/wiki/Mary_Lee_Nichols_School"
+    }
+   ]
+  },
+  {
+   "id": "immaculate",
+   "name": "Immaculate Conception Church",
+   "area": "Sparks",
+   "town": "sparks",
+   "geo": [
+    39.538428,
+    -119.752586,
+    100
+   ],
+   "addr": "590 Pyramid Way, Sparks, NV 89431",
+   "invite": "A 1932 church that replaced one lost to fire, designed by the same architect as half of Nevada.",
+   "story": [
+    "This Mediterranean Revival church was dedicated on February 22, 1932. Frederick Joseph DeLongchamps, a prominent Nevada architect, designed it. The style is relatively rare in northern Nevada.",
+    "It replaced a 1905 church at 729 F Street. It was among the first Catholic churches built in Nevada after the state became a diocese in 1931, and the National Register form calls it the oldest extant Catholic church in Sparks. It was listed on December 23, 1992.",
+    "A porch and vestibule added in 1970 for wheelchair access partly hide the original facade. The Catholic parish later moved elsewhere, so the old building houses a different congregation, which is one more reason to look from the sidewalk."
+   ],
+   "facts": [
+    {
+     "t": "The church was dedicated on February 22, 1932 and designed by Frederick Joseph DeLongchamps in the Mediterranean Revival style.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The National Register form calls it the oldest extant Catholic church in Sparks.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "An earlier church stood at 729 F Street.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "A vestibule and porch added in 1970 for handicap access partly obscure the original facade.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was among the first Catholic churches built in Nevada after the state became a diocese in 1931.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The address on the National Register form is 590 Pyramid Way.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on Pyramid Way. It is a working church. The congregation is no longer Roman Catholic, so do not expect Catholic Mass times; please be quiet near services.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the National Register form text and NoeHill. Wikipedia's Sparks list gives the address as 528 Pyramid Way while the registration form says 590, so the form's address is used; the map point is the list's coordinates. Wikipedia's article for the parish gives coordinates for the modern church on McCarran Way, which are not used. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "National Park Service: Immaculate Conception Church registration form",
+     "u": "https://npgallery.nps.gov/NRHP/GetAsset/NRHP/92001700_text"
+    },
+    {
+     "t": "NoeHill: Immaculate Conception Church",
+     "u": "https://noehill.com/nv_washoe/nat1992001700.asp"
+    }
    ]
   }
  ]

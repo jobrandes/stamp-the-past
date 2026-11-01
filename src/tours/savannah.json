@@ -1,0 +1,476 @@
+{
+ "id": "savannah",
+ "name": "Savannah",
+ "towns": [
+  "savannah"
+ ],
+ "stops": [
+  {
+   "id": "colonialpark",
+   "name": "Colonial Park Cemetery",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.07528,
+    -81.09,
+    150
+   ],
+   "addr": "200 Abercorn St, Savannah, GA 31401",
+   "invite": "Nine thousand graves, one city block, and the oldest intact municipal cemetery in town. Bring your inside voice.",
+   "story": [
+    "Savannah's second burying ground took its first burials around 1750 and stayed in use until it was closed to burials in 1853. The city says it covers about six acres and holds more than nine thousand graves.",
+    "The ground has gone by several names, including the Old Cemetery and Christ Church Cemetery. It became a city park in 1896, which is why it looks like a park with tombstones in it.",
+    "It also holds a large mass grave of yellow-fever victims. One story says Union soldiers who occupied Savannah on December 24, 1864 sheltered in the tombs and altered some stone dates. Accounts describe that damage as alleged, so treat it as a story, not a verdict."
+   ],
+   "facts": [
+    {
+     "t": "Burials began about 1750 and the cemetery was closed to burials in 1853.",
+     "src": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "t": "The cemetery covers about 6 acres and holds over nine thousand graves.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It has been known as the Old Cemetery, Old Brick Graveyard, South Broad Street Cemetery and Christ Church Cemetery.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It became a city park in 1896.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It contains a large mass grave of yellow-fever victims.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "Union troops occupied Savannah on December 24, 1864; soldiers allegedly altered some gravestone dates.",
+     "src": [
+      3
+     ]
+    }
+   ],
+   "access": "Open to pedestrians, with posted hours of 8 a.m. to 5 p.m. November to March and 8 a.m. to 8 p.m. March to November. Hours can change, so check the City of Savannah page. Walk on the paths and leave the stones alone; they are old and fragile.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Hours and address read from the City of Savannah page; dates read against the Georgia Historical Society marker text and The Georgia Trust. The city page lists March in both seasons, so the switch date is unclear. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "City of Savannah: Colonial Park Cemetery",
+     "u": "https://savannahga.gov/879/Colonial-Park-Cemetery"
+    },
+    {
+     "t": "Georgia Historical Society: Colonial Park marker",
+     "u": "https://www.georgiahistory.com/?p=22017"
+    },
+    {
+     "t": "The Georgia Trust: Colonial Park Cemetery",
+     "u": "https://www.georgiatrust.org/georgia-250/a-revolution-remembered-in-stone-colonial-park-cemetery-savannah-ga/"
+    },
+    {
+     "t": "Wikipedia: Colonial Park Cemetery",
+     "u": "https://en.wikipedia.org/wiki/Colonial_Park_Cemetery"
+    }
+   ]
+  },
+  {
+   "id": "davenport",
+   "name": "Davenport House",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.07722,
+    -81.08806,
+    100
+   ],
+   "addr": "324 E State St, Savannah, GA",
+   "invite": "The house that was almost a parking lot. Seven determined women changed that, and Savannah's whole preservation movement grew from it.",
+   "story": [
+    "Master builder Isaiah Davenport, a New England native, built this house around 1820. For over a century it was just another old house in a growing city.",
+    "In 1955 it was slated for demolition to make way for a parking lot. Seven women stopped the wrecking crew, bought the house, and founded the Historic Savannah Foundation to do it.",
+    "The foundation still owns and runs it. The house opened as a museum in 1963, and the group that saved one house went on to help save a lot more of the city."
+   ],
+   "facts": [
+    {
+     "t": "The house dates to about 1820 and was built by master builder Isaiah Davenport, a New England native.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "In 1955 it was slated for demolition to make way for a parking lot.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Seven women stopped the demolition, bought the house and founded the Historic Savannah Foundation.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The house opened as a museum in 1963, and the foundation still owns and operates it.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The house is at 324 East State Street; the museum shop entrance is at 323 East Broughton Street.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on East State Street. The museum shop and entrance are listed at 323 E. Broughton St. Hours and ticket prices are not on the museum's home page, so check davenporthousemuseum.org before you plan to go inside.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the museum's own page and Wikipedia. Hours and prices are not stated on the page I read, so none are listed here. Coordinates are Wikipedia's. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Davenport House Museum",
+     "u": "https://www.davenporthousemuseum.org/"
+    },
+    {
+     "t": "Wikipedia: Isaiah Davenport House",
+     "u": "https://en.wikipedia.org/wiki/Isaiah_Davenport_House"
+    }
+   ]
+  },
+  {
+   "id": "owensthomas",
+   "name": "Owens-Thomas House",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.0775,
+    -81.08944,
+    100
+   ],
+   "addr": "124 Abercorn St, Savannah, GA 31401",
+   "invite": "A grand house by an English architect who drew the plans without ever visiting, with a carriage house that tells the other half of the story.",
+   "story": [
+    "The English architect William Jay of Bath designed this house, and he drew the plans while still in England. Construction ran from 1816 to 1819.",
+    "In 1951 Margaret Thomas, the granddaughter of the original owner, left the house to the Telfair Academy of Arts and Sciences. It is now a historic house museum run by Telfair Museums, and a National Historic Landmark since May 11, 1976.",
+    "Renovations in the 1990s uncovered one of the oldest and best preserved urban slave quarters in the American South. The museum's exhibits tell the story of the free and enslaved people who lived and worked on the site, so the tour covers the people the grand rooms depended on, too."
+   ],
+   "facts": [
+    {
+     "t": "The house was designed by the English architect William Jay of Bath; construction ran from 1816 to 1819.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was designated a National Historic Landmark on May 11, 1976.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Margaret Thomas left the house to the Telfair Academy of Arts and Sciences in 1951.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "1990s renovations uncovered one of the oldest and best preserved urban slave quarters in the American South.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Telfair's exhibits tell the story of the free and enslaved people who lived and worked on the site.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The address is 124 Abercorn Street, on the northeast corner of Oglethorpe Square.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on Abercorn Street at Oglethorpe Square. Tours are run by Telfair Museums; the page I read lists no current hours or prices, so check telfair.org before going.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and Telfair's own page (which confirms the address and the exhibit focus). Hours and prices not stated on the page I read. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Owens-Thomas House",
+     "u": "https://en.wikipedia.org/wiki/Owens%E2%80%93Thomas_House"
+    },
+    {
+     "t": "Telfair Museums: Owens-Thomas House & Slave Quarters",
+     "u": "https://www.telfair.org/owens-thomas-house/"
+    }
+   ]
+  },
+  {
+   "id": "lowbirthplace",
+   "name": "Juliette Gordon Low Birthplace",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.07694,
+    -81.0925,
+    150
+   ],
+   "addr": "10 E Oglethorpe Ave, Savannah, GA 31401",
+   "invite": "Where the founder of the Girl Scouts was born. The first troop met a few blocks away, which is a fun detail to drop on a tour.",
+   "story": [
+    "Juliette Gordon Low was born in this house on October 31, 1860, and it was her girlhood home until she married William Low, an Englishman, in 1886. Wikipedia says the house was built in 1820; another passage on a related page says 1821, so treat the year as 'about 1820'.",
+    "On March 12, 1912 she founded the first Girl Guide troop in the United States at the Louisa Porter Home in Savannah. Her niece, Daisy Gordon, was the first member. So the troop started nearby, not in this house.",
+    "The Girl Scouts of the USA acquired the house in 1953, and it opened as a historic house museum in 1956. It is a National Historic Landmark."
+   ],
+   "facts": [
+    {
+     "t": "Juliette Gordon Low was born October 31, 1860, and the house was her girlhood home until her 1886 marriage to William Low.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "She founded the first U.S. Girl Guide troop on March 12, 1912 at the Louisa Porter Home in Savannah; her niece Daisy Gordon was the first member.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The Girl Scouts of the USA acquired the birthplace in 1953.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The house was built in about 1820 (sources differ between 1820 and 1821) and opened as a museum in 1956.",
+     "src": [
+      0,
+      3
+     ]
+    },
+    {
+     "t": "The museum describes itself as the historic house museum of Juliette Gordon Low, founder of the Girl Scouts, and a National Historic Landmark.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "The address is 10 East Oglethorpe Avenue.",
+     "src": [
+      0,
+      2
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk at Bull Street and Oglethorpe Avenue. Hours, prices and accessibility details are on the museum's own pages, which the page I read links to but does not list, so check juliettegordonlowbirthplace.org first.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the Georgia Historical Society marker (erected 1955), Wikipedia and the museum's page. Coordinates are Wikipedia's centre point for the Juliette Gordon Low Historic District, so they are approximate for this house; Maps uses the street address. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Juliette Gordon Low Birthplace",
+     "u": "https://en.wikipedia.org/wiki/Juliette_Gordon_Low_Birthplace"
+    },
+    {
+     "t": "Georgia Historical Society: Birthplace of Juliette Low marker",
+     "u": "https://www.georgiahistory.com/?p=21891"
+    },
+    {
+     "t": "Juliette Gordon Low Birthplace (museum)",
+     "u": "https://www.juliettegordonlowbirthplace.org/"
+    },
+    {
+     "t": "Wikipedia: Juliette Gordon Low Historic District",
+     "u": "https://en.wikipedia.org/wiki/Juliette_Gordon_Low_Historic_District"
+    }
+   ]
+  },
+  {
+   "id": "beach",
+   "name": "Beach Institute",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.07247,
+    -81.08842,
+    150
+   ],
+   "addr": "502 E Harris St, Savannah, GA 31401",
+   "invite": "Savannah's first permanent school built for Black students after the Civil War, now a gallery with 40 carved presidents.",
+   "story": [
+    "The Beach Institute began in 1867 as the first school in Savannah built specifically for the education of African Americans. It was named for Alfred Ely Beach, the editor of Scientific American, who gave $13,000 toward the building. John Boutell of Atlanta designed it.",
+    "After the Civil War the Freedmen's Bureau, the American Missionary Association and the Savannah Educational Association built the school and a teachers' house with the labor of newly freed people. The building was rebuilt after a fire in 1878.",
+    "Savannah College of Art and Design bought the empty building in 1988 and later donated it to the King-Tisdell Cottage Foundation, which reopened it as a cultural center in 1990. Inside are rotating exhibitions and a collection of 40 carved busts of U.S. presidents by Savannah sculptor Ulysses Davis."
+   ],
+   "facts": [
+    {
+     "t": "The Beach Institute began in 1867 as the first school in Savannah erected specifically for the education of African Americans.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It is named for Alfred Ely Beach, editor of Scientific American; he donated $13,000 and John Boutell of Atlanta designed it.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The Freedmen's Bureau, the American Missionary Association and the Savannah Educational Association built it with the labor of newly freed people.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The building was rebuilt after a fire in 1878.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "SCAD bought the empty building in 1988 and the King-Tisdell Cottage Foundation reopened it as a cultural center in 1990.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "The collection includes 40 carved busts of U.S. presidents by Ulysses Davis (1913 to 1990).",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "A working cultural center. One visitor guide lists Tuesday to Saturday, noon to 5 p.m., with paid admission; confirm hours and prices at beachinstitute.org before going. Parking and accessibility details were not stated on the pages I read.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the Georgia Historical Society marker (erected 2008), a Savannah visitor guide and Wikipedia. Sources differ on the building's completion (1867 vs 1868) and on when the school closed, so neither closing date is given. Coordinates are the marker's, at Harris and Price Streets. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Historical Marker Database: Beach Institute marker",
+     "u": "https://www.hmdb.org/m.asp?m=15681"
+    },
+    {
+     "t": "Go South Savannah: Beach Institute",
+     "u": "https://gosouthsavannah.com/things-to-do/arts-and-culture/beach-institute.html"
+    },
+    {
+     "t": "Wikipedia: Beach Institute African-American Cultural Center",
+     "u": "https://en.wikipedia.org/wiki/Beach_Institute_African-American_Cultural_Center"
+    }
+   ]
+  },
+  {
+   "id": "mickveisrael",
+   "name": "Congregation Mickve Israel",
+   "area": "Savannah",
+   "town": "savannah",
+   "geo": [
+    32.07104,
+    -81.09427,
+    100
+   ],
+   "addr": "20 E Gordon St, Savannah, GA 31401",
+   "invite": "The third oldest Jewish congregation in America, in a Gothic sanctuary on Monterey Square.",
+   "story": [
+    "Congregation Mickve Israel says it was founded in 1733, which makes it the third oldest Jewish congregation in America. Its first synagogue, built in 1820, was the first synagogue built in Georgia.",
+    "The current sanctuary was completed in 1878 in a Gothic style. The cornerstone was laid on March 1, 1876, and the New York architect Henry G. Harrison designed it.",
+    "When a fire destroyed an earlier building on December 4, 1829, the congregation saved its Torah scrolls. The Georgia Historical Society dedicated a marker for the congregation in 1961."
+   ],
+   "facts": [
+    {
+     "t": "The congregation says it was founded in 1733 and is the third oldest Jewish congregation in America.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Its first synagogue, built in 1820, was the first synagogue built in Georgia.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The current sanctuary was completed in 1878 in a Gothic style.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The cornerstone was laid March 1, 1876; the architect was Henry G. Harrison of New York.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The congregation saved its Torah scrolls when a fire destroyed the earlier building on December 4, 1829.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The Georgia Historical Society marker for the congregation was dedicated in 1961.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "The synagogue is on Monterey Square, at 20 East Gordon Street.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "An active house of worship. Look from the public sidewalk. The congregation offers docent-led tours that you schedule through its Museum and Tours page; hours and prices are not listed on its home page, so check mickveisrael.org first, and do not walk in during services.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against the congregation's home page, Wikipedia and the Georgia Historical Society page. Wikipedia and the congregation differ slightly on the founding story (arrival 1733 vs organized 1735), so the congregation's own 1733 is used and attributed. Coordinates are Wikipedia's. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Congregation Mickve Israel",
+     "u": "https://mickveisrael.org/"
+    },
+    {
+     "t": "Wikipedia: Congregation Mickve Israel",
+     "u": "https://en.wikipedia.org/wiki/Congregation_Mickve_Israel"
+    },
+    {
+     "t": "Georgia Historical Society: Congregation Mickve Israel",
+     "u": "https://www.georgiahistory.com/resource/congregation-mickve-israel/"
+    }
+   ]
+  }
+ ]
+}
