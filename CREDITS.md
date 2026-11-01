@@ -698,3 +698,9 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | sp_rb | https://commons.wikimedia.org/wiki/File:Robison house (Sparks, Nevada) from E 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
 | sp_gl | https://commons.wikimedia.org/wiki/File:Glendale School (Sparks, Nevada) from NW 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
 | sp_ml | https://commons.wikimedia.org/wiki/File:Nichols school (Sparks, Nevada) from SW 1.JPG | Ammodramus | CC0 1.0 | 2014, resized |
+| cc_gm | https://commons.wikimedia.org/wiki/File:Governor's Mansion.JPG | Barbmathers | CC BY-SA 3.0 | resized |
+| cc_oc | https://commons.wikimedia.org/wiki/File:Orion Clemens House.JPG | Barbmathers | CC BY-SA 3.0 | resized |
+| cc_sp | https://commons.wikimedia.org/wiki/File:St. Peter's Episcopal Church, Carson City.jpg | Aaron A. Gallup (HABS) | Public domain | 1973 survey photo, resized |
+| cc_pr | https://commons.wikimedia.org/wiki/File:Nevada State Printing Office.jpg | Aaron A. Gallup (HABS) | Public domain | 1972 survey photo, resized |
+| cc_rk | https://commons.wikimedia.org/wiki/File:Rinckel Mansion.jpg | Aaron A. Gallup (HABS) | Public domain | 1972 survey photo, resized |
+| vx_sm | https://commons.wikimedia.org/wiki/File:St. Mary's in the Mountains Catholic Church Virginia City Nevada.jpg | Photographyfaust | CC BY-SA 4.0 | resized |

@@ -1,0 +1,271 @@
+{
+ "id": "vc",
+ "name": "Virginia City",
+ "towns": [
+  "vc"
+ ],
+ "stops": [
+  {
+   "id": "stmarys",
+   "name": "St. Mary's in the Mountains",
+   "area": "Virginia City",
+   "town": "vc",
+   "geo": [
+    39.3091,
+    -119.6486,
+    100
+   ],
+   "addr": "111 S E St, Virginia City, NV 89440",
+   "invite": "The \"Bonanza Church\" that burned in the Great Fire of 1875, was rebuilt, and nearly lost its interior to a group of monks.",
+   "story": [
+    "Father Hugh Gallagher built the first Catholic church here in 1860, and a windstorm destroyed it within two years. Father Patrick Manogue built a successor soon after he arrived in 1862, and the growing Irish mining population needed a larger brick church, which Bishop Eugene O'Connell dedicated on November 20, 1870.",
+    "The Great Fire of 1875 destroyed most of that church. It was rebuilt on the ruins in 1876 to 1877, with a spire about 12 feet taller than the original, and a water pipe was added to spray the roof in case of another fire.",
+    "After the boom the church was neglected, and in 1957 Cistercian monks took it over and removed much of the choir loft and ornate interior. Restoration work began in 2008. Today it is a parish with a small museum and a gift shop, and the gas chandelier and a pewter baptismal font from before the fire are still there."
+   ],
+   "facts": [
+    {
+     "t": "Father Hugh Gallagher built the first Catholic church here in 1860; it blew down within two years.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Father Patrick Manogue arrived in 1862 and built a successor church.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "Bishop Eugene O'Connell dedicated the larger brick church on November 20, 1870.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The 1875 Great Fire destroyed most of that church, and it was rebuilt in 1876 to 1877 (sources give 1876 and 1877).",
+     "src": [
+      0,
+      1,
+      2
+     ]
+    },
+    {
+     "t": "The rebuilt spire is about 12 feet 6 inches taller than the original, and a water pipe was added to spray the roof.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Cistercian monks took over in 1957 and removed most of the choir loft and ornate interior; restoration began in 2008.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "The church has a pewter baptismal font from before the fire and a gas chandelier original to the church.",
+     "src": [
+      2
+     ]
+    },
+    {
+     "t": "The address is 111 South E Street.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "A working parish church, free to visit. A tourism page lists the gift shop open 10 a.m. to 4 p.m. daily and Sunday Mass at 11:30, with museum hours by calling ahead; those details may have changed, so check with the church before planning a visit and do not walk in during Mass.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia, NoeHill's Storey County historic points page and Travel Nevada's museum page; hours come from the Travel Nevada page and may be out of date. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: St. Mary's in the Mountains Catholic Church",
+     "u": "https://en.wikipedia.org/wiki/St._Mary%27s_in_the_Mountains_Catholic_Church"
+    },
+    {
+     "t": "NoeHill: St. Mary's in the Mountains, Storey County",
+     "u": "https://noehill.com/nv_storey/poi_saint_marys_church.asp"
+    },
+    {
+     "t": "Travel Nevada: St. Mary in the Mountains Church & Museum",
+     "u": "https://travelnevada.com/museums/saint-mary-in-the-mountains-catholic-church-museum/"
+    }
+   ],
+   "ph": {
+    "k": "vx_sm",
+    "alt": "The red-brick Gothic front and spire of St. Mary's in the Mountains in Virginia City",
+    "by": "Photographyfaust",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:St. Mary's in the Mountains Catholic Church Virginia City Nevada.jpg",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "stpauls",
+   "name": "St. Paul's Episcopal Church",
+   "area": "Virginia City",
+   "town": "vc",
+   "geo": [
+    39.30917,
+    -119.64806,
+    100
+   ],
+   "addr": "F and Taylor Sts, Virginia City, NV 89440",
+   "invite": "A small Carpenter Gothic church one block from the giant Catholic church, rebuilt after a fire that burned half the town.",
+   "story": [
+    "The Episcopal parish in Virginia City was founded on September 1, 1861. The first church burned in the Great Fire of 1875, and the church you see today was built in 1876 to replace it.",
+    "The Carpenter Gothic building is much smaller than St. Mary's in the Mountains one block west, which one history walk ties to the town's large Irish Catholic population.",
+    "It is still an active congregation in the Episcopal Diocese of Nevada, and it is a contributing building in the Virginia City Historic District, a National Historic Landmark since 1961."
+   ],
+   "facts": [
+    {
+     "t": "The parish was founded on September 1, 1861.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The church was built in 1876 to replace one that burned in 1875.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The architectural style is Carpenter Gothic.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It remains an active Episcopal congregation.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It is a contributing property in the Virginia City Historic District, a National Historic Landmark since 1961.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It sits one block east of the much larger St. Mary's in the Mountains.",
+     "src": [
+      2
+     ]
+    }
+   ],
+   "access": "A working church. Look from the public sidewalk at F and Taylor Streets. Visiting hours are not listed in the sources, so ask the congregation before going in and do not walk in during services.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia, the Virginia City Historic District Wikipedia article and a Mining History Association walking tour; none lists visiting hours. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: St. Paul's Episcopal Church (Virginia City, Nevada)",
+     "u": "https://en.wikipedia.org/wiki/St._Paul%27s_Episcopal_Church_(Virginia_City,_Nevada)"
+    },
+    {
+     "t": "Wikipedia: Virginia City Historic District",
+     "u": "https://en.wikipedia.org/wiki/Virginia_City_Historic_District_(Virginia_City,_Nevada)"
+    },
+    {
+     "t": "Mining History Association: Virginia City walking tour",
+     "u": "https://mininghistoryassociation.org/VirginiaCityWalking2.htm"
+    }
+   ]
+  },
+  {
+   "id": "chollar",
+   "name": "Chollar Mansion",
+   "area": "Virginia City",
+   "town": "vc",
+   "geo": [
+    39.30278,
+    -119.65083,
+    100
+   ],
+   "addr": "565 S D St, Virginia City, NV 89440",
+   "invite": "A mine boss's house that was taken apart and moved in 1870 because the ground under it was sinking.",
+   "story": [
+    "The Chollar Mansion was built in the early 1860s as the head office of the Chollar Mine and the home of its superintendent. Billy Chollar discovered the Chollar silver lode in 1861 and commissioned the house, though he lost the mine and house to the Bank of California and left Virginia City in 1862.",
+    "In 1870 the house was dismantled and rebuilt at its current site about a quarter mile away, because the ground above the mine had settled. It is an Italianate house with a three-story cantilevered staircase, and a 164-square-foot arched vault once held bullion.",
+    "The National Register of Historic Places listed it on August 5, 1993. The National Park Service describes it as a bed-and-breakfast, and the highway bypass removed the formal gardens that once ran uphill to C Street."
+   ],
+   "facts": [
+    {
+     "t": "It was built in the early 1860s; sources give 1861 to 1863 and 1862 to 1864.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It served as head office of the Chollar Mine and residence of the mine superintendent.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Billy Chollar discovered the Chollar silver lode in 1861 and lost the mine and home to the Bank of California.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The house was moved about 0.25 miles in 1870 because of the settling ground and mining needs.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The style is Italianate, with a three-story cantilevered staircase and a 164-square-foot arched vault that once held bullion.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was listed on the National Register of Historic Places on August 5, 1993.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The NPS page describes it as a bed-and-breakfast; the address is 565 South D Street.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public street on South D Street. The NPS page calls it a bed-and-breakfast, but the sources do not say whether it still takes guests, so treat it as private property unless you have a reservation.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the National Park Service travel page; current use is not confirmed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Chollar Mansion",
+     "u": "https://en.wikipedia.org/wiki/Chollar_Mansion"
+    },
+    {
+     "t": "National Park Service: Chollar Mansion",
+     "u": "https://www.nps.gov/nr/travel/nevada/cho.htm"
+    }
+   ]
+  }
+ ]
+}

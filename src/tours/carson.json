@@ -1,0 +1,567 @@
+{
+ "id": "carson",
+ "name": "Carson City",
+ "towns": [
+  "carson"
+ ],
+ "stops": [
+  {
+   "id": "govmansion",
+   "name": "Nevada Governor's Mansion",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16778,
+    -119.77222,
+    100
+   ],
+   "addr": "606 Mountain St, Carson City, NV 89703",
+   "invite": "The governor lives here, and it was built because earlier governors had to find lodging wherever they could.",
+   "story": [
+    "Nevada became a state in 1864, but the governor had no official home until this one was built in 1908 and 1909. Before that, governors and their families found lodging where they could in or near Carson City. A bill passed in 1907, nicknamed the Mansion Bill, set the project in motion, and Mrs. T. B. Rickey sold the land to the state for $10.",
+    "Reno architect George A. Ferris designed it in a Classical Revival style with Georgian and Jeffersonian touches, and the construction bid was $22,700. Acting Governor Denver Dickerson and his family moved in during July 1909.",
+    "The Dickersons' daughter June was born in the mansion that September, and she is the only child ever born there. The public got its first open house on New Year's Day 1910, and the National Park Service lists it on the National Register of Historic Places since October 22, 1976."
+   ],
+   "facts": [
+    {
+     "t": "It was built between 1908 and 1909; the construction bid was $22,700.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "George A. Ferris of Reno was the architect; the style is Classical Revival with Georgian and Jeffersonian motifs.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The 1907 'Mansion Bill' secured the site, and Mrs. T. B. Rickey sold the land to the state for $10.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Acting Governor Denver Dickerson's family moved in during July 1909.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "June Dickerson, born there in September 1909, is the only child born in the mansion.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The first public open house was New Year's Day 1910.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on October 22, 1976.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The NPS travel page says it is open for tours on Nevada Day, the last Saturday in October.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on Mountain Street; it is the governor's residence. An NPS travel page says it opens for tours on Nevada Day, the last Saturday in October, so check with the state before planning to go inside.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the National Park Service travel page; the tour note comes from that page and is not confirmed with the state. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Nevada Governor's Mansion",
+     "u": "https://en.wikipedia.org/wiki/Nevada_Governor%27s_Mansion"
+    },
+    {
+     "t": "National Park Service: Governor's Mansion",
+     "u": "https://www.nps.gov/NR/travel/nevada/gov.htm"
+    }
+   ],
+   "ph": {
+    "k": "cc_gm",
+    "alt": "The columned front of the Nevada Governor's Mansion above its stone sign",
+    "by": "Barbmathers",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Governor's Mansion.JPG",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "clemens",
+   "name": "Orion Clemens House",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16667,
+    -119.76861,
+    100
+   ],
+   "addr": "502 N Division St, Carson City, NV 89703",
+   "invite": "Mark Twain's older brother built this house, and Twain stayed here while he was a newspaper reporter.",
+   "story": [
+    "Orion Clemens built this house around 1862 and 1863. He was the Nevada Territory's first and only territorial secretary, and he sometimes served as acting governor when Governor James Nye was away, which is why locals called it the Governor's Mansion.",
+    "His younger brother Samuel, who became Mark Twain, stayed here while reporting for the Territorial Enterprise. A Nevada state marker (No. 78) records the visits in 1864. While living here, Orion also designed the Great Seal of the Territory of Nevada.",
+    "The house blends Gothic Revival and Greek Revival styles, and it was listed on the National Register of Historic Places on March 12, 1979. Later changes include a stucco coat over the original wood siding."
+   ],
+   "facts": [
+    {
+     "t": "Orion Clemens built the house around 1862 to 1863.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "He was the Nevada Territory's first and only territorial secretary and sometimes served as acting governor.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Locals called the house the 'Governor's Mansion' because he often served as governor pro tem.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Samuel Clemens, later Mark Twain, stayed at the house in 1864 while reporting for the Territorial Enterprise.",
+     "src": [
+      1,
+      2
+     ]
+    },
+    {
+     "t": "Orion designed the Great Seal of the Territory of Nevada while living there.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The house has a later stucco exterior over the original wood siding.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was listed on the National Register of Historic Places on March 12, 1979.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The NPS page says it is privately owned and not open to the public; the address is 502 North Division Street.",
+     "src": [
+      1,
+      2
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk at Division and Spear Streets. The NPS page says the house is privately owned and not open to the public, so please stay outside.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia, the National Park Service travel page and Nevada historical marker 78 (NoeHill). Privacy note comes from the NPS page and may be out of date. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Orion Clemens House",
+     "u": "https://en.wikipedia.org/wiki/Orion_Clemens_House"
+    },
+    {
+     "t": "National Park Service: Orion Clemens House",
+     "u": "https://www.nps.gov/NR/travel/nevada/ori.htm"
+    },
+    {
+     "t": "NoeHill: Nevada historical marker 78, Clemens Home",
+     "u": "https://noehill.com/nv_carson_city/nev0078.asp"
+    }
+   ],
+   "ph": {
+    "k": "cc_oc",
+    "alt": "The stucco-covered Orion Clemens House seen through trees",
+    "by": "Barbmathers",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Orion Clemens House.JPG",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "stpeters",
+   "name": "St. Peter's Episcopal Church",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16556,
+    -119.76917,
+    100
+   ],
+   "addr": "312 N Division St, Carson City, NV 89703",
+   "invite": "A church with no center aisle and a ceiling like an upturned ship, the oldest Episcopal church still in use in Nevada.",
+   "story": [
+    "St. Peter's was built in 1867 and 1868 for about $5,500, five years after the parish was organized. The first service was held in August 1868, and the church was consecrated in June 1870. It was enlarged by 24 feet in 1873 and 1874.",
+    "Its Gothic Revival design resembles many New England churches. Inside there is no center aisle, so the pews sit in three groups, which the National Park Service says may make it the only Episcopal church west of the Mississippi with that layout. The ceiling is half-domed and held up by Corinthian columns.",
+    "It is the oldest Episcopal church building still in use in Nevada, and it joined the National Register of Historic Places on January 3, 1978. The steeple you see today is a 1977 replica built after fire damage. The photo is a 1973 Historic American Buildings Survey picture."
+   ],
+   "facts": [
+    {
+     "t": "It was built in 1867 and 1868 at a cost of about $5,500.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It was consecrated in June 1870 and enlarged by 24 feet in 1873 to 1874.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The design is Gothic Revival, similar to many New England churches.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The pews are in three groups with no center aisle; the NPS says it may be the only Episcopal church west of the Mississippi with this layout.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It is the oldest Episcopal house of worship still in use in Nevada.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The current steeple is a 1977 replica built after fire damage.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on January 3, 1978.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The NPS page says the church is open to the public.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "An active church. Look from the public sidewalk at Division and Telegraph Streets. The NPS page says it is open to the public, but service times and visiting hours are not listed there, so check with the church before going in and do not walk in during services.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and the National Park Service travel page; the entrance and hours are not stated on either page. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: St. Peter's Episcopal Church (Carson City, Nevada)",
+     "u": "https://en.wikipedia.org/wiki/St._Peter%27s_Episcopal_Church_(Carson_City,_Nevada)"
+    },
+    {
+     "t": "National Park Service: St. Peter's Episcopal Church",
+     "u": "https://www.nps.gov/NR/travel/nevada/stp.htm"
+    }
+   ],
+   "ph": {
+    "k": "cc_sp",
+    "alt": "A 1973 black-and-white survey photo of St. Peter's Episcopal Church with its steeple",
+    "by": "Aaron A. Gallup (HABS)",
+    "lic": "Public domain",
+    "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:St. Peter's Episcopal Church, Carson City.jpg",
+    "note": "1973 survey photo, resized"
+   }
+  },
+  {
+   "id": "printing",
+   "name": "Nevada State Printing Office",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16361,
+    -119.76389,
+    100
+   ],
+   "addr": "101 S Fall St, Carson City, NV 89701",
+   "invite": "A stone building where Nevada's laws were printed for almost eighty years, now filled with state archives.",
+   "story": [
+    "The state built this stone building in 1885 and 1886 to house its government printing presses and offices. It was the first State Printing Plant and the first addition to the cluster of state buildings around the Capitol.",
+    "Printing stayed here from 1886 until 1964, when it moved to a new location. Today part of the state's Division of Archives and Records is in the building.",
+    "It was added to the National Register of Historic Places on March 29, 1978. The photo is a 1972 Historic American Buildings Survey picture."
+   ],
+   "facts": [
+    {
+     "t": "The building was constructed in 1885 to 1886.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It housed the state's government printing presses and offices from 1886 to 1964.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "It was the first State Printing Plant and the first addition to the group of state buildings near the Capitol.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on March 29, 1978.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Part of the Division of Archives and Records now occupies the building.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The address is 101 South Fall Street.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "A state office building, not a museum. Look from the public sidewalk near South Fall and East King Streets. Whether visitors can go inside is not stated in the sources, so do not assume you can.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and NoeHill's National Register entry; neither says whether the building is open to visitors. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Nevada State Printing Office",
+     "u": "https://en.wikipedia.org/wiki/Nevada_State_Printing_Office"
+    },
+    {
+     "t": "NoeHill: Nevada State Printing Office, National Register",
+     "u": "https://noehill.com/nv_carson_city/nat1978003212.asp"
+    }
+   ],
+   "ph": {
+    "k": "cc_pr",
+    "alt": "A 1972 black-and-white survey photo of the stone Nevada State Printing Office",
+    "by": "Aaron A. Gallup (HABS)",
+    "lic": "Public domain",
+    "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Nevada State Printing Office.jpg",
+    "note": "1972 survey photo, resized"
+   }
+  },
+  {
+   "id": "rinckel",
+   "name": "Rinckel Mansion",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16417,
+    -119.76694,
+    100
+   ],
+   "addr": "102 N Curry St, Carson City, NV 89703",
+   "invite": "A French Victorian mansion built by a Carson City merchant, called one of the best-preserved of its kind in the American West.",
+   "story": [
+    "Mathias Rinckel, a Carson City merchant, had this house built in the 1870s. Wikipedia gives 1875 in one place and 1872 in another, so treat the year as about 1872 to 1875. Charles H. Jones, trained at the École des Beaux-Arts in Paris, designed it in a French Victorian style.",
+    "Rinckel died in 1879. The house later became a private museum under the Blakeslee family, and it stayed a museum until 1968.",
+    "The National Register of Historic Places listed it on November 20, 1975, as one of the finest and best-preserved French Victorian buildings in the American West. Since 2000 it has been owned by the Nevada Press Foundation and houses the offices of the Nevada Press Association. The photo is a 1972 Historic American Buildings Survey picture."
+   ],
+   "facts": [
+    {
+     "t": "Charles H. Jones, trained at the École des Beaux-Arts, designed and built it for Mathias Rinckel, a Carson City merchant.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Wikipedia gives 1875 in its infobox and 1872 in its text, so the build year is about 1872 to 1875.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The style is French Victorian.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Mathias Rinckel died in 1879.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was a private museum under the Blakeslee family and a museum until 1968.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on November 20, 1975.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Nevada Press Foundation has owned it since 2000, and it houses the Nevada Press Association offices.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The address is 102 North Curry Street.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on North Curry Street. It holds press-association offices, not a museum, so no public hours are listed. Please do not enter without an appointment.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and NoeHill's National Register entry; the office use comes from Wikipedia and may have changed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Rinckel Mansion",
+     "u": "https://en.wikipedia.org/wiki/Rinckel_Mansion"
+    },
+    {
+     "t": "NoeHill: Rinckel Mansion, National Register",
+     "u": "https://noehill.com/nv_carson_city/nat1975002129.asp"
+    }
+   ],
+   "ph": {
+    "k": "cc_rk",
+    "alt": "A 1972 black-and-white survey photo of the two-story Rinckel Mansion",
+    "by": "Aaron A. Gallup (HABS)",
+    "lic": "Public domain",
+    "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Rinckel Mansion.jpg",
+    "note": "1972 survey photo, resized"
+   }
+  },
+  {
+   "id": "brougher",
+   "name": "Brougher Mansion",
+   "area": "Carson City",
+   "town": "carson",
+   "geo": [
+    39.16667,
+    -119.77278,
+    100
+   ],
+   "addr": "204 W Spear St, Carson City, NV 89703",
+   "invite": "The only Queen Anne house in Carson City, named for a penniless woodcutter who struck it rich.",
+   "story": [
+    "The Brougher Mansion was built in 1903 and 1904, and both Wikipedia and NoeHill describe it as the only Queen Anne residence in Carson City. Wikipedia credits the design to architect Henry Heidenreich.",
+    "It is named for Wilson Brougher, who came to Nevada as a penniless woodcutter and became one of the state's wealthier men through his Tonopah mining claims. NoeHill's entry adds Greek Revival and High Victorian elements to the style.",
+    "The National Register of Historic Places listed it on August 11, 1980. It is also called the Bath Mansion."
+   ],
+   "facts": [
+    {
+     "t": "It was built in 1903 to 1904.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "It is described as the only Queen Anne residence in Carson City.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Wikipedia credits architect Henry Heidenreich.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "Wilson Brougher came to Nevada penniless and became wealthy through Tonopah mining claims.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "NoeHill adds Greek Revival and High Victorian elements to the style.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "It was added to the National Register of Historic Places on August 11, 1980.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The address is 204 West Spear Street.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "Look from the public sidewalk on West Spear Street. Neither source says how the house is used today, so treat it as private property.",
+   "access_check": {
+    "on": "2026-11-01",
+    "by": "Claude",
+    "how": "Story read against Wikipedia and NoeHill's National Register entry; neither states current use. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Brougher Mansion",
+     "u": "https://en.wikipedia.org/wiki/Brougher_Mansion"
+    },
+    {
+     "t": "NoeHill: Brougher Mansion, National Register",
+     "u": "https://noehill.com/nv_carson_city/nat1980004274.asp"
+    }
+   ]
+  }
+ ]
+}
