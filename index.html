@@ -83,7 +83,14 @@ button{font-family:inherit}
 .hero .mono{color:rgba(255,255,255,.82)}
 .rank-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 #rankName{font:700 1.25rem var(--font-display);text-transform:uppercase;letter-spacing:.03em;text-shadow:0 1px 8px rgba(0,0,0,.7)}
-#xpText{text-shadow:0 1px 6px rgba(0,0,0,.8)}
+#xpText{text-shadow:none;color:#fff;background:rgba(6,14,24,.62);padding:2px 10px;border-radius:999px}
+/* audit rb02: next stop row on a town's first screen */
+.nextrow{display:flex;align-items:center;gap:10px;width:100%;min-height:56px;margin:0 0 12px;padding:8px 16px;border:2px solid var(--accent);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.nextrow .nr-l{font:600 0.75rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:none}
+.nextrow strong{flex:1;min-width:0;font:700 1.0625rem/1.2 var(--font-display);text-transform:uppercase;overflow-wrap:anywhere}
+.nextrow .nr-go{flex:none;font-size:1.5rem;color:var(--accent)}
+.nextrow:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:430px){.hero>.mono{display:none}}
 .xp{height:10px;border-radius:999px;background:rgba(255,255,255,.25);overflow:hidden}
 #xpFill{height:100%;width:0;background:#FFC83D;border-radius:999px}
 .bulbs{display:grid;grid-template-columns:repeat(4,1fr);position:relative;background:rgba(6,14,24,.62);border-radius:12px;padding:10px 4px 8px}
@@ -116,6 +123,9 @@ button{font-family:inherit}
 .scene{aspect-ratio:4/3;max-width:100%;overflow:hidden;border-radius:10px;background:var(--surface-2)}
 .scene svg{display:block;width:100%;height:100%}
 .banner{position:relative}
+/* audit rb03: on the Find it step the photo is a wide crop so the clue and check-in button start on the first screen */
+.banner.b0 .scene.ph{aspect-ratio:16/9;max-height:30vh}
+.banner .cue{position:absolute;right:10px;bottom:8px;font:500 0.6875rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(6,14,24,.6);padding:3px 8px;border-radius:999px}
 .banner .tagline{position:absolute;left:10px;bottom:8px;font:500 0.6875rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(6,14,24,.6);padding:3px 8px;border-radius:999px}
 .bimg{display:block;width:100%;height:100%}
 .bimg img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(1) brightness(.62) contrast(.9);box-shadow:0 0 0 3px var(--bulb-off)}
@@ -655,6 +665,9 @@ body.instop .hero::before{background:linear-gradient(180deg,rgba(6,14,24,.7),rgb
 #missions .towns .town:not(.soon) h3{color:#fff;font-size:1.125rem;line-height:1.1}
 #missions .towns .town:not(.soon) .sub{color:#E3EAF0;font-size:0.75rem}
 #missions .towns .town:not(.soon) .lvl{display:none}
+.town .tsize{display:block;color:var(--muted);font:500 0.75rem var(--font-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#missions .towns .town:not(.soon) .tsize{color:#E3EAF0}
+@media (max-width:340px){#missions .towns .town:not(.soon){aspect-ratio:1/1}}
 #missions .towns .town:not(.soon) .go{position:absolute;top:8px;left:8px;z-index:1;margin:0;padding:3px 9px;border-radius:999px;background:rgba(8,14,20,.7);color:#fff;font-size:0.6875rem}
 #missions .towns li:has(.tstar) .go{margin-right:0}
 #missions .tstar{top:2px;right:2px;z-index:3;background:rgba(8,14,20,.55);color:#fff;border-radius:999px;min-width:44px;min-height:44px;font-size:1.25rem}
@@ -1112,13 +1125,30 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   /* about how far apart a town's stops are, from their map points (straight-line, shortest order, so real routes run longer) */
   /* about how long a stop takes once you are at the spot: reading the story plus answering (200 words a minute, plus one minute for the question) */
   function stopMins(st){ var w=((st.story||[]).join(' ')+' '+(st.q&&st.q.q||'')).split(/\s+/).length; return Math.min(6,Math.max(2,Math.ceil(w/200)+1)); }
+  /* shortest-order straight-line miles through a town's stops; null unless every stop has a map point (so no guess is shown for towns with a missing one) */
+  var TOURMI={};
+  function tourMiles(c){
+    if(c.id&&TOURMI[c.id]!==undefined) return TOURMI[c.id];
+    var P=c.stops.map(function(st){ return st.geo; }), mi=null;
+    if(P.length>=2&&!P.some(function(g){ return !g||g.length<2; })){
+      var best=1e12;
+      (function perm(a,r){ if(!r.length){ var d=0; for(var i=1;i<a.length;i++) d+=distM(a[i-1][0],a[i-1][1],a[i][0],a[i][1]); if(d<best) best=d; return; } for(var i=0;i<r.length;i++) perm(a.concat([r[i]]),r.slice(0,i).concat(r.slice(i+1))); })([],P);
+      mi=best/1609.34;
+    }
+    if(c.id) TOURMI[c.id]=mi; return mi;
+  }
+  function milesTxt(mi){ return mi<10?mi.toFixed(1):String(Math.round(mi)); }
+  /* one short line for a town card: rough distance and walk or drive (every town has four stops, so the count is left out). Same estimate and same 2.5 mile line as the town page; empty when a stop has no map point. */
+  function tourBrief(c){
+    var mi=tourMiles(c); if(mi===null) return '';
+    if(mi<0.1) return 'short stroll';
+    return milesTxt(mi)+' mi · '+(mi>2.5?'drive':'walkable');
+  }
   function tourInfo(c){
-    var P=c.stops.map(function(st){ return st.geo; }); if(P.length<2||P.some(function(g){ return !g||g.length<2; })) return '';
-    var best=1e12;
-    (function perm(a,r){ if(!r.length){ var d=0; for(var i=1;i<a.length;i++) d+=distM(a[i-1][0],a[i-1][1],a[i][0],a[i][1]); if(d<best) best=d; return; } for(var i=0;i<r.length;i++) perm(a.concat([r[i]]),r.slice(0,i).concat(r.slice(i+1))); })([],P);
-    var mi=best/1609.34, n=P.length+' stops. ';
+    var mi=tourMiles(c); if(mi===null) return '';
+    var n=c.stops.length+' stops. ';
     if(mi<0.1) return n+'All within a short stroll of each other.';
-    var mtxt=mi<10?mi.toFixed(1):String(Math.round(mi));
+    var mtxt=milesTxt(mi);
     if(mi>2.5) return n+'Spread out: about '+mtxt+' miles from first to last. Plan to drive between stops.';
     var min=Math.max(5,Math.round(mi*1.3/3*60/5)*5);
     return n+'About '+mtxt+' miles in all, roughly '+min+' minutes of walking. Straight-line, so your route may be longer.';
@@ -1587,7 +1617,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       c.ranks.forEach(function(r){ if(x>=r[0]) rk=r[1]; });
       var key=c.heroKey||((BMAPS[k]||{})[c.stops[0].id]||[])[0], img=(key&&PHOTOS[key])?'<img loading="lazy" decoding="async" src="'+PHOTOS[key]+'" alt="">':'';
       var label=n===c.stops.length?'Complete':(n>0?'Continue':'Start');
-      return '<li data-q="'+stOf(k).toLowerCase()+'"><button class="town" data-a="city" data-c="'+k+'"><span class="tph">'+img+'</span><span class="tin"><h3>'+c.name+'</h3>'+(c.level?'<span class="lvl '+(c.level==='Classics'?'ic':'dc')+'">'+(c.level==='Classics'?'Classics · easy':'Hidden Gems · harder')+'</span>':'')+'<span class="sub">'+(TSTATE[k]?TSTATE[k]+' · ':'')+n+' of '+c.stops.length+' stamps · '+rk+'</span></span><span class="go">'+label+' ›</span></button><button class="tstar'+(tripGet().indexOf(k)>-1?' on':'')+'" data-a="trip" data-c="'+k+'" aria-pressed="'+(tripGet().indexOf(k)>-1?'true':'false')+'" aria-label="'+(tripGet().indexOf(k)>-1?'Remove '+c.name+' from my trip':'Add '+c.name+' to my trip')+'">'+(tripGet().indexOf(k)>-1?'★':'☆')+'</button></li>';
+      return '<li data-q="'+stOf(k).toLowerCase()+'"><button class="town" data-a="city" data-c="'+k+'"><span class="tph">'+img+'</span><span class="tin"><h3>'+c.name+'</h3>'+(c.level?'<span class="lvl '+(c.level==='Classics'?'ic':'dc')+'">'+(c.level==='Classics'?'Classics · easy':'Hidden Gems · harder')+'</span>':'')+'<span class="sub">'+(TSTATE[k]?TSTATE[k]+' · ':'')+n+' of '+c.stops.length+' stamps · '+rk+'</span>'+(tourBrief(c)?'<span class="tsize" title="Straight-line estimate between the four stops">'+tourBrief(c)+'</span>':'')+'</span><span class="go">'+label+' ›</span></button><button class="tstar'+(tripGet().indexOf(k)>-1?' on':'')+'" data-a="trip" data-c="'+k+'" aria-pressed="'+(tripGet().indexOf(k)>-1?'true':'false')+'" aria-label="'+(tripGet().indexOf(k)>-1?'Remove '+c.name+' from my trip':'Add '+c.name+' to my trip')+'">'+(tripGet().indexOf(k)>-1?'★':'☆')+'</button></li>';
     }
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
@@ -1643,13 +1673,17 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       if(((DATA.boss||{})[cityId]||[]).length){ var bb=bossBest()[cityId]; h+='<section class="card"><p class="mono">Final challenge</p><p>Four questions across every stop. No hints, no do-overs inside a run.'+(bb!==undefined?' Your best: <strong>'+bb+' of 4</strong>.':'')+'</p>'+(sealTier(bb)?'<div class="sealwrap">'+seal(sealTier(bb),64)+'<strong>'+SEALS[sealTier(bb)][3]+'</strong></div>':'<p class="why">Score 2 of 4 or better to earn a seal.</p>')+'<button class="btn" data-a="boss">'+(bb!==undefined?'Play again':'Start the final challenge')+'</button></section>'; }
     } else {
       var nm=STOPS.map(function(s){ return s.name; }); var lst=nm.slice(0,-1).join(', ')+' and '+nm[nm.length-1];
-      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(sum(S.done)===0?'<p class="why" style="margin:8px 0 0">On your list: '+lst+'.</p>':'')+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+(((DATA.boss||{})[cityId]||[]).length?'<p class="why finalnote">Finish all four to unlock the final challenge: four questions across every stop, and a seal to earn.</p>':'')+'</section>';
+      /* audit rb02: the next stop comes first so the action is on the first screen; the four stops are not listed twice (the hero and the list below already show them) and the final-challenge note sits under the list */
+      var ni=S.done.indexOf(0);
+      if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
+      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+'</section>';
     }
     h+=bkNudgeHtml();
     h+='<ul class="stops">'+STOPS.map(function(s,i){
       var d=S.done[i];
       return '<li><button class="stop" data-a="open" data-i="'+i+'"><span class="bbox'+(!d&&virtHas(cityId,i)?' virt':'')+'">'+badge(s.id,d||virtHas(cityId,i))+(!d&&virtHas(cityId,i)?'<i class="vtag">Virtual</i>':'')+'</span><span><h3>'+s.name+'</h3><span class="sub">'+s.teaser+'</span><span class="srow"><span class="status'+(d?' ok':(virtHas(cityId,i)?' virt':''))+'">'+(d?'Badge earned':(virtHas(cityId,i)?'Virtual stamp':'Not found yet'))+'</span>'+(s.verified&&s.verified.on?' <span class="vchip">Verified</span>':'')+(s.spot?' <span class="vchip puz">Puzzle</span>':'')+(d&&geoVerified(cityId,i)?' <span class="vchip gold">Visit verified</span>':'')+(d&&s.geo&&!geoVerified(cityId,i)&&!geoDenied?' <span class="vchip soft">Verify on a visit</span>':'')+'</span></span><span class="chev" aria-hidden="true">›</span></button></li>';
     }).join('')+'</ul>';
+    if(!allDone()&&((DATA.boss||{})[cityId]||[]).length) h+='<p class="why finalnote">Finish all four to unlock the final challenge: four questions across every stop, and a seal to earn.</p>';
     h+='<details class="card"><summary>Privacy and photo credits</summary><ul><li>This page has no accounts, uploads or camera use. Location is optional and only checked on your phone, never sent anywhere. Badges and XP are saved only in this browser.</li><li>Photos come from Wikimedia Commons under free licenses, with credit under each one. Where no free photo exists yet, the app says so instead of showing a stand-in.</li></ul>'+creditsList()+'</details>';
     return h;
   }
@@ -1867,7 +1901,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     TRAILS.forEach(function(tr){ var L=trailStops(tr.re); if(L.length<3) return; var d=L.filter(function(x){ return x.done; }).length, pc=Math.round(d/L.length*100), on=(btrail===tr.id);
       cards+='<button class="tcard'+(on?' on':'')+'" data-a="trail" data-t="'+tr.id+'" style="--tc:'+TRCOL[tr.id]+';--p:'+pc+'" aria-pressed="'+on+'"><span class="tic"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TRICON[tr.id]+'</svg></span><strong>'+tr.name+'</strong><span class="tcount">'+d+' of '+L.length+' stamped</span><span class="pbar" aria-hidden="true"><i style="width:'+pc+'%"></i></span></button>';
       lists+='<div class="trl" data-trail="'+tr.id+'"'+(on?'':' hidden')+' style="--tc:'+TRCOL[tr.id]+'"><p class="why">'+tr.note+'</p><ul class="tlist">'+L.map(function(x){ return '<li class="trow'+(x.done?' done':'')+'"><button class="trowb" data-a="city" data-c="'+x.k+'"><span class="tcheck" aria-hidden="true">'+(x.done?'&#10003;':'')+'</span>'+((x.st.now&&x.st.now.ph&&PHOTOS[x.st.now.ph.k])?'<img class="tthumb" loading="lazy" decoding="async" src="'+PHOTOS[x.st.now.ph.k]+'" alt="">':'')+'<span class="tn"><strong>'+x.st.name+'</strong><span class="sub">'+placeLabel(x.k)+'</span></span><span class="go">Open ›</span></button></li>'; }).join('')+'</ul></div>'; });
-    return '<h2 class="hh">Pick a trail</h2><p class="why">Collect a theme, not just a town. Pick a trail to see every stop on it.</p><div class="tcards" role="group" aria-label="Trails">'+cards+'</div>'+lists;
+    return '<h2 class="hh">Pick a trail</h2><p class="why">Collect a theme, not just a town. Collect places across the country. Pick a trail to see every stop on it.</p><div class="tcards" role="group" aria-label="Trails">'+cards+'</div>'+lists;
   }
   // share card
   /* one notable discovery for a finished town's share card: one stop's sourced "fact" (same one every time for a town), trimmed to fit two lines */
@@ -2229,7 +2263,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     h+=stepper();
 
     if(cur.step===0){
-      h+='<div class="banner">'+visual(st,'now',st.name+' today')+'<span class="tagline">'+(hasPh(st,'now')?'Photo':'Illustration')+'</span></div><p class="credit">'+credit(st,'now')+'</p>';
+      h+='<div class="banner b0">'+visual(st,'now',st.name+' today')+'<span class="tagline">'+(hasPh(st,'now')?'Photo':'Illustration')+'</span><span class="cue" aria-hidden="true">Clue below &darr;</span></div><p class="credit">'+credit(st,'now')+'</p>';
       h+='<section class="card"><p class="mono">Find it</p><p class="clue">'+st.clue+'</p>'
         +'<button class="btn stickgo" data-a="step" data-n="1">I am here. Show me the question</button>'+(!d&&!cur.demo?'<p class="hint">Tapping this is on your honor. Verifying with your location is optional and earns a gold stamp.</p>':'')+(!d&&!cur.demo?'<p class="hint stopmeta">Go there for the real stamp. About '+stopMins(st)+' minutes once you arrive. Or explore from home.</p>':'')+vnote(st)+(st.geo&&!d&&!cur.demo&&!geoDenied?'<button class="btn ghost" data-a="geo">'+(geoGranted()?'Re-check my location':'Verify with my location (optional)')+'</button><p class="hint">Your location is checked on this phone and never sent anywhere.</p><p id="geoMsg" class="geomsg" role="status"></p>':'')+'<a class="btn ghost" target="_blank" rel="noopener" href="'+(st.geo&&st.geo.length>1?'https://www.google.com/maps/dir/?api=1&amp;destination='+st.geo[0]+','+st.geo[1]:'https://www.google.com/maps/search/?api=1&amp;query='+encodeURIComponent(st.map))+'">Get directions in Maps</a>'+(d?'':'<button class="btn ghost" data-a="demo">'+(virtHas(cityId,cur.i)?'Virtual stamp saved. Explore again':'Not there? Explore from home')+'</button>')+'</section>';
     }

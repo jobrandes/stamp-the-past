@@ -77,7 +77,14 @@ button{font-family:inherit}
 .hero .mono{color:rgba(255,255,255,.82)}
 .rank-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
 #rankName{font:700 1.25rem var(--font-display);text-transform:uppercase;letter-spacing:.03em;text-shadow:0 1px 8px rgba(0,0,0,.7)}
-#xpText{text-shadow:0 1px 6px rgba(0,0,0,.8)}
+#xpText{text-shadow:none;color:#fff;background:rgba(6,14,24,.62);padding:2px 10px;border-radius:999px}
+/* audit rb02: next stop row on a town's first screen */
+.nextrow{display:flex;align-items:center;gap:10px;width:100%;min-height:56px;margin:0 0 12px;padding:8px 16px;border:2px solid var(--accent);border-radius:14px;background:var(--surface);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.nextrow .nr-l{font:600 0.75rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);flex:none}
+.nextrow strong{flex:1;min-width:0;font:700 1.0625rem/1.2 var(--font-display);text-transform:uppercase;overflow-wrap:anywhere}
+.nextrow .nr-go{flex:none;font-size:1.5rem;color:var(--accent)}
+.nextrow:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (max-width:430px){.hero>.mono{display:none}}
 .xp{height:10px;border-radius:999px;background:rgba(255,255,255,.25);overflow:hidden}
 #xpFill{height:100%;width:0;background:#FFC83D;border-radius:999px}
 .bulbs{display:grid;grid-template-columns:repeat(4,1fr);position:relative;background:rgba(6,14,24,.62);border-radius:12px;padding:10px 4px 8px}
@@ -110,6 +117,9 @@ button{font-family:inherit}
 .scene{aspect-ratio:4/3;max-width:100%;overflow:hidden;border-radius:10px;background:var(--surface-2)}
 .scene svg{display:block;width:100%;height:100%}
 .banner{position:relative}
+/* audit rb03: on the Find it step the photo is a wide crop so the clue and check-in button start on the first screen */
+.banner.b0 .scene.ph{aspect-ratio:16/9;max-height:30vh}
+.banner .cue{position:absolute;right:10px;bottom:8px;font:500 0.6875rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(6,14,24,.6);padding:3px 8px;border-radius:999px}
 .banner .tagline{position:absolute;left:10px;bottom:8px;font:500 0.6875rem var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:#fff;background:rgba(6,14,24,.6);padding:3px 8px;border-radius:999px}
 .bimg{display:block;width:100%;height:100%}
 .bimg img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover;filter:grayscale(1) brightness(.62) contrast(.9);box-shadow:0 0 0 3px var(--bulb-off)}
@@ -649,6 +659,9 @@ body.instop .hero::before{background:linear-gradient(180deg,rgba(6,14,24,.7),rgb
 #missions .towns .town:not(.soon) h3{color:#fff;font-size:1.125rem;line-height:1.1}
 #missions .towns .town:not(.soon) .sub{color:#E3EAF0;font-size:0.75rem}
 #missions .towns .town:not(.soon) .lvl{display:none}
+.town .tsize{display:block;color:var(--muted);font:500 0.75rem var(--font-mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#missions .towns .town:not(.soon) .tsize{color:#E3EAF0}
+@media (max-width:340px){#missions .towns .town:not(.soon){aspect-ratio:1/1}}
 #missions .towns .town:not(.soon) .go{position:absolute;top:8px;left:8px;z-index:1;margin:0;padding:3px 9px;border-radius:999px;background:rgba(8,14,20,.7);color:#fff;font-size:0.6875rem}
 #missions .towns li:has(.tstar) .go{margin-right:0}
 #missions .tstar{top:2px;right:2px;z-index:3;background:rgba(8,14,20,.55);color:#fff;border-radius:999px;min-width:44px;min-height:44px;font-size:1.25rem}

@@ -294,3 +294,9 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 ## Audit wave 2 (Oct 31 2026)
 - ra04: inside a stop (`body.instop`/`inboss`) the badge snackbar `.bsnack` sits at the TOP (below the safe area, detail line hidden) instead of over the answers; answering a Spot-the-change puzzle (`spotpick`) or a fact-check (`factAnswer`) calls `closeBpop()`. Tests in tests/flows.py fail on the old CSS (popup was at y 606-768 of 844).
 - rb07: tests/nearby.py now scrolls to the bottom of every Nearby screen at 320-1280 px and at 200% text and requires the last content to end 8+ px above the bottom bar. Still not covered: the menu drawer and stop screens (no bottom bar there).
+
+## Audit wave 3 (Oct 31 2026)
+- rb04: Trails intro says "Collect places across the country."
+- rb01: town cards show a `.tsize` line (straight-line miles + walkable/drive, or "short stroll") via `tourMiles`/`tourBrief`; tiles go square under 340px.
+- rb02: a town's first screen has a "Start here"/"Next stop" row (`.nextrow`) above the fold; duplicate "On your list" line removed; final-challenge note moved below the stop list; `#xpText` sits on a dark pill (44 of 59 towns failed 4.5:1 before, worst 2.66).
+- rb03: Find-it photo is a 16:9 crop (max 30vh) with a "Clue below" cue. Tests in tests/flows.py (rb01-rb04) fail on the old code. Awaiting phone verification.

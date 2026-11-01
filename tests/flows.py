@@ -382,6 +382,66 @@ with sync_playwright() as p:
         if pg.locator('.earned').count(): break
         pg.click('.opt >> nth=%d'%k)
     post=pg.inner_text('#main').lower(); need('+25 xp' in post and 'virtual stamp earned' in post,'preview result matches the 25 XP promise')
+    # audit rb04: Trails are nationwide collections, and the tab says so near "Pick a trail"
+    pg=new({'then-now-v3':{'city':'reno','home':1,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}}); pg.click('#bnav [data-t=trails]'); pg.wait_for_timeout(250)
+    tw=pg.inner_text('#bp-trails').lower()
+    need('across the country' in tw and tw.index('across the country')<tw.index('collect a theme')+200,'rb04: Trails tab says places are collected across the country, near Pick a trail')
+    need('collect a theme, not just a town' in tw,'rb04: Trails tab keeps its theme description')
+    # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
+    for w,h in ((390,844),(320,640)):
+        pg=new(); pg.set_viewport_size({'width':w,'height':h})
+        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.wait_for_timeout(200)
+        n=pg.locator('#missions button.town .tsize').count()
+        need(NT-3<=n<=NT,'rb01 (%dpx): most town cards show an outing line, got %d of %d'%(w,n,NT))
+        sp=pg.locator('#missions button.town[data-c=sparks] .tsize'); need(sp.count()==1 and 'drive' in sp.inner_text().lower(),'rb01 (%dpx): Sparks card says to drive'%w)
+        need(pg.locator('#missions button.town .tsize:has-text("walkable")').count()>=1,'rb01 (%dpx): some town card says walkable'%w)
+        need(pg.locator('#missions button.town .tsize:has-text("drive")').count()>=1,'rb01 (%dpx): some town card says drive'%w)
+        bad_t=pg.evaluate("""()=>[...document.querySelectorAll('#missions button.town:not(.soon)')].filter(t=>{const r=t.getBoundingClientRect(),i=t.querySelector('.tin').getBoundingClientRect(),h=t.querySelector('h3').getBoundingClientRect(),g=t.querySelector('.go').getBoundingClientRect();return r.width&&(h.top<g.bottom+3||i.bottom>r.bottom+1||h.top<r.top)}).map(t=>t.getAttribute('data-c'))""")
+        need(not bad_t,'rb01 (%dpx): card text must stay inside the tile and clear of the Start pill, got %s'%(w,bad_t[:6]))
+    pg=new(); pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
+    pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(250)
+    need('plan to drive' in pg.inner_text('.tourinfo').lower(),'rb01: town page still says plan to drive for Sparks')
+    # audit rb02: a town's first screen leads with the next stop, does not list the four stops twice, and the XP label is readable over the photo
+    for w,h in ((390,844),(375,667),(360,740)):
+        pg=new(); pg.set_viewport_size({'width':w,'height':h})
+        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(300)
+        nr=pg.locator('.nextrow'); need(nr.count()==1 and 'victorian square' in nr.inner_text().lower() and 'start here' in nr.inner_text().lower(),'rb02 (%dx%d): first screen has a Start here row for the first stop'%(w,h))
+        bb=pg.evaluate("(()=>{const r=document.querySelector('.nextrow').getBoundingClientRect(),n=document.querySelector('#bnav').getBoundingClientRect();return [r.top,r.bottom,n.top]})()")
+        need(bb[1]<=bb[2]-4,'rb02 (%dx%d): the Start here row sits fully above the bottom bar, got %s'%(w,h,bb))
+        need('on your list' not in pg.inner_text('#main .card').lower(),'rb02 (%dx%d): mission card does not repeat the four stops'%(w,h))
+    pg.click('.nextrow'); pg.wait_for_timeout(250); need(pg.locator('#stopTitle').count()==1 and 'victorian' in pg.inner_text('#stopTitle').lower(),'rb02: the Start here row opens the first stop')
+    pg=new({'then-now-v3':{'city':'sparks','home':0,'p':{'sparks':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}}); pg.wait_for_timeout(300)
+    need('next stop' in pg.inner_text('.nextrow').lower() and 'railroad shops' in pg.inner_text('.nextrow').lower(),'rb02: after one stamp the row says Next stop and names the second stop')
+    need(pg.evaluate("(()=>{const l=document.querySelector('.finalnote'),s=document.querySelector('.stops');return !!l&&!!s&&(s.compareDocumentPosition(l)&4)>0})()"),'rb02: the final-challenge note sits under the stop list')
+    # readable XP label over the hero photo, measured on the towns with the brightest photos behind it (small text needs 4.5:1)
+    from PIL import Image
+    import io
+    def lin(c):
+        c/=255; return c/12.92 if c<=0.03928 else ((c+0.055)/1.055)**2.4
+    def lum(c): return 0.2126*lin(c[0])+0.7152*lin(c[1])+0.0722*lin(c[2])
+    pg=new(); pg.set_viewport_size({'width':390,'height':844})
+    for k in ('knoxville','nashville','tucson','pittsburgh','columbus'):
+        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
+        if not pg.locator('#missions button.town[data-c=%s]'%k).count(): pg.click('#bnav [data-t=towns]'); pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
+        pg.click('#missions button.town[data-c=%s]'%k); pg.wait_for_timeout(250)
+        pg.evaluate("new Promise(r=>{const i=document.getElementById('heroImg');if(!i||i.complete)r();else{i.onload=i.onerror=r;setTimeout(r,2000)}})")
+        pg.add_style_tag(content='#xpText{color:transparent!important}')
+        r=pg.evaluate("(()=>{const r=document.querySelector('#xpText').getBoundingClientRect();return [r.left,r.top+scrollY,r.width,r.height]})()")
+        im=Image.open(io.BytesIO(pg.screenshot(full_page=True))).convert('RGB').crop((int(r[0]),int(r[1]),int(r[0]+r[2])+1,int(r[1]+r[3])+1))
+        ls=sorted(lum(c) for c in im.get_flattened_data()) if hasattr(im,'get_flattened_data') else sorted(lum(c) for c in im.getdata())
+        cr=(1.0+0.05)/(ls[int(len(ls)*0.9)]+0.05)
+        need(cr>=4.5,'rb02: XP label over the %s photo has contrast %.2f, needs 4.5'%(k,cr))
+        pg.evaluate("document.querySelectorAll('style').forEach(s=>{if(s.textContent.startsWith('#xpText{color:transparent'))s.remove()})"); pg.click('#bnav [data-t=towns]'); pg.wait_for_timeout(60)
+    # audit rb03: on a stop's first step the photo is a compact crop, the clue starts on the first screen and a cue points down to it
+    for w,h in ((390,844),(375,667),(360,740)):
+        pg=new(); pg.set_viewport_size({'width':w,'height':h})
+        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(250)
+        pg.click('.stop >> nth=0'); pg.wait_for_timeout(400)
+        g=pg.evaluate("(()=>{const s=document.querySelector('.banner.b0 .scene.ph').getBoundingClientRect(),c=document.querySelector('.clue').getBoundingClientRect(),q=document.querySelector('.banner .cue').getBoundingClientRect(),b=document.querySelector('.banner').getBoundingClientRect();return {sh:s.height,sw:s.width,clue:c.top,cue:q.width>0&&q.top>=b.top&&q.bottom<=b.bottom+1,vh:innerHeight}})()")
+        need(g['sh']<=g['vh']*0.3+1 and g['sw']/g['sh']>=1.7,'rb03 (%dx%d): Find it photo is a compact wide crop, got %s'%(w,h,g))
+        need(g['clue']+24<=g['vh'],'rb03 (%dx%d): the first line of the clue is on the first screen, clue top %s of %s'%(w,h,g['clue'],g['vh']))
+        need(g['cue'],'rb03 (%dx%d): the Clue below cue sits on the photo'%(w,h))
+    pg.click('[data-a=step][data-n="1"]'); pg.wait_for_timeout(250); need(pg.locator('.opts').count()==1,'rb03: the I am here button still opens the question')
     b.close()
 bad+= [f'page error: {e}' for e in errs]
 print('FLOWS: '+('OK' if not bad else 'FAILED'))
