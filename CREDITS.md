@@ -293,7 +293,7 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | ab_ry_now | https://commons.wikimedia.org/wiki/File:Looking_southwest_at_dual-track_transfer_table,_with_Machine_Shop_(Bldg._163)_in_background_-_Atchison,_Topeka,_Santa_Fe_Railroad,_Albuquerque_Shops,_908_Second_Street,_Southwest,_HAER_NM-12-5.tif | Jet Lowe (Historic American Engineering Record) | Public domain | 2005 |
 | tu_sx_then | https://commons.wikimedia.org/wiki/File:San_Xavier_Mission,_Tucson,_Arizona-saam_2004.29.38.jpg | Detroit Photographic Company (Smithsonian American Art Museum) | CC0 | about 1902 |
 | tu_sx_now | https://commons.wikimedia.org/wiki/File:Mission_San_Xavier_del_Bac,_Tucson_AZ.jpg | Philcomanforterie | CC BY-SA 4.0 | 2018 |
-| tu_dp_then | https://commons.wikimedia.org/wiki/File:Beautiful_Spanish_type_Southern_Pacific_Depot,_Tucson,_Arizona_(73692).jpg | Tichnor Brothers (Boston Public Library) | Public domain | about 1930 to 1945 |
+| tu_dp_then | https://commons.wikimedia.org/wiki/File:Southern_Pacific_Depot_(NBY_7820).jpg | Detroit Publishing Company (Newberry Library) | Public domain | 1900s |
 | tu_dp_now | https://commons.wikimedia.org/wiki/File:Tucson-Amtrak_Station-1907-1922-1.JPG | Tony the Marine | CC BY-SA 3.0 | 2015 |
 | tu_cc_then | https://commons.wikimedia.org/wiki/File:Pima_County_Court_House,_Tucson,_Arizona,_Santa_Catalina_Mountains_in_background-_portion_of_Old_City_of_Tucson_wall_in_foreground_(65323).jpg | Tichnor Brothers (Boston Public Library) | Public domain | about 1930 to 1945 |
 | tu_cc_now | https://commons.wikimedia.org/wiki/File:Pima_County_Courthouse_10.JPG | Gillfoto | CC BY-SA 3.0 | 2003 |

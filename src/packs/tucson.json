@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A bright white church in the desert, about 230 years old.",
    "map": "Mission San Xavier del Bac, 1950 W San Xavier Rd, Tucson, AZ",
-   "geo": [32.107, -111.008, 300],
+   "geo": [
+    32.107,
+    -111.008,
+    300
+   ],
    "clue": "Go about 10 miles south of downtown to the San Xavier Indian Reservation. Look for a bright church with two bell towers, standing alone in the desert.",
    "safety": "The mission is an active church and place of pilgrimage. Check visiting hours, dress respectfully, be quiet, and ask before taking photos inside.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -151,7 +155,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A train depot that was restored to look like it did in 1941.",
    "map": "Tucson Amtrak Station, 400 N Toole Ave, Tucson, AZ",
-   "geo": [32.22306, -110.96667, 150],
+   "geo": [
+    32.22306,
+    -110.96667,
+    150
+   ],
    "clue": "Go to the downtown rail area at Toole Avenue. Look for a long, tan station building with a red tile roof.",
    "safety": "Keep clear of the tracks, and watch for trains and the streetcar. Use crosswalks.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -168,19 +176,19 @@
     "verify": "Wikipedia says the restored depot has red clay roof tiles. Check on site. Written from sources, not yet checked on site."
    },
    "then": {
-    "yr": "1930s to 1940s",
+    "yr": "1900s",
     "label": "The depot then",
-    "line": "A postcard of the depot, described as a beautiful Spanish-type depot.",
+    "line": "A Detroit Publishing Company photo postcard, colorized and dated only to the 1900s. The 1941 Spanish Colonial Revival look came later.",
     "link": {
      "t": "Look for historic photos at the Library of Congress",
      "u": "https://www.loc.gov/pictures/"
     },
     "ph": {
      "k": "tu_dp_then",
-     "by": "Tichnor Brothers (Boston Public Library)",
-     "lic": "Public domain",
+     "by": "Detroit Publishing Company (Newberry Library collection)",
+     "lic": "Public domain (published before 1931)",
      "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-     "page": "https://commons.wikimedia.org/wiki/File:Beautiful_Spanish_type_Southern_Pacific_Depot,_Tucson,_Arizona_(73692).jpg",
+     "page": "https://commons.wikimedia.org/wiki/File:Southern_Pacific_Depot_(NBY_7820).jpg",
      "note": "resized"
     }
    },
@@ -242,7 +250,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "A courthouse with a tiled dome, now a visitor center.",
    "map": "Pima County Courthouse, 115 N Church Ave, Tucson, AZ",
-   "geo": [32.22306, -110.9725, 150],
+   "geo": [
+    32.22306,
+    -110.9725,
+    150
+   ],
    "clue": "Go downtown to the Presidio area on Church Avenue. Look for a big building with a round dome and arched walkways.",
    "safety": "Downtown streets have light rail and traffic. Use crosswalks, and check hours before going in.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -333,7 +345,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "The first building at a university that started with 32 students.",
    "map": "Old Main, 1200 E University Blvd, Tucson, AZ",
-   "geo": [32.23194, -110.95278, 150],
+   "geo": [
+    32.23194,
+    -110.95278,
+    150
+   ],
    "clue": "Go to the University of Arizona campus. Look for the brick building with two-story porches near the mall.",
    "safety": "The campus has bikes and scooters. Stay on walkways, and check whether the building is open before you go in.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
