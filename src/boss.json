@@ -599,15 +599,15 @@
  ],
  "detroit": [
   {
-   "q": "What did Diego Rivera paint in the Rivera Court?",
+   "q": "How many sections does Fort Wayne's limestone barracks have, one for each company of soldiers?",
    "o": [
-    "Oil portraits",
-    "Fresco murals",
-    "Mosaics",
-    "Stained glass"
+    "Two",
+    "Five",
+    "Eight",
+    "Twelve"
    ],
    "a": 1,
-   "why": "He painted the Detroit Industry murals in fresco, 1932 to 1933."
+   "why": "Wikipedia says the barracks has five sections, each meant to house one company."
   },
   {
    "q": "What was the Fisher Building's roof first covered in?",

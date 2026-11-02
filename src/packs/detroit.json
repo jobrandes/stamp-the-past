@@ -32,9 +32,9 @@
  "afterDone": "All four badges earned. The rest of Detroit is waiting.",
  "safetyNote": "<li>Downtown Detroit is spread out. Stay on busy, well-lit streets, watch for traffic and the QLine streetcar, and keep your belongings close.</li>",
  "badgeMap": {
-  "dia": [
-   "de_di_now",
-   "60% 40%"
+  "fortwayne": [
+   "de_fw_now",
+   "50% 45%"
   ],
   "michigancentral": [
    "de_mc_now",
@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "A 30-story art deco tower with a roof that glows gold at night.",
    "map": "Fisher Building, 3011 W Grand Blvd, Detroit, MI",
-   "geo": [42.36931, -83.07694, 150],
+   "geo": [
+    42.36931,
+    -83.07694,
+    150
+   ],
    "clue": "Go to the New Center area, north of downtown, and find the tall tower with the green roof on West Grand Boulevard.",
    "safety": "West Grand Boulevard is busy. Use crosswalks. Respect the building's lobby hours and rules.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -162,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "The spot where every Detroit road number begins.",
    "map": "Campus Martius Park, 800 Woodward Ave, Detroit, MI",
-   "geo": [42.33156, -83.04662, 300],
+   "geo": [
+    42.33156,
+    -83.04662,
+    300
+   ],
    "clue": "Go to the downtown park around Woodward Avenue. Look for a medallion set into the stone walkway near the fountain.",
    "safety": "Woodward Avenue is busy. Use crosswalks. In winter the ice rink gets crowded.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -257,105 +265,109 @@
    }
   },
   {
-   "id": "dia",
-   "name": "Detroit Institute of Arts",
-   "short": "DIA",
-   "badge": "DIA",
+   "id": "fortwayne",
+   "name": "Historic Fort Wayne",
+   "short": "Fort Wayne",
+   "badge": "Fort",
    "tag": "Stop 3 of 4",
-   "teaser": "A whole room painted by a famous muralist, and a priest-approved scandal.",
-   "map": "Detroit Institute of Arts, 5200 Woodward Ave, Detroit, MI",
-   "geo": [42.3594, -83.0647, 150],
-   "clue": "Go to the museum on Woodward Avenue. Inside, ask for the Rivera Court, the room covered in giant industrial murals.",
-   "safety": "Museum rules apply: do not touch the walls, and check hours and admission before you go.",
+   "teaser": "A stone fort built to face Canada, which never fired a shot at it.",
+   "map": "Historic Fort Wayne, Detroit, MI",
+   "geo": [
+    42.29917,
+    -83.09722,
+    300
+   ],
+   "clue": "Go to Historic Fort Wayne on the Detroit River and find the long limestone barracks. The fort is mainly open for tours on summer weekends, so check before you go.",
+   "safety": "Check opening times and rules before you go.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
    "q": {
-    "prompt": "In the Rivera Court, the murals cover the walls of the room. How many walls have painted panels?",
+    "prompt": "The limestone barracks at Fort Wayne is a tall building. How many stories does it have?",
     "options": [
-     "4",
-     "1",
-     "2",
-     "3"
+     "Three and a half",
+     "One",
+     "Two",
+     "Six"
     ],
     "answer": 0,
-    "hint": "Look all around the room.",
-    "verify": "Wikipedia says the 27 panels surround the room on all four walls. Count the walls on site. Written from sources, not yet checked on site."
+    "hint": "Count the rows of windows, then look under the roof.",
+    "verify": "Wikipedia describes a 3½-story limestone barracks. Count the floors on site. Written from sources, not yet checked on site."
    },
    "then": {
-    "yr": "1932",
-    "label": "The mural",
-    "line": "One wall of the Detroit Industry mural, painted in 1932 and 1933.",
+    "yr": "1934",
+    "label": "The barracks",
+    "line": "The limestone barracks, photographed in 1934 for the Historic American Buildings Survey.",
     "link": {
      "t": "Look for historic photos at the Library of Congress",
      "u": "https://www.loc.gov/pictures/"
     },
     "ph": {
-     "k": "de_di_then",
-     "by": "Cactus.man (photo of a 1932-33 mural by Diego Rivera)",
+     "k": "de_fw_then",
+     "by": "S. Lucas, Historic American Buildings Survey",
      "lic": "Public domain",
      "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-     "page": "https://commons.wikimedia.org/wiki/File:Rivera_detroit_industry_north.jpg",
+     "page": "https://commons.wikimedia.org/wiki/File:Fort_Wayne_Barrack_1934.jpg",
      "note": "resized"
     }
    },
    "now": {
-    "yr": "2017",
+    "yr": "2008",
     "head": "Today",
-    "label": "The Rivera Court today",
-    "line": "Visitors in the Rivera Court under the glass roof, with the murals behind them. Photo from 2017.",
+    "label": "The barracks, 2008",
+    "line": "The same limestone barracks in a photo from 2008.",
     "ph": {
-     "k": "de_di_now",
-     "by": "Timsox6",
-     "lic": "CC BY-SA 4.0",
-     "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
-     "page": "https://commons.wikimedia.org/wiki/File:Detroit_Industrial_Murals.jpg",
+     "k": "de_fw_now",
+     "by": "Taubuch (Flickr)",
+     "lic": "CC BY 2.0",
+     "lu": "https://creativecommons.org/licenses/by/2.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Fort_Wayne_Barracks,_Detroit.jpg",
      "note": "resized"
     }
    },
    "story": [
-    "Diego Rivera, the Mexican muralist, painted the Detroit Industry murals in fresco in 1932 and 1933. They cover 27 panels on four walls of the Rivera Court at the Detroit Institute of Arts.",
-    "The museum director, Wilhelm Valentiner, brought Rivera in, and Edsel Ford contributed $20,000 to make the commission possible. Rivera was a controversial choice because he followed Marxist philosophy.",
-    "In 1933 some clergy and newspapers attacked the murals. The target was a panel showing a Christ-like child being vaccinated. Some demanded its destruction, but Edsel Ford and Valentiner refused. The murals became a National Historic Landmark in April 2014."
+    "Congress paid for a chain of forts in 1841, and Detroit's was meant to answer Fort Malden, across the river in Canada. Building began in 1842, and the fort was finished in 1851 at a cost of $150,000.",
+    "The barracks is a 3½-story limestone building in five sections, each meant to house one company of soldiers. It dates from 1848. Brick washrooms and kitchens were added to the back in 1861.",
+    "The two countries settled their differences before any cannon was installed, and the fort sat nearly empty for about a decade with a single watchman. In the Civil War it mustered Michigan volunteers, and in World War II it became a huge motor supply depot. Since 1948 the Army has handed it to the City of Detroit in pieces."
    ],
-   "fact": "The murals took painters about a year to finish.",
-   "disputed": "Many people say Edsel Ford commissioned the murals. Wikipedia says the museum director commissioned them and Ford helped pay.",
+   "fact": "The fort sat nearly empty for about a decade with one watchman.",
+   "disputed": "Wikipedia dates construction to 1842-1851. The Detroit Historical Society says the Army surveyed the site in 1840 and finished the fort by 1850. Both give 1848 for the barracks.",
    "claims": [
     {
-     "t": "Diego Rivera painted the Detroit Industry murals in 1932 and 1933.",
-     "a": 0,
-     "why": "Wikipedia gives the dates 1932 to 1933."
+     "t": "Fort Wayne's cannons defended Detroit in battle.",
+     "a": 2,
+     "why": "Wikipedia says the countries settled their differences before any cannon was installed, with no sign the intended artillery was ever put in."
     },
     {
-     "t": "The murals were destroyed after the 1933 complaints.",
-     "a": 2,
-     "why": "Ford and Valentiner refused to destroy the panel, and the murals are still there."
+     "t": "Michigan volunteer soldiers were mustered at Fort Wayne in the Civil War.",
+     "a": 0,
+     "why": "Wikipedia and the Detroit Historical Society both describe it as a mustering post for Michigan regiments."
     }
    ],
    "sources": [
     {
-     "t": "Wikipedia: Detroit Industry Murals",
-     "u": "https://en.wikipedia.org/wiki/Detroit_Industry_Murals"
+     "t": "Wikipedia: Fort Wayne (Detroit)",
+     "u": "https://en.wikipedia.org/wiki/Fort_Wayne_(Detroit)"
     },
     {
-     "t": "Wikipedia: Detroit Institute of Arts",
-     "u": "https://en.wikipedia.org/wiki/Detroit_Institute_of_Arts"
+     "t": "Detroit Historical Society: Fort Wayne",
+     "u": "https://detroithistorical.org/learn/encyclopedia-of-detroit/fort-wayne"
     }
    ],
    "card": {
-    "a": "1932",
-    "b": "2014",
-    "la": "Painted",
-    "lb": "Landmark status"
+    "a": "1848",
+    "b": "1861",
+    "la": "Barracks built",
+    "lb": "Kitchens added"
    },
    "spot": {
-    "q": "In 1933 some people demanded that one panel of Diego Rivera's murals be destroyed. What did it show?",
+    "q": "In 1861, what was added to the back of the Fort Wayne barracks?",
     "options": [
-     "A factory fire",
-     "A Christ-like child being vaccinated",
-     "A portrait of Henry Ford",
-     "A map of Mexico"
+     "A cannon battery",
+     "Brick washrooms and kitchens",
+     "A rail spur",
+     "A clock tower"
     ],
     "answer": 1,
-    "why": "The target was a panel showing a Christ-like child being vaccinated. Edsel Ford and Wilhelm Valentiner refused to destroy it."
+    "why": "Wikipedia says brick washrooms and kitchens were added to the rear of the barracks in 1861."
    }
   },
   {
@@ -366,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "A skyscraper train station that sat empty for 30 years, then came back.",
    "map": "Michigan Central Station, 2001 15th St, Detroit, MI",
-   "geo": [42.32872, -83.0778, 150],
+   "geo": [
+    42.32872,
+    -83.0778,
+    150
+   ],
    "clue": "Go to Corktown, southwest of downtown, and look for the tall tower with rows of big windows beside the old rail yard.",
    "safety": "Be respectful of the active campus. View from public sidewalks, watch traffic and do not enter closed areas.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",

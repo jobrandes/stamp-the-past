@@ -7,7 +7,7 @@ Read this first in every session. Keep it current: update it whenever scope, rul
 Built by Jo-Anne (builder, on-site verifier) and her 14-year-old son (tester and idea source). Public credit: "made by a mom and her teenage son". Never name the son publicly.
 
 - Repo: `jobrandes/missions-app` (private). Live site: `stampthepast.com` (Porkbun domain bought Oct 25, DNS A record to Netlify, www CNAME; Porkbun auto-renew is OFF, expires 2027-10-25, so set a reminder). Test site `stamp-the-past.netlify.app` still works. Auto-deploys on push to GitHub.
-- Claude Artifact copy: https://claude.ai/artifact/4jha39rpChXp1cMVXRYkBs (republish after every build; the page must stay under 16 MB).
+- Claude Artifact copy (RETIRED Nov 2 2026, stale, over the 511-file limit): https://claude.ai/artifact/4jha39rpChXp1cMVXRYkBs
 - The App Store is the eventual destination. Netlify is only for testing.
 
 ## Goals (apply to every decision)
@@ -359,3 +359,7 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Honest labels: tower date disputed (1639-1700 vs by 1686); Wren attribution to Christopher Wren is tradition; Bruton 'secret vault' claim is marked not true (1992 dig found none); Palace is a 1931-34 reconstruction (Spotswood 1710 vs moved in 1716 noted). Bruton has a short `sens` note (1710 grant paid by taxes on liquor and on enslaved people, per the Colonial Williamsburg Almanack page).
 - Jamestown is several miles from the three Williamsburg stops; the mission text says plan a drive. GPS circles are estimates from Wikipedia coordinates; access notes (hours, tickets, an active parish, a working campus building) were NOT found, so each stop's text tells people to check. Nothing walked.
 - tests/reqtown.py now uses Tombstone (not Williamsburg) as the no-match town search, since Williamsburg is a real town.
+
+## Detroit swap (Nov 2 2026)
+- Detroit's DIA stop (photo of a Rivera mural) replaced by Historic Fort Wayne (`fortwayne`, photo keys `de_fw_`): then = 1934 HABS barracks (S. Lucas, PD), now = 2008 Taubuch (CC BY 2.0). Boss question 0 replaced. Not walked; opening times (mainly summer weekends per the Detroit Historical Society) are in the clue. Atlanta Piedmont Park (newspaper halftone) still needs a real photo.
+- The Artifact copy is stale and cannot hold 534 photos (511 files per version): the "republish after every build" rule is retired.

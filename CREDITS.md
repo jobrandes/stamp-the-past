@@ -163,8 +163,6 @@ Still pending: Jackson Square then, Griffith Observatory, Chinese Theatre, Union
 |---|---|---|---|---|
 | de_sp_now | File:The_Spirit_of_Detroit.jpg | JJonahJackalope | CC BY-SA 4.0 | 2022 |
 | de_fx_now | File:Detroitfox3.jpg | Mikerussell | CC BY-SA 3.0 | 2007 |
-| de_di_now | File:Detroit_Industrial_Murals.jpg | Timsox6 | CC BY-SA 4.0 | 2017 |
-| de_di_then | File:Rivera_detroit_industry_north.jpg | Cactus.man (photo of a 1932-33 mural by Diego Rivera) | Public domain | 1932 |
 | de_mc_now | File:MichiganCentral2024.jpg | Coreyfein01 | CC BY-SA 4.0 | 2024 |
 | de_mc_then | File:Michigan_Central_Station,_Detroit_(2013).jpg | Bartosz Brzezinski | CC BY 2.0 | 2013 |
 | mn_sa_now | File:Stone_Arch_Bridge,_Minneapolis_2012.jpg | Jim Cadwell | CC BY-SA 2.0 | 2012 |
@@ -733,3 +731,5 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | wb_gp_then | https://commons.wikimedia.org/wiki/File:Gardens and Governor's Palace Williamsburg Virginia by Frances Benjamin Johnston.jpg | Frances Benjamin Johnston | Public domain | resized |
 | wb_gp_now | https://commons.wikimedia.org/wiki/File:Governor’s Palace, front, 2014-03-23, 01.jpg | Cbaile19 | CC0 | resized |
 | wb_hero | https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg | Smash the Iron Cage | CC BY-SA 4.0 | resized |
+| de_fw_then | File:Fort_Wayne_Barrack_1934.jpg | S. Lucas, Historic American Buildings Survey | Public domain | 1934 |
+| de_fw_now | File:Fort_Wayne_Barracks,_Detroit.jpg | Taubuch (Flickr) | CC BY 2.0 | 2008 |
