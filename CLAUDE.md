@@ -348,3 +348,7 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Verified-visit pin (Nov 1 2026)
 - GPS-verified stamps show a small gold location pin (`gpin()`, `.gpin`) on the corner in the Passport grid, the stop list and the town Stamps tab. Real unverified stamps look as before; virtual stamps stay faded. Triggered by Jo-Anne's Sparks Marina check on her phone (Nov 1): the verified stamp looked identical to the others.
+
+## Town requests (Nov 2 2026)
+- "Do not see your town? Tell us which one to add" at the bottom of the Towns list, and "ask us to add it" when town search finds nothing (action `reqtown`). Opens the existing report dialog as "Which town should we add?" (search text pre-filled) and posts to the same Netlify `report` form with `where` = "Town request". Read requests in Netlify Forms. tests/reqtown.py covers it.
+- First request: Williamsburg VA / Jamestown (Facebook comment, Nov 2). Use Historic Jamestowne (the real site, NPS), not the Jamestown Settlement replicas. Free "then" photos not yet checked.
