@@ -697,6 +697,7 @@
      +'<details class="mdet"><summary>Photo credits for '+city().name+'</summary>'+creditsList()+'</details>'
      +'<p class="mgroup">Account</p>'
      +'<div class="macct"><strong>No account needed.</strong><span class="msub">Your stamps live on this phone. Use a backup code to move them to a new one. Optional sign-in may come later, so your stamps can follow you between devices.</span></div>'
+     +'<details class="mdet mreset"><summary>Start over (erase this phone\'s progress)</summary><p class="msub">Erases every stamp, badge, saved stop and setting on this phone, so the app starts like a brand-new install. Good for testing. It cannot be undone, so back up your passport first if you want to keep it.</p><button class="mitem mdanger" data-a="resetgo"><span><strong>Erase everything on this phone</strong></span></button></details>'
      +'<p class="mfoot">Made by a mom and her teenage son.</p></div>';
   }
   function openMenu(){
@@ -1406,6 +1407,12 @@
     if(a==='bossexit'){ boss=null; render(); window.scrollTo(0,0); return; }
     if(a==='bpick'){ if(boss&&boss.pick===null){ var qq=DATA.boss[boss.pid][boss.i], kk=+b.getAttribute('data-k'); boss.pick=kk; if(kk===qq.a){ boss.score++; boss.streak=(boss.streak||0)+1; } else boss.streak=0; render(); } return; }
     if(a==='bnext'){ if(boss){ boss.i++; boss.pick=null; if(boss.i>=DATA.boss[boss.pid].length) bossSave(boss.pid,boss.score); render(); window.scrollTo(0,0); } return; }
+    if(a==='resetgo'){
+      var rb=b;
+      if(!rb.dataset.armed){ rb.dataset.armed='1'; rb.querySelector('strong').textContent='Tap again to erase everything'; setTimeout(function(){ if(rb.isConnected){ delete rb.dataset.armed; rb.querySelector('strong').textContent='Erase everything on this phone'; } },6000); return; }
+      try{ var ks=[]; for(var ri=0;ri<localStorage.length;ri++){ var rk=localStorage.key(ri); if(/^(then-now|stp-)/.test(rk)) ks.push(rk); } ks.forEach(function(k){ localStorage.removeItem(k); }); }catch(x){}
+      toast('Erased. Starting fresh...'); setTimeout(function(){ location.reload(); },700); return;
+    }
     if(a==='hapticTest'){ haptic('success',function(r){ toast(r==='ok'?'Buzz sent. If you felt nothing, check Settings, Sounds and Haptics, System Haptics.':r==='missing'?'The buzz part of the app did not load. Please tell us.':'The buzz did not run. Please tell us.'); }); return; }
     if(a==='report'){ showReport(); return; }
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }

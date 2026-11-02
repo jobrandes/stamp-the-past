@@ -295,6 +295,11 @@ with sync_playwright() as p:
     need('next badge:' in pg.inner_text('.stat').lower(),'Home shows a next badge goal')
     pg.click('#bnav [data-t=pass]'); pg.wait_for_timeout(200)
     need('right now: sparks' in pg.inner_text('.passhead').lower() and '3 to go' in pg.inner_text('.passhead').lower(),'Passport names the current town and stamps to go')
+    # reset: two taps erase all progress and the app restarts as a new user
+    pg=new({'stp-log':'["2026-11-01"]','stp-trip':'["reno"]'}); pg.click('#menuBtn'); pg.click('#menu .mreset summary'); pg.click('#menu [data-a=resetgo]')
+    need(pg.evaluate("localStorage.getItem('stp-trip')")!=None,'reset: first tap only arms the button')
+    pg.click('#menu [data-a=resetgo]'); pg.wait_for_timeout(1500)
+    need(pg.evaluate("localStorage.getItem('stp-trip')")==None and pg.evaluate("localStorage.getItem('stp-log')")==None,'reset: second tap erases saved progress')
     # keyboard: Tab never leaves the open menu, Escape closes it and focus returns to the Menu button
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
     pg.focus('.menubtn'); pg.keyboard.press('Enter'); pg.wait_for_timeout(250)
