@@ -330,7 +330,7 @@
   function exploreRow(k){
     var n=townStory(k).length; if(!n) return '';
     var seen=0, v=nbGet(); townStory(k).forEach(function(sp){ if(v[nbKey(sp)]) seen++; });
-    return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more places in '+CITIES[k].name+' to read. No mission, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
+    return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more places in '+CITIES[k].name+' to read. Optional stories, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
   }
   /* Also close by: Story stops within ~0.5 mile of any of a town's four stops, as an expandable optional row on the mission card. Built from the data, so new Explore places appear on their own. */
   function closeBy(k){
@@ -652,7 +652,7 @@
       var nm=STOPS.map(function(s){ return s.name; }); var lst=nm.slice(0,-1).join(', ')+' and '+nm[nm.length-1];
       /* audit rb02: the next stop comes first so the action is on the first screen; the four stops are not listed twice (the hero and the list below already show them) and the final-challenge note sits under the list */
       var ni=S.done.indexOf(0);
-      if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
+      if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+(tourBrief(city())?'<small class="nr-m">'+tourBrief(city())+' for all '+STOPS.length+' stops</small>':'')+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
       h+=exploreRow(cityId);
       h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+closeByHtml(cityId)+'</section>';
     }
@@ -1123,7 +1123,7 @@
   function levelHtml(s){
     var lv=lvOf(s.xp);
     return '<section class="xlv" aria-label="Explorer level"><div class="lvl-top"><div class="lvl-n"><span>Level</span><b>'+lv.n+'</b></div><div class="lvl-t"><strong>'+lv.title+'</strong><span>Explorer · '+nfmt(s.xp)+' XP · '+nfmt(lv.to-s.xp)+' to level '+(lv.n+1)+'</span></div></div><div class="lbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="'+lv.pc+'" aria-label="Progress to level '+(lv.n+1)+'"><i style="width:'+lv.pc+'%"></i></div>'
-      +'<details class="lvl-how"><summary>How XP works</summary><ul><li><b>+100</b> for every stamp</li><li><b>+25</b> for each claim you sort correctly</li><li><b>+50</b> for a stamp verified by being there</li><li><b>+50</b> for your first stamp in a new state</li><li><b>+100</b> for finishing a town</li><li><b>Up to +300</b> from a town’s final challenge</li></ul></details></section>';
+      +'<details class="lvl-how"><summary>How XP works</summary><ul><li><b>+100</b> for every real stamp earned by visiting</li><li><b>+25</b> for a virtual stamp (answered from home, once per stop, only until you earn the real one)</li><li><b>+25</b> for each claim you sort correctly</li><li><b>+50</b> for a stamp verified by being there</li><li><b>+50</b> for your first stamp in a new state</li><li><b>+100</b> for finishing a town</li><li><b>Up to +300</b> from a town’s final challenge</li></ul><p class="msub">Explorer level is your overall level across every town. A town’s rank is only that one town’s progress.</p></details></section>';
   }
   function tileHtml(x){
     var b=x.b, pc=Math.round(x.cur/x.goal*100);

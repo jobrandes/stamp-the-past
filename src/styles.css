@@ -1030,3 +1030,6 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 .reqline{margin:14px 0 4px;font-size:0.9375rem;color:var(--muted)}.reqline .link,.tnone .link{display:inline;min-height:44px;padding:10px 2px;font:inherit;text-decoration:underline}
 
 .mreset .mdanger{border-color:#b3261e;color:#b3261e}.mreset .mdanger[data-armed]{background:#b3261e;color:#fff}.mreset>*:not(summary){margin:0 12px 8px}
+
+.nextrow .nr-m{display:block;margin-top:2px;font:500 0.75rem var(--font-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
+@media (max-height:700px){.nextrow .nr-m{display:none}}

@@ -183,7 +183,7 @@
    "story": [
     "Reno began as a railroad town. When the first transcontinental railroad reached the Truckee Meadows in 1868, a depot stood at this site. Myron Lake, who owned a toll bridge nearby, gave the Central Pacific Railroad land for it, and lots in the new town were auctioned on May 9.",
     "A bigger Depot Hotel replaced the first wooden depot, burned in the Great Fire of 1879, was rebuilt, and burned again in May 1889. After that the railroad built a one-story brick station with a slate roof, and a new depot opened that December.",
-    "The current stucco depot was built by the Southern Pacific in 1926 in a Mission and Spanish Revival style. In the 2007 ReTRAC project the tracks were lowered below ground through downtown. The depot was added to the National Register of Historic Places on November 12, 2012, and Amtrak's California Zephyr stops here."
+    "The current stucco depot was built by the Southern Pacific in 1926 in a Mission and Spanish Revival style. In the ReTRAC project the tracks were lowered below ground through downtown. The trench opened to trains in November 2005, and the work was finished in spring 2006. The depot was added to the National Register of Historic Places on November 12, 2012, and Amtrak's California Zephyr stops here."
    ],
    "fact": "Reno's street railway ran to the depot from 1908 to 1925.",
    "disputed": "Wikipedia lists the station as opened in 1868, but the building you see dates from 1926. Amtrak's move into it is dated January 2006 on a marker, and 2007 for the renovation in Wikipedia.",
@@ -196,7 +196,7 @@
     {
      "t": "The train tracks still run at street level through downtown Reno.",
      "a": 2,
-     "why": "They were lowered below ground in the 2007 ReTRAC project."
+     "why": "They were lowered below ground in the ReTRAC project. The trench opened in November 2005."
     }
    ],
    "sources": [
@@ -207,6 +207,10 @@
     {
      "t": "Historical Marker Database: Reno depots",
      "u": "https://www.hmdb.org/m.asp?m=167822"
+    },
+    {
+     "t": "Federal Highway Administration: Reno ReTRAC financing",
+     "u": "https://ops-dr.fhwa.dot.gov/freight/publications/freightfinancing/sect3.htm"
     }
    ],
    "card": {
@@ -216,7 +220,7 @@
     "lb": "Current depot built"
    },
    "spot": {
-    "q": "Slide back to 1931. One big change since then came with the 2007 ReTRAC project. What was it?",
+    "q": "Slide back to 1931. One big change since then came with the ReTRAC project, which opened its trench in 2005. What was it?",
     "options": [
      "The tracks were lowered below ground through downtown",
      "The depot was moved across the river",
