@@ -216,7 +216,7 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | at_fl_now | File:Flatiron Building Atlanta.jpg | dbking | CC BY 2.0 | 2006 |
 | at_fl_then | File:Collier's 1921 Georgia - Atlanta (Flatiron Building).jpg | Ewing Galloway | Public domain | 1921 |
 | at_pk_now | File:View of Lake Clara Meer from bridge.jpg | Gatorfan252525 | CC BY-SA 4.0 | 2021 |
-| at_pk_then | File:Piedmont Park Atlanta 1902 04 27.jpg | Unknown (newspaper photograph) | Public domain | 1902 |
+| at_pk_then | https://www.loc.gov/pictures/item/2018654288/ | R. A. Ellis (copyright 1895), Library of Congress | Public domain (published 1895) | 1895 |
 | me_ce_now | File:Cotton Exchange Building Memphis TN.jpg | Thomas R Machnitzki | CC BY-SA 3.0 | 2009 |
 | me_ce_then | File:Memphis Cotton Exchange.JPG | Marion Post Wolcott (Farm Security Administration) | Public domain | 1939 |
 | sv_pu_now | File:FtPulaskiFront.jpg | Jud McCranie | CC BY 3.0 | 2008 |

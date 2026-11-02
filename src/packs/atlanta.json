@@ -60,7 +60,11 @@
    "tag": "Stop 1 of 4",
    "teaser": "The church where Martin Luther King Jr. preached, and where his funeral was held.",
    "map": "Ebenezer Baptist Church, 407 Auburn Ave NE, Atlanta, GA",
-   "geo": [33.75528, -84.37417, 150],
+   "geo": [
+    33.75528,
+    -84.37417,
+    150
+   ],
    "clue": "Go to the Martin Luther King Jr. National Historical Park and find the red-brick church with the tall bell tower.",
    "safety": "The church is an active place of worship and a national park site. Be quiet and respectful, and check visiting hours.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -162,7 +166,11 @@
    "tag": "Stop 2 of 4",
    "teaser": "A gold dome made from gold dug up in Georgia.",
    "map": "Georgia State Capitol, 206 Washington St SW, Atlanta, GA",
-   "geo": [33.74905, -84.38813, 150],
+   "geo": [
+    33.74905,
+    -84.38813,
+    150
+   ],
    "clue": "Go downtown near Underground Atlanta and find the big domed building with a gold top.",
    "safety": "Downtown streets are busy. Use crosswalks. The building has security screening and set visiting hours.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -264,7 +272,11 @@
    "tag": "Stop 3 of 4",
    "teaser": "A wedge-shaped skyscraper that beat New York's by five years.",
    "map": "Flatiron Building, 84 Peachtree St NW, Atlanta, GA",
-   "geo": [33.7562, -84.3885, 150],
+   "geo": [
+    33.7562,
+    -84.3885,
+    150
+   ],
    "clue": "Walk to the downtown block where Peachtree, Poplar and Broad Streets meet and look for the narrow wedge-shaped tower.",
    "safety": "Peachtree Street is busy. Use crosswalks, and stay on public sidewalks around the building.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -366,7 +378,11 @@
    "tag": "Stop 4 of 4",
    "teaser": "A park built on the site of an 1895 world's fair.",
    "map": "Piedmont Park, 1071 Piedmont Ave NE, Atlanta, GA",
-   "geo": [33.78611, -84.37333, 300],
+   "geo": [
+    33.78611,
+    -84.37333,
+    300
+   ],
    "clue": "Go to the big park in Midtown and walk to the lake in the middle, Lake Clara Meer.",
    "safety": "Watch for bikes, skaters and joggers on the paths. Stay back from the water's edge.",
    "field": "Field notes pending: nobody has walked this stop for the app yet.",
@@ -383,24 +399,24 @@
     "verify": "Wikipedia says Lake Clara Meer is in the Olmsted Brothers design. Written from sources, not yet checked on site."
    },
    "then": {
-    "yr": "1902",
-    "label": "The park then",
-    "line": "A newspaper photograph of the grandstand at Piedmont Park in 1902.",
+    "yr": "1895",
+    "label": "The 1895 exposition",
+    "line": "The Georgia Manufacturers Building at the 1895 Cotton States and International Exposition, held on the land that became Piedmont Park. This is the exposition, not the park as it looks today.",
     "link": {
      "t": "Look for historic photos at the Library of Congress",
      "u": "https://www.loc.gov/pictures/"
     },
     "ph": {
      "k": "at_pk_then",
-     "by": "Unknown (newspaper photograph)",
-     "lic": "Public domain",
-     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
-     "page": "https://commons.wikimedia.org/wiki/File:Piedmont_Park_Atlanta_1902_04_27.jpg",
+     "by": "R. A. Ellis (copyright 1895), Library of Congress",
+     "lic": "Public domain (published 1895)",
+     "lu": "https://www.loc.gov/rr/print/res/rights.html",
+     "page": "https://www.loc.gov/pictures/item/2018654288/",
      "note": "resized"
     }
    },
    "now": {
-    "yr": "Today",
+    "yr": "2021",
     "head": "Today",
     "label": "The park today",
     "line": "The lake and lawn sit in the middle of Midtown.",
