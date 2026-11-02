@@ -2758,5 +2758,51 @@
    "a": 3,
    "why": "A 2019 article says the county bought the site in 1974 and restored it."
   }
+ ],
+ "williamsburg": [
+  {
+   "q": "In what year did the first Representative Legislative Assembly meet in a church at Jamestown?",
+   "o": [
+    "1607",
+    "1619",
+    "1676",
+    "1699"
+   ],
+   "a": 1,
+   "why": "Wikipedia says the first assembly met in the third church on July 30, 1619."
+  },
+  {
+   "q": "Which year did a fire destroy most of the first Wren Building?",
+   "o": [
+    "1705",
+    "1759",
+    "1859",
+    "1931"
+   ],
+   "a": 0,
+   "why": "Wikipedia says a fire on October 29, 1705 destroyed most of the first building."
+  },
+  {
+   "q": "What did the 1992 Colonial Williamsburg dig at Bruton Parish Church find?",
+   "o": [
+    "A tunnel to the Capitol",
+    "A cache of old coins",
+    "Francis Bacon's manuscripts",
+    "No vault, only undisturbed soil"
+   ],
+   "a": 3,
+   "why": "The dig went to about twenty feet and found no vault, so the Bacon story is unsupported."
+  },
+  {
+   "q": "After the Siege of Yorktown, how was the Governor's Palace used before it burned in 1781?",
+   "o": [
+    "As a courthouse",
+    "As a school",
+    "As a hospital for wounded American soldiers",
+    "As a barracks"
+   ],
+   "a": 2,
+   "why": "Wikipedia says it was used as a hospital for wounded American soldiers."
+  }
  ]
 }

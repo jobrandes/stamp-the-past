@@ -1,0 +1,482 @@
+{
+ "id": "williamsburg",
+ "name": "Williamsburg and Jamestown",
+ "explorer": "Colony Chronicler",
+ "initials": "WBJ",
+ "ranks": [
+  [
+   0,
+   "Visitor"
+  ],
+  [
+   100,
+   "Colonist"
+  ],
+  [
+   250,
+   "Burgess"
+  ],
+  [
+   450,
+   "Colony Scholar"
+  ],
+  [
+   600,
+   "Colony Historian"
+  ]
+ ],
+ "heroKey": "wb_hero",
+ "heroAlt": "The brick Wren Building at the College of William and Mary in Williamsburg, Virginia, seen from the west",
+ "heroLi": "<li>Header: Smash the Iron Cage · CC BY-SA 4.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg\">Source</a> · resized</li>",
+ "heroCredit": "Photo: Smash the Iron Cage · CC BY-SA 4.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg\">Source</a>",
+ "mission": "Find four places from Virginia's colonial story: the old tower at Jamestown, then three stops in Williamsburg. Jamestown is several miles from the Williamsburg stops, so plan a drive between them. At each one, check in to earn its badge, unlock its story, and collect a Time Card. Do them in any order. Everything stays on this phone.",
+ "afterDone": "All four badges earned. You have now stood where Virginia's colony began, and where it later governed itself.",
+ "safetyNote": "<li>Jamestown and the Williamsburg stops are several miles apart, so plan a drive. Stay on sidewalks and paths, and check opening rules, tickets and service times before you go.</li>",
+ "badgeMap": {
+  "tower": [
+   "wb_jt_now",
+   "50% 50%"
+  ],
+  "wren": [
+   "wb_wr_now",
+   "50% 50%"
+  ],
+  "bruton": [
+   "wb_br_now",
+   "50% 40%"
+  ],
+  "palace": [
+   "wb_gp_now",
+   "50% 50%"
+  ]
+ },
+ "level": "Classics",
+ "region": "The South",
+ "stops": [
+  {
+   "id": "tower",
+   "name": "Jamestown Church Tower",
+   "short": "Jamestown Tower",
+   "badge": "Jamestown Tower",
+   "tag": "Stop 1 of 4",
+   "teaser": "A brick tower that is the only 17th-century structure still standing at Jamestown.",
+   "map": "Historic Jamestowne, Jamestown, VA",
+   "geo": [
+    37.2093,
+    -76.7774,
+    200
+   ],
+   "clue": "Look for the old brick tower at Historic Jamestowne, with a 1907 memorial church built right beside it. This is the real 1607 site, not the Jamestown Settlement replicas.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "An earlier brick church at Jamestown burned on September 19, 1676. What was going on in Virginia that year?",
+    "options": [
+     "A hurricane",
+     "Bacon's Rebellion",
+     "A lightning strike",
+     "A war with Spain"
+    ],
+    "answer": 1,
+    "hint": "Think about what else was shaking up the colony in 1676.",
+    "verify": "The Historical Marker Database entry and Wikipedia both say the fourth church burned on September 19, 1676, during Bacon's Rebellion. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "wb_jt_then",
+     "by": "Library of Congress print (photographer not named)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Old Church at Jamestown, Virginia-LCCN2008679590.jpg",
+     "note": "resized"
+    },
+    "yr": "1902",
+    "label": "The tower around 1902",
+    "line": "A color print of the lone tower, with bare trees and a dirt road. The date is the Library of Congress print date as given on Wikimedia Commons.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Jamestown%20church%20tower&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2014",
+    "head": "Today",
+    "label": "The tower now",
+    "line": "The same brick tower, with the 1907 memorial church built beside it.",
+    "ph": {
+     "k": "wb_jt_now",
+     "by": "Ken Lund",
+     "lic": "CC BY-SA 2.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/2.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Jamestown Church, Historic Jamestowne, Colonial National Historical Park, Jamestown, Virginia (14239034848).jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Jamestown's churches were rebuilt several times. Archaeologists believe six churches stood on two sites at James Fort. The first, inside the 1607 fort, burned on January 7, 1608.",
+    "In 1619 the first Representative Legislative Assembly met in the third church, on July 30. A brick church begun in 1639 burned during Bacon's Rebellion in 1676, and a fifth church was in use by about 1686 on its walls and foundations.",
+    "That church was abandoned in the 1750s and was in ruins by the 1790s, but its tower survived. It is the only 17th-century structure still standing at Jamestown. Preservation Virginia strengthened it in the 1890s, and in 1907 the Colonial Dames built a memorial church beside it, reusing the tower."
+   ],
+   "fact": "The tower is the only 17th-century structure still standing at Jamestown.",
+   "disputed": "Sources do not agree on when the tower went up. Wikipedia says it was added to the church in stages between 1639 (possibly earlier) and 1700. The state-marker text says the fifth church was built by 1686 on the fourth church's walls. This app does not pick one year. The site is run by Preservation Virginia with the Colonial Williamsburg Foundation, so check opening times and fees before you go.",
+   "claims": [
+    {
+     "t": "The brick tower at Jamestown is the only 17th-century structure still standing there.",
+     "a": 0,
+     "why": "The marker text says so, and Wikipedia describes the tower as the surviving part of the old church."
+    },
+    {
+     "t": "The tower was built in 1686.",
+     "a": 1,
+     "why": "The marker says the fifth church was built by 1686, but Wikipedia says the tower was added between 1639 and 1700. The exact date is uncertain."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Jamestown Church",
+     "u": "https://en.wikipedia.org/wiki/Jamestown_Church"
+    },
+    {
+     "t": "Historical Marker Database: Jamestown's Churches",
+     "u": "https://www.hmdb.org/m.asp?m=17053"
+    }
+   ],
+   "card": {
+    "a": "1619",
+    "b": "1676",
+    "la": "First assembly met in a Jamestown church",
+    "lb": "Brick church burned in Bacon's Rebellion"
+   },
+   "spot": {
+    "q": "The c.1902 print shows the tower standing alone. By 2014 a church stood beside it. In what year was that Memorial Church dedicated?",
+    "options": [
+     "1887",
+     "1897",
+     "1907",
+     "1917"
+    ],
+    "answer": 2,
+    "why": "Wikipedia says the Colonial Dames' Memorial Church was dedicated on May 13, 1907, and reuses the original tower."
+   }
+  },
+  {
+   "id": "wren",
+   "name": "Wren Building",
+   "short": "Wren Building",
+   "badge": "Wren Building",
+   "tag": "Stop 2 of 4",
+   "teaser": "The oldest college building still standing in the United States, rebuilt after three fires.",
+   "map": "Wren Building, College of William and Mary, Williamsburg, VA",
+   "geo": [
+    37.27083,
+    -76.70917,
+    150
+   ],
+   "clue": "Walk to the College of William and Mary, at the west end of Duke of Gloucester Street. Look for the long red-brick building with a rounded-arch porch and a small cupola.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "How many times did fire gut the Wren Building?",
+    "options": [
+     "Never",
+     "Once",
+     "Twice",
+     "Three times"
+    ],
+    "answer": 3,
+    "hint": "Its history includes more than one rebuilding, across two centuries.",
+    "verify": "William & Mary's own history page says the building was gutted by fire three times, in 1705, 1859 and 1862. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "wb_wr_then",
+     "by": "Library of Congress print (photographer not named)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:William and Mary College, Williamsburg,VA-LCCN2008679592.jpg",
+     "note": "resized"
+    },
+    "yr": "1902",
+    "label": "The college around 1902",
+    "line": "A color print of the college's main building seen across the green. The date is the Library of Congress print date as given on Wikimedia Commons; this is before the 1928 to 1931 restoration.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Wren%20Building%20William%20and%20Mary&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2015",
+    "head": "Today",
+    "label": "The Wren Building now",
+    "line": "The restored building, seen from the west side.",
+    "ph": {
+     "k": "wb_wr_now",
+     "by": "Smash the Iron Cage",
+     "lic": "CC BY-SA 4.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Work on the building began with the laying of its foundation on August 8, 1695. Classes started in 1700, and the colonial government met there until the Capitol opened in 1704.",
+    "A fire on October 29, 1705 destroyed most of the first building. It was rebuilt in 1709 to 1716 using surviving walls, with Governor Alexander Spotswood influencing its design. Fire gutted it again in 1859, and in 1862 Union soldiers quartered in Williamsburg set it on fire.",
+    "From 1928 to 1931 it was restored to its colonial look with funding from John D. Rockefeller Jr., and in 1931 it was renamed the Sir Christopher Wren Building. It still holds classes, offices and a chapel."
+   ],
+   "fact": "William & Mary calls the Wren Building the oldest college building still standing in the United States.",
+   "disputed": "Whether Sir Christopher Wren designed this building is not settled. The attribution comes from Hugh Jones's 1724 book, which says it was 'first modelled by Sir Christopher Wren', and historians disagree about what 'modelled' meant. William & Mary says tradition credits Wren. The building is still a working campus building and work was planned for 2026, so check what is open to visitors.",
+   "claims": [
+    {
+     "t": "Sir Christopher Wren designed the Wren Building.",
+     "a": 1,
+     "why": "The attribution rests on a 1724 book and historians disagree. William & Mary says tradition credits Wren."
+    },
+    {
+     "t": "It is the oldest college building still standing in the United States.",
+     "a": 0,
+     "why": "Both William & Mary and Wikipedia state this, although it is the college's own description."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Wren Building",
+     "u": "https://en.wikipedia.org/wiki/Wren_Building"
+    },
+    {
+     "t": "William & Mary: Wren Building",
+     "u": "https://www.wm.edu/about/history/historiccampus/wrenbuilding"
+    }
+   ],
+   "card": {
+    "a": "1695",
+    "b": "1931",
+    "la": "Foundation laid",
+    "lb": "Renamed the Sir Christopher Wren Building"
+   },
+   "spot": {
+    "q": "The c.1902 print shows the college building before its big restoration. In what year was it renamed the Sir Christopher Wren Building?",
+    "options": [
+     "1862",
+     "1869",
+     "1928",
+     "1931"
+    ],
+    "answer": 3,
+    "why": "The restoration ran from 1928 to 1931, and the building was renamed for Wren in 1931."
+   }
+  },
+  {
+   "id": "bruton",
+   "name": "Bruton Parish Church",
+   "short": "Bruton Parish",
+   "badge": "Bruton Parish",
+   "tag": "Stop 3 of 4",
+   "teaser": "A working Episcopal church from 1715, planned by a royal governor.",
+   "map": "Bruton Parish Church, Duke of Gloucester Street, Williamsburg, VA",
+   "geo": [
+    37.27111,
+    -76.70278,
+    150
+   ],
+   "clue": "Look along Duke of Gloucester Street for a red-brick church with a white wooden steeple and a churchyard with old gravestones.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "Which royal governor drafted the plans for the cruciform church that was finished in 1715?",
+    "options": [
+     "Alexander Spotswood",
+     "Lord Dunmore",
+     "Sir William Berkeley",
+     "Lord Botetourt"
+    ],
+    "answer": 0,
+    "hint": "He was serving as lieutenant governor in the early 1700s.",
+    "verify": "Wikipedia says Governor Alexander Spotswood drafted the plans for a cruciform church, begun with a contract in 1711 and finished in 1715. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "wb_br_then",
+     "by": "Library of Congress print (photographer not named)",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Bruton Parish Church, Williamsburg, Virginia-LCCN2008679593.jpg",
+     "note": "resized"
+    },
+    "yr": "1902",
+    "label": "The church around 1902",
+    "line": "A color print of the church with its steeple, taken from the churchyard. The date is the Library of Congress print date as given on Wikimedia Commons.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Bruton%20Parish%20Church%20Williamsburg&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2015",
+    "head": "Today",
+    "label": "Bruton Parish now",
+    "line": "The brick tower and roof of the church today, in a black-and-white photo cropped to match.",
+    "ph": {
+     "k": "wb_br_now",
+     "by": "Smash the Iron Cage",
+     "lic": "CC BY-SA 4.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Bruton Parish Church 1.jpg",
+     "note": "resized, cropped"
+    }
+   },
+   "story": [
+    "Bruton Parish was formed in 1674 by merging two older parishes. Col. John Page gave land and money for a brick church in 1678, and that church was dedicated on January 6, 1684.",
+    "The present church came later. Governor Alexander Spotswood drafted plans for a cruciform church, the first such church in Virginia according to Wikipedia. The first building contract was awarded in 1711 and the church was finished in 1715, with Rev. James Blair overseeing the work.",
+    "From 1905 to 1907 Rev. W. A. R. Goodwin led a restoration of the interior. He later started the effort to restore Williamsburg's historic area. Today it is still an active Episcopal parish, so check service times before you visit."
+   ],
+   "fact": "Bruton Parish is still an active Episcopal parish, with four Sunday services.",
+   "disputed": "Wikipedia's infobox gives 1677 as the build date, but its text dates the brick church to 1681 to 1683 and the present church to 1711 to 1715, so 1677 matches neither. A story that a secret vault under the church holds Francis Bacon's writings is not supported: a 1992 Colonial Williamsburg dig to about twenty feet found no vault.",
+   "claims": [
+    {
+     "t": "A secret vault under Bruton Parish Church holds Francis Bacon's writings.",
+     "a": 2,
+     "why": "A 1992 Colonial Williamsburg excavation to about twenty feet found no vault, and Wikipedia calls the idea unsupported."
+    },
+    {
+     "t": "Bruton Parish is still an active Episcopal parish.",
+     "a": 0,
+     "why": "Wikipedia says it has nearly 2,000 members and holds four Sunday services."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Bruton Parish Church",
+     "u": "https://en.wikipedia.org/wiki/Bruton_Parish_Church"
+    },
+    {
+     "t": "Colonial Williamsburg Almanack: Bruton Parish Church",
+     "u": "https://www.slaveryandremembrance.org/almanack/places/hb/hbbruch.cfm"
+    }
+   ],
+   "sens": "The 1710 grant from the colonial Assembly for the new church was paid for with taxes on liquor and on enslaved people, according to the Colonial Williamsburg Almanack page.",
+   "card": {
+    "a": "1715",
+    "b": "1674",
+    "la": "Present church finished",
+    "lb": "Parish formed"
+   },
+   "spot": {
+    "q": "The c.1902 print shows the cruciform church with its steeple. In what year was the church finished?",
+    "options": [
+     "1715",
+     "1683",
+     "1761",
+     "1905"
+    ],
+    "answer": 0,
+    "why": "The first contract was awarded in 1711 and the church was finished in 1715."
+   }
+  },
+  {
+   "id": "palace",
+   "name": "Governor's Palace",
+   "short": "Governor's Palace",
+   "badge": "Governor's Palace",
+   "tag": "Stop 4 of 4",
+   "teaser": "The home of Virginia's governors, burned in 1781 and rebuilt in the 1930s.",
+   "map": "Governor's Palace, Palace Green, Williamsburg, VA",
+   "geo": [
+    37.27425,
+    -76.70211,
+    200
+   ],
+   "clue": "Walk to the north end of Palace Green. Look for a brick house with a gray roof and a white cupola, set behind a forecourt with two matching side buildings.",
+   "safety": "Stay on sidewalks and paths, use crosswalks, and check each place's opening rules before you go.",
+   "field": "Field notes pending: nobody has walked this stop for the app yet.",
+   "q": {
+    "prompt": "The Palace you can visit opened to the public in 1934. What happened to the original building in 1781?",
+    "options": [
+     "It was sold to the college",
+     "It was moved to Richmond",
+     "It burned down",
+     "It was torn down for its bricks"
+    ],
+    "answer": 2,
+    "hint": "A reconstruction is only needed when something is missing.",
+    "verify": "Wikipedia and Colonial Williamsburg both say the original palace burned on December 22, 1781, and was rebuilt on its foundations in the 1930s. Written from sources, not yet checked on site."
+   },
+   "then": {
+    "ph": {
+     "k": "wb_gp_then",
+     "by": "Frances Benjamin Johnston",
+     "lic": "Public domain",
+     "lu": "https://creativecommons.org/publicdomain/mark/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Gardens and Governor's Palace Williamsburg Virginia by Frances Benjamin Johnston.jpg",
+     "note": "resized"
+    },
+    "yr": "1930s",
+    "label": "The Palace in the 1930s",
+    "line": "A black-and-white photo of the reconstructed palace and its gardens by Frances Benjamin Johnston, taken between 1930 and 1939. This shows the rebuild, not the original 18th-century house, which no photograph can show.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Governor's%20Palace%20Williamsburg&co=hh"
+    }
+   },
+   "now": {
+    "yr": "2014",
+    "head": "Today",
+    "label": "The Palace now",
+    "line": "The front of the reconstructed palace, with its forecourt and side buildings.",
+    "ph": {
+     "k": "wb_gp_now",
+     "by": "Cbaile19",
+     "lic": "CC0",
+     "lu": "https://creativecommons.org/publicdomain/zero/1.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Governor’s Palace, front, 2014-03-23, 01.jpg",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "The House of Burgesses approved money for a governor's residence in 1706, and the building was finished in 1722. Alexander Spotswood arrived in 1710 and moved into the partly finished house in 1716.",
+    "Patrick Henry (1776 to 1779) and Thomas Jefferson (1779 to 1780) lived here as governors. When the capital moved to Richmond in 1780 the governor's residence moved too. After the Siege of Yorktown it served as a hospital for wounded American soldiers, and it burned on December 22, 1781.",
+    "The house you see is a reconstruction. Work on the original foundations began in December 1931, using excavations, Jefferson's drawings and the Bodleian Plate, an engraving from about 1740. The palace opened to the public in April 1934."
+   ],
+   "fact": "The Governor's Palace you can tour is a reconstruction. The original burned in 1781.",
+   "disputed": "Sources phrase the early years differently. Wikipedia calls Spotswood the first official resident, in 1710. Colonial Williamsburg says he arrived in 1710 and moved into the partly finished house in 1716. The building you see is a 1931 to 1934 reconstruction, not the original. It is a Colonial Williamsburg site, so check hours and tickets.",
+   "claims": [
+    {
+     "t": "The Governor's Palace you can tour is the original 1700s building.",
+     "a": 2,
+     "why": "The original burned on December 22, 1781. The present building is a reconstruction that opened in 1934."
+    },
+    {
+     "t": "Patrick Henry and Thomas Jefferson both lived in the Palace as governors.",
+     "a": 0,
+     "why": "Wikipedia names Henry (1776 to 1779) and Jefferson (1779 to 1780) as the post-colonial governors who lived there."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Governor's Palace (Williamsburg, Virginia)",
+     "u": "https://en.wikipedia.org/wiki/Governor%27s_Palace_(Williamsburg,_Virginia)"
+    },
+    {
+     "t": "Colonial Williamsburg: Governor's Palace 85th anniversary",
+     "u": "https://colonialwilliamsburg.org/learn/living-history/celebrate-the-governors-palace-85th-anniversary"
+    }
+   ],
+   "card": {
+    "a": "1781",
+    "b": "1934",
+    "la": "Original building burned",
+    "lb": "Reconstruction opened"
+   },
+   "spot": {
+    "q": "The 1930s photo shows the rebuilt palace and its garden. On what date did the reconstruction open to the public?",
+    "options": [
+     "April 23, 1931",
+     "April 23, 1934",
+     "December 22, 1781",
+     "April 23, 1938"
+    ],
+    "answer": 1,
+    "why": "Wikipedia says the house, outbuildings and gardens opened on April 23, 1934. December 22, 1781 is when the original burned."
+   }
+  }
+ ]
+}

@@ -724,3 +724,12 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | ns_km_then | https://commons.wikimedia.org/wiki/File:Historic American Buildings Survey Roger Sturtevant, Photographer Mar. 29, 1934 VIEW FROM SOUTH-WEST - Old Mine, Sierra City, Sierra County, CA HABS CAL,46-SIRCI,5-1.tif | Roger Sturtevant (Historic American Buildings Survey) | Public domain | resized |
 | ns_km_now | https://commons.wikimedia.org/wiki/File:Kentucky Mine and Museum in Sierra City, California LCCN2013633861.tif | Carol M. Highsmith | Public domain | resized |
 | ns_dm | https://commons.wikimedia.org/wiki/File:Downieville Museum.jpg | Yngvadottir | CC BY-SA 4.0 | resized |
+| wb_jt_then | https://commons.wikimedia.org/wiki/File:Old Church at Jamestown, Virginia-LCCN2008679590.jpg | Library of Congress print (photographer not named) | Public domain | resized |
+| wb_jt_now | https://commons.wikimedia.org/wiki/File:Jamestown Church, Historic Jamestowne, Colonial National Historical Park, Jamestown, Virginia (14239034848).jpg | Ken Lund | CC BY-SA 2.0 | resized |
+| wb_wr_then | https://commons.wikimedia.org/wiki/File:William and Mary College, Williamsburg,VA-LCCN2008679592.jpg | Library of Congress print (photographer not named) | Public domain | resized |
+| wb_wr_now | https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg | Smash the Iron Cage | CC BY-SA 4.0 | resized |
+| wb_br_then | https://commons.wikimedia.org/wiki/File:Bruton Parish Church, Williamsburg, Virginia-LCCN2008679593.jpg | Library of Congress print (photographer not named) | Public domain | resized |
+| wb_br_now | https://commons.wikimedia.org/wiki/File:Bruton Parish Church 1.jpg | Smash the Iron Cage | CC BY-SA 4.0 | resized, cropped |
+| wb_gp_then | https://commons.wikimedia.org/wiki/File:Gardens and Governor's Palace Williamsburg Virginia by Frances Benjamin Johnston.jpg | Frances Benjamin Johnston | Public domain | resized |
+| wb_gp_now | https://commons.wikimedia.org/wiki/File:Governor’s Palace, front, 2014-03-23, 01.jpg | Cbaile19 | CC0 | resized |
+| wb_hero | https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg | Smash the Iron Cage | CC BY-SA 4.0 | resized |
