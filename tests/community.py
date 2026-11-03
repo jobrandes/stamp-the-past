@@ -83,7 +83,9 @@ try:
     ok('<' not in P['Old Depot']['then']['desc'],'html stripped from Commons description')
     ids=[P['Old Depot']['id'],P['Town Library']['id']]
     s,body=api(f'/api/community/photo/{ids[0]}_t'); ok(s==200 and body[:3]==b'\xff\xd8\xff','then photo served')
-    s,body=api(f'/api/community/photo/{ids[1]}_n'); ok(s==200 and body[:3]==b'\xff\xd8\xff','uploaded now photo served')
+    s,body=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'uploaded photo is HELD: not public before approval')
+    s,body=api(f'/api/community/photo/{ids[1]}_n?key='+KEY); ok(s==200 and body[:3]==b'\xff\xd8\xff','uploaded now photo visible with the admin key')
+    s,body=api(f'/api/community/photo/{ids[0]}_t'); ok(s==200,'Commons photos stay public')
     # ---- researched: place files appear, status flips ----
     write_places([(ids[0],'Old Depot',1)])
     s,j=api('/api/community/mine/'+tok); ok(j.get('status')=='added','status should flip to added: %r'%j)

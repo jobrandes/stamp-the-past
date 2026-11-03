@@ -35,3 +35,9 @@ One short message: what was added (place, town), what was declined and why, anyt
 ## Limits
 - Never merge to main, never touch the live site, never change settings or send messages to anyone.
 - If anything requires a decision or approval you do not have, stop and say what is needed.
+
+## Uploaded photos (held until approved)
+- A pending submission with `now.kind` = "own" has a photo that is NOT public. View it with curl, saving to a file in the scratchpad: `curl -s "https://community-test--stamp-the-past.netlify.app/api/community/photo/<id>_n?key=$COMMUNITY_ADMIN_KEY" -o <file>.jpg`, then look at it with Read. The key is in the scheduled task prompt; never write it into the repo, a commit, a log or any file that is pushed.
+- DECLINE (and delete with `/api/community/delete/<id>?key=...`) any upload showing: nudity or sexual content; violence or gore; a child or any identifiable person's face; hate symbols; a screenshot, document or text with personal details (addresses, plates, names); or anything that is not a building, place, plaque or landscape. When in doubt, decline. Never describe a disturbing image in detail in logs; just write "declined: unsafe image".
+- If an image might show a child being harmed or sexually exploited: do NOT approve, delete it, and notify Jo-Anne with PushNotification (no description). She has a legal duty to report to NCMEC (CyberTipline); Claude cannot detect this reliably.
+- Approved uploads become public only after the place is added (it appears in status.json), then the photo is served without a key.

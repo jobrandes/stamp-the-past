@@ -397,3 +397,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Uploads off by default (Nov 3 2026, branch `community-ui`, also on `community-test`)
 - Own-photo uploads are rejected by `netlify/functions/community.mjs` unless the Netlify env var `COMMUNITY_UPLOADS=1` is set (no image scanning exists yet). `GET /api/community/config` returns `{uploads}`; /contribute/ hides the "Or upload my own photo" box unless it is true. Commons links still work. The test server takes `UPLOADS=0|1` (default 1); tests/community.py covers off and on.
+
+## Held uploads (Nov 3 2026, branch `community-ui`, also on `community-test`)
+- Uploaded photos are stored with metadata `own:true` and `/api/community/photo/<id>_n` returns 404 unless the admin key (`?key=`) is given or the place is in status.json `added`. Commons photos stay public. The daily agent views held photos with the key and declines unsafe ones (rules in docs/community-agent.md). The key lives only in Netlify env `COMMUNITY_ADMIN_KEY` and the scheduled task prompt, never in the repo. Still to build: in-browser explicit-image check on the form, per-person daily upload cap.

@@ -40,6 +40,12 @@ export const makeHandler = (opts = {}) => async (req, context) => {
     const key = 'photo/' + parts[1].replace(/[^a-z0-9_]/gi, '');
     const e = await store.getWithMetadata(key, { type: 'arrayBuffer' });
     if (!e) return new Response('not found', { status: 404 });
+    // Uploaded (not Commons) photos are HELD: only the admin key can see them until the place is approved.
+    if (e.metadata?.own && !isAdmin()) {
+      let approved = false;
+      try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const st = await r.json(); approved = (st.added || []).includes(key.split('/')[1].split('_')[0]); } } catch {}
+      if (!approved) return new Response('not found', { status: 404 });
+    }
     return new Response(e.data, { headers: { 'content-type': e.metadata?.type || 'image/jpeg', 'cache-control': 'public, max-age=300' } });
   }
 
@@ -98,10 +104,10 @@ export const makeHandler = (opts = {}) => async (req, context) => {
       }
     } else if (v.nowUpload) {
       const buf = decodeJpegDataUrl(v.nowUpload);
-      sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; photos.push([`photo/${id}_n`, buf, 'image/jpeg']);
+      sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; photos.push([`photo/${id}_n`, buf, 'image/jpeg', true]);
     }
     if (errors.length) return json({ errors }, 400);
-    for (const [k, b, type] of photos) await store.set(k, b, { metadata: { type } });
+    for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
     await store.setJSON('sub/' + id, sub);
     return json({ ok: true, id, status: 'received', edit: id + token });
   }
