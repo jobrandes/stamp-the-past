@@ -89,7 +89,14 @@ sm=['','privacy.html','support.html']
 open(R+'site/sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>https://stampthepast.com/{u}</loc></url>' for u in sm)+''.join(f'<url><loc>https://stampthepast.com{u}</loc></url>' for u in seo_urls)+'</urlset>')
 seo.test_pages(R)
 if os.path.exists(R+'src/community.flag'):
+    sys.path.insert(0,R+'tools'); import community as _cm
+    _bad=_cm.check(R); assert not _bad,'community places: '+'; '.join(_bad[:5])
+    _pk,_ph,_st=_cm.build(R)
+    shutil.rmtree(R+'site/community',ignore_errors=True); os.makedirs(R+'site/community')
+    open(R+'site/community/places.json','w').write(json.dumps({'packs':_pk,'photos':_ph},ensure_ascii=False,separators=(',',':')))
+    open(R+'site/community/status.json','w').write(json.dumps(_st,ensure_ascii=False,separators=(',',':')))
+    print('community:',len(_pk),'towns,',len(_st['added']),'places')
     os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html')
     open(R+'site/_headers','a').write('/contribute/*\n  X-Robots-Tag: noindex\n/api/*\n  X-Robots-Tag: noindex\n')
-else: shutil.rmtree(R+'site/contribute',ignore_errors=True)
+else: shutil.rmtree(R+'site/contribute',ignore_errors=True); shutil.rmtree(R+'site/community',ignore_errors=True)
 print('seo pages:',len(seo_urls))

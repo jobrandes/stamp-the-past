@@ -3,7 +3,7 @@
   var BASE_ORDER=DATA.order.slice(), CPH={};
   /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
   if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
-    try{ var cx=new XMLHttpRequest(); cx.open('GET','/api/community/list',false); cx.send();
+    try{ var cx=new XMLHttpRequest(); cx.open('GET','/community/places.json',false); cx.send();
       if(cx.status===200){ var cj=JSON.parse(cx.responseText); (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } }); CPH=cj.photos||{}; }
     }catch(e){}
   }
@@ -148,8 +148,8 @@
   /* shown on the share card; swap for the real domain or App Store link once it exists */
   var SHARE_URL='stampthepast.com';
   var railRegion=null, ORDER=DATA.order, SOON=DATA.soon||[], atHome=true, onPass=false;
-  function blank(){ return {done:[0,0,0,0],claims:[0,0,0,0,0,0,0,0]}; }
-  var ALL={}; ORDER.forEach(function(k){ ALL[k]=blank(); });
+  function blank(k){ var n=(k&&DATA.packs[k])?DATA.packs[k].stops.length:4, d=[], c=[], i; for(i=0;i<n;i++) d.push(0); for(i=0;i<2*n;i++) c.push(0); return {done:d,claims:c}; }
+  var ALL={}; ORDER.forEach(function(k){ ALL[k]=blank(k); });
   var cityId='reno';
   var S=ALL.reno, STOPS=RENO_STOPS;
   function city(){ return CITIES[cityId]; }
@@ -159,8 +159,14 @@
   var toastTimer=null, nudged=false;
   var pushed=false, ignorePop=false;
 
-  function norm(o){
-    if(o && Array.isArray(o.done) && o.done.length===4 && Array.isArray(o.claims) && o.claims.length===8){
+  function norm(o,k){
+    var P=k&&DATA.packs[k], n=P?P.stops.length:4;
+    if(P&&P.community&&o&&Array.isArray(o.done)&&Array.isArray(o.claims)){
+      /* community towns grow: keep earlier stamps, pad for new places (places are only ever appended) */
+      var d=[],c=[],i; for(i=0;i<n;i++) d.push(o.done[i]?1:0); for(i=0;i<2*n;i++) c.push(o.claims[i]?1:0);
+      return {done:d,claims:c};
+    }
+    if(o && Array.isArray(o.done) && o.done.length===n && Array.isArray(o.claims) && o.claims.length===2*n){
       return {done:o.done.map(function(x){return x?1:0}),claims:o.claims.map(function(x){return x?1:0})};
     }
     return null;
@@ -170,14 +176,14 @@
       var r3=localStorage.getItem(KEY3);
       if(r3){
         var o3=JSON.parse(r3), n;
-        ORDER.forEach(function(k){ if(o3.p && (n=norm(o3.p[k]))) ALL[k]=n; });
+        ORDER.forEach(function(k){ if(o3.p && (n=norm(o3.p[k],k))) ALL[k]=n; });
         if(o3.city && CITIES[o3.city]) cityId=o3.city;
         atHome=!!o3.home;
       } else {
         var r2=localStorage.getItem(KEY2), r=localStorage.getItem(KEY);
         if(r2){
           var o2=JSON.parse(r2);
-          ORDER.forEach(function(k){ if((n=norm(o2[k]))) ALL[k]=n; });
+          ORDER.forEach(function(k){ if((n=norm(o2[k],k))) ALL[k]=n; });
           if(o2.city && CITIES[o2.city]) cityId=o2.city;
           atHome=false;
         } else if(r){ var n1=norm(JSON.parse(r)); if(n1) ALL.reno=n1; atHome=false; }
@@ -202,7 +208,7 @@
     return best;
   }
   function code(){ return 'TN3-'+BASE_ORDER.map(function(k){ return ALL[k].done.join('')+ALL[k].claims.join(''); }).join('-'); }
-  function allDone(){ return sum(S.done)===4; }
+  function allDone(){ return sum(S.done)===S.done.length; }
 
   var stampFx=false;
   function isNativeApp(){ try{ return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()); }catch(e){ return false; } }
@@ -478,7 +484,7 @@
     document.getElementById('xpFill').style.width=Math.round(frac*100)+'%';
     var bar=document.getElementById('xpBar');
     bar.setAttribute('aria-valuenow',String(x));
-    bar.setAttribute('aria-valuetext',x+' of 600 XP, rank '+r.name);
+    bar.setAttribute('aria-valuetext',x+' of '+RANKS[RANKS.length-1][0]+' XP, rank '+r.name);
     document.getElementById('bulbs').innerHTML=STOPS.map(function(s,i){
       return '<div class="bulb'+(S.done[i]?' on':'')+'"><i></i><span>'+s.short+'</span></div>';
     }).join('');
@@ -1544,7 +1550,7 @@
     }
     if(a==='resetask'){ confirmReset=true; render(); return; }
     if(a==='resetno'){ confirmReset=false; render(); return; }
-    if(a==='resetyes'){ ALL[cityId]=blank(); S=ALL[cityId]; save(); confirmReset=false; render(); toast('Progress erased'); return; }
+    if(a==='resetyes'){ ALL[cityId]=blank(cityId); S=ALL[cityId]; save(); confirmReset=false; render(); toast('Progress erased'); return; }
   });
 
   var deepExp=null;

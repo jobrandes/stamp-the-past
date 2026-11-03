@@ -13,97 +13,66 @@ button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;
 details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
 </style></head><body><main>
 <p class="mut" style="margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem">Stamp the Past · community test</p>
-<h1>Add your city</h1>
-<p>Pick four places, tell their story, and add a "then" and a "now" photo for each. Your city shows up in the test copy of the app right away. No account, no email. You get a private edit link at the end.</p>
-<div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Only post photos you took yourself, or free-to-use photos from Wikimedia Commons or the Library of Congress. Your photos are resized and any hidden location data is removed in your browser before upload.</div>
+<h1>Suggest a place</h1>
+<p>Know a historic place in your town? Tell us its name, give us a one-liner and two photo links, and we do the rest: the research, the story, the sources and the quiz. Your place shows up in the test copy of the app within about 24 hours. No account, no email.</p>
+<div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
 <form id="f" novalidate>
 <input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-<fieldset><legend>Your city</legend>
-<label for="city">City or town</label><input id="city" maxlength="60" required>
-<div class="row"><div><label for="state">State or region</label><input id="state" maxlength="30"></div><div><label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30"></div></div>
+<fieldset><legend>The place</legend>
+<label for="place">Name of the place</label><input id="place" maxlength="80" placeholder="e.g. Mill Valley Depot">
+<div class="row"><div><label for="city">Town or city</label><input id="city" maxlength="60"></div><div><label for="state">State or region</label><input id="state" maxlength="30"></div></div>
+<label for="one">One line about it</label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
+<label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30">
 </fieldset>
-<div id="stops"></div>
+<fieldset><legend>"Then" photo (an old photo)</legend>
+<label for="then">Link to the photo's page on Wikimedia Commons</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<p class="help">The address should start with commons.wikimedia.org/wiki/File:. We check the license for you.</p>
+</fieldset>
+<fieldset><legend>"Now" photo (today)</legend>
+<label for="now">Link to a Commons photo page</label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<details id="own"><summary>Or upload my own photo</summary>
+<label>Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
+<label class="chk"><input type="checkbox" id="took"><span>I took this photo myself</span></label>
+<div class="row"><div><label>Your credit</label><input id="credit" maxlength="120"></div><div><label>Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
+<label>License</label><select id="lic"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
+<p class="help">Your photo is resized, and hidden location data is removed, in your browser before upload.</p></details>
+</fieldset>
 <fieldset><legend>Before you send</legend>
-<label class="chk"><input type="checkbox" id="confirm"><span>The photos marked "I took this" are mine and I am sharing them under the license I picked. The other photos are from the free source I linked. The facts come from the sources I listed.</span></label>
+<label class="chk"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
 <p class="err" id="errs" role="alert" hidden></p>
-<p><button type="submit" id="go">Add my city to the test</button></p>
+<p><button type="submit" id="go">Send this place</button></p>
 <p class="mut" id="status" role="status"></p>
 </fieldset>
 </form>
-<section id="done" hidden><h2>Your city is in.</h2><p class="ok">It is live in the test copy.</p>
-<p>Keep this private edit link. Anyone with it can change your city, and we cannot recover it for you.</p><div class="box" id="editlink"></div>
-<p><button class="ghost" id="copy" type="button">Copy the edit link</button> <a href="/play.html"><button type="button">See it in the app</button></a></p></section>
+<section id="done" hidden><h2>Received.</h2><p class="ok">Thank you. We will research your place and add it to the test copy within about 24 hours.</p>
+<p>Keep this private link. It shows where your place is in the process. We cannot recover it for you.</p><div class="box" id="editlink"></div>
+<p><button class="ghost" id="copy" type="button">Copy the link</button></p></section>
+<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><p><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button">Open the test app</button></a></p></section>
 </main>
 <script>
 (function(){
-var LIC_THEN=['Public domain','CC0','CC BY','CC BY-SA'], LIC_NOW=['CC0','CC BY','CC BY-SA','Public domain'];
-var stopsEl=document.getElementById('stops'), editId=null, photoData={};
-function el(h){var d=document.createElement('div');d.innerHTML=h;return d.firstElementChild;}
-function photoBlock(i,era){
-  var then=era==='then', ttl=then?'"Then" photo (an old photo)':'"Now" photo (today)';
-  var lic=(then?LIC_THEN:LIC_NOW).map(function(l){return '<option>'+l+'</option>';}).join('');
-  return '<div class="photo" data-era="'+era+'"><strong>'+ttl+'</strong>'+
-   '<label>Photo file</label><input type="file" accept="image/*" data-f="file">'+
-   '<img alt="" hidden data-f="prev">'+
-   (then?'':'<label class="chk"><input type="checkbox" data-f="own"><span>I took this photo myself</span></label>')+
-   '<label>Credit (who made it)</label><input data-f="credit" maxlength="120">'+
-   '<div class="row"><div><label>Year</label><input data-f="year" maxlength="12" placeholder="'+(then?'1905':'2026')+'"></div><div><label>License</label><select data-f="license">'+lic+'</select></div></div>'+
-   '<div data-f="pagewrap"><label>Link to the photo page ('+(then?'Wikimedia Commons or loc.gov':'Commons or loc.gov, only if it is not your own')+')</label><input data-f="page" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..."></div>'+
-   '<label>One-line caption</label><input data-f="caption" maxlength="140"></div>';
-}
-for(var i=0;i<4;i++){
-  stopsEl.appendChild(el('<fieldset data-i="'+i+'"><legend>Place '+(i+1)+' of 4</legend>'+
-   '<label>Name of the place</label><input data-f="name" maxlength="80">'+
-   '<label>Its story</label><textarea data-f="story" maxlength="1500" placeholder="What happened here? 2 to 4 short paragraphs, at least a couple of sentences."></textarea><p class="help">Only write what your sources say. Separate paragraphs with a blank line.</p>'+
-   '<div class="row"><div><label>Street address (optional)</label><input data-f="address" maxlength="120"></div><div><label>Latitude, longitude (optional)</label><input data-f="ll" placeholder="39.5296, -119.8138"></div></div>'+
-   '<label>Source 1</label><div class="row"><input data-f="s1t" placeholder="Title" maxlength="100"><input data-f="s1u" inputmode="url" placeholder="https://..."></div>'+
-   '<label>Source 2</label><div class="row"><input data-f="s2t" placeholder="Title" maxlength="100"><input data-f="s2u" inputmode="url" placeholder="https://..."></div>'+
-   photoBlock(i,'then')+photoBlock(i,'now')+
-   '<details><summary>Optional: write your own quiz question</summary><p class="help">If you skip this, the app makes a simple "which place is this?" question. A wrong answer must not appear in your hint.</p>'+
-   '<label>Question</label><input data-f="qp" maxlength="200"><label>Right answer</label><input data-f="qc" maxlength="80"><label>Wrong answer 1</label><input data-f="qw1" maxlength="80"><label>Wrong answer 2</label><input data-f="qw2" maxlength="80"><label>Wrong answer 3 (optional)</label><input data-f="qw3" maxlength="80"><label>Hint</label><input data-f="qh" maxlength="160"></details>'+
-   '</fieldset>'));
-}
-function $(root,f){return root.querySelector('[data-f="'+f+'"]');}
-// Resize in the browser: max 640 px, JPEG q0.6. Re-encoding drops EXIF (GPS) data.
-function shrink(file,cb){
-  var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);
-}
-Array.prototype.forEach.call(stopsEl.querySelectorAll('.photo'),function(ph){
-  var fs=ph.closest('fieldset'), key=fs.getAttribute('data-i')+ph.getAttribute('data-era');
-  $(ph,'file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;shrink(f,function(d){if(!d){say('That file could not be read as a picture.',true);return;}photoData[key]=d;var p=$(ph,'prev');p.src=d;p.hidden=false;p.alt='Preview';});});
-  var own=$(ph,'own');if(own){own.addEventListener('change',function(){$(ph,'pagewrap').hidden=own.checked;});}
-});
+var photo=null;
 function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
+function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
+document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;shrink(f,function(d){if(!d){say('That file could not be read as a picture.',true);return;}photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview';});});
+function v(id){return document.getElementById(id).value;}
 function collect(){
-  var o={city:document.getElementById('city').value,state:document.getElementById('state').value,nickname:document.getElementById('nick').value,confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value,stops:[]};
-  if(editId)o.edit=editId;
-  Array.prototype.forEach.call(stopsEl.querySelectorAll('fieldset'),function(fs){
-    var i=fs.getAttribute('data-i'), ll=$(fs,'ll').value.split(/[ ,]+/).filter(Boolean);
-    var s={name:$(fs,'name').value,story:$(fs,'story').value,address:$(fs,'address').value,lat:ll[0]||'',lon:ll[1]||'',sources:[{t:$(fs,'s1t').value,u:$(fs,'s1u').value},{t:$(fs,'s2t').value,u:$(fs,'s2u').value}]};
-    ['then','now'].forEach(function(era){var ph=fs.querySelector('.photo[data-era="'+era+'"]'), own=$(ph,'own');
-      s[era]={photo:photoData[i+era]||(editId&&ph.getAttribute('data-keep')?'keep':''),credit:$(ph,'credit').value,year:$(ph,'year').value,license:$(ph,'license').value,page:$(ph,'page').value,caption:$(ph,'caption').value,own:own?own.checked:false};});
-    if($(fs,'qp').value||$(fs,'qc').value)s.q={prompt:$(fs,'qp').value,correct:$(fs,'qc').value,wrong:[$(fs,'qw1').value,$(fs,'qw2').value,$(fs,'qw3').value],hint:$(fs,'qh').value};
-    o.stops.push(s);
-  });
+  var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
+  if(!o.nowUrl.trim()){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense=v('lic');}
   return o;
 }
 document.getElementById('f').addEventListener('submit',function(e){
-  e.preventDefault();var errs=document.getElementById('errs');errs.hidden=true;document.getElementById('go').disabled=true;say('Sending…');
+  e.preventDefault();var errs=document.getElementById('errs');errs.hidden=true;document.getElementById('go').disabled=true;say('Sending… checking your photo links can take a few seconds.');
   fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(collect())}).then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});}).then(function(x){
     document.getElementById('go').disabled=false;
-    if(x.s!==200){errs.hidden=false;errs.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(m){return '<li>'+m.replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';say('');errs.scrollIntoView({block:'center'});return;}
-    var link=location.origin+'/contribute/?edit='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+    if(x.s!==200){errs.hidden=false;errs.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(m){return '<li>'+String(m).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';say('');errs.scrollIntoView({block:'center'});return;}
+    var link=location.origin+'/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
   }).catch(function(){document.getElementById('go').disabled=false;say('Could not reach the test server. Try again.',true);});
 });
-document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){this.textContent='Copied';}.bind(this)).catch(function(){});});
-// edit mode
-var m=location.search.match(/[?&]edit=([a-f0-9]{8}[a-f0-9]+)/);
-if(m){editId=m[1];fetch('/api/community/mine/'+editId).then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return;var s=j.sub;document.getElementById('city').value=s.city;document.getElementById('state').value=s.state||'';document.getElementById('nick').value=s.nickname||'';
- s.stops.forEach(function(st,i){var fs=stopsEl.querySelector('fieldset[data-i="'+i+'"]');$(fs,'name').value=st.name;$(fs,'story').value=st.story.join('\n\n');$(fs,'address').value=st.address||'';if(st.geo)$(fs,'ll').value=st.geo.join(', ');
-  st.sources.forEach(function(x,k){$(fs,'s'+(k+1)+'t').value=x.t;$(fs,'s'+(k+1)+'u').value=x.u;});
-  ['then','now'].forEach(function(era){var ph=fs.querySelector('.photo[data-era="'+era+'"]'),p=st[era];ph.setAttribute('data-keep','1');$(ph,'credit').value=p.credit;$(ph,'year').value=p.year;$(ph,'license').value=p.license;$(ph,'page').value=p.page||'';$(ph,'caption').value=p.caption;var o=$(ph,'own');if(o){o.checked=!!p.own;$(ph,'pagewrap').hidden=!!p.own;}
-   var pv=$(ph,'prev');pv.src='/api/community/photo/'+s.id+'_'+(i+1)+(era==='then'?'t':'n');pv.hidden=false;pv.alt='Current photo (choose a file to replace it)';});
-  if(st.q){$(fs,'qp').value=st.q.prompt;$(fs,'qc').value=st.q.correct;st.q.wrong.forEach(function(w,k){$(fs,'qw'+(k+1)).value=w;});$(fs,'qh').value=st.q.hint;}});
- document.getElementById('go').textContent='Save changes';document.getElementById('confirm').checked=false;say('Editing your city. Tick the box again before saving.');});}
+document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent,b=this;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';}).catch(function(){});});
+var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
+if(m){document.getElementById('f').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
+  var T={received:['Received','We have your place and will research it. It shows up in the test copy within about 24 hours of being sent.'],added:['Added','Your place is in the test copy of the app. Open the test app, find the "Community-added" group on the Towns tab, and look for '+(j.city||'your town')+'.'],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
+  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];});}
 })();
 </script></body></html>
