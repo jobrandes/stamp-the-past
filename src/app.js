@@ -324,10 +324,10 @@
     var dist=(x.d!=null)?' · '+nice(x.d)+', straight-line':'';
     if(x.kind==='town'){
       var st=CITIES[x.c].stops[x.i], done=!!ALL[x.c].done[x.i];
-      return '<button class="rcard nbrow" data-a="nbtown" data-c="'+x.c+'" data-i="'+x.i+'"><span><strong>'+st.name+'</strong><span class="rsub">Town mission · '+CITIES[x.c].name+dist+'</span><span class="nbst'+(done?' on':'')+'">'+(done?'Stamped':'Not stamped')+'</span></span><span class="go">Open ›</span></button>';
+      return '<button class="rcard nbrow" data-a="nbtown" data-c="'+x.c+'" data-i="'+x.i+'"><span><strong>'+st.name+'</strong><span class="rsub">Town mission · '+CITIES[x.c].name+dist+'</span>'+(st.community?'<span class="nbst com">Community-added</span>':'')+'<span class="nbst'+(done?' on':'')+'">'+(done?'Stamped':'Not stamped')+'</span></span><span class="go">Open ›</span></button>';
     }
     var sp=x.s, v=!!nbGet()[nbKey(sp)];
-    return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span><span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+(x.teaser?sp.invite:nbFirst(sp.access))+'</span></span><span class="go">Open ›</span></button>';
+    return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span>'+(sp.community?'<span class="nbst com">Community-added</span>':'')+'<span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+(x.teaser?sp.invite:nbFirst(sp.access))+'</span></span><span class="go">Open ›</span></button>';
   }
   function nbCardHtml(){
     if(!STORY.length) return '';
@@ -371,10 +371,10 @@
     var dir='https://www.google.com/maps/dir/?api=1&amp;destination='+encodeURIComponent(sp.addr)+'&amp;travelmode=walking';
     return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ '+(nv.mode==='city'?'Explore '+CITIES[nv.town].name:'Closest stops')+'</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
       +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
-      +sensHtml(sp)+ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
+      +(sp.community?comBadge():'')+sensHtml(sp)+ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
       +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
-      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section></section>';
+      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
   }
   function viewNear(){
     var sp=nv.sid?nbStory(nv.sid):null; if(sp) return viewStory(sp);
@@ -741,8 +741,11 @@
   window.addEventListener('online',function(){ toast('Back online.'); });
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function vdate(d){ var m=/^(\d{4})-(\d{2})/.exec(d||''); return m?MON[+m[2]-1]+' '+m[1]:''; }
+  /* community content: always labelled, never mistaken for a curated place */
+  function comBadge(){ return '<div class="combadge"><b>Community-added</b><span>Suggested by a contributor and researched from sources. Not checked on site, and not reviewed by a historian.</span></div>'; }
   function vnote(st){
     var v=st.verified;
+    if(st.community) return comBadge()+(v&&v.on?'<div class="vbadge ok"><b>Verified on site</b><span>by '+v.by+(vdate(v.on)?' \u00b7 '+vdate(v.on):'')+'</span></div>':'');
     if(v&&v.on) return '<div class="vbadge ok"><b>Verified on site</b><span>by '+v.by+(vdate(v.on)?' · '+vdate(v.on):'')+'</span>'+(v.note?'<em>'+v.note+'</em>':'')+'</div>';
     var fn=st.field.replace(/^Field notes pending:\s*/i,''); return '<div class="vbadge"><b>Researched from sources. On-site check coming</b>'+(/nobody has walked/i.test(fn)?'':'<span>'+fn+'</span>')+'</div>';
   }
@@ -754,14 +757,15 @@
   }
   function showReport(opt){ opt=opt||{};
     var old=document.getElementById('report'); if(old) old.remove();
-    var d=document.createElement('div'); d.id='report'; d.className='celeb'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','repT'); d.dataset.where=opt.req?'Town request':whereAmI();
-    d.innerHTML='<div class="celeb-card tour-card rep-card"><h2 id="repT">'+(opt.req?'Which town should we add?':'Something wrong?')+'</h2><p>'+(opt.req?'Tell us the town and the places you would want to see. We add towns that have free, real photos from the past, so some take longer.':'Wrong answer, confusing screen, broken photo, or a plaque that says something else. Tell us in a sentence or two.')+'</p><label class="mono" for="repMsg">'+(opt.req?'Town and places':'What happened')+'</label><textarea id="repMsg" maxlength="600" rows="4">'+(opt.pre||'').replace(/[<>&"]/g,'')+'</textarea><label class="mono" for="repWho">Your email (optional, only if you want a reply)</label><input id="repWho" type="email" maxlength="120" autocomplete="off"><p class="why">Please do not include personal details. We send along only where in the app you were: <em>'+d.dataset.where+'</em>.</p><p id="repMsgOut" class="feedback" aria-live="polite"></p><div class="celeb-btns"><button class="btn" data-a="repsend">Send</button><button class="btn ghost" data-a="repclose">Cancel</button></div></div>';
+    var d=document.createElement('div'); d.id='report'; d.className='celeb'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','repT'); d.dataset.where=opt.req?'Town request':(opt.com?'Community report '+opt.com+' / ':'')+whereAmI();
+    d.innerHTML='<div class="celeb-card tour-card rep-card"><h2 id="repT">'+(opt.req?'Which town should we add?':(opt.com?'Report this place':'Something wrong?'))+'</h2><p>'+(opt.req?'Tell us the town and the places you would want to see. We add towns that have free, real photos from the past, so some take longer.':(opt.com?'Anyone can report a community place. Pick the closest reason and add a sentence if you like. We look at every report, and a place can be taken down.':'Wrong answer, confusing screen, broken photo, or a plaque that says something else. Tell us in a sentence or two.'))+'</p>'+(opt.com?'<label class="mono" for="repWhy">Reason</label><select id="repWhy"><option>Wrong or misleading information</option><option>A photo that should not be here</option><option>A private or unsafe place</option><option>Offensive or inappropriate</option><option>Something else</option></select>':'')+'<label class="mono" for="repMsg">'+(opt.req?'Town and places':'What happened')+'</label><textarea id="repMsg" maxlength="600" rows="4">'+(opt.pre||'').replace(/[<>&"]/g,'')+'</textarea><label class="mono" for="repWho">Your email (optional, only if you want a reply)</label><input id="repWho" type="email" maxlength="120" autocomplete="off"><p class="why">Please do not include personal details. We send along only where in the app you were: <em>'+d.dataset.where+'</em>.</p><p id="repMsgOut" class="feedback" aria-live="polite"></p><div class="celeb-btns"><button class="btn" data-a="repsend">Send</button><button class="btn ghost" data-a="repclose">Cancel</button></div></div>';
     document.body.appendChild(d); var f=document.getElementById('repMsg'); if(f) f.focus();
   }
   function closeReport(){ var e=document.getElementById('report'); if(e){ e.remove(); var m=document.getElementById('menuBtn'); if(m&&m.offsetParent!==null&&(!document.activeElement||document.activeElement===document.body)) try{ m.focus(); }catch(x){} } }
   function sendReport(){
     var d=document.getElementById('report'); if(!d) return;
-    var msg=document.getElementById('repMsg').value.trim(), out=document.getElementById('repMsgOut');
+    var msg=document.getElementById('repMsg').value.trim(), out=document.getElementById('repMsgOut'), why=document.getElementById('repWhy');
+    if(why) msg=('['+why.value+'] '+msg).trim();
     if(!msg){ out.className='feedback bad'; out.textContent='Write a sentence first.'; return; }
     var body=new URLSearchParams({'form-name':'report','bot-field':'','where':d.dataset.where,'message':msg,'contact':document.getElementById('repWho').value.trim()}).toString();
     out.className='feedback'; out.textContent='Sending...';
@@ -1295,7 +1299,7 @@
       h+='</div></div>';
     }
     if(cur.step===3 && d){ h+=factGame(st); }
-    h+='<p class="repline"><button class="link" data-a="report">Something wrong here? Tell us</button></p>';
+    h+='<p class="repline">'+(st.community?'<button class="link" data-a="report" data-com="'+String(st.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button>':'<button class="link" data-a="report">Something wrong here? Tell us</button>')+'</p>';
     return h;
   }
 
@@ -1427,7 +1431,7 @@
       toast('Erased. Starting fresh...'); setTimeout(function(){ location.reload(); },700); return;
     }
     if(a==='hapticTest'){ haptic('success',function(r){ toast(r==='ok'?'Buzz sent. If you felt nothing, check Settings, Sounds and Haptics, System Haptics.':r==='missing'?'The buzz part of the app did not load. Please tell us.':'The buzz did not run. Please tell us.'); }); return; }
-    if(a==='report'){ showReport(); return; }
+    if(a==='report'){ showReport(b.getAttribute('data-com')?{com:b.getAttribute('data-com')}:null); return; }
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }
     if(a==='repclose'){ closeReport(); return; }
     if(a==='repsend'){ sendReport(); return; }

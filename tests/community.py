@@ -95,6 +95,18 @@ try:
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(400)
     ok('Testville' in pg.inner_text('body') and 'Community' in pg.inner_text('body'),'town screen / community label')
     pg.evaluate("document.querySelector('[data-a=open]').click()"); pg.wait_for_timeout(300)
+    # slice 1: label and report on a community place
+    ok(pg.evaluate("!!document.querySelector('.combadge')") and 'community-added' in pg.inner_text('.combadge').lower(),'community stop shows the Community-added label')
+    ok(pg.evaluate("document.querySelector('.repline [data-a=report]').innerText")=='Report this place','community stop says Report this place')
+    sent=[]
+    pg.route('**/',lambda r: (sent.append(r.request.post_data or '') if r.request.method=='POST' else None, r.fulfill(status=200,body='ok') if r.request.method=='POST' else r.continue_())[1])
+    pg.click('.repline [data-a=report]'); pg.wait_for_selector('#report')
+    ok(pg.evaluate("!!document.getElementById('repWhy')") and pg.evaluate("document.getElementById('repWhy').options.length")==5,'report has five reasons')
+    ok('Community report p1' in pg.evaluate("document.getElementById('report').dataset.where"),'report names the community place: '+pg.evaluate("document.getElementById('report').dataset.where"))
+    pg.select_option('#repWhy','A private or unsafe place'); pg.click('[data-a=repsend]'); pg.wait_for_timeout(500)
+    ok(len(sent)==1 and 'Community+report+p1' in sent[0] and 'private+or+unsafe' in sent[0],'report posts place id and reason without typing: %r'%sent)
+    ok(pg.evaluate("!document.getElementById('report')"),'report closes after sending')
+    pg.unroute('**/')
     pg.click('[data-a=step][data-n="1"]'); pg.wait_for_timeout(300)
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=pick]')).find(function(b){return /^Old Depot/.test(b.innerText.trim());}).click()"); pg.wait_for_timeout(500)
     st=lambda: pg.evaluate("JSON.parse(localStorage.getItem('then-now-v3')).p['%s']"%cid)
@@ -159,6 +171,8 @@ try:
     pg.evaluate("document.querySelector('[data-a=nbstory]').click()"); pg.wait_for_timeout(500)
     ok('hilltop chapel' in pg.inner_text('body').lower() and pg.evaluate("!!document.querySelector('.nbfig img')"),'story card shows the photo')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
+    ok(pg.evaluate("!!document.querySelector('.combadge')"),'community story card shows the Community-added label')
+    ok(pg.evaluate("document.querySelector('.repline [data-a=report]')&&document.querySelector('.repline [data-a=report]').getAttribute('data-com')")=='chapel','community story card has a Report button')
     # the real save code is unchanged by community towns
     pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     n_real=json.load(open(R+'src/packs/index.json'))['order']
