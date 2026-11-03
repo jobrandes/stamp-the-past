@@ -71,18 +71,19 @@ export function validate(input) {
     place: t(input.place, 3, 80, 'Name of the place'), oneLiner: t(input.oneLiner, 10, 300, 'One line about it'),
     nickname: t(input.nickname, 0, 30, 'Nickname'),
   };
-  v.then = parseSourceLink(input.thenUrl);
-  if (!v.then) errs.push('"Then" photo: paste the link to its File: page on commons.wikimedia.org.');
-  const hasNowUrl = clean(input.nowUrl);
+  // At least one photo is needed. "Then" only = waits for a "now" photo. "Now" only = becomes a Story stop (no old photo yet).
+  const hasThenUrl = clean(input.thenUrl), hasNowUrl = clean(input.nowUrl), hasUpload = !!input.nowPhoto;
+  if (hasThenUrl) { v.then = parseSourceLink(input.thenUrl); if (!v.then) errs.push('"Then" photo: paste the link to its File: page on commons.wikimedia.org, or leave it empty.'); }
   if (hasNowUrl) { v.now = parseSourceLink(input.nowUrl); if (!v.now) errs.push('"Now" photo: paste a commons.wikimedia.org File: page link, or upload your own instead.'); }
-  else {
+  else if (hasUpload) {
     v.nowUpload = input.nowPhoto;
-    if (!decodeJpegDataUrl(input.nowPhoto)) errs.push('"Now" photo: paste a link or upload a photo.');
+    if (!decodeJpegDataUrl(input.nowPhoto)) errs.push('"Now" photo: that upload could not be read. Try another photo.');
     v.nowLicense = UPLOAD_LICENSES.includes(input.nowLicense) ? input.nowLicense : (errs.push('"Now" photo: pick a license for your own photo.'), '');
     v.nowCredit = t(input.nowCredit, 2, 120, 'Your photo credit');
     v.nowYear = t(input.nowYear, 4, 4, 'Year your photo was taken');
     if (input.nowOwn !== true) errs.push('Tick "I took this photo myself" for an uploaded photo.');
   }
+  if (!hasThenUrl && !hasNowUrl && !hasUpload) errs.push('Add at least one photo: an old one, a recent one, or both.');
   if (input.confirm !== true) errs.push('Please tick the box that confirms the photos are free to use and the facts are not your private information.');
   return { errs, v };
 }

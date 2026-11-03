@@ -15,6 +15,12 @@ Create `src/community/places/<id>.json` (see `src/community/README.md`):
 - Be honest about the photos: if the "then" photo is not clearly this building from this angle, or the "now" photo shows something different, say so in the labels. Use the Commons description and the page title as evidence. Hard history gets a short factual note in `sens`.
 - Keep the tone factual and a little warm. No teen slang.
 
+## 2b. Pick the path from the photos
+A submission may have only one photo, so check which of `then` / `now` is present:
+- **Both** -> a full mission stop as above (`src/community/places/<id>.json`).
+- **`now` only** -> a Story stop (history place, no stamp, no XP). Write `src/community/stories/<id>.json`: `{"sub","town","state","added","stop":{...}}` where `stop` follows the Story-stop schema in `src/tours/*.json` (id, name, area, geo [lat,lon,radius 50-1000], addr, invite, story 2+ paragraphs, facts (3+, each with `src` source indexes), access (specific, 40+ chars: say what can be seen from public ground and to check hours), access_check {on,by,how}, sources 2+ https, ph {k:"cm_<id>_n", alt, by, lic, lu, page}, optional `sens`). Say honestly that no old photo is shown. First try for a few minutes to find a free "then" photo (Commons, Library of Congress, HABS): if you find a clearly matching one, tell Jo-Anne in the report instead of adding it (photos cannot be uploaded from this run).
+- **`then` only** -> do not add it. Add `{"<id>": "We have your place and its old photo. We still need a recent photo of it."}` to `src/community/waiting.json` (create it as `{}` if missing). Do not decline it.
+
 ## 3. When you must decline
 Write the reason in plain, kind language into `src/community/declined.json` as `{"<id>": "reason"}`. Decline when: fewer than 2 reliable sources can be found, the place is private or unsafe to visit, the place is not historical, it duplicates an existing place in that town, or the photos do not show the place. Never decline silently and never add something you could not verify.
 

@@ -4,7 +4,7 @@
   /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
   if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
     try{ var cx=new XMLHttpRequest(); cx.open('GET','/community/places.json',false); cx.send();
-      if(cx.status===200){ var cj=JSON.parse(cx.responseText); (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } }); CPH=cj.photos||{}; }
+      if(cx.status===200){ var cj=JSON.parse(cx.responseText); (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } }); CPH=cj.photos||{}; DATA.tours=(DATA.tours||[]).concat((cj.tours||[]).filter(function(t){ return t&&t.id&&t.stops&&t.stops.length; })); }
     }catch(e){}
   }
   /* ---------- native progress backup (iPhone/Android app only) ---------- */
@@ -391,7 +391,7 @@
     } else if(mode==='area'){
       var t=null; TOURS.forEach(function(x){ if(x.id===nv.tour) t=x; });
       if(!t){ nv.mode='pick'; return viewNear(); }
-      var towns=[]; t.towns.forEach(function(k){ CITIES[k].stops.forEach(function(st,i){ towns.push({kind:'town',c:k,i:i}); }); });
+      var towns=[]; t.towns.forEach(function(k){ if(!CITIES[k]) return; CITIES[k].stops.forEach(function(st,i){ towns.push({kind:'town',c:k,i:i}); }); });
       h+='<p class="nbnote">'+t.name+'. These are not in any route order, and distances need location.</p><h2 class="nbh">Town missions</h2>'+towns.map(nbRow).join('')+'<h2 class="nbh">Story stops</h2>'+t.stops.map(function(x){ return nbRow({kind:'story',s:x}); }).join('')+'<button class="link" data-a="nbnoloc">‹ Choose another place</button>';
     } else {
       var arr=nbItems();

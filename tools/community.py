@@ -11,7 +11,10 @@ def load_places(R=R,d=None):
     for f in sorted(glob.glob(d+'*.json')):
         out.append((os.path.basename(f),json.load(open(f))))
     return out
-def build(R=R,places_dir=None,declined_file=None):
+def load_stories(R=R,d=None):
+    d=d or R+'src/community/stories/'
+    return [(os.path.basename(f),json.load(open(f))) for f in sorted(glob.glob(d+'*.json'))]
+def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
     """Return (packs, photos, status). Every town with at least one place becomes one pack, any number of stops."""
     towns={}
     for fn,p in load_places(R,places_dir):
@@ -43,10 +46,21 @@ def build(R=R,places_dir=None,declined_file=None):
           'afterDone':f'All {n} badges earned. {nm} is stamped.','safetyNote':'<li>Stay on public paths and sidewalks.</li>',
           'badgeMap':{st['id']:[st['now']['ph']['k'],'50% 50%'] for st in stops},
           'level':'Community','region':'Community-added','state':state,'stops':stops})
-    added=sorted({p['sub'] for _,p in load_places(R,places_dir)})
+    # Story stops: places with a recent photo only. They become a "tour" per town, shown under Nearby stops / Explore history.
+    tours={}
+    for fn,p in load_stories(R,stories_dir):
+        tid='c_'+slug(p['town']+'-'+p['state'] if p.get('state') else p['town'])
+        sp=json.loads(json.dumps(p['stop'])); sp['town']=tid; sp['community']=True
+        t=tours.setdefault(tid,{'id':tid,'name':p['town'],'towns':[tid] if tid in {x['id'] for x in packs} else [],'community':True,'stops':[]})
+        t['stops'].append(sp)
+        ph=sp.get('ph')
+        if ph: photos[ph['k']]='/api/community/photo/'+ph['k'][3:]
+    added=sorted({p['sub'] for _,p in load_places(R,places_dir)}|{p['sub'] for _,p in load_stories(R,stories_dir)})
     df=declined_file or R+'src/community/declined.json'
     declined=json.load(open(df)) if os.path.exists(df) else {}
-    return packs,photos,{'added':added,'declined':declined}
+    wf=R+'src/community/waiting.json'
+    waiting=json.load(open(wf)) if os.path.exists(wf) else {}
+    return packs,photos,{'added':added,'declined':declined,'waiting':waiting},list(tours.values())
 def check(R=R,places_dir=None):
     bad=[]
     def need(c,m):
@@ -80,7 +94,27 @@ def check(R=R,places_dir=None):
         c=st.get('card') or {}; need(all(c.get(k) for k in ('a','b','la','lb')),f'{w}: card incomplete')
         if st.get('spot'):
             s=st['spot']; need(len(set(s.get('options',[])))==4 and 0<=s.get('answer',-1)<4 and s.get('why'),f'{w}: bad spot puzzle')
+    for fn,p in load_stories(R):
+        w='stories/'+fn
+        for f in ('sub','town','added','stop'): need(p.get(f),f'{w}: missing {f}')
+        if not p.get('stop'): continue
+        need(re.fullmatch(r'[a-f0-9]{8}',p.get('sub','')) and fn==p['sub']+'.json',f'{w}: file name must be <sub>.json')
+        st=p['stop']
+        for f in ('id','name','area','addr','invite','access'): need(st.get(f),f'{w}: missing {f}')
+        g=st.get('geo'); need(isinstance(g,list) and len(g)==3 and -90<=g[0]<=90 and -180<=g[1]<=180 and 50<=g[2]<=1000,f'{w}: geo [lat, lon, radius 50..1000] required')
+        need(isinstance(st.get('story'),list) and len(st['story'])>=2,f'{w}: story needs 2+ paragraphs')
+        need(len(st.get('access',''))>=40,f'{w}: access note must be specific')
+        srcs=st.get('sources') or []
+        need(len(srcs)>=2 and all(x.get('t') and str(x.get('u','')).startswith('https://') for x in srcs),f'{w}: 2+ https sources')
+        fa=st.get('facts') or []; used=set()
+        need(len(fa)>=3,f'{w}: list 3+ facts with source indexes')
+        for x in fa:
+            need(x.get('t') and x.get('src') and all(isinstance(i,int) and 0<=i<len(srcs) for i in x['src']),f'{w}: every fact needs valid src indexes'); used|=set(x.get('src') or [])
+        need(used==set(range(len(srcs))),f'{w}: every source must support a fact')
+        ph=st.get('ph') or {}
+        need(ph.get('k')==f'cm_{p.get("sub")}_n' and ph.get('by') and ph.get('lic') and ph.get('page','').startswith('https://') and ph.get('lu'),f'{w}: now photo key cm_<sub>_n with by, lic, lu, page required')
+        need(st.get('sens') is None or isinstance(st['sens'],str),f'{w}: sens must be text')
     return bad
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='check':
-        b=check(); print('community places:',len(load_places()),'files;',len(b),'problems'); [print(' ',x) for x in b]; sys.exit(1 if b else 0)
+        b=check(); print('community places:',len(load_places()),'places,',len(load_stories()),'stories;',len(b),'problems'); [print(' ',x) for x in b]; sys.exit(1 if b else 0)

@@ -14,7 +14,7 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 </style></head><body><main>
 <p class="mut" style="margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem">Stamp the Past · community test</p>
 <h1>Suggest a place</h1>
-<p>Know a historic place in your town? Tell us its name, give us a one-liner and two photo links, and we do the rest: the research, the story, the sources and the quiz. Your place shows up in the test copy of the app within about 24 hours. No account, no email.</p>
+<p>Know a historic place in your town? Tell us its name, give us a one-liner and a photo link (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. Your place shows up in the test copy of the app within about 24 hours. No account, no email.</p>
 <div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
 <form id="f" novalidate>
 <input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -24,11 +24,12 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <label for="one">One line about it</label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
 <label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30">
 </fieldset>
-<fieldset><legend>"Then" photo (an old photo)</legend>
+<fieldset><legend>"Then" photo (an old photo, optional)</legend>
 <label for="then">Link to the photo's page on Wikimedia Commons</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <p class="help">The address should start with commons.wikimedia.org/wiki/File:. We check the license for you.</p>
 </fieldset>
-<fieldset><legend>"Now" photo (today)</legend>
+<fieldset><legend>"Now" photo (today, optional)</legend>
+<p class="help">One photo is enough. With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
 <label for="now">Link to a Commons photo page</label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <details id="own"><summary>Or upload my own photo</summary>
 <label>Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
@@ -58,7 +59,7 @@ document.getElementById('file').addEventListener('change',function(e){var f=e.ta
 function v(id){return document.getElementById(id).value;}
 function collect(){
   var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
-  if(!o.nowUrl.trim()){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense=v('lic');}
+  if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense=v('lic');}
   return o;
 }
 document.getElementById('f').addEventListener('submit',function(e){
@@ -72,7 +73,7 @@ document.getElementById('f').addEventListener('submit',function(e){
 document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent,b=this;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';}).catch(function(){});});
 var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
 if(m){document.getElementById('f').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
-  var T={received:['Received','We have your place and will research it. It shows up in the test copy within about 24 hours of being sent.'],added:['Added','Your place is in the test copy of the app. Open the test app, find the "Community-added" group on the Towns tab, and look for '+(j.city||'your town')+'.'],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
+  var T={received:['Received','We have your place and will research it. It shows up in the test copy within about 24 hours of being sent.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
   document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];});}
 })();
 </script></body></html>

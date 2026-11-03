@@ -39,10 +39,11 @@ def stop_for(sub,name,seq):
      'sources':[{'t':'Town history','u':'https://example.org/h'},{'t':'Museum page','u':'https://example.org/m'}],'card':{'a':'1908','b':'2026','la':'Opened','lb':'Museum'}}
 def write_places(places):
     d=TMP+'/_places'; shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
+    if not os.path.isdir(TMP+'/_stories'): os.makedirs(TMP+'/_stories')
     for sub,name,seq in places: json.dump({'sub':sub,'town':'Testville','state':'NV','added':'2026-11-03','seq':seq,'stop':stop_for(sub,name,seq)},open(f'{d}/{sub}.json','w'))
     bad=cm.check(places_dir=d+'/'); ok(not bad,'fixture places invalid: %r'%bad)
-    pk,ph,st=cm.build(places_dir=d+'/',declined_file='/nonexistent')
-    json.dump({'packs':pk,'photos':ph},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
+    pk,ph,st,tr=cm.build(places_dir=d+'/',declined_file='/nonexistent',stories_dir=TMP+'/_stories/')
+    json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
 sv=server('branch-deploy')
 try:
   # ---- API ----
@@ -53,6 +54,7 @@ try:
   s,j=api('/api/community/submit',{**good,'thenUrl':'https://commons.wikimedia.org/wiki/File:NC_photo.jpg'}); ok(s==400 and 'license' in ' '.join(j['errors']),'non-commercial license must be rejected: %r'%j)
   s,j=api('/api/community/submit',{**good,'nowUrl':'https://commons.wikimedia.org/wiki/File:Missing.jpg'}); ok(s==400 and 'no file' in ' '.join(j['errors']).lower(),'missing Commons file: %r'%j)
   s,j=api('/api/community/submit',{**good,'confirm':False}); ok(s==400,'confirm box required')
+  s,j=api('/api/community/submit',{**good,'thenUrl':'','nowUrl':''}); ok(s==400 and 'at least one photo' in ' '.join(j['errors']).lower(),'no photo at all must be rejected: %r'%j)
   s,j=api('/api/community/submit',{**good,'hp':'bot'}); ok(s==200 and j.get('status')=='ignored','honeypot ignored')
   # ---- the form (390 wide) ----
   with sync_playwright() as pw:
@@ -62,9 +64,9 @@ try:
     pg.goto(B+'/contribute/'); pg.wait_for_selector('#place')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'form sideways scroll at 390')
     pg.fill('#place','Old Depot'); pg.fill('#city','Testville'); pg.fill('#state','NV'); pg.fill('#one','The old train depot downtown, now a museum.')
+    pg.check('#confirm'); pg.click('#go'); pg.wait_for_selector('#errs:not([hidden])'); ok('at least one photo' in pg.inner_text('#errs').lower(),'photo message missing')
     pg.fill('#then','https://commons.wikimedia.org/wiki/File:Good_then.jpg')
-    pg.click('#go'); pg.wait_for_selector('#errs:not([hidden])'); ok('now' in pg.inner_text('#errs').lower(),'now photo message missing')
-    pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.check('#confirm'); pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
+    pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
     link=pg.inner_text('#editlink'); ok(re.search(r'/contribute/\?status=[a-f0-9]{32}$',link) is not None,'status link shape: '+link)
     tok=link.split('status=')[1]
     # second place through the API with an uploaded "now" photo
@@ -125,6 +127,38 @@ try:
         ok(pg.evaluate("document.querySelectorAll('[data-a=open]').length")>=10,'ten stops listed')
         ok(pg.evaluate("document.querySelector('#bulbs')===null || document.querySelector('#bulbs').scrollWidth<=document.querySelector('#bulbs').parentElement.clientWidth+2 || getComputedStyle(document.querySelector('#bulbs')).overflowX!=='visible'"),f'bulbs row overflows its box at {w}')
     pg.screenshot(path='/tmp/cm_ten.png')
+    # ---- history stops: a place with only a recent photo becomes a Story stop ----
+    s,jn=api('/api/community/submit',{**good,'place':'Hilltop Chapel','thenUrl':'','nowUrl':'https://commons.wikimedia.org/wiki/File:Good_now.jpg'}); ok(s==200,'now-only submit accepted: %r'%jn)
+    s,jt=api('/api/community/submit',{**good,'place':'Lost Mill','nowUrl':''}); ok(s==200,'then-only submit accepted: %r'%jt)
+    s,j=api('/api/community/pending'); PP={p['place']:p for p in j['pending']}
+    ok('then' not in PP['Hilltop Chapel'] and PP['Hilltop Chapel']['now']['credit']=='Jane Doe','now-only has no then photo')
+    ok('now' not in PP['Lost Mill'] and 'then' in PP['Lost Mill'],'then-only has no now photo')
+    cid_s=PP['Hilltop Chapel']['id']; cid_w=PP['Lost Mill']['id']
+    d=TMP+'/_stories'; shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
+    story={'id':'chapel','name':'Hilltop Chapel','area':'Testville','geo':[39.5,-119.8,150],'addr':'1 Hill Rd, Testville, NV','invite':'A small chapel on a hill.',
+      'story':['The chapel was built in 1900.','It is still used for weddings.'],'facts':[{'t':'Built in 1900.','src':[0,1]},{'t':'Used for weddings.','src':[0]},{'t':'On a hill.','src':[1]}],
+      'access':'Look from the public road; the chapel is private on weekdays, so check before going.','access_check':{'on':'2026-11-03','by':'Claude','how':'Read against two pages.'},
+      'sources':[{'t':'A','u':'https://example.org/a'},{'t':'B','u':'https://example.org/b'}],
+      'ph':{'k':'cm_%s_n'%cid_s,'alt':'The chapel','by':'Jane Doe','lic':'CC BY-SA','lu':'https://creativecommons.org/licenses/by-sa/4.0/','page':'https://commons.wikimedia.org/wiki/File:Good_now.jpg'}}
+    json.dump({'sub':cid_s,'town':'Storyville','state':'NV','added':'2026-11-03','stop':story},open(f'{d}/{cid_s}.json','w'))
+    ok(cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/')[3][0]['stops'][0]['town']=='c_storyville-nv','story stop is tied to its town')
+    pk,ph,st,tr=cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/'); st['waiting']={cid_w:'We still need a recent photo of this place.'}
+    json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
+    ok(cid_s in st['added'],'story counted as added')
+    s,j=api('/api/community/pending'); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
+    tokn=jn['edit'] if 'edit' in jn else ''
+    s,j=api('/api/community/mine/'+jn['edit']); ok(j.get('status')=='added','story status added')
+    s,j=api('/api/community/mine/'+jt['edit']); ok(j.get('status')=='waiting' and 'recent photo' in j.get('note',''),'waiting status: %r'%j)
+    pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/contribute/?status='+jt['edit']); pg.wait_for_selector('#stat:not([hidden])'); ok('Waiting for a photo' in pg.inner_text('#stT'),'waiting page text: '+pg.inner_text('#stT'))
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
+    pg.evaluate("document.querySelector('#bnav [data-t=home]').click()"); pg.wait_for_timeout(300)
+    pg.evaluate("document.querySelector('[data-a=nbopen]').click()"); pg.wait_for_timeout(300)
+    pg.evaluate("document.querySelector('[data-a=nbnoloc]').click()"); pg.wait_for_timeout(300)
+    ok('storyville' in pg.inner_text('body').lower(),'story town listed under Nearby stops')
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=nbarea]')).find(function(b){return /storyville/i.test(b.innerText);}).click()"); pg.wait_for_timeout(300)
+    pg.evaluate("document.querySelector('[data-a=nbstory]').click()"); pg.wait_for_timeout(500)
+    ok('hilltop chapel' in pg.inner_text('body').lower() and pg.evaluate("!!document.querySelector('.nbfig img')"),'story card shows the photo')
+    ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
     # the real save code is unchanged by community towns
     pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     n_real=json.load(open(R+'src/packs/index.json'))['order']

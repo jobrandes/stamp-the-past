@@ -44,19 +44,19 @@ export const makeHandler = (opts = {}) => async (req, context) => {
     const sub = await store.get('sub/' + id, { type: 'json' });
     if (!sub || sub.tokenHash !== sha(token)) return json({ error: 'That link is not valid.' }, 404);
     let status = 'received', note = '';
-    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const s = await r.json(); if ((s.added || []).includes(id)) status = 'added'; else if (s.declined && s.declined[id]) { status = 'declined'; note = String(s.declined[id]); } } } catch {}
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const s = await r.json(); if ((s.added || []).includes(id)) status = 'added'; else if (s.waiting && s.waiting[id]) { status = 'waiting'; note = String(s.waiting[id]); } else if (s.declined && s.declined[id]) { status = 'declined'; note = String(s.declined[id]); } } } catch {}
     return json({ id, status, note, place: sub.place, city: sub.city, state: sub.state, created: sub.created });
   }
 
   // The inbox list holds no personal data (no names, emails, locations or edit links), so the daily research run can read it without a secret.
   if (req.method === 'GET' && parts[0] === 'pending') {
-    let st = { added: [], declined: {} };
+    let st = { added: [], declined: {}, waiting: {} };
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
     const { blobs } = await store.list({ prefix: 'sub/' });
     const out = [];
     for (const b of blobs) {
       const s = await store.get(b.key, { type: 'json' }); if (!s) continue;
-      if ((st.added || []).includes(s.id) || (st.declined || {})[s.id]) continue;
+      if ((st.added || []).includes(s.id) || (st.declined || {})[s.id] || (st.waiting || {})[s.id]) continue;
       const { tokenHash, ...pub } = s; out.push(pub);
     }
     return json({ pending: out });
@@ -81,7 +81,7 @@ export const makeHandler = (opts = {}) => async (req, context) => {
     const sub = { id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, created: new Date().toISOString(), tokenHash: sha(token) };
     const errors = [];
     // "then" photo
-    if (v.then.kind === 'commons') {
+    if (v.then && v.then.kind === 'commons') {
       const r = await commonsPhoto(v.then, fetchFn);
       if (!r.ok) errors.push('"Then" photo: ' + r.error); else { sub.then = { kind: 'commons', page: v.then.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_t`, r.buf, r.type]); }
     }
@@ -91,7 +91,7 @@ export const makeHandler = (opts = {}) => async (req, context) => {
         const r = await commonsPhoto(v.now, fetchFn);
         if (!r.ok) errors.push('"Now" photo: ' + r.error); else { sub.now = { kind: 'commons', page: v.now.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_n`, r.buf, r.type]); }
       }
-    } else {
+    } else if (v.nowUpload) {
       const buf = decodeJpegDataUrl(v.nowUpload);
       sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; photos.push([`photo/${id}_n`, buf, 'image/jpeg']);
     }
