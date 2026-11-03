@@ -1,0 +1,26 @@
+{"sub":"953e4d35","town":"San Francisco","state":"CA","added":"2026-11-03","stop":{
+"id":"moscone","name":"Moscone Center","area":"San Francisco",
+"geo":[37.78417,-122.40167,250],
+"addr":"747 Howard St, San Francisco, CA 94103",
+"invite":"San Francisco's biggest convention hall carries the name of a mayor, and it hosted a first in American politics in 1984.",
+"story":[
+"Moscone Center opened in 1981 at 747 Howard Street. The first hall, now called Moscone South, put its main exhibition space underground to keep the building low. Moscone North followed in the early 1990s and Moscone West in 2003. Sources disagree on the North opening year (1991 or 1992).",
+"It is named for George Moscone, who was mayor of San Francisco from January 8, 1976 until November 27, 1978. Before the center was built he had opposed development of the area as a supervisor, then backed a compromise as mayor, and voters approved the measure in November 1976. The Board of Supervisors named the center for him on December 8, 1978.",
+"The center hosted the 1984 Democratic National Convention, which nominated Walter Mondale for president and Geraldine Ferraro for vice president, the first woman nominated for either office by a major party. A multi-year expansion finished around the end of 2018, and the above-ground part of Moscone South was rebuilt."
+],
+"facts":[
+{"t":"Moscone Center opened in 1981 at 747 Howard Street.","src":[0,1]},
+{"t":"It is named for George Moscone, mayor from January 8, 1976 to November 27, 1978.","src":[0]},
+{"t":"The Board of Supervisors named the center a memorial to Moscone on December 8, 1978.","src":[1]},
+{"t":"The 1984 Democratic National Convention was held there; Geraldine Ferraro became the first woman nominated for national office by a major party.","src":[0]},
+{"t":"Moscone North opened in 1991 or 1992 depending on the source, and Moscone West in 2003.","src":[0,1]}
+],
+"access":"The outside can be seen from the public sidewalks around Howard Street. Entry to the halls depends on the event calendar and is usually by ticket or registration, so check before planning to go in.",
+"access_check":{"on":"2026-11-03","by":"Claude","how":"Story read against Wikipedia and Exhibit City News. The official Moscone site could not be fetched (robots). Not walked. Submitted as a test, no old photo shown."},
+"sources":[
+{"t":"Wikipedia: Moscone Center","u":"https://en.wikipedia.org/wiki/Moscone_Center"},
+{"t":"Exhibit City News: Convention Center Snapshot, the Moscone Center","u":"https://exhibitcitynews.com/convention-center-snapshot-the-moscone-center/"}
+],
+"sens":"The center is named for Mayor George Moscone, who was shot and killed at City Hall on November 27, 1978.",
+"ph":{"k":"cm_953e4d35_n","alt":"Moscone Center, photo supplied by the contributor","by":"Jo-Anne B","lic":"CC0","lu":"https://creativecommons.org/publicdomain/zero/1.0/","page":"https://stampthepast.com/","note":"Photo by the contributor"}
+}}
