@@ -7,6 +7,7 @@ self.addEventListener('fetch',function(e){
   var r=e.request; if(r.method!=='GET') return;
   var u=new URL(r.url);
   if(u.origin===location.origin){
+    if(u.pathname.indexOf('/api/')===0) return;
     if(r.mode==='navigate'&&(u.pathname==='/play'||u.pathname==='/play.html')){
       e.respondWith(fetch(r).then(function(res){ var cp=res.clone(); caches.open(V).then(function(c){ c.put('play.html',cp); }); return res; }).catch(function(){ return caches.match('play.html');  }));
       return;

@@ -9,3 +9,7 @@
   Cache-Control: no-cache
 /index.html
   Cache-Control: no-cache
+/contribute/*
+  X-Robots-Tag: noindex
+/api/*
+  X-Robots-Tag: noindex

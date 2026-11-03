@@ -27,6 +27,7 @@ for _f in sorted(os.listdir(R+'src/tours')) if os.path.isdir(R+'src/tours') else
         ph=s.get('ph'); assert not ph or ph['k'] in photos, f'tour {_t["id"]}/{s["id"]}: missing photo {ph["k"]}'
     if _t['stops']: tours.append(_t)
 data={'boss':json.loads(rd('src/boss.json')),'right':json.loads(rd('src/right.json')),'order':order,'soon':idx.get('soon',[]),'packs':packs,'tours':tours}
+if os.path.exists(R+'src/community.flag'): data['community']=1  # test branch only
 js=rd('src/app.js').replace('__PHOTOS__',json.dumps(photos,ensure_ascii=False,separators=(',',':'))).replace('__DATA__',json.dumps(data,ensure_ascii=False,separators=(',',':')))
 out=rd('src/head.html')+'<style>\n'+rd('src/styles.css')+'</style>'+rd('src/body.html')+'<script>\n'+js+'</script>'
 open(R+'index.html','w').write(out)
@@ -87,4 +88,8 @@ seo_urls.append(seo.daily_page(R,packs,order,json.loads(_ts.group(1))))
 sm=['','privacy.html','support.html']
 open(R+'site/sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>https://stampthepast.com/{u}</loc></url>' for u in sm)+''.join(f'<url><loc>https://stampthepast.com{u}</loc></url>' for u in seo_urls)+'</urlset>')
 seo.test_pages(R)
+if os.path.exists(R+'src/community.flag'):
+    os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html')
+    open(R+'site/_headers','a').write('/contribute/*\n  X-Robots-Tag: noindex\n/api/*\n  X-Robots-Tag: noindex\n')
+else: shutil.rmtree(R+'site/contribute',ignore_errors=True)
 print('seo pages:',len(seo_urls))

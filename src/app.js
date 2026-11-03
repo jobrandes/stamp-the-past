@@ -1,5 +1,12 @@
 (function(){
   var DATA=__DATA__;
+  var BASE_ORDER=DATA.order.slice(), CPH={};
+  /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
+  if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
+    try{ var cx=new XMLHttpRequest(); cx.open('GET','/api/community/list',false); cx.send();
+      if(cx.status===200){ var cj=JSON.parse(cx.responseText); (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } }); CPH=cj.photos||{}; }
+    }catch(e){}
+  }
   /* ---------- native progress backup (iPhone/Android app only) ---------- */
   (function(){
     var NB=null;
@@ -30,7 +37,7 @@
     if(m&&PHOTOS[m[0]]) return '<span class="bimg'+(on?' on':'')+'"><img loading="lazy" src="'+PHOTOS[m[0]]+'" alt="" style="object-position:'+m[1]+'"></span>';
     return '<span class="bimg plain'+(on?' on':'')+'"><b>'+mono(id,pid)+'</b></span>';
   }
-  var PHOTOS=__PHOTOS__;
+  var PHOTOS=__PHOTOS__; Object.keys(CPH).forEach(function(k){ PHOTOS[k]=CPH[k]; });
   function preloadTown(k){ try{ var c=CITIES[k]; if(!c||c._pre) return; c._pre=1; var seen={}; c.stops.forEach(function(st){ ['then','now'].forEach(function(e){ var p=st[e].ph&&st[e].ph.k; if(p&&PHOTOS[p]&&!seen[p]){ seen[p]=1; var im=new Image(); im.src=PHOTOS[p]; } }); }); }catch(e){} }
   function hasPh(st,era){return !!(st[era].ph && PHOTOS[st[era].ph.k]);}
   function visual(st,era,label,extra){
@@ -194,7 +201,7 @@
     var best=0; ORDER.forEach(function(k){ var st=ALL[k]; var x=sum(st.done)*100+sum(st.claims)*25, i=0; [0,100,250,450,600].forEach(function(t,k){ if(x>=t) i=k; }); if(i>best) best=i; });
     return best;
   }
-  function code(){ return 'TN3-'+ORDER.map(function(k){ return ALL[k].done.join('')+ALL[k].claims.join(''); }).join('-'); }
+  function code(){ return 'TN3-'+BASE_ORDER.map(function(k){ return ALL[k].done.join('')+ALL[k].claims.join(''); }).join('-'); }
   function allDone(){ return sum(S.done)===4; }
 
   var stampFx=false;
@@ -1530,8 +1537,8 @@
       else if(m2){ ALL.reno={done:arr(m2[1]),claims:arr(m2[2])}; ALL.vc={done:arr(m2[3]),claims:arr(m2[4])}; }
       else {
         var segs=m3[1].split('-');
-        if(segs.length>ORDER.length){ msg.textContent='That code has more towns than this version of the app. Update the app and try again.'; return; }
-        segs.forEach(function(g,i){ ALL[ORDER[i]]={done:arr(g.slice(0,4)),claims:arr(g.slice(4))}; });
+        if(segs.length>BASE_ORDER.length){ msg.textContent='That code has more towns than this version of the app. Update the app and try again.'; return; }
+        segs.forEach(function(g,i){ ALL[BASE_ORDER[i]]={done:arr(g.slice(0,4)),claims:arr(g.slice(4))}; });
       }
       S=ALL[cityId]; save(); render(); toast('Progress restored'); awardSoon(); return;
     }
