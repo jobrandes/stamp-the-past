@@ -1,3 +1,5 @@
+> UPDATE Nov 2 2026: this file describes the first four-place version. The current model is one place per submission, a status page and a daily agent. See the Community-city test section of CLAUDE.md and docs/community-agent.md.
+
 # Community-city test (branch `community-test`)
 
 Updated Nov 2 2026. Supersedes the "links only, no uploads, Reno pilot" version in the design doc for the TEST branch only; the doc's rules for the live app still stand.
