@@ -60,13 +60,36 @@ const handle = (opts) => async (req, context) => {
     return new Response(e.data, { headers: { 'content-type': e.metadata?.type || 'image/jpeg', 'cache-control': admin ? 'private, no-store' : 'public, max-age=300' } });
   }
 
+  // Add or replace photos from the private status link (e.g. a place that is "Waiting for a photo"). Puts the place back in the review queue.
+  if (req.method === 'POST' && parts[0] === 'mine' && parts[1] && parts[2] === 'photo') {
+    const id = parts[1].slice(0, 8).replace(/[^a-f0-9]/g, ''), token = parts[1].slice(8);
+    const sub = await store.get('sub/' + id, { type: 'json' });
+    if (!sub || sub.tokenHash !== sha(token)) return json({ error: 'That link is not valid.' }, 404);
+    let body; try { body = await req.json(); } catch { return json({ errors: ['Could not read the form.'] }, 400); }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ errors: ['Could not read the form.'] }, 400);
+    let st = { added: [], declined: {} };
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    if ((st.added || []).includes(id)) return json({ errors: ['This place was already added, so its photos cannot be changed here.'] }, 400);
+    if ((st.declined || {})[id]) return json({ errors: ['This place was not added, so it cannot be changed.'] }, 400);
+    if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
+    const { errs, v } = validate({ city: sub.city, state: sub.state, place: sub.place, oneLiner: sub.oneLiner, nickname: sub.nickname || '', thenUrl: body.thenUrl, nowUrl: body.nowUrl, nowPhoto: body.nowPhoto, nowOwn: body.nowOwn, nowCredit: body.nowCredit, nowYear: body.nowYear, nowLicense: body.nowLicense, confirm: body.confirm });
+    if (errs.length) return json({ errors: errs }, 400);
+    const next = { ...sub };
+    const { errors, photos } = await collectPhotos(v, id, next, fetchFn);
+    if (errors.length) return json({ errors }, 400);
+    for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
+    next.resubmitted = new Date().toISOString();
+    await store.setJSON('sub/' + id, next);
+    return json({ ok: true, status: 'received' });
+  }
+
   if (req.method === 'GET' && parts[0] === 'mine' && parts[1]) {
     const id = parts[1].slice(0, 8).replace(/[^a-f0-9]/g, ''), token = parts[1].slice(8);
     const sub = await store.get('sub/' + id, { type: 'json' });
     if (!sub || sub.tokenHash !== sha(token)) return json({ error: 'That link is not valid.' }, 404);
     let status = 'received', note = '';
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const s = await r.json(); if ((s.added || []).includes(id)) status = 'added'; else if (s.waiting && s.waiting[id]) { status = 'waiting'; note = String(s.waiting[id]); } else if (s.declined && s.declined[id]) { status = 'declined'; note = String(s.declined[id]); } } } catch {}
-    return json({ id, status, note, place: sub.place, city: sub.city, state: sub.state, created: sub.created });
+    return json({ id, status, note, place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now } });
   }
 
   // The inbox holds unreviewed free text and nicknames, so only the research run (admin key in the x-admin-key header) can read it.
@@ -78,7 +101,7 @@ const handle = (opts) => async (req, context) => {
     const out = [];
     for (const b of blobs) {
       const s = await store.get(b.key, { type: 'json' }); if (!s) continue;
-      if ((st.added || []).includes(s.id) || (st.declined || {})[s.id] || (st.waiting || {})[s.id]) continue;
+      if ((st.added || []).includes(s.id) || (st.declined || {})[s.id] || ((st.waiting || {})[s.id] && !s.resubmitted)) continue;
       const { tokenHash, ...pub } = s; out.push(pub);
     }
     return json({ pending: out });
@@ -101,25 +124,8 @@ const handle = (opts) => async (req, context) => {
     const { errs, v } = validate(body);
     if (errs.length) return json({ errors: errs }, 400);
     const id = randomBytes(4).toString('hex'), token = randomBytes(12).toString('hex');
-    const photos = [];
     const sub = { id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, created: new Date().toISOString(), tokenHash: sha(token) };
-    const errors = [];
-    // "then" photo
-    if (v.then && v.then.kind === 'commons') {
-      const r = await commonsPhoto(v.then, fetchFn);
-      if (!r.ok) errors.push('"Then" photo: ' + r.error); else { sub.then = { kind: 'commons', page: v.then.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_t`, r.buf, r.type]); }
-    }
-    // "now" photo
-    if (v.now) {
-      if (v.now.kind === 'commons') {
-        const r = await commonsPhoto(v.now, fetchFn);
-        if (!r.ok) errors.push('"Now" photo: ' + r.error); else { sub.now = { kind: 'commons', page: v.now.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_n`, r.buf, r.type]); }
-      }
-    } else if (v.nowUpload) {
-      const buf = await cleanImage(decodeJpegDataUrl(v.nowUpload));
-      if (!buf) errors.push('"Now" photo: that upload could not be read as a photo. Try another one.');
-      else sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; if (buf) photos.push([`photo/${id}_n`, buf, 'image/jpeg', true]);
-    }
+    const { errors, photos } = await collectPhotos(v, id, sub, fetchFn);
     if (errors.length) return json({ errors }, 400);
     for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
     await store.setJSON('sub/' + id, sub);
@@ -128,6 +134,28 @@ const handle = (opts) => async (req, context) => {
 
   return json({ error: 'not found' }, 404);
 };
+
+// Reads the photos named in a validated submission into `sub` and returns the blobs to store.
+async function collectPhotos(v, id, sub, fetchFn) {
+  const photos = [], errors = [];
+  // "then" photo
+  if (v.then && v.then.kind === 'commons') {
+    const r = await commonsPhoto(v.then, fetchFn);
+    if (!r.ok) errors.push('"Then" photo: ' + r.error); else { sub.then = { kind: 'commons', page: v.then.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_t`, r.buf, r.type]); }
+  }
+  // "now" photo
+  if (v.now) {
+    if (v.now.kind === 'commons') {
+      const r = await commonsPhoto(v.now, fetchFn);
+      if (!r.ok) errors.push('"Now" photo: ' + r.error); else { sub.now = { kind: 'commons', page: v.now.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_n`, r.buf, r.type]); }
+    }
+  } else if (v.nowUpload) {
+    const buf = await cleanImage(decodeJpegDataUrl(v.nowUpload));
+    if (!buf) errors.push('"Now" photo: that upload could not be read as a photo. Try another one.');
+    else sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; if (buf) photos.push([`photo/${id}_n`, buf, 'image/jpeg', true]);
+  }
+  return { errors, photos };
+}
 
 export const makeHandler = (opts = {}) => {
   const h = handle(opts);

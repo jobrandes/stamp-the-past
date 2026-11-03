@@ -41,3 +41,6 @@ One short message: what was added (place, town), what was declined and why, anyt
 - DECLINE (and delete with `curl -s -X POST -H "x-admin-key: $COMMUNITY_ADMIN_KEY" .../api/community/delete/<id>`) any upload showing: nudity or sexual content; violence or gore; a child or any identifiable person's face; hate symbols; a screenshot, document or text with personal details (addresses, plates, names); or anything that is not a building, place, plaque or landscape. When in doubt, decline. Never describe a disturbing image in detail in logs; just write "declined: unsafe image".
 - If an image might show a child being harmed or sexually exploited: do NOT approve, delete it, and notify Jo-Anne with PushNotification (no description). She has a legal duty to report to NCMEC (CyberTipline); Claude cannot detect this reliably.
 - Approved uploads become public only after the place is added (it appears in status.json), then the photo is served without a key.
+
+## Resubmitted places (a contributor added a photo)
+- A pending entry with a `resubmitted` date was waiting (or received) and the contributor has since added or replaced a photo from their private link. Treat it like a new submission, using its current `then` / `now` photos. When you add it, also remove its id from `src/community/waiting.json`. If you decline it, remove it from waiting.json too.

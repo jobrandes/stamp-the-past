@@ -13,8 +13,8 @@ button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;
 details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
 </style></head><body><main>
 <p class="mut" style="margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem">Stamp the Past · community test</p>
-<h1>Suggest a place</h1>
-<p>Know a historic place in your town? Tell us its name, give us a one-liner and a photo link (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. We aim to review suggestions within about a day. Approved places appear in the test copy of the app. No account, no email.</p>
+<h1>Suggest one place</h1>
+<p>Know a historic place in your town? Tell us its name, give us a one-liner and add at least one photo (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. We aim to review suggestions within about a day. Approved places appear in the test copy of the app. No account, no email.</p>
 <div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
 <div class="banner" id="priv"><strong>What happens to what you send (test only).</strong> We keep the place name, town, your one-liner, your optional nickname, and any photo or credit you give. Photos you upload stay private until a person approves the place. If it is approved, the name, town, nickname, text and photo are shown publicly in this test copy of the app. We store no email, name or location. To have something removed, use the Report button on the place in the app. This is a test and is not covered by the live app's privacy page.</div>
 <form id="f" novalidate>
@@ -36,8 +36,8 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <label for="file">Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0"><button type="button" class="ghost" id="rmphoto" hidden>Remove photo</button>
 <label class="chk"><input type="checkbox" id="took"><span>I took this photo myself</span></label>
 <div class="row"><div><label for="credit">Your credit</label><input id="credit" maxlength="120"></div><div><label for="year">Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
-<label for="lic">License</label><select id="lic"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
-<p class="help">Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
+<label for="lic">License</label><select id="lic"><option value="">Choose a license</option><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
+<p class="help">Only upload a photo you took yourself. Choosing CC0 gives it to the public domain; CC BY lets anyone use it if they credit you; CC BY-SA is the same but any copies must share alike. We show your credit with the photo. Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
 </fieldset>
 <fieldset><legend>Before you send</legend>
 <label class="chk"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
@@ -46,16 +46,27 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <p class="mut" id="status" role="status"></p>
 </fieldset>
 </form>
+<section id="mine" hidden><h2>Your suggestions on this browser</h2><p class="help">Saved only in this browser, so they will not follow you to another phone or computer. Keep each private link too.</p><ul id="minelist" style="padding-left:1.1em"></ul></section>
 <section id="done" hidden><h2>Received.</h2><p class="ok">Thank you. We will research your place. We aim to review within about a day, and approved places appear in the test copy of the app. It could also be declined, or wait for another photo.</p>
 <p>Keep this private link. It shows where your place is in the process. We cannot recover it for you.</p><div class="box" id="editlink"></div>
-<p><button class="ghost" id="copy" type="button">Copy the link</button></p></section>
-<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><p><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button">Open the test app</button></a></p></section>
+<p><button class="ghost" id="copy" type="button">Copy the link</button></p><p><a id="viewstat" href="#"><button type="button">View submission status</button></a> <a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></p></section>
+<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><div id="addp" hidden><h3 style="margin:.6em 0 .2em">Add or change a photo</h3><p class="help">Add the missing photo (or replace one) and your place goes back into review.</p>
+<label for="pthen">Old photo: Commons link</label><input id="pthen" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<label for="pnow">Recent photo: Commons link</label><input id="pnow" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<details id="pown" hidden><summary>Or upload my own recent photo</summary>
+<label for="pfile">Photo file</label><input type="file" accept="image/*" id="pfile"><img id="pprev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
+<label class="chk"><input type="checkbox" id="ptook"><span>I took this photo myself</span></label>
+<div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
+<label for="plic">License</label><select id="plic"><option value="">Choose a license</option><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select></details>
+<label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
+<p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></div>
+<p><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button">Return to the app</button></a></p></section>
 </main>
 <script>
 (function(){
 var photo=null;
 function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
-fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads)document.getElementById('own').hidden=false;}).catch(function(){});
+fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads){document.getElementById('own').hidden=false;document.getElementById('pown').hidden=false;}}).catch(function(){});
 function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
 function clearPhoto(){photo=null;var p=document.getElementById('prev');p.removeAttribute('src');p.hidden=true;document.getElementById('rmphoto').hidden=true;document.getElementById('file').value='';}
 document.getElementById('rmphoto').addEventListener('click',function(){clearPhoto();say('');});
@@ -72,14 +83,30 @@ document.getElementById('f').addEventListener('submit',function(e){
   fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(collect())}).then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});}).then(function(x){
     document.getElementById('go').disabled=false;
     if(x.s!==200){errs.hidden=false;errs.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(m){return '<li>'+String(m).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';say('');errs.scrollIntoView({block:'center'});return;}
-    var link=location.origin+'/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+    var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,document.getElementById('place').value,document.getElementById('city').value);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
   }).catch(function(){document.getElementById('go').disabled=false;say('Could not reach the test server. Try again.',true);});
 });
 document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent,b=this;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';}).catch(function(){});});
 try{var qp=new URLSearchParams(location.search),qc=(qp.get('city')||'').slice(0,60),qs=(qp.get('state')||'').slice(0,30);if(qc)document.getElementById('city').value=qc;if(qs)document.getElementById('state').value=qs;}catch(e){}
+function sugGet(){try{return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){return x&&/^[a-f0-9]{9,}$/.test(x.t);});}catch(e){return[];}}
+function saveSug(t,place,city){try{var a=sugGet().filter(function(x){return x.t!==t;});a.unshift({t:t,p:String(place).slice(0,80),c:String(city).slice(0,60)});localStorage.setItem('stp-sugg',JSON.stringify(a.slice(0,20)));}catch(e){}}
+var LBL={received:'Received',added:'Added',waiting:'Waiting for a photo',declined:'Not added'};
+function showSug(){var a=sugGet();if(!a.length)return;var ul=document.getElementById('minelist');document.getElementById('mine').hidden=false;ul.innerHTML='';a.slice(0,10).forEach(function(x){var li=document.createElement('li'),l=document.createElement('a');l.href='/contribute/?status='+x.t;l.textContent=x.p+(x.c?' ('+x.c+')':'');li.appendChild(l);var sp=document.createElement('span');sp.className='mut';li.appendChild(sp);ul.appendChild(li);fetch('/api/community/mine/'+x.t).then(function(r){return r.ok?r.json():null;}).then(function(j){if(j)sp.textContent=': '+(LBL[j.status]||j.status);}).catch(function(){});});}
+showSug();
+var pphoto=null;
+function pclear(){pphoto=null;var p=document.getElementById('pprev');p.removeAttribute('src');p.hidden=true;document.getElementById('pfile').value='';}
+document.getElementById('pfile').addEventListener('change',function(e){var f=e.target.files[0];pclear();if(!f)return;var b=document.getElementById('psend');b.disabled=true;shrink(f,function(d){b.disabled=false;var m=document.getElementById('pstatus');if(!d){document.getElementById('pfile').value='';m.textContent='That file could not be read as a picture. Choose another.';return;}m.textContent='';pphoto=d;var p=document.getElementById('pprev');p.src=d;p.hidden=false;p.alt='Preview of your photo';});});
+document.getElementById('psend').addEventListener('click',function(){
+  var tok=(location.search.match(/[?&]status=([a-f0-9]{9,})/)||[])[1];if(!tok)return;var b=this,er=document.getElementById('perrs'),m=document.getElementById('pstatus');er.hidden=true;
+  var o={thenUrl:v('pthen'),nowUrl:v('pnow'),confirm:document.getElementById('pconfirm').checked};
+  if(!o.nowUrl.trim()&&pphoto){o.nowPhoto=pphoto;o.nowOwn=document.getElementById('ptook').checked;o.nowCredit=v('pcredit');o.nowYear=v('pyear');o.nowLicense=v('plic');}
+  b.disabled=true;m.textContent='Sending… checking photo links can take a few seconds.';
+  fetch('/api/community/mine/'+tok+'/photo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
+    if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';m.textContent='';return;}
+    m.textContent='Sent. Your place is back in review.';document.getElementById('stT').textContent=document.getElementById('stT').textContent.replace(/:.*$/,'')+': Received';}).catch(function(){b.disabled=false;m.textContent='Could not reach the test server. Try again.';});});
 var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
 if(m){document.getElementById('f').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
   var T={received:['Received','We have your place and will research it. We aim to review within about a day. If approved, it appears in the test copy.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
-  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];});}
+  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');if(j.status==='received'||j.status==='waiting')document.getElementById('addp').hidden=false;});}
 })();
 </script></body></html>
