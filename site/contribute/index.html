@@ -31,7 +31,7 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <fieldset><legend>"Now" photo (today, optional)</legend>
 <p class="help">One photo is enough. With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
 <label for="now">Link to a Commons photo page</label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
-<details id="own"><summary>Or upload my own photo</summary>
+<details id="own" hidden><summary>Or upload my own photo</summary>
 <label>Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
 <label class="chk"><input type="checkbox" id="took"><span>I took this photo myself</span></label>
 <div class="row"><div><label>Your credit</label><input id="credit" maxlength="120"></div><div><label>Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
@@ -54,6 +54,7 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 (function(){
 var photo=null;
 function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
+fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads)document.getElementById('own').hidden=false;}).catch(function(){});
 function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
 document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;shrink(f,function(d){if(!d){say('That file could not be read as a picture.',true);return;}photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview';});});
 function v(id){return document.getElementById(id).value;}

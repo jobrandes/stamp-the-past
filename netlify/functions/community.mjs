@@ -32,6 +32,10 @@ export const makeHandler = (opts = {}) => async (req, context) => {
   const adminKey = (opts.adminKey ?? globalThis.Netlify?.env?.get?.('COMMUNITY_ADMIN_KEY') ?? '');
   const isAdmin = () => { const k = url.searchParams.get('key') || ''; return adminKey.length >= 16 && k.length === adminKey.length && timingSafeEqual(Buffer.from(k), Buffer.from(adminKey)); };
 
+  // Own-photo uploads are OFF unless COMMUNITY_UPLOADS=1 (no image scanning yet: links to Commons/LoC only).
+  const uploadsOn = opts.uploads ?? (globalThis.Netlify?.env?.get?.('COMMUNITY_UPLOADS') === '1');
+  if (req.method === 'GET' && parts[0] === 'config') return json({ uploads: !!uploadsOn });
+
   if (req.method === 'GET' && parts[0] === 'photo' && parts[1]) {
     const key = 'photo/' + parts[1].replace(/[^a-z0-9_]/gi, '');
     const e = await store.getWithMetadata(key, { type: 'arrayBuffer' });
@@ -74,6 +78,7 @@ export const makeHandler = (opts = {}) => async (req, context) => {
     if (body.hp) return json({ ok: true, id: 'ignored', status: 'ignored' });
     const { blobs } = await store.list({ prefix: 'sub/' });
     if (blobs.length >= 60) return json({ errors: ['The test inbox is full for now.'] }, 429);
+    if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
     const { errs, v } = validate(body);
     if (errs.length) return json({ errors: errs }, 400);
     const id = randomBytes(4).toString('hex'), token = randomBytes(12).toString('hex');

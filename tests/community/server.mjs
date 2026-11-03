@@ -24,7 +24,7 @@ const fakeFetch = async (u) => {
   if (u.startsWith('https://upload.wikimedia.org/fake/')) return new Response(JPG, { status: 200 });
   throw new Error('unexpected fetch ' + u);
 };
-const handler = makeHandler({ getStoreFn: store, fetchFn: fakeFetch, adminKey: 'testkey-testkey-1234' });
+const handler = makeHandler({ getStoreFn: store, fetchFn: fakeFetch, adminKey: 'testkey-testkey-1234', uploads: process.env.UPLOADS !== '0' });
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.css': 'text/css', '.woff2': 'font/woff2', '.webmanifest': 'application/json' };
 http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x');

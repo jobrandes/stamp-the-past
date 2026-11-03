@@ -18,8 +18,8 @@ FAKE='/tmp/_cm_fake.jpg'; mkjpg((90,120,150),FAKE)
 shutil.rmtree(TMP,ignore_errors=True); shutil.copytree(R+'site',TMP)
 shutil.rmtree(TMP+'/community',ignore_errors=True); os.makedirs(TMP+'/community')
 json.dump({'packs':[],'photos':{}},open(TMP+'/community/places.json','w')); json.dump({'added':[],'declined':{}},open(TMP+'/community/status.json','w'))
-def server(ctx):
-    pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
+def server(ctx,uploads='1'):
+    pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE,'UPLOADS':uploads},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
 B=f'http://localhost:{PORT}'
 def api(path,body=None):
     req=urllib.request.Request(B+path,data=json.dumps(body).encode() if body is not None else None,method='POST' if body is not None else 'GET')
@@ -212,6 +212,21 @@ try:
     b.close()
   # ---- delete (moderation) ----
   s,j=api(f'/api/community/delete/{ids[1]}?key='+KEY); ok(s==200,'admin delete'); s,_=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'deleted photo gone')
+  # ---- uploads off (the default on Netlify): API rejects, config says off, form hides the upload box ----
+  sv.terminate(); sv=server('branch-deploy','0')
+  s,j=api('/api/community/config'); ok(s==200 and j=={'uploads':False},'config reports uploads off: %r'%j)
+  up2='data:image/jpeg;base64,'+base64.b64encode(mkjpg((10,120,60))).decode()
+  s,j=api('/api/community/submit',{**good,'place':'Upload Probe','nowUrl':'','nowPhoto':up2,'nowOwn':True,'nowCredit':'x','nowYear':'2026','nowLicense':'CC BY'}); ok(s==400 and 'turned off' in json.dumps(j),'upload rejected when off: %r %r'%(s,j))
+  s,j=api('/api/community/submit',{**good,'place':'Link Probe'}); ok(s==200,'commons-link submit still works when uploads are off: %r'%j)
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(800)
+    ok(pg.evaluate("document.getElementById('own').hidden")==True and not pg.is_visible('#own'),'upload box hidden when uploads are off')
+    b.close()
+  sv.terminate(); sv=server('branch-deploy','1')
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(800)
+    ok(pg.is_visible('#own'),'upload box shown when uploads are on')
+    b.close()
   # ---- production context: everything off ----
   sv.terminate(); sv=server('production')
   for u in ('/api/community/pending','/api/community/photo/x_t'):
