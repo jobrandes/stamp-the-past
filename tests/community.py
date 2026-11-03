@@ -59,7 +59,7 @@ try:
   # ---- the form (390 wide) ----
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pe=[]
-    pg.on('pageerror',lambda e:pe.append(str(e)))
+    pg.on('pageerror',lambda e:pe.append(str(e)+' | '+str(getattr(e,'stack',''))[:400]))
     pg.add_init_script("try{localStorage.setItem('then-now-tour','1');localStorage.setItem('stp-dragged','1')}catch(e){}")
     pg.goto(B+'/contribute/'); pg.wait_for_selector('#place')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'form sideways scroll at 390')
@@ -92,6 +92,15 @@ try:
     pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'play sideways scroll at 390')
     cid='c_testville-nv'
+    # slice 2: community towns live in their own last, collapsed section with a note and a Suggest link
+    regs=pg.evaluate("Array.from(document.querySelectorAll('details.reg > summary .rname')).map(function(e){return e.textContent.trim().toLowerCase();})")
+    ok(regs and regs[-1]=='community-added' and regs.count('community-added')==1,'Community-added region is last and unique: %r'%regs)
+    ok(pg.evaluate("(function(){var d=Array.from(document.querySelectorAll('details.reg')).pop();return !d.open;})()"),'community section starts collapsed')
+    ok(pg.evaluate("!!document.querySelector('.comnote a[href=\"/contribute/\"]')"),'community section has a Suggest a place link')
+    ok(pg.evaluate("(function(){var t=document.querySelector('[data-a=city][data-c=\"c_testville-nv\"] .lvl');return !!t&&/community-added/i.test(t.textContent)&&!/hidden gems/i.test(t.textContent);})()"),'community tile says Community-added, not Hidden Gems')
+    pg.evaluate("Array.from(document.querySelectorAll('details.reg')).pop().open=true"); pg.wait_for_timeout(200)
+    ok(pg.evaluate("document.querySelector('.comnote a').getBoundingClientRect().height>=44"),'Suggest link is a 44px target')
+    ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'home with community section sideways scroll at 390')
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(400)
     ok('Testville' in pg.inner_text('body') and 'Community' in pg.inner_text('body'),'town screen / community label')
     pg.evaluate("document.querySelector('[data-a=open]').click()"); pg.wait_for_timeout(300)
@@ -126,6 +135,13 @@ try:
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=pick]')).find(function(b){return /^Town Library/.test(b.innerText.trim());}).click()"); pg.wait_for_timeout(600)
     ok(pg.evaluate("JSON.parse(localStorage.getItem('then-now-v3')).p['%s'].done"%cid)==[1,1],'first stamp survived, second earned: %r'%st())
     pg.screenshot(path='/tmp/cm_done.png')
+    # community stamps never count toward the official totals, level or badges
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.wait_for_timeout(1500)
+    pg.evaluate("document.querySelector('#bnav [data-t=home]').click()"); pg.wait_for_timeout(400)
+    ok(not pe,'Home must not crash when the current mission is a one or two place community town: %r'%pe[-1:])
+    ok(pg.evaluate("/^0 of/.test((document.querySelector('.passport-line')||{textContent:''}).textContent.trim())"),'community stamps stay out of the official stamp total: '+pg.evaluate("(document.querySelector('.passport-line')||{textContent:'none'}).textContent"))
+    ok(pg.evaluate("document.body.classList.contains('homefirst')"),'home still treats the player as first-time (no official stamps)')
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(400)
     for w in (320,768,1280):
         pg.set_viewport_size({'width':w,'height':800}); pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.wait_for_timeout(1500)  # let the completion banner's pop animation settle
         ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),f'play sideways scroll at {w}')

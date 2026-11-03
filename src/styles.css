@@ -328,6 +328,10 @@ body.ishome .hero, body.ishome .tabs{display:none}
 
 .lvl{display:inline-block;margin:2px 0 4px;padding:2px 8px;border-radius:999px;font:600 0.6875rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);color:var(--muted)}
 .lvl.ic{color:var(--accent);border-color:var(--accent)}
+.lvl.com{color:var(--accent);border-color:var(--accent)}
+.comnote{margin:8px 4px 10px;font-size:0.875rem;color:var(--muted)}
+.comnote b{color:var(--ink)}
+.comnote a{color:var(--accent);font-weight:600;display:block;min-height:44px;line-height:44px}
 .town .sub{display:block}
 
 /* town rail: one tidy row of tabs instead of wrapping bubbles */

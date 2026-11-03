@@ -334,6 +334,10 @@ body.ishome .hero, body.ishome .tabs{display:none}
 
 .lvl{display:inline-block;margin:2px 0 4px;padding:2px 8px;border-radius:999px;font:600 0.6875rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);color:var(--muted)}
 .lvl.ic{color:var(--accent);border-color:var(--accent)}
+.lvl.com{color:var(--accent);border-color:var(--accent)}
+.comnote{margin:8px 4px 10px;font-size:0.875rem;color:var(--muted)}
+.comnote b{color:var(--ink)}
+.comnote a{color:var(--accent);font-weight:600;display:block;min-height:44px;line-height:44px}
 .town .sub{display:block}
 
 /* town rail: one tidy row of tabs instead of wrapping bubbles */
@@ -1610,7 +1614,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   }
   (function(){
     var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)'), seq=null, si=0;
-    function build(){ var regs=[], by={}; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(!by[r]){ by[r]=[]; regs.push(r); } by[r].push(k); }); var out=[], i=0; while(out.length<ORDER.length){ regs.forEach(function(r){ if(by[r][i]) out.push(by[r][i]); }); i++; } return out; }
+    function build(){ var regs=[], by={}, nOff=0; ORDER.forEach(function(k){ if(isCom(k)) return; nOff++; var r=CITIES[k].region||'More places'; if(!by[r]){ by[r]=[]; regs.push(r); } by[r].push(k); }); var out=[], i=0; while(out.length<nOff){ regs.forEach(function(r){ if(by[r][i]) out.push(by[r][i]); }); i++; } return out; }
     setInterval(function(){
       if(!atHome||onPass||document.hidden||(rm&&rm.matches)||Date.now()<heroPause||!document.querySelector('.hstamps')) return;
       if(!seq){ seq=build(); }
@@ -1669,8 +1673,8 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     return '<section class="card nudge" aria-label="Back up reminder"><h3>Protect your stamps</h3><p>Your passport is saved on this phone only. Copy your backup code so a new phone or a cleared browser does not erase it.</p><div class="row2"><button class="btn small" data-a="backup">Back up now</button><button class="btn small ghost" data-a="bkdismiss">Not now</button></div></section>';
   }
   function viewHome(){
-    var got=0,total=0;
-    ORDER.forEach(function(k){ total+=CITIES[k].stops.length; got+=sum(ALL[k].done); });
+    var got=0,total=0,nOff=0;
+    ORDER.forEach(function(k){ if(isCom(k)) return; nOff++; total+=CITIES[k].stops.length; got+=sum(ALL[k].done); });
     var hk=homeTown(), stamps=stampsHtml();
     document.body.classList.toggle('homefirst',got===0);
     var res0=null; [cityId].concat(ORDER).forEach(function(k){ if(!res0&&CITIES[k]){ var d0=sum(ALL[k].done); if(d0>0&&d0<CITIES[k].stops.length) res0=k; } });
@@ -1687,21 +1691,22 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       c.ranks.forEach(function(r){ if(x>=r[0]) rk=r[1]; });
       var key=c.heroKey||((BMAPS[k]||{})[c.stops[0].id]||[])[0], img=(key&&PHOTOS[key])?'<img loading="lazy" decoding="async" src="'+PHOTOS[key]+'" alt="">':'';
       var label=n===c.stops.length?'Complete':(n>0?'Continue':'Start');
-      return '<li data-q="'+stOf(k).toLowerCase()+'"><button class="town" data-a="city" data-c="'+k+'"><span class="tph">'+img+'</span><span class="tin"><h3>'+c.name+'</h3>'+(c.level?'<span class="lvl '+(c.level==='Classics'?'ic':'dc')+'">'+(c.level==='Classics'?'Classics · easy':'Hidden Gems · harder')+'</span>':'')+'<span class="sub">'+(TSTATE[k]?TSTATE[k]+' · ':'')+n+' of '+c.stops.length+' stamps · '+rk+'</span>'+(tourBrief(c)?'<span class="tsize" title="Straight-line estimate between the four stops">'+tourBrief(c)+'</span>':'')+'</span><span class="go">'+label+' ›</span></button><button class="tstar'+(tripGet().indexOf(k)>-1?' on':'')+'" data-a="trip" data-c="'+k+'" aria-pressed="'+(tripGet().indexOf(k)>-1?'true':'false')+'" aria-label="'+(tripGet().indexOf(k)>-1?'Remove '+c.name+' from my trip':'Add '+c.name+' to my trip')+'">'+(tripGet().indexOf(k)>-1?'★':'☆')+'</button></li>';
+      return '<li data-q="'+stOf(k).toLowerCase()+'"><button class="town" data-a="city" data-c="'+k+'"><span class="tph">'+img+'</span><span class="tin"><h3>'+c.name+'</h3>'+(c.community?'<span class="lvl com">Community-added</span>':(c.level?'<span class="lvl '+(c.level==='Classics'?'ic':'dc')+'">'+(c.level==='Classics'?'Classics · easy':'Hidden Gems · harder')+'</span>':''))+'<span class="sub">'+(TSTATE[k]?TSTATE[k]+' · ':'')+n+' of '+c.stops.length+' stamps · '+rk+'</span>'+(tourBrief(c)?'<span class="tsize" title="Straight-line estimate between the four stops">'+tourBrief(c)+'</span>':'')+'</span><span class="go">'+label+' ›</span></button><button class="tstar'+(tripGet().indexOf(k)>-1?' on':'')+'" data-a="trip" data-c="'+k+'" aria-pressed="'+(tripGet().indexOf(k)>-1?'true':'false')+'" aria-label="'+(tripGet().indexOf(k)>-1?'Remove '+c.name+' from my trip':'Add '+c.name+' to my trip')+'">'+(tripGet().indexOf(k)>-1?'★':'☆')+'</button></li>';
     }
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
+    regs=regs.filter(function(r){ return r!==COMREG; }).concat(regs.indexOf(COMREG)>-1?[COMREG]:[]);
     h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
-      return '<details class="reg"'+(open?' open':'')+'><summary class="region"><span class="rname"><i class="ring" style="--p:'+(rt?Math.round(rg/rt*100):0)+'" aria-hidden="true"></i>'+r+'</span><span class="rcount">'+(rt?rg+' of '+rt+' stamps':'soon')+'</span></summary><ul class="towns">'+items+'</ul></details>';
-    }).join('')+'<p class="passport-line"><strong>'+got+' of '+total+'</strong> stamps collected across '+ORDER.length+' missions.</p><p class="reqline">Do not see your town? <button class="link" data-a="reqtown">Tell us which one to add</button></p></section>';
+      return '<details class="reg"'+(open?' open':'')+'><summary class="region"><span class="rname"><i class="ring" style="--p:'+(rt?Math.round(rg/rt*100):0)+'" aria-hidden="true"></i>'+r+'</span><span class="rcount">'+(rt?rg+' of '+rt+' stamps':'soon')+'</span></summary>'+(r===COMREG?'<p class="comnote"><b>Community-added.</b> Places suggested by contributors and researched from sources. They are not checked on site, and they do not count toward your level or badges. <a href="/contribute/">Suggest a place</a></p>':'')+'<ul class="towns">'+items+'</ul></details>';
+    }).join('')+'<p class="passport-line"><strong>'+got+' of '+total+'</strong> stamps collected across '+nOff+' missions.</p><p class="reqline">Do not see your town? <button class="link" data-a="reqtown">Tell us which one to add</button></p></section>';
     h+='</div><div class="bpanel" id="bp-trails" role="tabpanel"'+(btab==='trails'?'':' hidden')+'>'+trailsHtml()+'</div><div class="bpanel" id="bp-trip" role="tabpanel"'+(btab==='trip'?'':' hidden')+'>'+tripHtml()+'</div></section>';
     if(got>0) h+='<details class="pitch"><summary><span class="mono">About</span><strong>How Stamp the Past works</strong></summary>';
-    var hs=CITIES[hk].stops, HT=[['Find the spot','A clue sends you to a real landmark. Bring your own two feet.'],['Prove it','Answer a question about what is right in front of you.'],['Fact or fiction','Is the famous story solid, disputed, or a tall tale? Historians argue. Now so can you.'],['Get stamped','Every stop adds a stamp to your passport and a Then/Now photo you can fade through.']];
-    h+='<section class="navy"><p class="mono">How it works</p><h2>Four steps. One stamp.</h2><p class="why" style="color:inherit;opacity:.85">Pictured: your current mission, '+CITIES[hk].name+'.</p><div class="hsteps">'+HT.map(function(t,i){ var st=hs[i]; return '<div class="hstep"><span class="bbox sm" aria-hidden="true">'+badge(st.id,true,hk)+'</span><b>'+(i+1)+'</b><h3>'+t[0]+'</h3><p>'+t[1]+'</p><p class="mono" style="opacity:.8">e.g. '+st.name+'</p></div>'; }).join('')+'</div></section>';
+    var hkx=(CITIES[hk].stops.length<4||CITIES[hk].community)?BASE_ORDER[0]:hk, hs=CITIES[hkx].stops, HT=[['Find the spot','A clue sends you to a real landmark. Bring your own two feet.'],['Prove it','Answer a question about what is right in front of you.'],['Fact or fiction','Is the famous story solid, disputed, or a tall tale? Historians argue. Now so can you.'],['Get stamped','Every stop adds a stamp to your passport and a Then/Now photo you can fade through.']];
+    h+='<section class="navy"><p class="mono">How it works</p><h2>Four steps. One stamp.</h2><p class="why" style="color:inherit;opacity:.85">Pictured: '+(hkx===hk?'your current mission, ':'')+CITIES[hkx].name+'.</p><div class="hsteps">'+HT.map(function(t,i){ var st=hs[i]; return '<div class="hstep"><span class="bbox sm" aria-hidden="true">'+badge(st.id,true,hkx)+'</span><b>'+(i+1)+'</b><h3>'+t[0]+'</h3><p>'+t[1]+'</p><p class="mono" style="opacity:.8">e.g. '+st.name+'</p></div>'; }).join('')+'</div></section>';
     if(PHOTOS.arch_now&&PHOTOS.sign1973) h+='<section class="hsec"><p class="mono">Then and now</p><h2 class="hh2">Swipe back through time.</h2><p>Swipe the photo or drag the slider. Every stop unlocks a real old photo next to a current one. This one is the Reno Arch, 1973 to 2021.</p><div class="cmp" style="margin-top:12px"><div class="box"><img src="'+PHOTOS.arch_now+'" alt="The Reno Arch in 2021"><img class="top" src="'+PHOTOS.sign1973+'" alt="The Reno sign in 1973"></div><div class="row"><span>Now</span><input type="range" min="0" max="100" value="0" aria-label="Fade from now to 1973" data-cmp="1"><span>1973</span></div></div></section>';
     h+='<section class="hsec"><p class="mono">The part nobody else does</p><h2 class="hh2">Is that actually true?</h2><p>Every story comes with claims to sort: well documented, disputed, or not true. Every answer shows its sources, so the game rewards checking, not guessing.</p><div id="homefof" style="margin-top:12px">'+homeFof()+'</div></section>';
     h+='<section class="grown"><p class="mono">For parents (the grown-up section)</p><h2 class="hh2">A game that gets the whole family reading the plaque. Voluntarily.</h2><ul><li>No accounts and no sign-up</li><li>Location is optional, used only on the phone and never sent anywhere</li><li>No photo uploads</li><li>No ads</li><li>Every story shows its sources</li><li>Every photo shows its credit</li>'+(vcount?'<li>'+vcount+' of '+total+' stops verified on site by the makers</li>':'')+'</ul></section>';
@@ -1823,6 +1828,8 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   var MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   function vdate(d){ var m=/^(\d{4})-(\d{2})/.exec(d||''); return m?MON[+m[2]-1]+' '+m[1]:''; }
   /* community content: always labelled, never mistaken for a curated place */
+  var COMREG='Community-added';
+  function isCom(k){ return !!(CITIES[k]&&CITIES[k].community); }
   function comBadge(){ return '<div class="combadge"><b>Community-added</b><span>Suggested by a contributor and researched from sources. Not checked on site, and not reviewed by a historian.</span></div>'; }
   function vnote(st){
     var v=st.verified;
@@ -2091,6 +2098,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   function gStats(){
     var b=bossBest(), g=geoGet(), vg=virtGet(), s={virt:0,xp:0,stamps:0,claims:0,full:0,ver:0,gems:0,seals:0,golds:0,reg:{},st:{},nv:0,town:{},cnt:{}};
     ORDER.forEach(function(k){
+      if(isCom(k)) return;
       var a=ALL[k], c=CITIES[k], d=sum(a.done); s.stamps+=d; s.claims+=sum(a.claims); s.xp+=d*100+sum(a.claims)*25; s.town[k]=d;
       if(d===c.stops.length){ s.full++; s.xp+=100; }
       if(d>0){ if(c.region) s.reg[c.region]=1; if(c.level==='Hidden Gems') s.gems+=d; (TSTATE[k]||'').split('/').forEach(function(x){ if(x&&!s.st[x]){ s.st[x]=1; s.xp+=50; } }); if(/NV/.test(TSTATE[k]||'')&&!/CA/.test(TSTATE[k]||'')) s.nv++; }
