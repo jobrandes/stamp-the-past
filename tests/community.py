@@ -92,6 +92,17 @@ try:
     pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'play sideways scroll at 390')
     cid='c_testville-nv'
+    # slice 3: Suggest a place entry points
+    ok(pg.evaluate("!!document.querySelector('.reqline [data-a=suggest]')"),'Towns list has a Suggest a place link')
+    ok(pg.evaluate("!!document.querySelector('.reqline [data-a=reqtown]')"),'Tell us which town to add stays')
+    pg.evaluate("document.getElementById('menuBtn').click()"); pg.wait_for_timeout(300)
+    ok(pg.evaluate("!!document.querySelector('.menu-panel [data-a=suggest]')"),'Menu has Suggest a place')
+    pg.evaluate("document.querySelector('[data-a=menuclose]').click()"); pg.wait_for_timeout(200)
+    pg.evaluate("document.querySelector('#bnav [data-t=home]').click()"); pg.wait_for_timeout(200)
+    pg.evaluate("document.querySelector('[data-a=nbopen]').click()"); pg.wait_for_timeout(300)
+    pg.evaluate("document.querySelector('[data-a=nbnoloc]').click()"); pg.wait_for_timeout(300)
+    ok(pg.evaluate("!!document.querySelector('.nbwrap [data-a=suggest]')"),'Nearby place picker has Suggest it')
+    pg.evaluate("document.querySelector('[data-a=nbback], [data-a=home]').click()"); pg.wait_for_timeout(300)
     # slice 2: community towns live in their own last, collapsed section with a note and a Suggest link
     regs=pg.evaluate("Array.from(document.querySelectorAll('details.reg > summary .rname')).map(function(e){return e.textContent.trim().toLowerCase();})")
     ok(regs and regs[-1]=='community-added' and regs.count('community-added')==1,'Community-added region is last and unique: %r'%regs)
@@ -103,6 +114,11 @@ try:
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'home with community section sideways scroll at 390')
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(400)
     ok('Testville' in pg.inner_text('body') and 'Community' in pg.inner_text('body'),'town screen / community label')
+    ok(pg.evaluate("!!document.querySelector('[data-a=suggest][data-c=\"c_testville-nv\"]')"),'town page has Suggest a place for that town')
+    pg.evaluate("document.querySelector('[data-a=suggest][data-c=\"c_testville-nv\"]').click()"); pg.wait_for_selector('#city'); pg.wait_for_timeout(200)
+    ok(pg.evaluate("document.getElementById('city').value")=='Testville' and pg.evaluate("document.getElementById('state').value")=='NV','contribute form is prefilled from the town: %r'%pg.evaluate("[document.getElementById('city').value,document.getElementById('state').value]"))
+    pg.go_back(); pg.wait_for_selector('[data-a=city]',state='attached'); pg.wait_for_timeout(500)
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(400)
     pg.evaluate("document.querySelector('[data-a=open]').click()"); pg.wait_for_timeout(300)
     # slice 1: label and report on a community place
     ok(pg.evaluate("!!document.querySelector('.combadge')") and 'community-added' in pg.inner_text('.combadge').lower(),'community stop shows the Community-added label')

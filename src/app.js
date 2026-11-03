@@ -1,8 +1,9 @@
 (function(){
   var DATA=__DATA__;
-  var BASE_ORDER=DATA.order.slice(), CPH={};
+  var BASE_ORDER=DATA.order.slice(), CPH={}, COMON=false;
   /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
   if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
+    COMON=true;
     try{ var cx=new XMLHttpRequest(); cx.open('GET','/community/places.json',false); cx.send();
       if(cx.status===200){ var cj=JSON.parse(cx.responseText); (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } }); CPH=cj.photos||{}; DATA.tours=(DATA.tours||[]).concat((cj.tours||[]).filter(function(t){ return t&&t.id&&t.stops&&t.stops.length; })); }
     }catch(e){}
@@ -387,7 +388,7 @@
     if(mode==='ask'){
       h+='<section class="card"><h2 class="nbh2">Find stops around you</h2><p>Stamp the Past can use your location, only while the app is open, to sort nearby stops by distance. It stays on this phone. Nothing is saved or sent anywhere.</p><button class="btn" data-a="nbloc">Find stops near me</button><button class="btn ghost" data-a="nbnoloc">Continue without location</button><p id="nbMsg" class="geomsg" role="status"></p></section>';
     } else if(mode==='pick'){
-      h+='<p class="nbnote">No location, no problem. Pick a place and see its stops.</p>'+TOURS.map(function(t){ return '<button class="rcard" data-a="nbarea" data-t="'+t.id+'"><span><strong>'+t.name+'</strong><span class="rsub">Town missions and Story stops</span></span><span class="go">Open ›</span></button>'; }).join('')+'<button class="btn ghost" data-a="nbtowns">Pick any other town</button>'+(noloc?'':'<button class="link" data-a="nbask">Use my location instead</button>');
+      h+='<p class="nbnote">No location, no problem. Pick a place and see its stops.</p>'+TOURS.map(function(t){ return '<button class="rcard" data-a="nbarea" data-t="'+t.id+'"><span><strong>'+t.name+'</strong><span class="rsub">Town missions and Story stops</span></span><span class="go">Open ›</span></button>'; }).join('')+'<button class="btn ghost" data-a="nbtowns">Pick any other town</button>'+(noloc?'':'<button class="link" data-a="nbask">Use my location instead</button>')+(COMON?'<p class="nbnote">Know a place that is missing? <button class="link" data-a="suggest">Suggest it</button></p>':'');
     } else if(mode==='area'){
       var t=null; TOURS.forEach(function(x){ if(x.id===nv.tour) t=x; });
       if(!t){ nv.mode='pick'; return viewNear(); }
@@ -612,12 +613,12 @@
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
     regs=regs.filter(function(r){ return r!==COMREG; }).concat(regs.indexOf(COMREG)>-1?[COMREG]:[]);
-    h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
+    h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.'+(COMON?' Or <button class="link" data-a="suggest">suggest a place</button>.':'')+'</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
       return '<details class="reg"'+(open?' open':'')+'><summary class="region"><span class="rname"><i class="ring" style="--p:'+(rt?Math.round(rg/rt*100):0)+'" aria-hidden="true"></i>'+r+'</span><span class="rcount">'+(rt?rg+' of '+rt+' stamps':'soon')+'</span></summary>'+(r===COMREG?'<p class="comnote"><b>Community-added.</b> Places suggested by contributors and researched from sources. They are not checked on site, and they do not count toward your level or badges. <a href="/contribute/">Suggest a place</a></p>':'')+'<ul class="towns">'+items+'</ul></details>';
-    }).join('')+'<p class="passport-line"><strong>'+got+' of '+total+'</strong> stamps collected across '+nOff+' missions.</p><p class="reqline">Do not see your town? <button class="link" data-a="reqtown">Tell us which one to add</button></p></section>';
+    }).join('')+'<p class="passport-line"><strong>'+got+' of '+total+'</strong> stamps collected across '+nOff+' missions.</p><p class="reqline">Do not see your town? <button class="link" data-a="reqtown">Tell us which one to add</button>'+(COMON?'<br>Know a place that is missing? <button class="link" data-a="suggest">Suggest a place</button>':'')+'</p></section>';
     h+='</div><div class="bpanel" id="bp-trails" role="tabpanel"'+(btab==='trails'?'':' hidden')+'>'+trailsHtml()+'</div><div class="bpanel" id="bp-trip" role="tabpanel"'+(btab==='trip'?'':' hidden')+'>'+tripHtml()+'</div></section>';
     if(got>0) h+='<details class="pitch"><summary><span class="mono">About</span><strong>How Stamp the Past works</strong></summary>';
     var hkx=(CITIES[hk].stops.length<4||CITIES[hk].community)?BASE_ORDER[0]:hk, hs=CITIES[hkx].stops, HT=[['Find the spot','A clue sends you to a real landmark. Bring your own two feet.'],['Prove it','Answer a question about what is right in front of you.'],['Fact or fiction','Is the famous story solid, disputed, or a tall tale? Historians argue. Now so can you.'],['Get stamped','Every stop adds a stamp to your passport and a Then/Now photo you can fade through.']];
@@ -668,7 +669,7 @@
       var ni=S.done.indexOf(0);
       if(ni>-1) h+='<button class="nextrow" data-a="open" data-i="'+ni+'"><span class="nr-l">'+(sum(S.done)===0?'Start here':'Next stop')+'</span><strong>'+STOPS[ni].name+(tourBrief(city())?'<small class="nr-m">'+tourBrief(city())+' for all '+STOPS.length+' stops</small>':'')+'</strong><span class="nr-go" aria-hidden="true">›</span></button>';
       h+=exploreRow(cityId);
-      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+closeByHtml(cityId)+'</section>';
+      h+='<section class="card"><h3>Your mission</h3><p>'+(sum(S.done)===0?city().mission:'On your list: '+lst+'. Do them in any order.')+'</p>'+(COMON?'<p class="hint"><button class="link" data-a="suggest" data-c="'+cityId+'">Know a place in '+city().name+' that is missing? Suggest it</button></p>':'')+(tourInfo(city())?'<p class="tourinfo">'+tourInfo(city())+'</p>':'')+closeByHtml(cityId)+'</section>';
     }
     h+=bkNudgeHtml();
     h+='<ul class="stops">'+STOPS.map(function(s,i){
@@ -694,6 +695,7 @@
      +item('backup','Back up your passport','Save a code so a lost phone does not lose your stamps')
      +(got>0?item('share','Share my passport','Make a picture of your stamps',' data-k=""'):'')
      +(/^https?:$/.test(location.protocol)?'<p class="mgroup">Play anywhere</p>'+item('daily','Daily Fact or Fiction','One claim a day, with sources. No travel needed'):'')
+     +(COMON?'<p class="mgroup">Contribute</p>'+item('suggest','Suggest a place','Add a place and a photo. We check it before it appears'):'')
      +'<p class="mgroup">Settings</p>'
      +'<div class="mrow"><span id="thl">Appearance</span><div class="segs" role="group" aria-labelledby="thl">'+seg+'</div></div>'
      +(geoGranted()?'<div class="mrow"><span id="lvl">Live location while the app is open</span><div class="segs"><button class="seg on" data-a="livetoggle" aria-labelledby="lvl" aria-pressed="'+liveOn()+'">'+(liveOn()?'On':'Off')+'</button></div></div>':'')
@@ -744,6 +746,7 @@
   function vdate(d){ var m=/^(\d{4})-(\d{2})/.exec(d||''); return m?MON[+m[2]-1]+' '+m[1]:''; }
   /* community content: always labelled, never mistaken for a curated place */
   var COMREG='Community-added';
+  function sugGo(k){ var u='/contribute/'; if(k&&CITIES[k]){ var c=CITIES[k], st=(c.state||(TSTATE[k]||'').split('/')[0]||''); u+='?city='+encodeURIComponent(c.name)+(st?'&state='+encodeURIComponent(st):''); } location.href=u; }
   function isCom(k){ return !!(CITIES[k]&&CITIES[k].community); }
   function comBadge(){ return '<div class="combadge"><b>Community-added</b><span>Suggested by a contributor and researched from sources. Not checked on site, and not reviewed by a historian.</span></div>'; }
   function vnote(st){
@@ -1419,6 +1422,7 @@
     if(a==='menu'){ openMenu(); return; }
     if(a==='menuclose'){ closeMenu(); return; }
     if(a==='daily'){ location.href='/daily/'; return; }
+    if(a==='suggest'){ sugGo(b.getAttribute('data-c')); return; }
     if(a==='theme'){ var tv=b.getAttribute('data-t'); try{ if(tv==='system') localStorage.removeItem('stp-theme'); else localStorage.setItem('stp-theme',tv); }catch(x){} themeApply(tv); b.parentNode.querySelectorAll('.seg').forEach(function(x){ var on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false'); }); return; }
     if(document.getElementById('menu')&&['backup','share','replaytour','report'].indexOf(a)>-1) closeMenu();
     if(a==='home'){ goHome(); return; }
