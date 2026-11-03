@@ -21,8 +21,8 @@ json.dump({'packs':[],'photos':{}},open(TMP+'/community/places.json','w')); json
 def server(ctx,uploads='1'):
     pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE,'UPLOADS':uploads},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
 B=f'http://localhost:{PORT}'
-def api(path,body=None):
-    req=urllib.request.Request(B+path,data=json.dumps(body).encode() if body is not None else None,method='POST' if body is not None else 'GET')
+def api(path,body=None,key=None,raw=None):
+    req=urllib.request.Request(B+path,data=(raw if raw is not None else json.dumps(body).encode() if body is not None else None),method='POST' if (body is not None or raw is not None) else 'GET',headers=({'x-admin-key':key} if key else {}))
     try:
         r=urllib.request.urlopen(req); return r.status,json.loads(r.read() or b'null') if r.headers.get('content-type','').startswith('application/json') else r.read()
     except urllib.error.HTTPError as e:
@@ -76,20 +76,32 @@ try:
     pg.goto(B+'/contribute/?status='+tok); pg.wait_for_selector('#stat:not([hidden])'); ok('Received' in pg.inner_text('#stT'),'status should say Received: '+pg.inner_text('#stT'))
     pg.goto(B+'/contribute/?status='+tok[:-2]+'zz'); pg.wait_for_selector('#stat:not([hidden])'); ok('not recognised' in pg.inner_text('#stT'),'bad status link message')
     # ---- admin ----
-    s,j=api('/api/community/delete/aaaaaaaa'); ok(s==404,'delete without key must 404')
-    s,j=api('/api/community/delete/aaaaaaaa?key=wrong-wrong-wrong-1'); ok(s==404,'delete with wrong key must 404')
-    s,j=api('/api/community/pending'); ok(s==200 and len(j['pending'])==2 and all('tokenHash' not in p and 'edit=' not in json.dumps(p) for p in j['pending']),'pending lists both without token hashes: %r'%j)
+    s,j=api('/api/community/delete/aaaaaaaa',{}); ok(s==404,'delete without key must 404')
+    s,j=api('/api/community/delete/aaaaaaaa',{},key='wrong-wrong-wrong-1'); ok(s==404,'delete with wrong key must 404')
+    s,j=api('/api/community/pending',key=KEY); ok(s==200 and len(j['pending'])==2 and all('tokenHash' not in p and 'edit=' not in json.dumps(p) for p in j['pending']),'pending lists both without token hashes: %r'%j)
     P={p['place']:p for p in j['pending']}; ok(P['Old Depot']['then']['license']=='CC BY-SA' and P['Old Depot']['then']['credit']=='Jane Doe' and P['Old Depot']['then']['year']=='1908','license/credit/year read from Commons: %r'%P['Old Depot']['then'])
     ok('<' not in P['Old Depot']['then']['desc'],'html stripped from Commons description')
     ids=[P['Old Depot']['id'],P['Town Library']['id']]
-    s,body=api(f'/api/community/photo/{ids[0]}_t'); ok(s==200 and body[:3]==b'\xff\xd8\xff','then photo served')
+    s,body=api(f'/api/community/photo/{ids[0]}_t',key=KEY); ok(s==200 and body[:3]==b'\xff\xd8\xff','then photo visible with the admin key')
     s,body=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'uploaded photo is HELD: not public before approval')
-    s,body=api(f'/api/community/photo/{ids[1]}_n?key='+KEY); ok(s==200 and body[:3]==b'\xff\xd8\xff','uploaded now photo visible with the admin key')
-    s,body=api(f'/api/community/photo/{ids[0]}_t'); ok(s==200,'Commons photos stay public')
+    s,body=api(f'/api/community/photo/{ids[1]}_n',key=KEY); ok(s==200 and body[:3]==b'\xff\xd8\xff','uploaded now photo visible with the admin key')
+    s,body=api(f'/api/community/photo/{ids[0]}_t'); ok(s==404,'Commons photos are also held before approval')
+    s,j=api('/api/community/pending'); ok(s==404,'pending inbox is private without the key: %r'%s)
+    s,j=api('/api/community/pending',key='wrong-wrong-wrong-1'); ok(s==404,'pending with a wrong key is 404')
+    s,j=api('/api/community/submit',raw=b'null'); ok(s==400,'JSON null body gives 400, not a crash: %r'%s)
+    s,j=api('/api/community/submit',{**good,'thenUrl':'https://commons.wikimedia.org/wiki/File:%E0%A4%A.jpg'}); ok(s==400,'malformed percent-encoding gives 400: %r %r'%(s,j))
+    s,j=api('/api/community/submit',{**good,'place':'Bad Year','nowUrl':'','nowPhoto':up,'nowOwn':True,'nowCredit':'Dad','nowYear':'abcd','nowLicense':'CC BY'}); ok(s==400 and 'year' in json.dumps(j).lower(),'non-numeric year rejected: %r'%j)
+    s,j=api('/api/community/submit',{**good,'place':'Fake Jpeg','nowUrl':'','nowPhoto':'data:image/jpeg;base64,'+base64.b64encode(b'\xff\xd8\xff'+b'A'*3000).decode(),'nowOwn':True,'nowCredit':'Dad','nowYear':'2026','nowLicense':'CC BY'}); ok(s==400,'undecodable JPEG-header payload rejected: %r %r'%(s,j))
+    # server re-encodes uploads and drops EXIF/GPS
+    ex=Image.new('RGB',(900,600),(10,200,50)); xb=io.BytesIO(); eo=Image.Exif(); eo[0x010F]='SecretCamera'; ex.save(xb,'JPEG',exif=eo.tobytes(),quality=80)
+    s,j=api('/api/community/submit',{**good,'place':'Exif Probe','nowUrl':'','nowPhoto':'data:image/jpeg;base64,'+base64.b64encode(xb.getvalue()).decode(),'nowOwn':True,'nowCredit':'Dad','nowYear':'2026','nowLicense':'CC BY'}); ok(s==200,'exif upload accepted: %r'%j)
+    pj=api('/api/community/pending',key=KEY)[1]['pending']; pid=[p['id'] for p in pj if p['place']=='Exif Probe'][0]
+    s,body=api(f'/api/community/photo/{pid}_n',key=KEY); ok(s==200 and b'SecretCamera' not in body and b'Exif' not in body[:40],'server stripped EXIF from the stored upload')
+    api(f'/api/community/delete/{pid}',{},key=KEY)
     # ---- researched: place files appear, status flips ----
     write_places([(ids[0],'Old Depot',1)])
     s,j=api('/api/community/mine/'+tok); ok(j.get('status')=='added','status should flip to added: %r'%j)
-    s,j=api('/api/community/pending'); ok(len(j['pending'])==1,'pending shrinks after a place is added')
+    s,j=api('/api/community/pending',key=KEY); ok(len(j['pending'])==1,'pending shrinks after a place is added')
     # ---- the app ----
     pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'play sideways scroll at 390')
@@ -176,7 +188,7 @@ try:
     # ---- history stops: a place with only a recent photo becomes a Story stop ----
     s,jn=api('/api/community/submit',{**good,'place':'Hilltop Chapel','thenUrl':'','nowUrl':'https://commons.wikimedia.org/wiki/File:Good_now.jpg'}); ok(s==200,'now-only submit accepted: %r'%jn)
     s,jt=api('/api/community/submit',{**good,'place':'Lost Mill','nowUrl':''}); ok(s==200,'then-only submit accepted: %r'%jt)
-    s,j=api('/api/community/pending'); PP={p['place']:p for p in j['pending']}
+    s,j=api('/api/community/pending',key=KEY); PP={p['place']:p for p in j['pending']}
     ok('then' not in PP['Hilltop Chapel'] and PP['Hilltop Chapel']['now']['credit']=='Jane Doe','now-only has no then photo')
     ok('now' not in PP['Lost Mill'] and 'then' in PP['Lost Mill'],'then-only has no now photo')
     cid_s=PP['Hilltop Chapel']['id']; cid_w=PP['Lost Mill']['id']
@@ -191,7 +203,7 @@ try:
     pk,ph,st,tr=cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/'); st['waiting']={cid_w:'We still need a recent photo of this place.'}
     json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
     ok(cid_s in st['added'],'story counted as added')
-    s,j=api('/api/community/pending'); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
+    s,j=api('/api/community/pending',key=KEY); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
     tokn=jn['edit'] if 'edit' in jn else ''
     s,j=api('/api/community/mine/'+jn['edit']); ok(j.get('status')=='added','story status added')
     s,j=api('/api/community/mine/'+jt['edit']); ok(j.get('status')=='waiting' and 'recent photo' in j.get('note',''),'waiting status: %r'%j)
@@ -213,7 +225,7 @@ try:
     code=pg.evaluate("(function(){var f=document.querySelector('[data-a=backup]');return null})()")
     b.close()
   # ---- delete (moderation) ----
-  s,j=api(f'/api/community/delete/{ids[1]}?key='+KEY); ok(s==200,'admin delete'); s,_=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'deleted photo gone')
+  s,j=api(f'/api/community/delete/{ids[1]}',{},key=KEY); ok(s==200,'admin delete'); s,_=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'deleted photo gone')
   # ---- uploads off (the default on Netlify): API rejects, config says off, form hides the upload box ----
   sv.terminate(); sv=server('branch-deploy','0')
   s,j=api('/api/community/config'); ok(s==200 and j=={'uploads':False},'config reports uploads off: %r'%j)

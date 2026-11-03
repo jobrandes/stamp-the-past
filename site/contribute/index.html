@@ -14,8 +14,9 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 </style></head><body><main>
 <p class="mut" style="margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem">Stamp the Past · community test</p>
 <h1>Suggest a place</h1>
-<p>Know a historic place in your town? Tell us its name, give us a one-liner and a photo link (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. Your place shows up in the test copy of the app within about 24 hours. No account, no email.</p>
+<p>Know a historic place in your town? Tell us its name, give us a one-liner and a photo link (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. We aim to review suggestions within about a day. Approved places appear in the test copy of the app. No account, no email.</p>
 <div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
+<div class="banner" id="priv"><strong>What happens to what you send (test only).</strong> We keep the place name, town, your one-liner, your optional nickname, and any photo or credit you give. Photos you upload stay private until a person approves the place. If it is approved, the name, town, nickname, text and photo are shown publicly in this test copy of the app. We store no email, name or location. To have something removed, use the Report button on the place in the app. This is a test and is not covered by the live app's privacy page.</div>
 <form id="f" novalidate>
 <input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <fieldset><legend>The place</legend>
@@ -24,19 +25,19 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <label for="one">One line about it</label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
 <label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30">
 </fieldset>
-<fieldset><legend>"Then" photo (an old photo, optional)</legend>
+<fieldset><legend>"Then" photo (an old photo)</legend>
 <label for="then">Link to the photo's page on Wikimedia Commons</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <p class="help">The address should start with commons.wikimedia.org/wiki/File:. We check the license for you.</p>
 </fieldset>
-<fieldset><legend>"Now" photo (today, optional)</legend>
-<p class="help">One photo is enough. With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
+<fieldset><legend>"Now" photo (today)</legend>
+<p class="help"><strong>Add at least one photo, old or new.</strong> With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
 <label for="now">Link to a Commons photo page</label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <details id="own" hidden><summary>Or upload my own photo</summary>
-<label>Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
+<label for="file">Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0"><button type="button" class="ghost" id="rmphoto" hidden>Remove photo</button>
 <label class="chk"><input type="checkbox" id="took"><span>I took this photo myself</span></label>
-<div class="row"><div><label>Your credit</label><input id="credit" maxlength="120"></div><div><label>Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
-<label>License</label><select id="lic"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
-<p class="help">Your photo is resized, and hidden location data is removed, in your browser before upload.</p></details>
+<div class="row"><div><label for="credit">Your credit</label><input id="credit" maxlength="120"></div><div><label for="year">Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
+<label for="lic">License</label><select id="lic"><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
+<p class="help">Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
 </fieldset>
 <fieldset><legend>Before you send</legend>
 <label class="chk"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
@@ -45,7 +46,7 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <p class="mut" id="status" role="status"></p>
 </fieldset>
 </form>
-<section id="done" hidden><h2>Received.</h2><p class="ok">Thank you. We will research your place and add it to the test copy within about 24 hours.</p>
+<section id="done" hidden><h2>Received.</h2><p class="ok">Thank you. We will research your place. We aim to review within about a day, and approved places appear in the test copy of the app. It could also be declined, or wait for another photo.</p>
 <p>Keep this private link. It shows where your place is in the process. We cannot recover it for you.</p><div class="box" id="editlink"></div>
 <p><button class="ghost" id="copy" type="button">Copy the link</button></p></section>
 <section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><p><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button">Open the test app</button></a></p></section>
@@ -56,10 +57,13 @@ var photo=null;
 function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
 fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads)document.getElementById('own').hidden=false;}).catch(function(){});
 function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
-document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;shrink(f,function(d){if(!d){say('That file could not be read as a picture.',true);return;}photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview';});});
+function clearPhoto(){photo=null;var p=document.getElementById('prev');p.removeAttribute('src');p.hidden=true;document.getElementById('rmphoto').hidden=true;document.getElementById('file').value='';}
+document.getElementById('rmphoto').addEventListener('click',function(){clearPhoto();say('');});
+document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];clearPhoto();if(!f){return;}var go=document.getElementById('go');go.disabled=true;shrink(f,function(d){go.disabled=false;if(!d){document.getElementById('file').value='';say('That file could not be read as a picture. Choose another.',true);return;}say('');photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview of your photo';document.getElementById('rmphoto').hidden=false;});});
 function v(id){return document.getElementById(id).value;}
 function collect(){
   var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
+  if(o.nowUrl.trim()&&photo){clearPhoto();}
   if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense=v('lic');}
   return o;
 }
@@ -75,7 +79,7 @@ document.getElementById('copy').addEventListener('click',function(){var t=docume
 try{var qp=new URLSearchParams(location.search),qc=(qp.get('city')||'').slice(0,60),qs=(qp.get('state')||'').slice(0,30);if(qc)document.getElementById('city').value=qc;if(qs)document.getElementById('state').value=qs;}catch(e){}
 var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
 if(m){document.getElementById('f').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
-  var T={received:['Received','We have your place and will research it. It shows up in the test copy within about 24 hours of being sent.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
+  var T={received:['Received','We have your place and will research it. We aim to review within about a day. If approved, it appears in the test copy.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
   document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];});}
 })();
 </script></body></html>

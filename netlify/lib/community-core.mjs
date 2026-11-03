@@ -14,7 +14,7 @@ export function parseSourceLink(raw) {
   if (u.protocol !== 'https:') return null;
   if (u.hostname === 'commons.wikimedia.org') {
     let t = null;
-    if (u.pathname.startsWith('/wiki/')) t = decodeURIComponent(u.pathname.slice(6));
+    if (u.pathname.startsWith('/wiki/')) { try { t = decodeURIComponent(u.pathname.slice(6)); } catch { return null; } }
     else if (u.searchParams.get('title')) t = u.searchParams.get('title');
     if (!t || !/^File:/i.test(t)) return null;
     t = t.replace(/_/g, ' ').replace(/^file:/i, 'File:');
@@ -81,6 +81,7 @@ export function validate(input) {
     v.nowLicense = UPLOAD_LICENSES.includes(input.nowLicense) ? input.nowLicense : (errs.push('"Now" photo: pick a license for your own photo.'), '');
     v.nowCredit = t(input.nowCredit, 2, 120, 'Your photo credit');
     v.nowYear = t(input.nowYear, 4, 4, 'Year your photo was taken');
+    if (!/^(19\d\d|20\d\d)$/.test(v.nowYear) || +v.nowYear > new Date().getFullYear()) errs.push('Year your photo was taken: use a real year such as 2026.');
     if (input.nowOwn !== true) errs.push('Tick "I took this photo myself" for an uploaded photo.');
   }
   if (!hasThenUrl && !hasNowUrl && !hasUpload) errs.push('Add at least one photo: an old one, a recent one, or both.');
