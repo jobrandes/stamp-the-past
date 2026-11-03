@@ -67,7 +67,7 @@ try:
     pg.check('#confirm'); pg.click('#go'); pg.wait_for_selector('#errs:not([hidden])'); ok('at least one photo' in pg.inner_text('#errs').lower(),'photo message missing')
     pg.fill('#then','https://commons.wikimedia.org/wiki/File:Good_then.jpg')
     pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
-    link=pg.inner_text('#editlink'); ok(re.search(r'/contribute/\?status=[a-f0-9]{32}$',link) is not None,'status link shape: '+link)
+    link=pg.text_content('#editlink'); ok(re.search(r'/contribute/\?status=[a-f0-9]{32}$',link) is not None,'status link shape: '+link)
     tok=link.split('status=')[1]
     # second place through the API with an uploaded "now" photo
     up='data:image/jpeg;base64,'+base64.b64encode(mkjpg((200,120,60))).decode()

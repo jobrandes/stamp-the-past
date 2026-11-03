@@ -10,12 +10,13 @@ label{display:block;font-weight:600;margin:12px 0 4px}input,textarea,select{widt
 .help{font-size:.9rem;color:var(--mut);margin:2px 0 0}.chk{display:flex;gap:10px;align-items:flex-start;font-weight:500}.chk input{width:auto;min-height:0;margin-top:5px}
 button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;background:var(--ac);color:#fff;padding:0 22px;cursor:pointer}button.ghost{background:transparent;color:var(--ac);border:1px solid var(--ac)}
 .err{color:var(--bad);margin:10px 0}.ok{color:var(--ok);font-weight:600}.hp{position:absolute;left:-9999px}.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;word-break:break-all}
-details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600}
+details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{display:block;text-decoration:none}.actions button{width:100%}.mineBox{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;margin:12px 0}.mineBox h2{font-size:1.05rem;margin:0 0 .3em}summary{cursor:pointer;min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600;border:1px solid var(--line);background:var(--card);border-radius:10px;padding:0 14px}summary::after{content:'+';font-size:1.4rem;color:var(--ac)}details[open]>summary::after{content:'\2212'}details[open]>summary{margin-bottom:8px}
 </style></head><body><main>
 <p class="mut" style="margin:0;text-transform:uppercase;letter-spacing:.08em;font-size:.8rem">Stamp the Past · community test</p>
 <h1>Suggest one place</h1>
-<p>Know a historic place in your town? Tell us its name, give us a one-liner and add at least one photo (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. We aim to review suggestions within about a day. Approved places appear in the test copy of the app. No account, no email.</p>
-<div class="banner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
+<section id="mine" class="mineBox" hidden><h2>Your suggestions</h2><ul id="minelist" style="padding-left:1.1em;margin:.2em 0"></ul><p class="help">Saved in this browser only. Keep each private link too.</p></section>
+<p id="intro">Know a historic place in your town? Tell us its name, give us a one-liner and add at least one photo (an old one, a recent one, or both), and we do the rest: the research, the story, the sources and the quiz. We aim to review suggestions within about a day. Approved places appear in the test copy of the app. No account, no email.</p>
+<div class="banner" id="tbanner"><strong>Test copy only.</strong> Nothing here goes to the real app or the App Store until it has been checked. Photos must be free to use. The easy way is a link to the photo's page on <a href="https://commons.wikimedia.org" target="_blank" rel="noopener">Wikimedia Commons</a>. We read the license and the credit from that page ourselves.</div>
 <div class="banner" id="priv"><strong>What happens to what you send (test only).</strong> We keep the place name, town, your one-liner, your optional nickname, and any photo or credit you give. Photos you upload stay private until a person approves the place. If it is approved, the name, town, nickname, text and photo are shown publicly in this test copy of the app. We store no email, name or location. To have something removed, use the Report button on the place in the app. This is a test and is not covered by the live app's privacy page.</div>
 <form id="f" novalidate>
 <input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
@@ -46,11 +47,10 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <p class="mut" id="status" role="status"></p>
 </fieldset>
 </form>
-<section id="mine" hidden><h2>Your suggestions on this browser</h2><p class="help">Saved only in this browser, so they will not follow you to another phone or computer. Keep each private link too.</p><ul id="minelist" style="padding-left:1.1em"></ul></section>
-<section id="done" hidden><h2>Received.</h2><p class="ok">Thank you. We will research your place. We aim to review within about a day, and approved places appear in the test copy of the app. It could also be declined, or wait for another photo.</p>
-<p>Keep this private link. It shows where your place is in the process. We cannot recover it for you.</p><div class="box" id="editlink"></div>
-<p><button class="ghost" id="copy" type="button">Copy the link</button></p><p><a id="viewstat" href="#"><button type="button">View submission status</button></a> <a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></p></section>
-<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><div id="addp" hidden><h3 style="margin:.6em 0 .2em">Add or change a photo</h3><p class="help">Add the missing photo (or replace one) and your place goes back into review.</p>
+<section id="done" hidden><h2>Received. Thank you!</h2><p class="ok">We aim to review within about a day. Approved places appear in the test copy of the app. It could also be declined, or wait for another photo.</p>
+<div class="actions"><a id="viewstat" href="#"><button type="button">View submission status</button></a><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a><a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></div>
+<details><summary>Your private status link</summary><p class="help">Keep this link. We cannot recover it for you.</p><div class="box" id="editlink"></div><p><button class="ghost" id="copy" type="button">Copy the link</button></p></details></section>
+<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><details id="addp" hidden><summary>Add or change a photo</summary><p class="help">Add the missing photo (or replace one) and your place goes back into review.</p>
 <label for="pthen">Old photo: Commons link</label><input id="pthen" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <label for="pnow">Recent photo: Commons link</label><input id="pnow" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <details id="pown" hidden><summary>Or upload my own recent photo</summary>
@@ -59,8 +59,8 @@ details{margin-top:10px}summary{cursor:pointer;min-height:44px;display:flex;alig
 <div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
 <label for="plic">License</label><select id="plic"><option value="">Choose a license</option><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select></details>
 <label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
-<p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></div>
-<p><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a> <a href="/play.html"><button type="button">Return to the app</button></a></p></section>
+<p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></details>
+<div class="actions"><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a><a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></div></section>
 </main>
 <script>
 (function(){
@@ -83,11 +83,12 @@ document.getElementById('f').addEventListener('submit',function(e){
   fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(collect())}).then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});}).then(function(x){
     document.getElementById('go').disabled=false;
     if(x.s!==200){errs.hidden=false;errs.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(m){return '<li>'+String(m).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';say('');errs.scrollIntoView({block:'center'});return;}
-    var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,document.getElementById('place').value,document.getElementById('city').value);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+    var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,document.getElementById('place').value,document.getElementById('city').value);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
   }).catch(function(){document.getElementById('go').disabled=false;say('Could not reach the test server. Try again.',true);});
 });
 document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent,b=this;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';}).catch(function(){});});
 try{var qp=new URLSearchParams(location.search),qc=(qp.get('city')||'').slice(0,60),qs=(qp.get('state')||'').slice(0,30);if(qc)document.getElementById('city').value=qc;if(qs)document.getElementById('state').value=qs;}catch(e){}
+function hideIntro(){['intro','tbanner','priv'].forEach(function(i){var e=document.getElementById(i);if(e)e.hidden=true;});}
 function sugGet(){try{return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){return x&&/^[a-f0-9]{9,}$/.test(x.t);});}catch(e){return[];}}
 function saveSug(t,place,city){try{var a=sugGet().filter(function(x){return x.t!==t;});a.unshift({t:t,p:String(place).slice(0,80),c:String(city).slice(0,60)});localStorage.setItem('stp-sugg',JSON.stringify(a.slice(0,20)));}catch(e){}}
 var LBL={received:'Received',added:'Added',waiting:'Waiting for a photo',declined:'Not added'};
@@ -105,8 +106,8 @@ document.getElementById('psend').addEventListener('click',function(){
     if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';m.textContent='';return;}
     m.textContent='Sent. Your place is back in review.';document.getElementById('stT').textContent=document.getElementById('stT').textContent.replace(/:.*$/,'')+': Received';}).catch(function(){b.disabled=false;m.textContent='Could not reach the test server. Try again.';});});
 var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
-if(m){document.getElementById('f').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
+if(m){document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
   var T={received:['Received','We have your place and will research it. We aim to review within about a day. If approved, it appears in the test copy.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
-  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');if(j.status==='received'||j.status==='waiting')document.getElementById('addp').hidden=false;});}
+  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');if(j.status==='received'||j.status==='waiting'){var ad=document.getElementById('addp');ad.hidden=false;if(j.status==='waiting')ad.open=true;}});}
 })();
 </script></body></html>
