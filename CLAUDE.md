@@ -415,3 +415,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Queue limit (Nov 4 2026, branch `community-ui`, also on `community-test`)
 - Submit now refuses with 429 only when 60 places are still OPEN (not in status.json `added` or `declined`); handled places no longer use up the cap. A hard ceiling of 500 stored records bounds storage. Blobs has no atomic counter, so a burst of simultaneous submits can overshoot 60 slightly; acceptable for the test. Test in tests/community.py ("queue limit"). From the Nov 3 outside audit.
+
+## Community stamps keyed by place id (Nov 4 2026, branch `community-ui`, also on `community-test`)
+- Saved progress for community towns now stores `ids` (the stop ids) next to `done`/`claims` in `then-now-v3`; `norm()` matches by id on load, so removing or reordering a place never shifts stamps. Old saves without `ids` fall back to position. Official towns and the TN3 code are unchanged. Test in tests/community.py fails on the old code. Second outside audit (Nov 4) agreed with the first; its only new point is the shared blob store name across branch deploys (not changed: only `community-test` builds, and renaming the store would orphan existing submissions and status links).

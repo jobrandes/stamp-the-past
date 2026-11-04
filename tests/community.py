@@ -164,6 +164,15 @@ try:
     pg.click('[data-a=step][data-n="1"]'); pg.wait_for_timeout(300)
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=pick]')).find(function(b){return /^Town Library/.test(b.innerText.trim());}).click()"); pg.wait_for_timeout(600)
     ok(pg.evaluate("JSON.parse(localStorage.getItem('then-now-v3')).p['%s'].done"%cid)==[1,1],'first stamp survived, second earned: %r'%st())
+    ok(pg.evaluate("JSON.parse(localStorage.getItem('then-now-v3')).p['%s'].ids"%cid)==['p1','p2'],'saved community stamps carry place ids')
+    # the FIRST place is removed and a new one added: stamps follow the place, not the position
+    write_places([(ids[1],'Town Library',2),('%08x'%0xcc000001,'Brand New Hall',3)])
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='%s';}).click()"%cid); pg.wait_for_timeout(500)
+    rows=pg.evaluate("Array.from(document.querySelectorAll('[data-a=open]')).map(function(b){return b.innerText.replace(/\\s+/g,' ');})")
+    lib=[r for r in rows if 'Library' in r]; new_=[r for r in rows if 'Brand New' in r]
+    ok(lib and new_ and 'BADGE EARNED' in lib[0].upper() and 'NOT FOUND YET' in new_[0].upper(),'stamp stays with Town Library after the first place is removed; new place is unstamped: %r'%rows)
+    write_places([(ids[0],'Old Depot',1),(ids[1],'Town Library',2)])
     pg.screenshot(path='/tmp/cm_done.png')
     # community stamps never count toward the official totals, level or badges
     pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.wait_for_timeout(1500)
