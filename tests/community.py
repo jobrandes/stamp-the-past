@@ -140,6 +140,7 @@ try:
     sent=[]
     pg.route('**/',lambda r: (sent.append(r.request.post_data or '') if r.request.method=='POST' else None, r.fulfill(status=200,body='ok') if r.request.method=='POST' else r.continue_())[1])
     pg.click('.repline [data-a=report]'); pg.wait_for_selector('#report')
+    ok(pg.evaluate('''!!document.querySelector('.rep-card a[href="mailto:stampthepast@gmail.com"]')'''),'community report dialog shows the support email')
     ok(pg.evaluate("!!document.getElementById('repWhy')") and pg.evaluate("document.getElementById('repWhy').options.length")==5,'report has five reasons')
     ok('Community report p1' in pg.evaluate("document.getElementById('report').dataset.where"),'report names the community place: '+pg.evaluate("document.getElementById('report').dataset.where"))
     pg.select_option('#repWhy','A private or unsafe place'); pg.click('[data-a=repsend]'); pg.wait_for_timeout(500)
