@@ -78,7 +78,7 @@ export function validate(input) {
   else if (hasUpload) {
     v.nowUpload = input.nowPhoto;
     if (!decodeJpegDataUrl(input.nowPhoto)) errs.push('"Now" photo: that upload could not be read. Try another photo.');
-    v.nowLicense = UPLOAD_LICENSES.includes(input.nowLicense) ? input.nowLicense : (errs.push('"Now" photo: pick a license for your own photo.'), '');
+    v.nowLicense = 'CC BY-SA'; // every uploaded photo is shared under CC BY-SA 4.0, credited to the contributor (no choice)
     v.nowCredit = t(input.nowCredit, 2, 120, 'Your photo credit');
     v.nowYear = t(input.nowYear, 4, 4, 'Year your photo was taken');
     if (!/^(19\d\d|20\d\d)$/.test(v.nowYear) || +v.nowYear > new Date().getFullYear()) errs.push('Year your photo was taken: use a real year such as 2026.');

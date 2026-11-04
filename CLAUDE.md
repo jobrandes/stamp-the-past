@@ -421,3 +421,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Support email on the contribute page (Nov 4 2026)
 - stampthepast@gmail.com (already on the landing page and /support) now also shows on /contribute/ (privacy box and a line under the form) for questions and removal requests. Also in the app Menu (Contribute group) and the community Report dialog. Still open for Apple 1.2: how block/hide works (auto-hide after repeated reports).
+
+## Upload rights by attestation (Nov 4 2026, after Jo-Anne's dad's advice)
+- Own-photo uploads no longer have a license picker: the form says "I took this photo myself and agree to share it under CC BY-SA 4.0 with my credit shown", and the server forces `CC BY-SA`. Commons links still have their license read automatically. The daily agent does NOT verify ownership of uploads; it only checks safety and subject (decline likely copied/watermarked images). Takedown route: stampthepast.com Gmail + Report button. Still to do before any public beta: register a DMCA designated agent (Jo-Anne; small fee, check current rules). Not legal advice.

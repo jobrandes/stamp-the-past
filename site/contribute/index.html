@@ -36,13 +36,12 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <label for="now">Link to a Commons photo page</label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <details id="own" hidden><summary>Or upload my own photo</summary>
 <label for="file">Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0"><button type="button" class="ghost" id="rmphoto" hidden>Remove photo</button>
-<label class="chk"><input type="checkbox" id="took"><span>I took this photo myself</span></label>
+<label class="chk"><input type="checkbox" id="took"><span>I took this photo myself, and I agree to share it under CC BY-SA 4.0 with my credit shown</span></label>
 <div class="row"><div><label for="credit">Your credit</label><input id="credit" maxlength="120"></div><div><label for="year">Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
-<label for="lic">License</label><select id="lic"><option value="">Choose a license</option><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select>
-<p class="help">Only upload a photo you took yourself. Choosing CC0 gives it to the public domain; CC BY lets anyone use it if they credit you; CC BY-SA is the same but any copies must share alike. We show your credit with the photo. Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
+<p class="help">Only upload a photo you took yourself. Never upload a photo from a website, a book or someone else. By uploading you agree that anyone may reuse it under CC BY-SA 4.0 (they must credit you and share copies alike). We show your credit with the photo. If you ever want it removed, email stampthepast@gmail.com. Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
 </fieldset>
 <fieldset><legend>Before you send</legend>
-<label class="chk"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
+<label class="chk"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or I took them myself, and I am not including anyone's private information. I can be asked to remove a photo if someone objects.</span></label>
 <p class="err" id="errs" role="alert" hidden></p>
 <p><button type="submit" id="go">Send this place</button></p>
 <p class="mut" id="status" role="status"></p>
@@ -56,10 +55,10 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <label for="pnow">Recent photo: Commons link</label><input id="pnow" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <details id="pown" hidden><summary>Or upload my own recent photo</summary>
 <label for="pfile">Photo file</label><input type="file" accept="image/*" id="pfile"><img id="pprev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
-<label class="chk"><input type="checkbox" id="ptook"><span>I took this photo myself</span></label>
+<label class="chk"><input type="checkbox" id="ptook"><span>I took this photo myself, and I agree to share it under CC BY-SA 4.0 with my credit shown</span></label>
 <div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
-<label for="plic">License</label><select id="plic"><option value="">Choose a license</option><option>CC0</option><option>CC BY</option><option>CC BY-SA</option></select></details>
-<label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or mine to share, and I am not including anyone's private information.</span></label>
+</details>
+<label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or I took them myself, and I am not including anyone's private information. I can be asked to remove a photo if someone objects.</span></label>
 <p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></details>
 <div class="actions"><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a><a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></div></section>
 <p class="fine" id="contactline">Questions or something to remove? Email <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a>.</p>
@@ -77,7 +76,7 @@ function v(id){return document.getElementById(id).value;}
 function collect(){
   var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
   if(o.nowUrl.trim()&&photo){clearPhoto();}
-  if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense=v('lic');}
+  if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense='CC BY-SA';}
   return o;
 }
 document.getElementById('f').addEventListener('submit',function(e){
@@ -102,7 +101,7 @@ document.getElementById('pfile').addEventListener('change',function(e){var f=e.t
 document.getElementById('psend').addEventListener('click',function(){
   var tok=(location.search.match(/[?&]status=([a-f0-9]{9,})/)||[])[1];if(!tok)return;var b=this,er=document.getElementById('perrs'),m=document.getElementById('pstatus');er.hidden=true;
   var o={thenUrl:v('pthen'),nowUrl:v('pnow'),confirm:document.getElementById('pconfirm').checked};
-  if(!o.nowUrl.trim()&&pphoto){o.nowPhoto=pphoto;o.nowOwn=document.getElementById('ptook').checked;o.nowCredit=v('pcredit');o.nowYear=v('pyear');o.nowLicense=v('plic');}
+  if(!o.nowUrl.trim()&&pphoto){o.nowPhoto=pphoto;o.nowOwn=document.getElementById('ptook').checked;o.nowCredit=v('pcredit');o.nowYear=v('pyear');o.nowLicense='CC BY-SA';}
   b.disabled=true;m.textContent='Sending… checking photo links can take a few seconds.';
   fetch('/api/community/mine/'+tok+'/photo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
     if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';m.textContent='';return;}

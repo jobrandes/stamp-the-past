@@ -90,6 +90,11 @@ try:
     s,j=api('/api/community/pending',key='wrong-wrong-wrong-1'); ok(s==404,'pending with a wrong key is 404')
     s,j=api('/api/community/submit',raw=b'null'); ok(s==400,'JSON null body gives 400, not a crash: %r'%s)
     s,j=api('/api/community/submit',{**good,'thenUrl':'https://commons.wikimedia.org/wiki/File:%E0%A4%A.jpg'}); ok(s==400,'malformed percent-encoding gives 400: %r %r'%(s,j))
+    s,j=api('/api/community/submit',{**good,'place':'Lic Force','nowUrl':'','nowPhoto':up,'nowOwn':True,'nowCredit':'Dad','nowYear':'2026','nowLicense':'CC0'}); ok(s==200,'upload with any license value accepted')
+    s,pj=api('/api/community/pending',key=KEY); lf=[x for x in pj['pending'] if x['place']=='Lic Force']
+    ok(lf and lf[0]['now']['license']=='CC BY-SA','uploads are always stored as CC BY-SA: %r'%(lf and lf[0]['now']))
+    s,j=api('/api/community/submit',{**good,'place':'No Lic Field','nowUrl':'','nowPhoto':up,'nowOwn':True,'nowCredit':'Dad','nowYear':'2026'}); ok(s==200,'upload without a license field accepted: %r'%j)
+    for x in [y for y in api('/api/community/pending',key=KEY)[1]['pending'] if y['place'] in ('Lic Force','No Lic Field')]: api('/api/community/delete/'+x['id'],{},key=KEY)
     s,j=api('/api/community/submit',{**good,'place':'Bad Year','nowUrl':'','nowPhoto':up,'nowOwn':True,'nowCredit':'Dad','nowYear':'abcd','nowLicense':'CC BY'}); ok(s==400 and 'year' in json.dumps(j).lower(),'non-numeric year rejected: %r'%j)
     s,j=api('/api/community/submit',{**good,'place':'Fake Jpeg','nowUrl':'','nowPhoto':'data:image/jpeg;base64,'+base64.b64encode(b'\xff\xd8\xff'+b'A'*3000).decode(),'nowOwn':True,'nowCredit':'Dad','nowYear':'2026','nowLicense':'CC BY'}); ok(s==400,'undecodable JPEG-header payload rejected: %r %r'%(s,j))
     # server re-encodes uploads and drops EXIF/GPS
