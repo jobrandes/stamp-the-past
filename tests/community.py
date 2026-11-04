@@ -259,6 +259,7 @@ try:
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(800)
     ok(pg.is_visible('#own'),'upload box shown when uploads are on')
+    ok(pg.is_visible('#contactline') and pg.get_attribute('#contactline a','href')=='mailto:stampthepast@gmail.com','support email shown on the form page')
     b.close()
   # ---- queue limit counts only open places, not added/declined ones ----
   sv.terminate(); sv=server('branch-deploy','1')
