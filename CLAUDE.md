@@ -412,3 +412,6 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 ## Contribute page tidy (Nov 3 2026, from Jo-Anne's phone feedback)
 - After sending, and on the status page, the intro and both banners are hidden so the result is at the top; "Your suggestions" (stp-sugg list) is a box at the very top of the form page. Done screen: Received, then three full-width buttons (View submission status, Suggest another, Return to the app), private link inside a closed details. Status page: status first, "Add or change a photo" in a details (open only when waiting). Summaries show +/-. Tests read `#editlink` with text_content because it is in a closed details.
+
+## Queue limit (Nov 4 2026, branch `community-ui`, also on `community-test`)
+- Submit now refuses with 429 only when 60 places are still OPEN (not in status.json `added` or `declined`); handled places no longer use up the cap. A hard ceiling of 500 stored records bounds storage. Blobs has no atomic counter, so a burst of simultaneous submits can overshoot 60 slightly; acceptable for the test. Test in tests/community.py ("queue limit"). From the Nov 3 outside audit.

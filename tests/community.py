@@ -251,6 +251,19 @@ try:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(800)
     ok(pg.is_visible('#own'),'upload box shown when uploads are on')
     b.close()
+  # ---- queue limit counts only open places, not added/declined ones ----
+  sv.terminate(); sv=server('branch-deploy','1')
+  ids=[]
+  for i in range(60):
+    s,r=api('/api/community/submit',{**good,'place':'Queue Place %d'%i}); 
+    if s==200: ids.append(r['id'])
+  ok(len(ids)==60,'60 open places accepted, got %d'%len(ids))
+  s,r=api('/api/community/submit',{**good,'place':'Queue Place 61'}); ok(s==429 and 'queue' in json.dumps(r).lower(),'61st open place refused: %s'%s)
+  json.dump({'added':ids[:2],'declined':{ids[2]:'no'}},open(TMP+'/community/status.json','w'))
+  for _ in range(3):
+    s,r=api('/api/community/submit',{**good,'place':'Queue After'}); ok(s==200,'room frees up once places are added or declined: %s'%s)
+  s,r=api('/api/community/submit',{**good,'place':'Queue Over'}); ok(s==429,'cap applies again once full: %s'%s)
+  json.dump({'added':[],'declined':{}},open(TMP+'/community/status.json','w'))
   # ---- production context: everything off ----
   sv.terminate(); sv=server('production')
   for u in ('/api/community/pending','/api/community/photo/x_t'):

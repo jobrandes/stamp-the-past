@@ -119,7 +119,13 @@ const handle = (opts) => async (req, context) => {
     if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ errors: ['Could not read the form.'] }, 400);
     if (body.hp) return json({ ok: true, id: 'ignored', status: 'ignored' });
     const { blobs } = await store.list({ prefix: 'sub/' });
-    if (blobs.length >= 60) return json({ errors: ['The test inbox is full for now.'] }, 429);
+    if (blobs.length >= 500) return json({ errors: ['The test inbox is full for now.'] }, 429);
+    // Queue limit: only places still waiting for a decision count (not added or declined ones).
+    let st = {};
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    const handled = new Set([...(st.added || []), ...Object.keys(st.declined || {})]);
+    const open = blobs.filter(b => !handled.has(b.key.slice(4))).length;
+    if (open >= 60) return json({ errors: ['The review queue is full for now. Please try again in a few days.'] }, 429);
     if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
     const { errs, v } = validate(body);
     if (errs.length) return json({ errors: errs }, 400);
