@@ -53,7 +53,7 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         tid='c_'+slug(p['town']+'-'+p['state'] if p.get('state') else p['town'])
         sp=json.loads(json.dumps(p['stop'])); sp['town']=tid; sp['community']=True
         if p.get('by'): sp['by']=p['by']
-        t=tours.setdefault(tid,{'id':tid,'name':p['town'],'towns':[tid] if tid in {x['id'] for x in packs} else [],'community':True,'stops':[]})
+        t=tours.setdefault(tid,{'id':tid,'name':p['town'],'towns':[tid] if tid in {x['id'] for x in packs} else [],'community':True,'state':p.get('state',''),'stops':[]})
         t['stops'].append(sp)
         ph=sp.get('ph')
         if ph: photos[ph['k']]='/api/community/photo/'+ph['k'][3:]

@@ -1049,6 +1049,19 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 @media (max-height:700px){.nextrow .nr-m{display:none}}
 
 .mysug{list-style:none;margin:0 0 8px;padding:0}.mysug li{margin:0 12px 8px}.mysug .mitem{display:flex;width:100%;text-decoration:none;color:inherit}.sugst{font-weight:600}
+
+.galstrip{display:flex;gap:8px;margin-top:8px;overflow-x:auto;padding-bottom:2px}
+.galth{flex:0 0 auto;width:64px;height:64px;padding:0;border:2px solid var(--line,#8886);border-radius:10px;overflow:hidden;background:none;cursor:pointer}
+.galth img{width:100%;height:100%;object-fit:cover;display:block}
+.galth[aria-pressed=true]{border-color:var(--gold,#c9a227)}
+.galbig{min-height:44px;margin-top:4px}
+.galbox{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;color:#fff}
+.galfig{margin:0;max-width:100%;max-height:78vh;display:flex;flex-direction:column;align-items:center}
+.galfig img{max-width:100%;max-height:68vh;object-fit:contain;border-radius:8px}
+.galfig figcaption{font-size:.8125rem;margin-top:8px;color:#ddd;text-align:center}.galfig figcaption a{color:#fff}
+.galx,.galnav button{min-height:44px;min-width:44px;padding:8px 16px;border-radius:22px;border:1px solid #fff8;background:#222;color:#fff;font:inherit;cursor:pointer}
+.galx{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px}
+.galnav{display:flex;gap:12px;margin-top:12px}
 </style>
 
 <div class="app">
@@ -1468,21 +1481,49 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     return h+'</section>';
   }
   /* extra photos on a Story stop (community places can have up to 5 photos in all): sp.more = [{k,alt,by,lic,page,label}] */
-  function moreHtml(sp){ var L=(sp.more||[]).filter(function(m){ return m&&PHOTOS[m.k]; }).slice(0,4); if(!L.length) return '';
-    return '<div class="nbmore">'+L.map(function(m){ return '<figure class="nbfig"><img src="'+PHOTOS[m.k]+'" alt="'+String(m.alt||sp.name).replace(/[<>&"]/g,'')+'" loading="lazy"><figcaption>'+(m.label?String(m.label).replace(/[<>&"]/g,'')+' · ':'')+'Photo: '+String(m.by||'').replace(/[<>&"]/g,'')+', <a href="'+m.page+'" target="_blank" rel="noopener">'+String(m.lic||'').replace(/[<>&"]/g,'')+'</a></figcaption></figure>'; }).join('')+'</div>'; }
+  function gEsc(x){ return String(x==null?'':x).replace(/[<>&"]/g,''); }
+  var GAL={};
+  function galList(sp){ var L=[]; if(sp.ph&&PHOTOS[sp.ph.k]) L.push(sp.ph); (sp.more||[]).slice(0,4).forEach(function(m){ if(m&&PHOTOS[m.k]) L.push(m); }); return L; }
+  function galFig(sp,m){ return '<img src="'+PHOTOS[m.k]+'" alt="'+gEsc(m.alt||sp.name)+'"><figcaption>'+(m.label?gEsc(m.label)+' · ':'')+'Photo: '+gEsc(m.by)+', <a href="'+m.page+'" target="_blank" rel="noopener">'+gEsc(m.lic)+'</a></figcaption>'; }
+  function galHtml(sp){ var L=galList(sp); if(!L.length) return ''; GAL[nbKey(sp)]=L;
+    var h='<div class="gal" data-g="'+nbKey(sp)+'"><figure class="nbfig galmain">'+galFig(sp,L[0])+'</figure>';
+    if(L.length>1){
+      h+='<div class="galstrip" role="group" aria-label="Photos of this place, '+L.length+' in all">'+L.map(function(m,i){ return '<button type="button" class="galth" data-a="galpick" data-i="'+i+'" aria-pressed="'+(i===0?'true':'false')+'" aria-label="Photo '+(i+1)+' of '+L.length+(m.label?': '+gEsc(m.label):'')+'"><img src="'+PHOTOS[m.k]+'" alt="" loading="lazy"></button>'; }).join('')+'</div>';
+    }
+    return h+'<button type="button" class="link galbig" data-a="galfull">View larger</button></div>'; }
+  function galCur(g){ var b=g.querySelector('.galth[aria-pressed=true]'); return b?+b.getAttribute('data-i'):0; }
+  function galShow(g,i){ var L=GAL[g.getAttribute('data-g')], sp=nbStory(g.getAttribute('data-g')); if(!L||!L[i]||!sp) return;
+    g.querySelector('.galmain').innerHTML=galFig(sp,L[i]);
+    g.querySelectorAll('.galth').forEach(function(x,j){ x.setAttribute('aria-pressed',j===i?'true':'false'); }); }
+  function galClose(){ var o=document.getElementById('galbox'); if(o){ var f=o._from; o.remove(); if(f&&f.focus) f.focus(); } }
+  function galOpen(g,btn){ galClose(); var L=GAL[g.getAttribute('data-g')], sp=nbStory(g.getAttribute('data-g')); if(!L||!sp) return; var i=galCur(g);
+    var o=document.createElement('div'); o.id='galbox'; o.className='galbox'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true'); o.setAttribute('aria-label','Photo viewer'); o._from=btn;
+    function paint(){ var m=L[i]; o.innerHTML='<button type="button" class="galx" data-a="galclose" aria-label="Close photo viewer">Close</button><figure class="galfig"><img src="'+PHOTOS[m.k]+'" alt="'+gEsc(m.alt||sp.name)+'"><figcaption>'+(m.label?gEsc(m.label)+' · ':'')+'Photo '+(i+1)+' of '+L.length+'. '+gEsc(m.by)+', <a href="'+m.page+'" target="_blank" rel="noopener">'+gEsc(m.lic)+'</a></figcaption></figure>'+(L.length>1?'<div class="galnav"><button type="button" data-a="galprev" aria-label="Previous photo">‹ Prev</button><button type="button" data-a="galnext" aria-label="Next photo">Next ›</button></div>':''); }
+    o._step=function(d){ i=(i+d+L.length)%L.length; paint(); galShow(g,i); var x=o.querySelector(d>0?'[data-a=galnext]':'[data-a=galprev]')||o.querySelector('.galx'); if(x) x.focus(); };
+    paint(); document.body.appendChild(o); o.querySelector('.galx').focus(); }
+  function moreHtml(sp){ return ''; }
   function comPid(st){ var k=((st.ph&&st.ph.k)||(st.now&&st.now.ph&&st.now.ph.k)||(st.then&&st.then.ph&&st.then.ph.k)||''); var m=/^cm_([a-f0-9]{8})_/.exec(k); return m?m[1]:''; }
   function addPhotoBtn(st){ var id=comPid(st); if(!id) return ''; return '<a class="link" href="/contribute/?add='+id+'&amp;place='+encodeURIComponent(String(st.name).slice(0,80))+'">Add a photo</a>'; }
   function viewStory(sp){
     var v=nbGet()[nbKey(sp)], d=nbDist(sp), ac=sp.access_check||{};
-    var ph='';
-    if(sp.ph&&PHOTOS[sp.ph.k]) ph='<figure class="nbfig"><img src="'+PHOTOS[sp.ph.k]+'" alt="'+(sp.ph.alt||sp.name)+'"><figcaption>Photo: '+sp.ph.by+', <a href="'+sp.ph.page+'" target="_blank" rel="noopener">'+sp.ph.lic+'</a></figcaption></figure>';
     var dir='https://www.google.com/maps/dir/?api=1&amp;destination='+encodeURIComponent(sp.addr)+'&amp;travelmode=walking';
     return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ '+(nv.mode==='city'?'Explore '+CITIES[nv.town].name:'Closest stops')+'</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
       +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
-      +(sp.community?comBadge(sp):'')+sensHtml(sp)+ph+moreHtml(sp)+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
+      +(sp.community?comBadge(sp):'')+sensHtml(sp)+galHtml(sp)+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +(sp.mission&&CITIES[sp.mission.town]?'<section class="card"><p class="mono">Mission</p><p>This place is also a mission. Visit in person to earn its stamp.</p><button class="btn" data-a="nbtown" data-c="'+sp.mission.town+'" data-i="'+(sp.mission.i||0)+'">Play the mission</button></section>':'')+'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
       +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
       +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="shareplace" data-n="'+String(sp.name).replace(/[<>&"]/g,'')+'">Share this place</button> · '+addPhotoBtn(sp)+' · <button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
+  }
+  function tourState(t){ return String(t.state||TSTATE[(t.towns||[])[0]]||TSTATE[t.id]||'').split('/')[0].toUpperCase(); }
+  function nbPickHtml(){
+    var g={},keys=[];
+    TOURS.forEach(function(t){ var st=tourState(t)||'Other'; if(!g[st]){ g[st]=[]; keys.push(st); } g[st].push(t); });
+    keys.sort(function(a,b){ return a==='Other'?1:b==='Other'?-1:a<b?-1:1; });
+    return keys.map(function(st){ var L=g[st], n=0; L.forEach(function(t){ n+=t.stops.length; });
+      L.sort(function(a,b){ return a.name<b.name?-1:1; });
+      return '<h2 class="nbh">'+(st==='Other'?'More places':st)+' · '+n+(n===1?' place':' places')+'</h2>'+L.map(function(t){ var c=t.stops.length;
+        return '<button class="rcard" data-a="nbarea" data-t="'+t.id+'"><span><strong>'+t.name+'</strong><span class="rsub">'+(t.community&&c===1?'1 place so far':'Town missions and Story stops')+'</span></span><span class="go">Open ›</span></button>'; }).join('')
+        +(COMON&&L.some(function(t){ return t.community&&t.stops.length===1; })?'<p class="nbnote">Only one place in some towns so far. Know another? <button class="link" data-a="suggest">Suggest it</button></p>':''); }).join('');
   }
   function viewNear(){
     var sp=nv.sid?nbStory(nv.sid):null; if(sp) return viewStory(sp);
@@ -1495,7 +1536,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     if(mode==='ask'){
       h+='<section class="card"><h2 class="nbh2">Find stops around you</h2><p>Stamp the Past can use your location, only while the app is open, to sort nearby stops by distance. It stays on this phone. Nothing is saved or sent anywhere.</p><button class="btn" data-a="nbloc">Find stops near me</button><button class="btn ghost" data-a="nbnoloc">Continue without location</button><p id="nbMsg" class="geomsg" role="status"></p></section>';
     } else if(mode==='pick'){
-      h+='<p class="nbnote">No location, no problem. Pick a place and see its stops.</p>'+TOURS.map(function(t){ return '<button class="rcard" data-a="nbarea" data-t="'+t.id+'"><span><strong>'+t.name+'</strong><span class="rsub">Town missions and Story stops</span></span><span class="go">Open ›</span></button>'; }).join('')+'<button class="btn ghost" data-a="nbtowns">Pick any other town</button>'+(noloc?'':'<button class="link" data-a="nbask">Use my location instead</button>')+(COMON?'<p class="nbnote">Know a place that is missing? <button class="link" data-a="suggest">Suggest it</button></p>':'');
+      h+='<p class="nbnote">No location, no problem. Pick a place and see its stops.</p>'+nbPickHtml()+'<button class="btn ghost" data-a="nbtowns">Pick any other town</button>'+(noloc?'':'<button class="link" data-a="nbask">Use my location instead</button>')+(COMON?'<p class="nbnote">Know a place that is missing? <button class="link" data-a="suggest">Suggest it</button></p>':'');
     } else if(mode==='area'){
       var t=null; TOURS.forEach(function(x){ if(x.id===nv.tour) t=x; });
       if(!t){ nv.mode='pick'; return viewNear(); }
@@ -1851,7 +1892,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
   document.addEventListener('keydown',function(e){
     if(e.key==='Tab'){ var dlg=document.getElementById('report')||document.getElementById('menu')||document.getElementById('tour')||document.getElementById('celeb'); if(dlg&&dlg.offsetParent!==null||dlg&&getComputedStyle(dlg).display!=='none'){ var f=[].filter.call(dlg.querySelectorAll('button,a[href],input,select,textarea,summary,[tabindex]:not([tabindex="-1"])'),function(x){ return !x.disabled&&x.offsetParent!==null&&(!x.checkVisibility||x.checkVisibility()); }); if(f.length){ var first=f[0], last=f[f.length-1]; if(!dlg.contains(document.activeElement)){ first.focus(); e.preventDefault(); } else if(e.shiftKey&&document.activeElement===first){ last.focus(); e.preventDefault(); } else if(!e.shiftKey&&document.activeElement===last){ first.focus(); e.preventDefault(); } } } }
   });
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ closeReport(); closeCeleb(); closeBpop(); closeMenu(); if(document.getElementById('tour')) endTour(); } });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'){ if(document.getElementById('galbox')){ galClose(); return; } closeReport(); closeCeleb(); closeBpop(); closeMenu(); if(document.getElementById('tour')) endTour(); } });
   /* offline: the web version caches itself (sw.js). Say so when the connection changes. */
   try{ if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(function(){}); }catch(e){}
   window.addEventListener('offline',function(){ toast('You are offline. Everything still works except map links.'); });
@@ -2552,6 +2593,10 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       toast('Erased. Starting fresh...'); setTimeout(function(){ location.reload(); },700); return;
     }
     if(a==='hapticTest'){ haptic('success',function(r){ toast(r==='ok'?'Buzz sent. If you felt nothing, check Settings, Sounds and Haptics, System Haptics.':r==='missing'?'The buzz part of the app did not load. Please tell us.':'The buzz did not run. Please tell us.'); }); return; }
+    if(a==='galpick'){ var gg=b.closest('.gal'); if(gg) galShow(gg,+b.getAttribute('data-i')); return; }
+    if(a==='galfull'){ var gg2=b.closest('.gal'); if(gg2) galOpen(gg2,b); return; }
+    if(a==='galclose'){ galClose(); return; }
+    if(a==='galprev'||a==='galnext'){ var bx=document.getElementById('galbox'); if(bx&&bx._step) bx._step(a==='galnext'?1:-1); return; }
     if(a==='shareplace'){ var pn=b.getAttribute('data-n')||'this place', pu=location.origin+'/play.html', pt='Found a community-added history place on Stamp the Past: '+pn;
       if(navigator.share){ navigator.share({title:'Stamp the Past',text:pt,url:pu}).catch(function(){}); }
       else { try{ navigator.clipboard.writeText(pt+' '+pu).then(function(){ toast('Link copied.'); },function(){ toast(pu); }); }catch(err){ toast(pu); } }
