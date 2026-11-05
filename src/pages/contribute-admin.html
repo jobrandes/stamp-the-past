@@ -3,10 +3,16 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:1.0625rem/1.5 "Public Sans",system-ui,sans-serif;padding:20px 16px 64px}main{max-width:720px;margin:0 auto;overflow-wrap:anywhere}h1{font:700 2.2rem/1 "Big Shoulders Display",sans-serif;text-transform:uppercase;margin:.2em 0}.mut{color:var(--mut)}a{color:var(--ac)}
 input{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;background:var(--ac);color:#fff;padding:0 18px;cursor:pointer}@media(prefers-color-scheme:dark){button{color:#08121c}}button.ghost{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
 .row{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:10px 0;display:grid;gap:8px}.row b{font-size:1.05rem}.tag{display:inline-block;font:500 .75rem "IBM Plex Mono",monospace;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}.tag.h{color:var(--bad);border-color:var(--bad)}.tag.v{color:var(--ok);border-color:var(--ok)}.err{color:var(--bad);font-weight:600}h2{font-size:1.25rem;margin:1.2em 0 .3em}h3{font-size:1.05rem;margin:1.2em 0 .3em}.pvs{display:flex;gap:8px}.pvs figure{margin:0;flex:1;min-width:0}.pvs img{width:100%;height:110px;object-fit:cover;border-radius:8px;background:var(--line)}.pvs figcaption{font-size:.8rem;color:var(--mut)}
+.rulesd{margin:14px 0}.rulesd summary,.more summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.rulesd summary::marker,.more summary::marker{content:""}.rulesd summary::before,.more summary::before{content:"+";display:inline-block;width:1.2em;color:var(--ac);font-weight:700}.rulesd[open]>summary::before,.more[open]>summary::before{content:"\2212"}
+.tag.o{color:var(--ac);border-color:var(--ac)}.row.need{border:2px solid var(--bad)}ul.rl{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}ul.rl li{display:grid;grid-template-columns:1.4em 1fr;gap:6px}.rl .p{color:var(--ok);font-weight:700}.rl .f{color:var(--bad);font-weight:700}.rl .n{color:var(--mut);font-weight:700}.rgrp{font:600 .8rem "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:14px 0 4px}.vr{font-size:.95rem}
 figure.held img{opacity:.35;outline:3px solid var(--bad,#b00)}figure .link{min-height:44px}</style></head><body><main>
 <p class="mut" style="margin:0;font:500 .75rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">Stamp the Past · community test</p>
-<h1>Reported places</h1>
+<h1>Community review</h1>
 <p class="mut">Private page for the owner. No key is needed for the first list. The others need the admin key. Easiest way: open this page once with <b>#k=YOUR-KEY</b> on the end of the address, then bookmark it or tick Remember. The part after # is never sent to the server.</p>
+<section id="rep"><h2>What is new <span class="mut" id="nrep"></span></h2><p class="mut" id="repsum" aria-live="polite">Loading…</p>
+<div id="needs" aria-live="polite"></div>
+<div id="repl" aria-live="polite"></div>
+<details id="rulesd" class="rulesd"><summary>The rules Claude follows when approving <span class="mut" id="nrules"></span></summary><p class="mut" id="rulesintro"></p><div id="rulesl"></div></details></section>
 <section><h2>Recently added <span class="mut" id="nadd"></span></h2><p class="mut">Places the daily run published. Open one to look it over. If something is wrong, use Report this place in the app.</p><div id="added" aria-live="polite">Loading…</div></section>
 <section><h2>Owner tools</h2>
 <div id="lock"><label for="k" class="mut">Admin key</label><input id="k" type="password" autocomplete="off" spellcheck="false">
@@ -68,6 +74,39 @@ function loadReports(){
 function unlock(){var k=getKey();if(!k)return;if($('rem').checked){try{localStorage.setItem(KEYN,k);}catch(x){}}loadPending();}
 $('go').addEventListener('click',unlock);$('k').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
 $('forget').addEventListener('click',function(){try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;history.replaceState(null,'',location.pathname+location.search);});
+
+// approval report + rules (public: names, dates, results; no personal data)
+var DEC={'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
+function loadReport(){
+  fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
+    $('nrep').textContent=recs.length?'('+recs.length+')':'';
+    var bits=[];[['added','added'],['needs-owner','need your decision'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
+    if(c.recheck)bits.push(c.recheck+' to re-check');
+    $('repsum').textContent=recs.length?'Everything Claude has decided so far: '+bits.join(', ')+'.':'Nothing has been decided yet.';
+    var N=$('needs'),L=$('repl');N.innerHTML='';L.innerHTML='';
+    recs.forEach(function(x){var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]||[x.decision,'o'];
+      d.appendChild(el('b','',x.place));
+      d.appendChild(el('span','mut',(x.town?x.town+(x.state?', '+x.state:'')+' · ':'')+(x.kind==='place'?'New place':x.kind==='photo'?'New photo':'Correction')+' · '+x.on+' · decided by '+(x.by||'Claude')));
+      var tg=el('span','');tg.appendChild(el('span','tag '+dd[1],dd[0]));if(x.legacy){tg.appendChild(document.createTextNode(' '));tg.appendChild(el('span','tag h','Needs re-check'));}d.appendChild(tg);
+      if(x.notes)d.appendChild(el('span','vr',x.notes));
+      var ru=x.rules||{},ks=Object.keys(ru),ph=x.photos||[];
+      if(ks.length||ph.length){var dt=el('details','more'),sm=el('summary','','What was checked');dt.appendChild(sm);
+        if(ks.length){var ul=el('ul','rl');ks.forEach(function(k){var v=String(ru[k]),li=document.createElement('li'),m=v==='pass'?['p','\u2713']:v.indexOf('fail')===0?['f','\u2717']:['n','\u2013'];
+          li.appendChild(el('span',m[0],m[1]));li.appendChild(el('span','',(rl[k]?rl[k].text.split('. ')[0].replace(/\.$/,''):k)+(v==='pass'?'':': '+v.replace(/^(na|fail): /,''))));ul.appendChild(li);});dt.appendChild(ul);}
+        if(ph.length){var up=el('ul','rl');ph.forEach(function(q){var li=document.createElement('li');li.appendChild(el('span',q.verdict==='used'?'p':'f',q.verdict==='used'?'\u2713':'\u2717'));li.appendChild(el('span','','Photo '+q.k.replace(/^cm_[a-f0-9]{8}_/,'')+': '+(q.verdict==='used'?'used':'held back')+(q.why?' ('+q.why+')':'')));up.appendChild(li);});dt.appendChild(up);}
+        d.appendChild(dt);}
+      if(x.url){var a=el('a','','Open this place');a.href=x.url;d.appendChild(a);}
+      (x.decision==='needs-owner'?N:L).appendChild(d);});
+    if(N.children.length){var h=el('h3','','Needs your decision');N.insertBefore(h,N.firstChild);}
+    if(!recs.length)L.textContent='Nothing yet.';
+    $('nrules').textContent='('+(j.rules||[]).length+')';$('rulesintro').textContent=(j.intro||'')+(j.effective?' In force since '+j.effective+'.':'');
+    var R=$('rulesl');R.innerHTML='';var g='';
+    (j.rules||[]).forEach(function(r){if(r.group!==g){g=r.group;R.appendChild(el('div','rgrp',g));}
+      var d=el('div','row'),by={code:'Checked by code',claude:'Checked by Claude',both:'Checked by code and Claude'}[r.by]||'';d.appendChild(el('span','',r.text));d.appendChild(el('span','mut',by+' · applies to '+(r.for||[]).join(', ')));R.appendChild(d);});
+  }).catch(function(){$('repsum').textContent='Could not load the report.';});
+}
+loadReport();
 loadPublic();
 // key from the address (#k=...) or from this device; the # part is never sent to the server
 var m=location.hash.match(/[#&]k=([^&]+)/),saved=null;try{saved=localStorage.getItem(KEYN);}catch(x){}

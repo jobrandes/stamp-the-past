@@ -17,7 +17,45 @@ def mkjpg(c,path=None):
 FAKE='/tmp/_cm_fake.jpg'; mkjpg((90,120,150),FAKE)
 shutil.rmtree(TMP,ignore_errors=True); shutil.copytree(R+'site',TMP)
 shutil.rmtree(TMP+'/community',ignore_errors=True); os.makedirs(TMP+'/community')
-json.dump({'packs':[],'photos':{}},open(TMP+'/community/places.json','w')); json.dump({'added':[],'declined':{}},open(TMP+'/community/status.json','w'))
+shutil.copy(R+'site/community/report.json',TMP+'/community/report.json'); json.dump({'packs':[],'photos':{}},open(TMP+'/community/places.json','w')); json.dump({'added':[],'declined':{}},open(TMP+'/community/status.json','w'))
+
+# ---- approval rules (pure checks, no server) ----
+_rules=cm.load_rules(R); _ids={r['id'] for r in _rules['rules']}
+ok(len(_ids)==len(_rules['rules']) and len(_ids)>=15,'rules have unique ids')
+ok(all(r['by'] in ('code','claude','both') and r['for'] and r['text'] for r in _rules['rules']),'every rule says who checks it and what it applies to')
+ok(not cm.check(R),'repo approvals and stories pass: %r'%cm.check(R))
+def _st(name='Sample Mill',geo=(39.5,-119.8,200),**k):
+    st={'id':'sm','name':name,'area':'a','addr':'1 Main St','invite':'Come and see it.','access':'Seen from the public sidewalk. Check opening hours before you go.','geo':list(geo)+[],'story':['One.','Two.'],'facts':[{'t':'A fact.','src':[0]},{'t':'B.','src':[1]},{'t':'C.','src':[0]}],'sources':[{'t':'a','u':'https://a.example/'},{'t':'b','u':'https://b.example/'}],'ph':{'k':'cm_aaaaaaaa_n','by':'X','lic':'CC BY-SA','page':'https://x/','lu':'https://x/'}}
+    st['geo']=list(geo); st.update(k); return st
+_full={r:'pass' for r in cm.rules_for(_rules,'place')}
+def _ap(**k):
+    a={'kind':'place','decision':'added','on':'2026-11-05','place':'Sample Mill','rules':dict(_full),'photos':[{'k':'cm_aaaaaaaa_n','verdict':'used'}]}; a.update(k); return a
+def _chk(st=None,ap=None,off=(),**kw):
+    return cm.check_approvals(_rules,{'aaaaaaaa':ap} if ap else {},[('aaaaaaaa.json',{'sub':'aaaaaaaa','town':'Reno','state':'NV','stop':st or _st()})],list(off),{},[],kw.get('dp',[]))
+ok(not _chk(ap=_ap()),'a fully approved place passes: %r'%_chk(ap=_ap()))
+ok(any('no "added" approval' in x for x in _chk()),'a published place with no approval record is refused')
+_a=_ap(); del _a['rules']['ph-people']; ok(any('ph-people' in x for x in _chk(ap=_a)),'a missing rule result is refused')
+_a=_ap(); _a['rules']['ph-people']='fail: a face'; ok(any('ph-people' in x for x in _chk(ap=_a)),'a failed rule cannot be added')
+ok(any('listed as "used"' in x for x in _chk(ap=_ap(photos=[]))),'every published photo must be in the record')
+ok(any('held-back' in x for x in _chk(ap=_ap(photos=[{'k':'cm_aaaaaaaa_n','verdict':'used'},{'k':'cm_aaaaaaaa_x1','verdict':'held back','why':'face'}]))),'held-back photo must be in declined-photos.json')
+ok(not _chk(ap=_ap(photos=[{'k':'cm_aaaaaaaa_n','verdict':'used'},{'k':'cm_aaaaaaaa_x1','verdict':'held back','why':'face'}]),dp=['aaaaaaaa_x1']),'held-back photo listed correctly passes')
+ok(any('web link' in x for x in _chk(st=_st(invite='See http://spam.example now'),ap=_ap())),'web links in the text are refused')
+ok(any('email' in x for x in _chk(st=_st(invite='Write bob@example.com'),ap=_ap())),'emails in the text are refused')
+ok(any('phone' in x for x in _chk(st=_st(invite='Call 775-555-0123 today'),ap=_ap())),'phone numbers in the text are refused')
+_s=_st(); _s['ph']['lic']='All rights reserved'; ok(any('licence' in x for x in _chk(st=_s,ap=_ap())),'a non-free licence is refused')
+_o=[{'n':'Statue of Liberty','t':'New York','g':[39.5,-119.8]}]
+ok(any('within 150 m' in x for x in _chk(ap=_ap(),off=_o)),'a place 150 m from an official stop is a duplicate')
+ok(not _chk(ap=_ap(dup_ok_by='Jo-Anne'),off=_o),'only Jo-Anne can allow a duplicate')
+ok(any('same name' in x for x in _chk(ap=_ap(),off=[{'n':'The Sample Mill','t':'Elsewhere','g':[10,10]}])),'same name as an official stop is a duplicate')
+_two=[('a.json',{'sub':'aaaaaaaa','town':'Reno','state':'NV','stop':_st()}),('b.json',{'sub':'bbbbbbbb','town':'Reno','state':'NV','stop':_st(name='Sample Mill ',geo=(39.6,-119.9,200))})]
+ok(any('duplicate of' in x for x in cm.check_approvals(_rules,{'aaaaaaaa':_ap(),'bbbbbbbb':_ap(photos=[{'k':'cm_aaaaaaaa_n','verdict':'used'}])},_two,[],{},[],[])),'two places with the same name in one town are refused')
+_six={('%08x'%i):_ap() for i in range(6)}; ok(any('limit is 5' in x for x in cm.check_approvals(_rules,_six,[],[],{},[],[])),'more than 5 places added in one day is refused')
+ok(any('declined.json' in x for x in cm.check_approvals(_rules,{},[],[],{'cccccccc':'no'},[],[])),'a declined place needs a record')
+ok(_chk(ap=_ap())==[] and cm.check_approvals(_rules,{'dddddddd':_ap(decision='needs-owner',notes='x',rules={'dp-place':'fail: near'})},[],[],{},[],[])==[],'needs-owner records need no full checklist')
+import glob as _g
+ok(not any('10587d75' in f for f in _g.glob(R+'src/community/stories/*')) and os.path.exists(R+'src/community/held/10587d75.json'),'Liberty Island is held back, not published')
+_rp=cm.report(R); ok(_rp['counts']['needs-owner']>=1 and _rp['rules'] and all('id' in r for r in _rp['records']),'report lists rules and decisions')
+ok(json.load(open(TMP+'/community/report.json'))['counts']==_rp['counts'],'built report.json matches the log')
 def server(ctx,uploads='1'):
     pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE,'UPLOADS':uploads},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
 B=f'http://localhost:{PORT}'
@@ -456,6 +494,11 @@ try:
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/admin/'); pg.wait_for_timeout(600)
     ok('Credit Probe' in pg.inner_text('#added') and 'by Dad' in pg.inner_text('#added'),'recently added list needs no key: '+pg.inner_text('#added'))
+    ok('Needs your decision' in pg.inner_text('#needs') and 'Liberty Island' in pg.inner_text('#needs'),'admin shows items that need the owner: '+pg.inner_text('#needs'))
+    ok(pg.is_hidden('#rulesl') and pg.locator('#rulesd summary').inner_text().startswith('The rules Claude follows'),'rules are collapsed by default')
+    pg.click('#rulesd summary'); ok('No people in any photo' in pg.inner_text('#rulesl') and 'Checked by code' in pg.inner_text('#rulesl'),'admin lists every rule and who checks it')
+    ok('Added before the written rules' in pg.inner_text('#repl') and 'Needs re-check' in pg.inner_text('#repl'),'report lists everything decided, including re-checks')
+    ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'report and rules fit the phone')
     ok(pg.evaluate("[...document.querySelectorAll('#added a')].every(a=>a.getAttribute('href').indexOf('/play.html#story=')==0||a.getAttribute('href')=='/play.html')"),'admin place links deep-link to the story card')
     pg.fill('#k','wrong-key-wrong-key'); pg.click('#go'); pg.wait_for_selector('#err:not([hidden])'); ok('not accepted' in pg.inner_text('#err'),'admin page rejects a wrong key')
     pg.fill('#k',KEY); pg.click('#go'); pg.wait_for_selector('#tools:not([hidden])'); pg.wait_for_selector('#list .row')

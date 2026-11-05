@@ -96,6 +96,7 @@ if os.path.exists(R+'src/community.flag'):
     shutil.rmtree(R+'site/community',ignore_errors=True); os.makedirs(R+'site/community')
     open(R+'site/community/places.json','w').write(json.dumps({'packs':_pk,'photos':_ph,'tours':_tr,'official':_off},ensure_ascii=False,separators=(',',':')))
     open(R+'site/community/status.json','w').write(json.dumps(_st,ensure_ascii=False,separators=(',',':')))
+    open(R+'site/community/report.json','w').write(json.dumps(_cm.report(R),ensure_ascii=False,separators=(',',':')))
     print('community:',len(_pk),'towns,',len(_st['added']),'places')
     os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html'); os.makedirs(R+'site/contribute/admin',exist_ok=True); shutil.copy(R+'src/pages/contribute-admin.html',R+'site/contribute/admin/index.html')
     open(R+'site/_headers','a').write('/contribute/*\n  X-Robots-Tag: noindex\n/api/*\n  X-Robots-Tag: noindex\n')
