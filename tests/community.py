@@ -63,10 +63,16 @@ try:
     pg.add_init_script("try{localStorage.setItem('then-now-tour','1');localStorage.setItem('stp-dragged','1')}catch(e){}")
     pg.goto(B+'/contribute/'); pg.wait_for_selector('#place')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'form sideways scroll at 390')
-    pg.fill('#place','Old Depot'); pg.fill('#city','Testville'); pg.fill('#state','NV'); pg.fill('#one','The old train depot downtown, now a museum.')
-    pg.check('#confirm'); pg.click('#go'); pg.wait_for_selector('#errs:not([hidden])'); ok('at least one photo' in pg.inner_text('#errs').lower(),'photo message missing')
+    pg.click('#nx1'); ok('name of the place' in pg.inner_text('#e1').lower(),'step 1 asks for the missing fields: '+pg.inner_text('#e1'))
+    pg.fill('#place','Old Depot'); pg.fill('#city','Testville'); pg.fill('#state','nevada'); pg.fill('#one','The old train depot downtown, now a museum.')
+    ok('old depot' in pg.inner_text('#mkn').lower(),'live card shows the place name'); pg.click('#nx1'); pg.wait_for_selector('#then')
+    ok(pg.input_value('#state')=='NV','state name becomes the two-letter code: '+pg.input_value('#state'))
+    pg.click('#nx2'); ok('at least one photo' in pg.inner_text('#e2').lower(),'photo message missing')
+    pg.fill('#then','https://example.com/x.jpg'); pg.wait_for_timeout(700); ok('not a commons' in pg.inner_text('#pvt').lower(),'non-Commons link is flagged in the preview: '+pg.inner_text('#pvt'))
     pg.fill('#then','https://commons.wikimedia.org/wiki/File:Good_then.jpg')
-    pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
+    pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.click('#nx2'); pg.wait_for_selector('#confirm')
+    ok('Old Depot' in pg.inner_text('#sum') and 'Commons link' in pg.inner_text('#sum'),'review step summarises the entry')
+    pg.check('#confirm'); pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
     link=pg.text_content('#editlink'); ok(re.search(r'/contribute/\?status=[a-f0-9]{32}$',link) is not None,'status link shape: '+link)
     tok=link.split('status=')[1]
     # second place through the API with an uploaded "now" photo
@@ -264,6 +270,7 @@ try:
   sv.terminate(); sv=server('branch-deploy','1')
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(800)
+    pg.fill('#place','Probe'); pg.fill('#city','Town'); pg.fill('#one','Some words about it'); pg.click('#nx1')
     ok(pg.is_visible('#own'),'upload box shown when uploads are on')
     ok(pg.is_visible('#contactline') and pg.get_attribute('#contactline a','href')=='mailto:stampthepast@gmail.com','support email shown on the form page')
     b.close()
