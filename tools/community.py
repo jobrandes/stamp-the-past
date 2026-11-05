@@ -57,6 +57,8 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         t['stops'].append(sp)
         ph=sp.get('ph')
         if ph: photos[ph['k']]='/api/community/photo/'+ph['k'][3:]
+        for m in sp.get('more') or []:
+            if m.get('k'): photos[m['k']]='/api/community/photo/'+m['k'][3:]
     added=sorted({p['sub'] for _,p in load_places(R,places_dir)}|{p['sub'] for _,p in load_stories(R,stories_dir)})
     df=declined_file or R+'src/community/declined.json'
     declined=json.load(open(df)) if os.path.exists(df) else {}
@@ -115,6 +117,10 @@ def check(R=R,places_dir=None):
         for x in fa:
             need(x.get('t') and x.get('src') and all(isinstance(i,int) and 0<=i<len(srcs) for i in x['src']),f'{w}: every fact needs valid src indexes'); used|=set(x.get('src') or [])
         need(used==set(range(len(srcs))),f'{w}: every source must support a fact')
+        mo=st.get('more') or []
+        need(isinstance(mo,list) and len(mo)<=4,f'{w}: at most 4 extra photos in "more" (5 photos in all)')
+        for m in mo if isinstance(mo,list) else []:
+            need(re.fullmatch(r'cm_[a-f0-9]{8}_[a-z0-9]+',str(m.get('k',''))) and m.get('by') and m.get('lic') and str(m.get('page','')).startswith('https://'),f'{w}: each extra photo needs k (cm_<id>_<n>), by, lic and an https page')
         ph=st.get('ph') or {}
         need(ph.get('k')==f'cm_{p.get("sub")}_n' and ph.get('by') and ph.get('lic') and ph.get('page','').startswith('https://') and ph.get('lu'),f'{w}: now photo key cm_<sub>_n with by, lic, lu, page required')
         need(st.get('sens') is None or isinstance(st['sens'],str),f'{w}: sens must be text')

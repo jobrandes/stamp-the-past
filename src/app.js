@@ -380,6 +380,9 @@
     h+=c.stops.map(function(st,i){ return nbRow({kind:'town',c:k,i:i}); }).join('');
     return h+'</section>';
   }
+  /* extra photos on a Story stop (community places can have up to 5 photos in all): sp.more = [{k,alt,by,lic,page,label}] */
+  function moreHtml(sp){ var L=(sp.more||[]).filter(function(m){ return m&&PHOTOS[m.k]; }).slice(0,4); if(!L.length) return '';
+    return '<div class="nbmore">'+L.map(function(m){ return '<figure class="nbfig"><img src="'+PHOTOS[m.k]+'" alt="'+String(m.alt||sp.name).replace(/[<>&"]/g,'')+'" loading="lazy"><figcaption>'+(m.label?String(m.label).replace(/[<>&"]/g,'')+' · ':'')+'Photo: '+String(m.by||'').replace(/[<>&"]/g,'')+', <a href="'+m.page+'" target="_blank" rel="noopener">'+String(m.lic||'').replace(/[<>&"]/g,'')+'</a></figcaption></figure>'; }).join('')+'</div>'; }
   function viewStory(sp){
     var v=nbGet()[nbKey(sp)], d=nbDist(sp), ac=sp.access_check||{};
     var ph='';
@@ -387,8 +390,8 @@
     var dir='https://www.google.com/maps/dir/?api=1&amp;destination='+encodeURIComponent(sp.addr)+'&amp;travelmode=walking';
     return '<section class="nbwrap"><button class="link nbback" data-a="nbback">‹ '+(nv.mode==='city'?'Explore '+CITIES[nv.town].name:'Closest stops')+'</button><p class="mono">Story stop · '+sp.area+'</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+sp.name+'</h1>'
       +(d!=null?'<p class="nbnote">'+nice(d)+' from you, straight-line. Your walk may be longer.</p>':'')
-      +(sp.community?comBadge(sp):'')+sensHtml(sp)+ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
-      +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
+      +(sp.community?comBadge(sp):'')+sensHtml(sp)+ph+moreHtml(sp)+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
+      +(sp.mission&&CITIES[sp.mission.town]?'<section class="card"><p class="mono">Mission</p><p>This place is also a mission. Visit in person to earn its stamp.</p><button class="btn" data-a="nbtown" data-c="'+sp.mission.town+'" data-i="'+(sp.mission.i||0)+'">Play the mission</button></section>':'')+'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
       +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
       +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="shareplace" data-n="'+String(sp.name).replace(/[<>&"]/g,'')+'">Share this place</button> · <button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
   }

@@ -225,7 +225,8 @@ try:
       'story':['The chapel was built in 1900.','It is still used for weddings.'],'facts':[{'t':'Built in 1900.','src':[0,1]},{'t':'Used for weddings.','src':[0]},{'t':'On a hill.','src':[1]}],
       'access':'Look from the public road; the chapel is private on weekdays, so check before going.','access_check':{'on':'2026-11-03','by':'Claude','how':'Read against two pages.'},
       'sources':[{'t':'A','u':'https://example.org/a'},{'t':'B','u':'https://example.org/b'}],
-      'ph':{'k':'cm_%s_n'%cid_s,'alt':'The chapel','by':'Jane Doe','lic':'CC BY-SA','lu':'https://creativecommons.org/licenses/by-sa/4.0/','page':'https://commons.wikimedia.org/wiki/File:Good_now.jpg'}}
+      'ph':{'k':'cm_%s_n'%cid_s,'alt':'The chapel','by':'Jane Doe','lic':'CC BY-SA','lu':'https://creativecommons.org/licenses/by-sa/4.0/','page':'https://commons.wikimedia.org/wiki/File:Good_now.jpg'},
+      'more':[{'k':'cm_%s_t'%cid_s,'alt':'The chapel long ago','label':'About 1910','by':'Old Photog','lic':'Public domain','page':'https://commons.wikimedia.org/wiki/File:Good_then.jpg'}],'mission':{'town':'reno','i':0}}
     json.dump({'sub':cid_s,'town':'Storyville','state':'NV','added':'2026-11-03','stop':story},open(f'{d}/{cid_s}.json','w'))
     ok(cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/')[3][0]['stops'][0]['town']=='c_storyville-nv','story stop is tied to its town')
     pk,ph,st,tr=cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/'); st['waiting']={cid_w:'We still need a recent photo of this place.'}
@@ -254,6 +255,9 @@ try:
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=nbarea]')).find(function(b){return /storyville/i.test(b.innerText);}).click()"); pg.wait_for_timeout(300)
     pg.evaluate("document.querySelector('[data-a=nbstory]').click()"); pg.wait_for_timeout(500)
     ok('hilltop chapel' in pg.inner_text('body').lower() and pg.evaluate("!!document.querySelector('.nbfig img')"),'story card shows the photo')
+    ok(pg.evaluate("document.querySelectorAll('.nbfig img').length")==2,'story card shows its main photo plus the extra photo')
+    ok(pg.evaluate("/about 1910/i.test(document.querySelector('.nbmore').innerText)"),'extra photo has its label and credit')
+    ok(pg.evaluate("!!document.querySelector('[data-a=nbtown][data-c=reno]')"),'promoted place links to its mission')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
     ok(pg.evaluate("!!document.querySelector('.combadge')"),'community story card shows the Community-added label')
     ok(pg.evaluate("document.querySelector('.repline [data-a=report]')&&document.querySelector('.repline [data-a=report]').getAttribute('data-com')")=='chapel','community story card has a Report button')
