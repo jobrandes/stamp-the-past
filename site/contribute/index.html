@@ -40,6 +40,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <div class="row"><div><label for="city">Town or city</label><input id="city" maxlength="60" autocomplete="off"></div><div><label for="state">State or region</label><input id="state" maxlength="30" list="sts" autocomplete="off" placeholder="e.g. CA"></div></div>
 <datalist id="sts"></datalist>
 <label for="one">One line about it <span class="cnt" id="cnt">0/300</span></label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
+<label for="addr">Street address or cross streets (optional)</label><input id="addr" maxlength="120" placeholder="e.g. 1 Depot Plaza, or Main St and 3rd" autocomplete="off"><p class="help">The address of the place itself, never your own. It helps us put the place on the map correctly.</p>
 <label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30" autocomplete="off">
 <div class="mock" aria-hidden="true"><span class="lbl">How it will look</span><span class="badge">Community-added</span><b id="mkn">Your place</b><p id="mkt">Town, State</p></div>
 <p class="err" id="e1" role="alert" hidden></p>
@@ -117,7 +118,7 @@ $('nx1').addEventListener('click',function(){var miss=[];if(!v('place').trim()){
 $('bk2').addEventListener('click',function(){goStep(1);});$('bk3').addEventListener('click',function(){goStep(2);});
 $('nx2').addEventListener('click',function(){if(!v('then').trim()&&!v('now').trim()&&!photo){showE('e2','Please add at least one photo, an old one, a recent one, or both.');return;}showE('e2','');goStep(3);});
 function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
-function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')].filter(function(x){return x.trim();}).join(', ')],['About',v('one')],['Nickname',v('nick')||'None'],['Old photo',v('then').trim()?'Commons link':'None'],['Recent photo',v('now').trim()?'Commons link':(photo?'Your upload':'None')]];
+function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')].filter(function(x){return x.trim();}).join(', ')],['About',v('one')],['Address',v('addr')||'Not given'],['Nickname',v('nick')||'None'],['Old photo',v('then').trim()?'Commons link':'None'],['Recent photo',v('now').trim()?'Commons link':(photo?'Your upload':'None')]];
   var ul=$('sum');ul.innerHTML='';rows.forEach(function(r){var li=document.createElement('li'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=r[0];sp.textContent=r[1];li.appendChild(b);li.appendChild(sp);ul.appendChild(li);});}
 // Commons link preview (browser asks Commons directly; if it cannot, the server still checks on send)
 var PV={t:null,n:null};
@@ -162,7 +163,7 @@ document.getElementById('rmphoto').addEventListener('click',function(){clearPhot
 document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];clearPhoto();if(!f){return;}var go=document.getElementById('go');go.disabled=true;shrink(f,function(d){go.disabled=false;if(!d){document.getElementById('file').value='';say('That file could not be read as a picture. Choose another.',true);return;}say('');photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview of your photo';document.getElementById('rmphoto').hidden=false;});});
 function v(id){return document.getElementById(id).value;}
 function collect(){
-  var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
+  var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),address:v('addr'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
   if(o.nowUrl.trim()&&photo){clearPhoto();}
   if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense='CC BY-SA';}
   return o;

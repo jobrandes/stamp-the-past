@@ -87,7 +87,7 @@ const handle = (opts) => async (req, context) => {
     if ((st.added || []).includes(id)) return json({ errors: ['This place was already added, so its photos cannot be changed here.'] }, 400);
     if ((st.declined || {})[id]) return json({ errors: ['This place was not added, so it cannot be changed.'] }, 400);
     if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
-    const { errs, v } = validate({ city: sub.city, state: sub.state, place: sub.place, oneLiner: sub.oneLiner, nickname: sub.nickname || '', thenUrl: body.thenUrl, nowUrl: body.nowUrl, nowPhoto: body.nowPhoto, nowOwn: body.nowOwn, nowCredit: body.nowCredit, nowYear: body.nowYear, nowLicense: body.nowLicense, confirm: body.confirm });
+    const { errs, v } = validate({ city: sub.city, state: sub.state, place: sub.place, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', thenUrl: body.thenUrl, nowUrl: body.nowUrl, nowPhoto: body.nowPhoto, nowOwn: body.nowOwn, nowCredit: body.nowCredit, nowYear: body.nowYear, nowLicense: body.nowLicense, confirm: body.confirm });
     if (errs.length) return json({ errors: errs }, 400);
     const next = { ...sub };
     const { errors, photos } = await collectPhotos(v, id, next, fetchFn);
@@ -182,7 +182,7 @@ const handle = (opts) => async (req, context) => {
     const { errs, v } = validate(body);
     if (errs.length) return json({ errors: errs }, 400);
     const id = randomBytes(4).toString('hex'), token = randomBytes(12).toString('hex');
-    const sub = { id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, created: new Date().toISOString(), tokenHash: sha(token) };
+    const sub = { id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, address: v.address, created: new Date().toISOString(), tokenHash: sha(token) };
     const { errors, photos } = await collectPhotos(v, id, sub, fetchFn);
     if (errors.length) return json({ errors }, 400);
     for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });

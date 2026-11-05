@@ -95,7 +95,7 @@ export function validate(input) {
   const v = {
     city: t(input.city, 2, 60, 'Town or city'), state: t(input.state, 0, 30, 'State or region'),
     place: t(input.place, 3, 80, 'Name of the place'), oneLiner: t(input.oneLiner, 10, 300, 'One line about it'),
-    nickname: t(input.nickname, 0, 30, 'Nickname'),
+    nickname: t(input.nickname, 0, 30, 'Nickname'), address: t(input.address, 0, 120, 'Street address or cross streets'),
   };
   // At least one photo is needed. "Then" only = waits for a "now" photo. "Now" only = becomes a Story stop (no old photo yet).
   const hasThenUrl = clean(input.thenUrl), hasNowUrl = clean(input.nowUrl), hasUpload = !!input.nowPhoto;
