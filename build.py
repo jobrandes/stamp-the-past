@@ -96,7 +96,7 @@ if os.path.exists(R+'src/community.flag'):
     open(R+'site/community/places.json','w').write(json.dumps({'packs':_pk,'photos':_ph,'tours':_tr},ensure_ascii=False,separators=(',',':')))
     open(R+'site/community/status.json','w').write(json.dumps(_st,ensure_ascii=False,separators=(',',':')))
     print('community:',len(_pk),'towns,',len(_st['added']),'places')
-    os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html')
+    os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html'); os.makedirs(R+'site/contribute/admin',exist_ok=True); shutil.copy(R+'src/pages/contribute-admin.html',R+'site/contribute/admin/index.html')
     open(R+'site/_headers','a').write('/contribute/*\n  X-Robots-Tag: noindex\n/api/*\n  X-Robots-Tag: noindex\n')
 else: shutil.rmtree(R+'site/contribute',ignore_errors=True); shutil.rmtree(R+'site/community',ignore_errors=True)
 print('seo pages:',len(seo_urls))

@@ -127,6 +127,15 @@ const handle = (opts) => async (req, context) => {
     for (const b of blobs.slice(0, 200)) { const r = await store.get(b.key, { type: 'json' }); if (r && r.n >= HIDE_AT && !r.cleared) out.push(b.key.slice(4)); }
     return new Response(JSON.stringify({ hidden: out }), { headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=60' } });
   }
+  // Admin only: every place that has been reported, with its count and whether it is hidden.
+  if (req.method === 'GET' && parts[0] === 'reports') {
+    if (!isAdmin()) return json({ error: 'not found' }, 404);
+    const { blobs } = await store.list({ prefix: 'rep/' });
+    const out = [];
+    for (const b of blobs.slice(0, 200)) { const r = await store.get(b.key, { type: 'json' }); if (r) out.push({ id: b.key.slice(4), n: r.n || 0, last: r.last || '', cleared: !!r.cleared, hidden: (r.n || 0) >= HIDE_AT && !r.cleared }); }
+    out.sort((a, b) => (b.hidden - a.hidden) || String(b.last).localeCompare(String(a.last)));
+    return new Response(JSON.stringify({ reports: out }), { headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' } });
+  }
   // Admin only: put a hidden place back (a person looked and it is fine).
   if (req.method === 'POST' && parts[0] === 'unhide' && parts[1]) {
     if (!isAdmin()) return json({ error: 'not found' }, 404);
