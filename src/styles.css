@@ -1041,3 +1041,5 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .nextrow .nr-m{display:block;margin-top:2px;font:500 0.75rem var(--font-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
 @media (max-height:700px){.nextrow .nr-m{display:none}}
+
+.mysug{list-style:none;margin:0 0 8px;padding:0}.mysug li{margin:0 12px 8px}.mysug .mitem{display:flex;width:100%;text-decoration:none;color:inherit}.sugst{font-weight:600}

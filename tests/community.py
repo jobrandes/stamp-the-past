@@ -258,6 +258,19 @@ try:
   # ---- delete (moderation) ----
   s,j=api(f'/api/community/delete/{ids[1]}',{},key=KEY); ok(s==200,'admin delete'); s,_=api(f'/api/community/photo/{ids[1]}_n'); ok(s==404,'deleted photo gone')
   # ---- uploads off (the default on Netlify): API rejects, config says off, form hides the upload box ----
+  # ---- Menu > My suggestions shows saved submissions with live status ----
+  s,j=api('/api/community/submit',{**good,'place':'Menu Probe Depot'}); ok(s==200,'probe submit: %r'%j); tok=j.get('edit','')
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844})
+    pg.add_init_script("try{localStorage.setItem('then-now-tour','1');localStorage.setItem('stp-sugg',JSON.stringify([{t:'%s',p:'Menu Probe Depot',c:'Testville'}]))}catch(e){}"%tok)
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.evaluate("document.querySelector('[data-a=menu]').click()"); pg.wait_for_selector('#mysug')
+    ok('My suggestions (1)' in pg.inner_text('#mysug summary'),'menu lists saved suggestions: '+pg.inner_text('#mysug summary'))
+    pg.click('#mysug summary'); pg.wait_for_timeout(600)
+    t=pg.inner_text('#mysug'); ok('Menu Probe Depot' in t and 'Received' in t,'status loads in the menu: '+t)
+    ok(pg.get_attribute('#mysug a.mitem','href')=='/contribute/?status='+tok,'row links to the status page')
+    pg2=b.new_page(viewport={'width':390,'height':844}); pg2.goto(B+'/play.html'); pg2.wait_for_selector('#main'); pg2.evaluate("document.querySelector('[data-a=menu]').click()"); pg2.wait_for_timeout(300)
+    ok(pg2.evaluate("!document.getElementById('mysug')"),'no My suggestions row when nothing was suggested')
+    b.close()
   sv.terminate(); sv=server('branch-deploy','0')
   s,j=api('/api/community/config'); ok(s==200 and j=={'uploads':False},'config reports uploads off: %r'%j)
   up2='data:image/jpeg;base64,'+base64.b64encode(mkjpg((10,120,60))).decode()

@@ -698,7 +698,7 @@
      +item('backup','Back up your passport','Save a code so a lost phone does not lose your stamps')
      +(got>0?item('share','Share my passport','Make a picture of your stamps',' data-k=""'):'')
      +(/^https?:$/.test(location.protocol)?'<p class="mgroup">Play anywhere</p>'+item('daily','Daily Fact or Fiction','One claim a day, with sources. No travel needed'):'')
-     +(COMON?'<p class="mgroup">Contribute</p>'+item('suggest','Suggest a place','Add a place and a photo. We check it before it appears')+'<p class="why" style="margin:6px 14px 0">Questions or removal requests: <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a></p>':'')
+     +(COMON?'<p class="mgroup">Contribute</p>'+item('suggest','Suggest a place','Add a place and a photo. We check it before it appears')+mySugHtml()+'<p class="why" style="margin:6px 14px 0">Questions or removal requests: <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a></p>':'')
      +'<p class="mgroup">Settings</p>'
      +'<div class="mrow"><span id="thl">Appearance</span><div class="segs" role="group" aria-labelledby="thl">'+seg+'</div></div>'
      +(geoGranted()?'<div class="mrow"><span id="lvl">Live location while the app is open</span><div class="segs"><button class="seg on" data-a="livetoggle" aria-labelledby="lvl" aria-pressed="'+liveOn()+'">'+(liveOn()?'On':'Off')+'</button></div></div>':'')
@@ -719,11 +719,16 @@
      +'<details class="mdet mreset"><summary>Start over (erase this phone\'s progress)</summary><p class="msub">Erases every stamp, badge, saved stop and setting on this phone, so the app starts like a brand-new install. Good for testing. It cannot be undone, so back up your passport first if you want to keep it.</p><button class="mitem mdanger" data-a="resetgo"><span><strong>Erase everything on this phone</strong></span></button></details>'
      +'<p class="mfoot">Made by a mom and her teenage son.</p></div>';
   }
+  function sugList(){ try{ return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){ return x&&/^[a-f0-9]{9,}$/.test(x.t); }).slice(0,10); }catch(x){ return []; } }
+  function mySugHtml(){ var a=sugList(); if(!a.length) return ''; var e=function(t){ return String(t==null?'':t).replace(/[<>&"]/g,''); };
+    return '<details class="mdet mhelp" id="mysug"><summary>My suggestions ('+a.length+')</summary><ul class="mysug">'+a.map(function(x){ return '<li><a class="mitem" href="/contribute/?status='+x.t+'"><span><strong>'+e(x.p)+'</strong><span class="msub">'+e(x.c)+(x.c?' · ':'')+'<span class="sugst" data-t="'+x.t+'">Checking…</span></span></span><span class="go" aria-hidden="true">›</span></a></li>'; }).join('')+'</ul><p class="msub" style="margin:0 12px 8px">Saved on this device only. Tap one to see its status or add a photo.</p></details>'; }
+  function mySugLoad(){ var LB={received:'Received',added:'Added to the app',waiting:'Waiting for a photo',declined:'Not added'}; Array.prototype.forEach.call(document.querySelectorAll('#menu .sugst'),function(sp){ fetch('/api/community/mine/'+sp.getAttribute('data-t')).then(function(r){ return r.ok?r.json():null; }).then(function(j){ sp.textContent=j?(LB[j.status]||j.status):'Status unavailable'; }).catch(function(){ sp.textContent='Status unavailable'; }); }); }
   function openMenu(){
     closeMenu(); menuFrom=document.activeElement;
     var d=document.createElement('div'); d.id='menu'; d.className='menu'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','menuT');
     d.innerHTML='<div class="menu-scrim" data-a="menuclose"></div>'+menuHtml(); document.body.appendChild(d); document.body.classList.add('menuopen');
     var f=d.querySelector('.menu-x'); if(f) f.focus();
+    if(COMON) mySugLoad();
   }
   function closeMenu(){ var e=document.getElementById('menu'); if(e){ e.remove(); document.body.classList.remove('menuopen'); if(menuFrom&&menuFrom.focus&&document.body.contains(menuFrom)) try{ menuFrom.focus(); }catch(x){} } }
   function celebKeyGet(){ try{ return JSON.parse(localStorage.getItem('then-now-cel')||'{}')||{}; }catch(e){ return {}; } }
