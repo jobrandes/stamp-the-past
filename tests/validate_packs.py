@@ -11,10 +11,12 @@ for cid in order:
     p=json.load(open(R+f'src/packs/{cid}.json'))
     for f in ('id','name','explorer','initials','mission','afterDone','safetyNote'): need(p.get(f),f'{cid}: missing {f}')
     need(len(p['ranks'])==5 and p['ranks'][0][0]==0,f'{cid}: ranks must be 5 tiers starting at 0 XP')
-    need([r[0] for r in p['ranks']]==[0,100,250,450,600],f'{cid}: rank thresholds must match the XP model (0,100,250,450,600)')
-    need(len(p['stops'])==4,f'{cid}: the save code and XP model assume 4 stops')
+    _n=len(p['stops']); _th=[r[0] for r in p['ranks']]
+    need(_n>=1,f'{cid}: needs at least one stop')
+    if _n==4: need(_th==[0,100,250,450,600],f'{cid}: rank thresholds must match the XP model (0,100,250,450,600)')
+    else: need(_th[0]==0 and _th[-1]==150*_n and all(a<b for a,b in zip(_th,_th[1:])),f'{cid}: with {_n} stops the ranks must rise from 0 to the town maximum {150*_n} XP')
     need(p.get('heroKey') is None or p['heroKey'] in photos,f'{cid}: heroKey not in photos')
-    need(len({st['q']['answer'] for st in p['stops']})>=3,f'{cid}: correct answers should not sit in the same slot every time (use at least 3 different positions)')
+    _need=min(3,len(p['stops'])); need(len({st['q']['answer'] for st in p['stops']})>=_need,f'{cid}: correct answers should not sit in the same slot every time (use at least {_need} different positions)')
     for st in p['stops']:
         w=f'{cid}/{st["id"]}'
         for f in ('id','name','short','badge','tag','teaser','map','clue','safety','field','fact'): need(st.get(f),f'{w}: missing {f}')
@@ -52,6 +54,7 @@ _b=_j.load(open(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)),'..','sr
 _order=_j.load(open(_o.path.join(_o.path.dirname(_o.path.abspath(__file__)),'..','src','packs','index.json')))['order']
 for _k in _order:
     _q=_b.get(_k)
+    if not _q and len(json.load(open(R+f'src/packs/{_k}.json'))['stops'])<4: continue  # small towns have no final challenge
     if not _q or len(_q)!=4: bad.append(f'BOSS: {_k} needs exactly 4 questions'); continue
     if len({x['a'] for x in _q})<2: bad.append(f'BOSS: {_k} answers all in one slot')
     for x in _q:

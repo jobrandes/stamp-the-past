@@ -101,7 +101,7 @@
   document.addEventListener('input',function(e){
     var q=e.target; if(q&&q.id==='townSearch'){ var v=q.value.trim().toLowerCase(), any=false;
       document.querySelectorAll('#missions details.reg').forEach(function(d){ var vis=0; d.querySelectorAll('li').forEach(function(li){ var m=!v||(li.textContent+' '+(li.getAttribute('data-q')||'')).toLowerCase().indexOf(v)>-1; li.hidden=!m; if(m) vis++; }); d.hidden=!!v&&!vis; if(v) d.open=vis>0; if(vis) any=true; });
-      var th=0; document.querySelectorAll('#tourHits [data-q]').forEach(function(x){ var m=!!v&&x.getAttribute('data-q').toLowerCase().indexOf(v)>-1; x.hidden=!m; if(m) th++; }); var tw=document.getElementById('tourHits'); if(tw) tw.hidden=!th; var nn=document.getElementById('townNone'); if(nn) nn.hidden=!v||any||th>0; return; }
+      var nn=document.getElementById('townNone'); if(nn) nn.hidden=!v||any; return; }
     var t=e.target; if(!t||!t.getAttribute||!t.getAttribute('data-cmp')) return;
     var top=t.closest('.cmp').querySelector('.top'); if(top) top.style.opacity=(t.value/100); slUsed(t.closest('.cmp'));
   });
@@ -141,8 +141,8 @@
   /* shown on the share card; swap for the real domain or App Store link once it exists */
   var SHARE_URL='stampthepast.com';
   var railRegion=null, ORDER=DATA.order, SOON=DATA.soon||[], atHome=true, onPass=false;
-  function blank(){ return {done:[0,0,0,0],claims:[0,0,0,0,0,0,0,0]}; }
-  var ALL={}; ORDER.forEach(function(k){ ALL[k]=blank(); });
+  function blank(k){ var n=(k&&CITIES[k]&&CITIES[k].stops.length)||4, z=function(m){ var a=[]; while(a.length<m) a.push(0); return a; }; return {done:z(n),claims:z(2*n)}; }
+  var ALL={}; ORDER.forEach(function(k){ ALL[k]=blank(k); });
   var cityId='reno';
   var S=ALL.reno, STOPS=RENO_STOPS;
   function city(){ return CITIES[cityId]; }
@@ -152,8 +152,9 @@
   var toastTimer=null, nudged=false;
   var pushed=false, ignorePop=false;
 
-  function norm(o){
-    if(o && Array.isArray(o.done) && o.done.length===4 && Array.isArray(o.claims) && o.claims.length===8){
+  function norm(o,k){
+    var n=(k&&CITIES[k]&&CITIES[k].stops.length)||4;
+    if(o && Array.isArray(o.done) && o.done.length===n && Array.isArray(o.claims) && o.claims.length===2*n){
       return {done:o.done.map(function(x){return x?1:0}),claims:o.claims.map(function(x){return x?1:0})};
     }
     return null;
@@ -163,17 +164,17 @@
       var r3=localStorage.getItem(KEY3);
       if(r3){
         var o3=JSON.parse(r3), n;
-        ORDER.forEach(function(k){ if(o3.p && (n=norm(o3.p[k]))) ALL[k]=n; });
+        ORDER.forEach(function(k){ if(o3.p && (n=norm(o3.p[k],k))) ALL[k]=n; });
         if(o3.city && CITIES[o3.city]) cityId=o3.city;
         atHome=!!o3.home;
       } else {
         var r2=localStorage.getItem(KEY2), r=localStorage.getItem(KEY);
         if(r2){
           var o2=JSON.parse(r2);
-          ORDER.forEach(function(k){ if((n=norm(o2[k]))) ALL[k]=n; });
+          ORDER.forEach(function(k){ if((n=norm(o2[k],k))) ALL[k]=n; });
           if(o2.city && CITIES[o2.city]) cityId=o2.city;
           atHome=false;
-        } else if(r){ var n1=norm(JSON.parse(r)); if(n1) ALL.reno=n1; atHome=false; }
+        } else if(r){ var n1=norm(JSON.parse(r),'reno'); if(n1) ALL.reno=n1; atHome=false; }
       }
     }catch(e){}
     S=ALL[cityId]; STOPS=CITIES[cityId].stops; RANKS=CITIES[cityId].ranks;
@@ -191,11 +192,11 @@
   var INKS=[{n:'Blue',c:'#1B58B8'},{n:'Red',c:'#C0392B'},{n:'Green',c:'#2E8B57'},{n:'Purple',c:'#7B4BB7'},{n:'Gold',c:'#D4A017'}], inkI=0;
   try{ var _k=parseInt(localStorage.getItem('then-now-ink'),10); if(_k>=0&&_k<INKS.length) inkI=_k; }catch(e){}
   function bestRank(){
-    var best=0; ORDER.forEach(function(k){ var st=ALL[k]; var x=sum(st.done)*100+sum(st.claims)*25, i=0; [0,100,250,450,600].forEach(function(t,k){ if(x>=t) i=k; }); if(i>best) best=i; });
+    var best=0; ORDER.forEach(function(k){ var st=ALL[k]; var x=sum(st.done)*100+sum(st.claims)*25, i=0; CITIES[k].ranks.forEach(function(t,j){ if(x>=t[0]) i=j; }); if(i>best) best=i; });
     return best;
   }
   function code(){ return 'TN3-'+ORDER.map(function(k){ return ALL[k].done.join('')+ALL[k].claims.join(''); }).join('-'); }
-  function allDone(){ return sum(S.done)===4; }
+  function allDone(){ return sum(S.done)===S.done.length; }
 
   var stampFx=false;
   function isNativeApp(){ try{ return !!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()); }catch(e){ return false; } }
@@ -330,7 +331,7 @@
   function exploreRow(k){
     var n=townStory(k).length; if(!n) return '';
     var seen=0, v=nbGet(); townStory(k).forEach(function(sp){ if(v[nbKey(sp)]) seen++; });
-    return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more places in '+CITIES[k].name+' to read. Optional stories, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
+    return '<button class="rcard exprow" data-a="nbcity" data-c="'+k+'"><span><strong>Explore history</strong><span class="rsub">'+n+' more '+(n===1?'place':'places')+' in '+CITIES[k].name+' to read. Optional stories, no questions, no stamps.'+(seen?' You have visited '+seen+'.':'')+'</span></span><span class="go">Browse ›</span></button>';
   }
   /* Also close by: Story stops within ~0.5 mile of any of a town's four stops, as an expandable optional row on the mission card. Built from the data, so new Explore places appear on their own. */
   function closeBy(k){
@@ -342,8 +343,6 @@
     var L=closeBy(k); if(!L.length) return ''; var v=nbGet();
     return '<details class="alsonear"><summary>Also close by: '+L.length+' history place'+(L.length>1?'s':'')+'</summary><p class="nbnote">Optional reading, no stamps or XP. Straight-line estimates.</p>'+L.map(function(x){ var dn=nice(x.d); return '<button class="rcard nbrow" data-a="nbtownstory" data-c="'+k+'" data-s="'+nbKey(x.s)+'"><span><strong>'+x.s.name+'</strong><span class="rsub">'+x.s.area+' · '+dn+' from '+x.from+'</span>'+(v[nbKey(x.s)]?'<span class="nbst on">Visited</span>':'')+'</span><span class="go">Read ›</span></button>'; }).join('')+'</details>';
   }
-  /* history-only places (no mission town yet) so search can find them: Walnut Creek */
-  function tourOnlyHtml(){ var l=TOURS.filter(function(t){ return !CITIES[t.id]&&!(t.towns&&t.towns.length); }); if(!l.length) return ''; return '<div id="tourHits" hidden>'+l.map(function(t){ return '<button class="rcard" data-a="nbtourpick" data-t="'+t.id+'" data-q="'+t.name+'" hidden><span><strong>'+t.name+'</strong><span class="rsub">History places to read. No stamps yet.</span></span><span class="go">Open ›</span></button>'; }).join('')+'</div>'; }
   function viewCityExplore(k){
     var list=townStory(k), c=CITIES[k], v=nbGet();
     var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
@@ -473,7 +472,7 @@
     document.getElementById('xpFill').style.width=Math.round(frac*100)+'%';
     var bar=document.getElementById('xpBar');
     bar.setAttribute('aria-valuenow',String(x));
-    bar.setAttribute('aria-valuetext',x+' of 600 XP, rank '+r.name);
+    bar.setAttribute('aria-valuetext',x+' of '+RANKS[RANKS.length-1][0]+' XP, rank '+r.name);
     document.getElementById('bulbs').innerHTML=STOPS.map(function(s,i){
       return '<div class="bulb'+(S.done[i]?' on':'')+'"><i></i><span>'+s.short+'</span></div>';
     }).join('');
@@ -600,7 +599,7 @@
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
-    h+=reqBanHtml()+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label>'+tourOnlyHtml()+'<p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
+    h+=reqBanHtml()+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -812,7 +811,7 @@
   var SEALS={gold:['#f2cf72','#b8872a','#6e4b0c','Gold Seal','Master Historian'],silver:['#eceff3','#9aa3b0','#566070','Silver Seal','Sharp Eye'],bronze:['#e8b58a','#a8693a','#643415','Bronze Seal','Plaque Reader'],grand:['#f2cf72','#1d3557','#f2cf72','Grand Historian','Gold in every town']};
   function sealTier(n){ return n>=4?'gold':(n===3?'silver':(n===2?'bronze':null)); }
   function ptsOf(n){ return n===undefined||n===null?0:50*n+(n>=4?100:0); }
-    var TSTATE={"reno":"NV","vc":"NV","sparks":"NV","carson":"NV","tahoeicons":"CA/NV","tahoe":"CA/NV","boston":"MA","dc":"DC","ny":"NY","chicago":"IL","sf":"CA","philly":"PA","la":"CA","seattle":"WA","nola":"LA","detroit":"MI","minneapolis":"MN","atlanta":"GA","memphis":"TN","savannah":"GA","denver":"CO","santafe":"NM","phoenix":"AZ","albuquerque":"NM","tucson":"AZ","pittsburgh":"PA","baltimore":"MD","cleveland":"OH","stlouis":"MO","cincinnati":"OH","indianapolis":"IN","buffalo":"NY","richmond":"VA","williamsburg":"VA","charleston":"SC","houston":"TX","nashville":"TN","providence":"RI","saltlake":"UT","sandiego":"CA","portland":"OR","milwaukee":"WI","columbus":"OH","gettysburg":"PA","louisville":"KY","newport":"RI","knoxville":"TN","portlandme":"ME","newhaven":"CT","burlington":"VT","coloradosprings":"CO","lasvegas":"NV","flagstaff":"AZ","elpaso":"TX","sanantonio":"TX","dayton":"OH","honolulu":"HI","skagway":"AK","sitka":"AK","sacramento":"CA","nsierra":"CA"}, TFULL={"NV":"Nevada","CA":"California","MA":"Massachusetts","DC":"District of Columbia Washington","NY":"New York","IL":"Illinois","PA":"Pennsylvania","WA":"Washington","LA":"Louisiana","MI":"Michigan","MN":"Minnesota","GA":"Georgia","TN":"Tennessee","CO":"Colorado","NM":"New Mexico","AZ":"Arizona","MD":"Maryland","OH":"Ohio","MO":"Missouri","IN":"Indiana","VA":"Virginia","SC":"South Carolina","TX":"Texas","RI":"Rhode Island","UT":"Utah","OR":"Oregon","WI":"Wisconsin","KY":"Kentucky","ME":"Maine","CT":"Connecticut","VT":"Vermont","HI":"Hawaii","AK":"Alaska"};
+    var TSTATE={"reno":"NV","vc":"NV","sparks":"NV","carson":"NV","tahoeicons":"CA/NV","tahoe":"CA/NV","boston":"MA","dc":"DC","ny":"NY","chicago":"IL","sf":"CA","philly":"PA","la":"CA","seattle":"WA","nola":"LA","detroit":"MI","minneapolis":"MN","atlanta":"GA","memphis":"TN","savannah":"GA","denver":"CO","santafe":"NM","phoenix":"AZ","albuquerque":"NM","tucson":"AZ","pittsburgh":"PA","baltimore":"MD","cleveland":"OH","stlouis":"MO","cincinnati":"OH","indianapolis":"IN","buffalo":"NY","richmond":"VA","williamsburg":"VA","charleston":"SC","houston":"TX","nashville":"TN","providence":"RI","saltlake":"UT","sandiego":"CA","portland":"OR","milwaukee":"WI","columbus":"OH","gettysburg":"PA","louisville":"KY","newport":"RI","knoxville":"TN","portlandme":"ME","newhaven":"CT","burlington":"VT","coloradosprings":"CO","lasvegas":"NV","flagstaff":"AZ","elpaso":"TX","sanantonio":"TX","dayton":"OH","honolulu":"HI","skagway":"AK","sitka":"AK","sacramento":"CA","walnutcreek":"CA","nsierra":"CA"}, TFULL={"NV":"Nevada","CA":"California","MA":"Massachusetts","DC":"District of Columbia Washington","NY":"New York","IL":"Illinois","PA":"Pennsylvania","WA":"Washington","LA":"Louisiana","MI":"Michigan","MN":"Minnesota","GA":"Georgia","TN":"Tennessee","CO":"Colorado","NM":"New Mexico","AZ":"Arizona","MD":"Maryland","OH":"Ohio","MO":"Missouri","IN":"Indiana","VA":"Virginia","SC":"South Carolina","TX":"Texas","RI":"Rhode Island","UT":"Utah","OR":"Oregon","WI":"Wisconsin","KY":"Kentucky","ME":"Maine","CT":"Connecticut","VT":"Vermont","HI":"Hawaii","AK":"Alaska"};
     function placeLabel(k){ var nm=CITIES[k].name, st=TSTATE[k]||''; return (!st||st==='DC'||/,\s*\S+$/.test(nm))?nm:nm+', '+st; }
     function stOf(k){ var a=TSTATE[k]||''; return a.split('/').map(function(x){return TFULL[x]||x;}).join(' ')+' '+a.replace('/',' '); }
 
@@ -1001,7 +1000,7 @@
   function totalStamps(){ var t=0; ORDER.forEach(function(k){ t+=sum(ALL[k].done); }); return t; }
   function bkSeen(){ try{ return parseInt(localStorage.getItem('stp-bk-seen')||'-1',10); }catch(e){ return -1; } }
   function totalPts(){ var b=bossBest(),t=0; ORDER.forEach(function(k){ t+=ptsOf(b[k]); }); return t; }
-  function grandOk(){ var b=bossBest(); return ORDER.length>0&&ORDER.every(function(k){ return b[k]>=4; }); }
+  function grandOk(){ var b=bossBest(); return ORDER.length>0&&ORDER.every(function(k){ return !(((DATA.boss||{})[k]||[]).length)||b[k]>=4; }); }
   /* ---------- explorer level + badges (everything is worked out from saved progress; only the earned list is stored) ---------- */
   var LVTITLES=[[1,'Newcomer'],[3,'Wanderer'],[5,'Trailblazer'],[8,'Pathfinder'],[12,'Explorer'],[16,'Historian'],[21,'Archivist'],[27,'Time Traveler'],[34,'Grand Chronicler']];
   function lvXp(L){ return 25*(L-1)*(L+2); }
@@ -1481,7 +1480,6 @@
     if(a==='nbcity'){ var ck=b.getAttribute('data-c'); if(ck&&CITIES[ck]){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:ck}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbtownstory'){ var tk=b.getAttribute('data-c'), sk=b.getAttribute('data-s'); if(tk&&CITIES[tk]&&nbStory(sk)){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:sk,msg:'',town:tk}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbcityback'){ var bk=b.getAttribute('data-c'); if(bk&&CITIES[bk]){ railRegion=null; setCity(bk); } return; }
-    if(a==='nbtourpick'){ var tk=b.getAttribute('data-t'); leave(); atHome=true; onPass=false; onNear=true; nv={mode:'area',tour:tk,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbloc'){
       if(!navigator.geolocation){ nv.mode='pick'; nv.msg='This device cannot share its location. Pick a place instead.'; render(true); return; }
@@ -1542,7 +1540,7 @@
     }
     if(a==='restore'){
       var v=(document.getElementById('codeIn').value||'').trim().toUpperCase();
-      var m1=/^TN1-([01]{4})([01]{8})$/.exec(v), m2=/^TN2-([01]{4})([01]{8})-([01]{4})([01]{8})$/.exec(v), m3=/^TN3-([01]{12}(?:-[01]{12})*)$/.exec(v), msg=document.getElementById('codeMsg');
+      var m1=/^TN1-([01]{4})([01]{8})$/.exec(v), m2=/^TN2-([01]{4})([01]{8})-([01]{4})([01]{8})$/.exec(v), m3=/^TN3-([01]+(?:-[01]+)*)$/.exec(v), msg=document.getElementById('codeMsg');
       if(!m1 && !m2 && !m3){ msg.textContent='That code does not look right. It starts with TN3- (older TN1- and TN2- codes work too).'; return; }
       var arr=function(x){return x.split('').map(Number);};
       if(m1){ ALL.reno={done:arr(m1[1]),claims:arr(m1[2])}; }
@@ -1550,13 +1548,15 @@
       else {
         var segs=m3[1].split('-');
         if(segs.length>ORDER.length){ msg.textContent='That code has more towns than this version of the app. Update the app and try again.'; return; }
-        segs.forEach(function(g,i){ ALL[ORDER[i]]={done:arr(g.slice(0,4)),claims:arr(g.slice(4))}; });
+        var okLen=segs.every(function(g,i){ var c=CITIES[ORDER[i]]; return c&&g.length===3*c.stops.length; });
+        if(!okLen){ msg.textContent='That code does not look right. It starts with TN3- (older TN1- and TN2- codes work too).'; return; }
+        segs.forEach(function(g,i){ var c=CITIES[ORDER[i]], n=c.stops.length; ALL[ORDER[i]]={done:arr(g.slice(0,n)),claims:arr(g.slice(n))}; });
       }
       S=ALL[cityId]; save(); render(); toast('Progress restored'); awardSoon(); return;
     }
     if(a==='resetask'){ confirmReset=true; render(); return; }
     if(a==='resetno'){ confirmReset=false; render(); return; }
-    if(a==='resetyes'){ ALL[cityId]=blank(); S=ALL[cityId]; save(); confirmReset=false; render(); toast('Progress erased'); return; }
+    if(a==='resetyes'){ ALL[cityId]=blank(cityId); S=ALL[cityId]; save(); confirmReset=false; render(); toast('Progress erased'); return; }
   });
 
   var deepExp=null;

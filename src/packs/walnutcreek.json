@@ -1,0 +1,223 @@
+{
+ "id": "walnutcreek",
+ "name": "Walnut Creek",
+ "explorer": "Valley Explorer",
+ "initials": "WC",
+ "ranks": [
+  [
+   0,
+   "Sapling"
+  ],
+  [
+   100,
+   "Orchard Hand"
+  ],
+  [
+   175,
+   "Ranch Hand"
+  ],
+  [
+   250,
+   "Foreman"
+  ],
+  [
+   300,
+   "Valley Historian"
+  ]
+ ],
+ "heroKey": "wk_sh",
+ "heroAlt": "The two-story Shadelands Ranch house with a corner turret and a wide front porch",
+ "heroLi": "<li>Header: Shadelands Ranch House, Sanfranman59 · CC BY-SA 3.0 · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Shadelands_Ranch_House_(Walnut_Creek,_CA).JPG\">Source</a></li>",
+ "heroCredit": "Photo: Sanfranman59 · <a target=\"_blank\" rel=\"noopener\" href=\"https://creativecommons.org/licenses/by-sa/3.0/\">CC BY-SA 3.0</a> · <a target=\"_blank\" rel=\"noopener\" href=\"https://commons.wikimedia.org/wiki/File:Shadelands_Ranch_House_(Walnut_Creek,_CA).JPG\">Source</a>",
+ "mission": "Find two ranches from the days when Walnut Creek was farm country. At each one, check in to earn its badge, unlock its story, and collect a Time Card. Do them in any order. Everything stays on this phone.",
+ "afterDone": "Both badges earned. Walnut Creek is stamped.",
+ "safetyNote": "<li>Both stops are outdoors. Borges Ranch is in open space with working animals and a hillside, so stay on the paths and keep your distance from the animals.</li>",
+ "badgeMap": {
+  "shadelands": [
+   "wk_sh",
+   "50% 50%"
+  ],
+  "borges": [
+   "wk_bo",
+   "50% 55%"
+  ]
+ },
+ "level": "Hidden Gems",
+ "region": "The West",
+ "stops": [
+  {
+   "id": "shadelands",
+   "name": "Shadelands Ranch Museum",
+   "short": "Shadelands",
+   "badge": "Shadelands Ranch",
+   "tag": "Stop 1 of 2",
+   "teaser": "A pioneer's orchard house, now a museum.",
+   "map": "Shadelands Ranch Museum, 2660 Ygnacio Valley Rd, Walnut Creek, CA",
+   "geo": [
+    37.92611,
+    -122.01944,
+    150
+   ],
+   "clue": "Find the two-story house with a corner turret and a wide front porch on Ygnacio Valley Road. It was a family home on a big ranch, and it is now a museum run by the city's historical society. The museum has public tours only on some days, so check the hours before you go.",
+   "safety": "Stay on the sidewalk and the museum grounds. Cross Ygnacio Valley Road only at a corner with a signal.",
+   "field": "Field notes pending: Jo-Anne will check this spot on foot.",
+   "q": {
+    "prompt": "This ranch house stood on land Hiram Penniman farmed. About 500 acres of what did he own here?",
+    "options": [
+     "Orchards",
+     "Vineyards",
+     "Cotton fields",
+     "Rice paddies"
+    ],
+    "answer": 0,
+    "hint": "Look at the museum's displays or ask the docent about the ranch's early crops.",
+    "verify": "The Walnut Creek Historical Society museum page says Penniman owned about 500 acres of orchards in the Ygnacio Valley. Confirm on site."
+   },
+   "then": {
+    "yr": "Not yet",
+    "label": "Old photo wanted",
+    "line": "We could not find a free-to-use old photo of this place, so this slot is honestly empty. If you have an old photo that you or your family took and would share, tell us from the Menu.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Walnut%20Creek%20California"
+    }
+   },
+   "now": {
+    "yr": "2008",
+    "head": "Today",
+    "label": "Shadelands Ranch house",
+    "line": "The ranch house in 2008, with its turret and porch. Photo taken in 2008, so details may have changed.",
+    "ph": {
+     "k": "wk_sh",
+     "alt": "The two-story Shadelands Ranch house with a corner turret and a wide front porch",
+     "by": "Sanfranman59",
+     "lic": "CC BY-SA 3.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Shadelands_Ranch_House_(Walnut_Creek,_CA).JPG",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Hiram Penniman arrived in the Walnut Creek area in 1850 and came to own about 500 acres of orchards in the Ygnacio Valley. He built the ranch house for his unmarried daughter Mary, who died of influenza in 1909. The ranch then passed to his daughter Bessie and her husband, Albert Johnson, and farming there ended when Johnson died in 1948.",
+    "In 1970 the Gospel Foundation of California, which had looked after the property, gave the house to the City of Walnut Creek. The Walnut Creek Historical Society was asked to run it, and it opened as a museum in 1972. The house is on the National Register of Historic Places, listed in 1985."
+   ],
+   "fact": "Penniman built the house for his unmarried daughter Mary, who died of influenza in 1909.",
+   "disputed": "Sources disagree on when the house was finished: the Historical Society says 1903 and Wikipedia says 1902. No old photo of the house was found, so the Then slot is empty.",
+   "claims": [
+    {
+     "t": "The Shadelands ranch house was built for a pioneer's unmarried daughter.",
+     "a": 0,
+     "why": "The Walnut Creek Historical Society says Hiram Penniman built it for his unmarried daughter Mary."
+    },
+    {
+     "t": "Shadelands Ranch opened as a museum in 1952.",
+     "a": 2,
+     "why": "The city received the house in 1970 and the museum opened in 1972."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Walnut Creek Historical Society: Shadelands Ranch Museum",
+     "u": "https://wchistory.org/museum/"
+    },
+    {
+     "t": "Wikipedia: Shadelands Ranch",
+     "u": "https://en.wikipedia.org/wiki/Shadelands_Ranch"
+    }
+   ],
+   "card": {
+    "a": "1972",
+    "b": "Today",
+    "la": "Museum opens",
+    "lb": "Shadelands"
+   }
+  },
+  {
+   "id": "borges",
+   "name": "Old Borges Ranch",
+   "short": "Borges Ranch",
+   "badge": "Old Borges Ranch",
+   "tag": "Stop 2 of 2",
+   "teaser": "A working ranch with a 1901 farmhouse.",
+   "map": "Old Borges Ranch, 1035 Castle Rock Rd, Walnut Creek, CA",
+   "geo": [
+    37.89011,
+    -122.00252,
+    300
+   ],
+   "clue": "Find the old wooden ranch buildings and corrals below the oak-covered hillside on Castle Rock Road. Parking is at Northgate High School, and the ranch is open from 8 a.m. to sunset. Animals still live here, so give them room.",
+   "safety": "Stay on the paths, keep your distance from the animals, and watch for traffic on Castle Rock Road.",
+   "field": "Field notes pending: Jo-Anne will check this spot on foot.",
+   "q": {
+    "prompt": "The Borges family farmhouse is a National Register landmark. In what year was it built?",
+    "options": [
+     "1851",
+     "1901",
+     "1931",
+     "1961"
+    ],
+    "answer": 1,
+    "hint": "Look for a date on the ranch signs or in the farmhouse displays.",
+    "verify": "Wikipedia and the Bay Area Older Adults listing both say the Borges home was built in 1901. Confirm on site."
+   },
+   "then": {
+    "yr": "Not yet",
+    "label": "Old photo wanted",
+    "line": "We could not find a free-to-use old photo of this place, so this slot is honestly empty. If you have an old photo that you or your family took and would share, tell us from the Menu.",
+    "link": {
+     "t": "Look for historic photos at the Library of Congress",
+     "u": "https://www.loc.gov/pictures/search/?q=Walnut%20Creek%20California"
+    }
+   },
+   "now": {
+    "yr": "2008",
+    "head": "Today",
+    "label": "Old Borges Ranch",
+    "line": "The ranch buildings and corrals in 2008. Photo taken in 2008, so details may have changed.",
+    "ph": {
+     "k": "wk_bo",
+     "alt": "Old Borges Ranch buildings and corrals below an oak-covered hillside",
+     "by": "Sanfranman59",
+     "lic": "CC BY-SA 3.0",
+     "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+     "page": "https://commons.wikimedia.org/wiki/File:Old_Borges_Ranch_(Walnut_Creek,_CA).JPG",
+     "note": "resized"
+    }
+   },
+   "story": [
+    "Frank Borges was an early Walnut Creek pioneer, and his family's ranch house was built in 1901. Wikipedia says the Borges family bought about 700 acres in 1899, and that the City of Walnut Creek bought the ranch in 1976.",
+    "The ranch is on the National Register of Historic Places, listed in 1981. Today the farmhouse has displays on life in the early 1900s, and the ranch still has a blacksmith shop, farm equipment, and animals cared for by Pleasant Hill 4-H."
+   ],
+   "fact": "The Borges family home was built in 1901 and is listed on the National Register of Historic Places.",
+   "disputed": "Only Wikipedia gives the 1899 land purchase and the 1976 city purchase; the other source we read does not say. No old photo of the ranch was found, so the Then slot is empty.",
+   "claims": [
+    {
+     "t": "The Borges ranch house is on the National Register of Historic Places.",
+     "a": 0,
+     "why": "It was listed July 7, 1981, and both sources we read say it is listed."
+    },
+    {
+     "t": "The City of Walnut Creek has owned Borges Ranch since the 1800s.",
+     "a": 2,
+     "why": "The family bought its land in 1899, and Wikipedia says the city bought the ranch in 1976."
+    }
+   ],
+   "sources": [
+    {
+     "t": "Wikipedia: Old Borges Ranch",
+     "u": "https://en.wikipedia.org/wiki/Old_Borges_Ranch"
+    },
+    {
+     "t": "Bay Area Older Adults: Old Borges Ranch",
+     "u": "https://bayareaolderadults.org/historical-sites/walnut-creek/old-borges-ranch"
+    }
+   ],
+   "card": {
+    "a": "1901",
+    "b": "Today",
+    "la": "Farmhouse built",
+    "lb": "Borges Ranch"
+   }
+  }
+ ]
+}
