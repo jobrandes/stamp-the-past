@@ -1039,6 +1039,15 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .nextrow .nr-m{display:block;margin-top:2px;font:500 0.75rem var(--font-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
 @media (max-height:700px){.nextrow .nr-m{display:none}}
+
+.reqban{border:2px solid var(--accent);margin:1rem 0}
+.reqban h3{margin:.25rem 0 .4rem}
+.reqban .reqrow{display:flex;flex-direction:column;gap:.5rem;margin-top:.6rem}
+.reqban input{font:inherit;min-height:2.75rem;padding:.5rem .75rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:inherit;width:100%;box-sizing:border-box}
+.reqban .btn{min-height:2.75rem;width:100%}
+.reqban .feedback{min-height:1.2em;margin:.4rem 0 0}
+@media(min-width:600px){.reqban .reqrow{flex-direction:row}.reqban .btn{width:auto;white-space:nowrap}}
+.reqban .feedback:empty{display:none}
 </style>
 
 <div class="app">
@@ -1675,7 +1684,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
-    h+=browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
+    h+=reqBanHtml()+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -1833,6 +1842,21 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     fetch(web?'/':'https://stampthepast.com/',{method:'POST',mode:web?'same-origin':'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).then(function(r){
       if(web&&!r.ok) throw new Error('bad'); closeReport(); toast('Thanks. Sent.');
     }).catch(function(){ out.className='feedback bad'; out.textContent='Could not send from here. Try the test site, or check your connection.'; });
+  }
+  /* ---------- Town request banner on Home: one field, one tap, no dialog ---------- */
+  function reqBanHtml(){
+    return '<section class="card reqban" aria-label="Request a town"><p class="mono">Your town not here yet?</p><h3>Tell us which town to add</h3><p>Type it below and we will add it. Community-suggested places are coming soon, too.</p><div class="reqrow"><label class="sr" for="reqBanIn">Town and state</label><input id="reqBanIn" maxlength="120" autocomplete="off" autocapitalize="words" placeholder="Town and state, e.g. Mill Valley, CA"><button class="btn" data-a="reqban">Request this town</button></div><p id="reqBanOut" class="feedback" role="status"></p></section>';
+  }
+  function sendReqBan(){
+    var inp=document.getElementById('reqBanIn'), out=document.getElementById('reqBanOut'); if(!inp||!out) return;
+    var msg=inp.value.trim();
+    if(msg.length<2){ out.className='feedback bad'; out.textContent='Type a town first.'; return; }
+    var body=new URLSearchParams({'form-name':'report','bot-field':'','where':'Town request','message':msg,'contact':''}).toString();
+    out.className='feedback'; out.textContent='Sending...';
+    var web=/^https?:$/.test(location.protocol);
+    fetch(web?'/':'https://stampthepast.com/',{method:'POST',mode:web?'same-origin':'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).then(function(r){
+      if(web&&!r.ok) throw new Error('bad'); inp.value=''; out.className='feedback good'; out.textContent='Thanks. We read every request.';
+    }).catch(function(){ out.className='feedback bad'; out.textContent='Could not send from here. Check your connection and try again.'; });
   }
   /* ---------- first-run tour ---------- */
   var TOUR=[
@@ -2492,6 +2516,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     }
     if(a==='hapticTest'){ haptic('success',function(r){ toast(r==='ok'?'Buzz sent. If you felt nothing, check Settings, Sounds and Haptics, System Haptics.':r==='missing'?'The buzz part of the app did not load. Please tell us.':'The buzz did not run. Please tell us.'); }); return; }
     if(a==='report'){ showReport(); return; }
+    if(a==='reqban'){ sendReqBan(); return; }
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }
     if(a==='repclose'){ closeReport(); return; }
     if(a==='repsend'){ sendReport(); return; }

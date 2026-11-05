@@ -1033,3 +1033,12 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
 .nextrow .nr-m{display:block;margin-top:2px;font:500 0.75rem var(--font-mono);text-transform:none;letter-spacing:0;color:var(--muted)}
 @media (max-height:700px){.nextrow .nr-m{display:none}}
+
+.reqban{border:2px solid var(--accent);margin:1rem 0}
+.reqban h3{margin:.25rem 0 .4rem}
+.reqban .reqrow{display:flex;flex-direction:column;gap:.5rem;margin-top:.6rem}
+.reqban input{font:inherit;min-height:2.75rem;padding:.5rem .75rem;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:inherit;width:100%;box-sizing:border-box}
+.reqban .btn{min-height:2.75rem;width:100%}
+.reqban .feedback{min-height:1.2em;margin:.4rem 0 0}
+@media(min-width:600px){.reqban .reqrow{flex-direction:row}.reqban .btn{width:auto;white-space:nowrap}}
+.reqban .feedback:empty{display:none}
