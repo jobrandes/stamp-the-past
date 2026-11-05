@@ -220,6 +220,17 @@ with sync_playwright() as p:
     need('does not look right' in pg.inner_text('#codeMsg').lower(),'a 12 character group for a two-stop town is rejected')
     pg.fill('#codeIn','TN3-'+'-'.join(['000000000000']*(NT-1))+'-111111'); pg.click('text=Restore'); pg.wait_for_timeout(300)
     need('does not look right' not in pg.inner_text('#codeMsg').lower(),'a code with the right group lengths restores')
+    # tester feedback Nov 4: after a right answer the next claim must be obviously a NEW claim
+    pg=new({'then-now-v3':{'city':'sparks','home':0,'p':{}}})
+    pg.locator('.stop').nth(2).click(); pg.click('text=I am here')
+    for k in range(4):
+        pg.locator('.opt').nth(k).click()
+        if pg.query_selector('.opt.right'): break
+    pg.click('text=Unlock the story'); pg.click('text=sort fact from fiction')
+    need('claim 1 of 2' in pg.inner_text('.fof').lower(),'fact or fiction says which claim you are on')
+    pg.locator('.fbtn').nth(0).click(); pg.wait_for_timeout(300)
+    _t=pg.inner_text('.fof').lower()
+    need('claim 2 of 2' in _t and 'right: well documented' in _t and 'here is the next claim' in _t,'after a right answer the page says it was right and that this is the next claim, got '+_t[:200])
     # try it from home: preview unlocks the story but saves nothing
     pg=new(); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
     need(pg.locator('[data-a=demo]').count()>=1,'unstamped stop offers Explore from home')

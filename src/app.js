@@ -1226,6 +1226,8 @@
       return nextPanel()+h+'</section>';
     }
     var c=st.claims[next];
+    if(n>1) h+='<p class="mono fcount">Claim '+(next+1)+' of '+n+'</p>';
+    if(cur.fok&&doneN>0) h+='<p class="feedback good" role="status"><strong>Right: '+FLAB[cur.fok.a]+'.</strong> '+cur.fok.t+' <span class="why">'+cur.fok.why+'</span> Here is the next claim.</p>';
     h+='<p class="why">Open book: the answers are in the story and sources you just read. Is this claim solid, disputed, or not true? Tap a label'+(('ontouchstart' in window)?', or swipe the card right for solid and left for not true':'')+'.</p>';
     h+='<div class="fcard'+(cur.fbad?' shake':'')+'" data-claim="'+next+'" tabindex="0"><p class="ftxt">'+c.t+'</p></div>';
     if(cur.fbad) h+='<p class="feedback bad" aria-live="polite">Not quite. Check the story and the sources, then try again.</p>';
@@ -1239,7 +1241,7 @@
     if(S.claims[gi]) return;
     closeBpop();
     if(k===c.a){
-      S.claims[gi]=1; streak++; cur.fbad=false; save(); render();
+      S.claims[gi]=1; streak++; cur.fbad=false; cur.fok=c; save(); render();
       toast('Right. +25 XP'+(streak>1?' ('+streak+' in a row)':''));
     } else {
       streak=0; cur.fbad=true; render(); toast('Not quite. Try again.');
