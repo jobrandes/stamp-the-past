@@ -42,8 +42,16 @@ open(R+'site/play.html','w').write(full)
 open(R+'site/_headers','w').write('/*\n  X-Content-Type-Options: nosniff\n  Referrer-Policy: strict-origin-when-cross-origin\n/play\n  X-Robots-Tag: noindex\n/play.html\n  X-Robots-Tag: noindex\n')
 
 import shutil
+import re as _re2
+_com=os.path.exists(R+'src/community.flag')
 for pg in ('privacy.html','support.html'):
-    shutil.copy(R+'src/pages/'+pg,R+'site/'+pg)
+    _t=open(R+'src/pages/'+pg).read()
+    # text about community suggestions (data-com) appears only where that feature is switched on (the test branch);
+    # the original wording (data-nocom) is used everywhere else
+    _drop,_keep=('nocom','com') if _com else ('com','nocom')
+    _t=_re2.sub(r'<span data-%s>.*?</span>\n?'%_drop,'',_t,flags=_re2.S)
+    _t=_re2.sub(r'<span data-%s>(.*?)</span>'%_keep,r'\1',_t,flags=_re2.S)
+    open(R+'site/'+pg,'w').write(_t)
 shutil.rmtree(R+'site/photos',ignore_errors=True); os.makedirs(R+'site/photos')
 for k in keys: shutil.copy(R+f'src/photos/{k}.jpg',R+f'site/photos/{k}.jpg')
 shutil.rmtree(R+'site/fonts',ignore_errors=True); shutil.copytree(R+'src/fonts',R+'site/fonts')

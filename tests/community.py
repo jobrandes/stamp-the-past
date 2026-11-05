@@ -81,6 +81,12 @@ _td=_tf.mkdtemp(); _m={'sub':'aaaaaaaa','town':'Reno','state':'NV','added':'2026
 json.dump(_m,open(_td+'/aaaaaaaa.json','w')); ok(any('promoted_by' in x for x in cm.check(places_dir=_td+'/')),'a mission file without Jo-Anne\'s promotion is refused')
 _m.update(promoted_by='Jo-Anne',promoted_on='2026-11-05'); json.dump(_m,open(_td+'/aaaaaaaa.json','w')); ok(not any('promoted_by' in x for x in cm.check(places_dir=_td+'/')),'a promoted mission file passes')
 ok(isinstance(json.load(open(R+'site/community/status.json')).get('photos'),list),'built status.json lists the published photos')
+_pv=open(R+'site/privacy.html').read(); _sp=open(R+'site/support.html').read()
+ok('If you suggest a place' in _pv and 'data-com' not in _pv and 'data-nocom' not in _pv and 'We do not let you upload photos' not in _pv,'privacy page describes suggestions on the community build')
+ok('suggested a place and want it removed' in _sp and 'data-com' not in _sp,'support page explains removal of a suggestion on the community build')
+import re as _r3
+_src=open(R+'src/pages/privacy.html').read(); _plain=_r3.sub(r'<span data-nocom>(.*?)</span>',r'\1',_r3.sub(r'<span data-com>.*?</span>\n?','',_src,flags=_r3.S),flags=_r3.S)
+ok('suggest a place' not in _plain.lower() and 'We do not let you upload photos' in _plain,'without the community flag the privacy page keeps its original wording')
 def write_places(places):
     d=TMP+'/_places'; shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
     if not os.path.isdir(TMP+'/_stories'): os.makedirs(TMP+'/_stories')
@@ -284,6 +290,11 @@ try:
     s,j=api('/api/community/submit',{'place':'Hilltop Chapel','city':'Storyville','state':'NV','oneLiner':'More photos of Hilltop Chapel.','target':cid_s,'extras':[{'url':'https://commons.wikimedia.org/wiki/File:Good_then.jpg','type':'old','caption':'Inside'}],'confirm':True})
     ok(s==200,'photos can be added to a published place: %r'%j)
     s,j2=api('/api/community/mine/'+j['edit']); ok(j2.get('target')==cid_s and j2['photos'][0]['status']=='waiting for review','add-photo submission carries its target and waits: %r'%j2)
+    # 5-photo cap counts published photos AND photos other add-photo suggestions are waiting to add
+    ex=lambda n:[{'url':f'https://commons.wikimedia.org/wiki/File:Cap_{n}_{i}.jpg','type':'detail','caption':'More %d'%i} for i in range(n)]
+    cap={'place':'Hilltop Chapel','city':'Storyville','state':'NV','oneLiner':'More photos of Hilltop Chapel.','target':cid_s,'confirm':True}
+    s,j=api('/api/community/submit',dict(cap,extras=ex(3))); ok(s==200,'1 published + 1 waiting + 3 new = 5 is allowed: %r'%j)
+    s,j=api('/api/community/submit',dict(cap,extras=ex(1))); ok(s==400 and 'up to 5' in json.dumps(j),'a sixth photo (counting those waiting) is refused with a clear reason: %r'%j)
     # a correction to a published place: text only, never edits anything by itself, goes to the inbox flagged
     fx={'place':'Hilltop Chapel','city':'Storyville','state':'NV','target':cid_s,'correction':{'text':'The chapel was built in 1911, not 1910, according to the county record.','source':'https://example.org/record'},'confirm':True}
     s,jf=api('/api/community/submit',fx); ok(s==200,'a correction can be sent with no photo: %r'%jf)

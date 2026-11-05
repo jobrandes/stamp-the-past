@@ -13,6 +13,7 @@ const root = path.resolve(process.argv[2]); const ctxName = process.env.CTX || '
 const JPG = fs.readFileSync(process.env.FAKE_JPG);
 const fakeFetch = async (u) => {
   u = String(u);
+  if (u.includes('/community/places.json')) { const f = path.join(root, 'community/places.json'); return fs.existsSync(f) ? new Response(fs.readFileSync(f), { status: 200 }) : new Response('nf', { status: 404 }); }
   if (u.includes('/community/status.json')) { const f = path.join(root, 'community/status.json'); return fs.existsSync(f) ? new Response(fs.readFileSync(f), { status: 200 }) : new Response('nf', { status: 404 }); }
   if (u.startsWith('https://commons.wikimedia.org/w/api.php')) {
     const t = decodeURIComponent(new URL(u).searchParams.get('titles'));

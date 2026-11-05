@@ -249,6 +249,16 @@ const handle = (opts) => async (req, context) => {
     const sub = { ...(v.target ? { target: v.target } : {}), ...(v.correction ? { correction: v.correction } : {}), id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, address: v.address, created: new Date().toISOString(), tokenHash: sha(token) };
     const { errors, photos } = await collectPhotos(v, id, sub, fetchFn);
     if (errors.length) return json({ errors }, 400);
+    if (v.target && photos.length) {
+      // One place holds at most 5 photos in all: count the ones already published plus the ones other add-photo suggestions have waiting.
+      let have = 0;
+      try { const r = await fetchFn(new URL('/community/places.json', url.origin).href); if (r.ok) { const pj = await r.json(); const pre = 'cm_' + v.target + '_';
+        const live = k => k && !(st.declinedPhotos || []).includes(String(k).slice(3));
+        for (const t of pj.tours || []) for (const sp of t.stops || []) if (sp.ph && String(sp.ph.k).startsWith(pre)) have = [sp.ph.k, ...(sp.more || []).map(m => m.k)].filter(live).length;
+        for (const pk of pj.packs || []) for (const sp of pk.stops || []) { const k2 = [sp.then, sp.now].map(e => e && e.ph && e.ph.k).filter(Boolean); if (k2.some(k => String(k).startsWith(pre))) have = k2.filter(live).length; } } } catch {}
+      for (const b of blobs) { const o = await store.get(b.key, { type: 'json' }); if (o && o.target === v.target && !handled.has(o.id)) have += (o.then ? 1 : 0) + (o.now ? 1 : 0) + (o.extra || []).length; }
+      if (have + photos.length > 5) return json({ errors: ['This place already has ' + have + ' photo' + (have === 1 ? '' : 's') + ' (including ones waiting for review), and a place can have up to 5. Try one photo, or suggest a correction instead.'] }, 400);
+    }
     for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
     await store.setJSON('sub/' + id, sub);
     return json({ ok: true, id, status: 'received', edit: id + token });
