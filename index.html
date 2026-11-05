@@ -1473,7 +1473,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       +(sp.community?comBadge(sp):'')+sensHtml(sp)+ph+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
       +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
-      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
+      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="shareplace" data-n="'+String(sp.name).replace(/[<>&"]/g,'')+'">Share this place</button> · <button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
   }
   function viewNear(){
     var sp=nv.sid?nbStory(nv.sid):null; if(sp) return viewStory(sp);
@@ -2411,7 +2411,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       h+='</div></div>';
     }
     if(cur.step===3 && d){ h+=factGame(st); }
-    h+='<p class="repline">'+(st.community?'<button class="link" data-a="report" data-com="'+String(st.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button>':'<button class="link" data-a="report">Something wrong here? Tell us</button>')+'</p>';
+    h+='<p class="repline">'+(st.community?'<button class="link" data-a="shareplace" data-n="'+String(st.name).replace(/[<>&"]/g,'')+'">Share this place</button> · <button class="link" data-a="report" data-com="'+String(st.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button>':'<button class="link" data-a="report">Something wrong here? Tell us</button>')+'</p>';
     return h;
   }
 
@@ -2544,6 +2544,10 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       toast('Erased. Starting fresh...'); setTimeout(function(){ location.reload(); },700); return;
     }
     if(a==='hapticTest'){ haptic('success',function(r){ toast(r==='ok'?'Buzz sent. If you felt nothing, check Settings, Sounds and Haptics, System Haptics.':r==='missing'?'The buzz part of the app did not load. Please tell us.':'The buzz did not run. Please tell us.'); }); return; }
+    if(a==='shareplace'){ var pn=b.getAttribute('data-n')||'this place', pu=location.origin+'/play.html', pt='Found a community-added history place on Stamp the Past: '+pn;
+      if(navigator.share){ navigator.share({title:'Stamp the Past',text:pt,url:pu}).catch(function(){}); }
+      else { try{ navigator.clipboard.writeText(pt+' '+pu).then(function(){ toast('Link copied.'); },function(){ toast(pu); }); }catch(err){ toast(pu); } }
+      return; }
     if(a==='report'){ showReport(b.getAttribute('data-com')?{com:b.getAttribute('data-com')}:null); return; }
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }
     if(a==='repclose'){ closeReport(); return; }
@@ -2672,11 +2676,16 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 
   var deepExp=null;
   try{ var hm=/^#explore-([a-z0-9-]+)$/.exec(location.hash||''); if(hm&&CITIES[hm[1]]&&townStory(hm[1]).length) deepExp=hm[1]; }catch(e){}
+  var deepSt=null;
+  try{ var sm=/^#story=([A-Za-z0-9_:.-]+)$/.exec(location.hash||''); if(sm&&nbStory(sm[1])) deepSt=sm[1]; }catch(e){}
   load(); applyCity();
+  if(deepSt){ /* link like /play.html#story=c_mill-valley-ca:tamalpais opens that Story card */
+    atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:deepSt,msg:''}; confirmReset=false; applyCity();
+  }
   if(deepExp){ /* link like /play#explore-savannah opens that town's Explore history list directly */
     atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:deepExp}; confirmReset=false; applyCity();
   }
-  render(); if(!deepExp) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
+  render(); if(!deepExp&&!deepSt) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
   if(NG){ try{ NG.addListener('stopTap',function(){ bgOpenPending(); }); }catch(e){} }
   if(NG&&!BGALERTS){ try{ NG.disable(); }catch(e){} } /* clear any region monitoring an older build registered */
 })();

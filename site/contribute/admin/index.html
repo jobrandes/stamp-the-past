@@ -28,12 +28,12 @@ function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cl
 function loadPublic(){
   fetch('/community/places.json').then(function(r){return r.ok?r.json():{};}).catch(function(){return {};}).then(function(j){names={};places=[];
     (j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){var k=((st.then&&st.then.ph)||(st.now&&st.now.ph)||{}).k||'',id=k.replace(/^cm_/,'').slice(0,8);names[id]={n:st.name,c:p.name,kind:'Mission stop',by:st.by||'',added:p.added||''};places.push(id);});});
-    (j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){var k=(st.ph||{}).k||'',id=k.replace(/^cm_/,'').slice(0,8);names[id]={n:st.name,c:t.name,kind:'Story stop',by:st.by||'',added:''};places.push(id);});});
+    (j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){var k=(st.ph||{}).k||'',id=k.replace(/^cm_/,'').slice(0,8);names[id]={n:st.name,c:t.name,kind:'Story stop',by:st.by||'',added:'',u:'/play.html#story='+encodeURIComponent(t.id+':'+st.id).replace(/%3A/g,':')};places.push(id);});});
     var L=$('added');L.innerHTML='';$('nadd').textContent=places.length?'('+places.length+')':'';
     if(!places.length){L.textContent='Nothing has been added yet.';return;}
     places.sort(function(a,b){return String(names[b].added).localeCompare(String(names[a].added));});
     places.forEach(function(id){var x=names[id],d=el('div','row'),b=el('b','',x.n);d.appendChild(b);d.appendChild(el('span','mut',x.c+' · '+x.kind+(x.by?' · by '+x.by:'')+(x.added?' · '+x.added:'')));
-      var a=el('a','','Open in the app');a.href='/play.html';d.appendChild(a);L.appendChild(d);});
+      var a=el('a','',x.u?'Open this place':'Open in the app');a.href=x.u||'/play.html';d.appendChild(a);L.appendChild(d);});
   });
 }
 // owner tools
@@ -55,6 +55,7 @@ function loadReports(){
     j.reports.forEach(function(x){var nm=names[x.id]||{n:'Place '+x.id,c:''},d=el('div','row');d.appendChild(el('b','',nm.n));d.appendChild(el('span','mut',(nm.c?nm.c+' · ':'')+x.n+' report'+(x.n===1?'':'s')+(x.last?' · last '+x.last.slice(0,10):'')));
       d.appendChild(el('span','tag '+(x.hidden?'h':'v'),x.hidden?'Hidden in the app':(x.cleared?'Visible (you cleared it)':'Visible')));
       if(x.hidden){var u=el('button','','Unhide this place');u.type='button';u.addEventListener('click',function(){u.disabled=true;fetch('/api/community/unhide/'+x.id,{method:'POST',headers:hdr()}).then(function(r){if(!r.ok)throw 0;loadReports();}).catch(function(){u.disabled=false;$('err').hidden=false;$('err').textContent='Could not unhide. Try again.';});});d.appendChild(u);}
+      if(nm.u){var o=el('a','','Open this place');o.href=nm.u;d.appendChild(o);}
       L.appendChild(d);});
   }).catch(function(){$('list').textContent='Could not load reports.';});
 }

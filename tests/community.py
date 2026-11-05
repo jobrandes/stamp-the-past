@@ -157,6 +157,7 @@ try:
     # slice 1: label and report on a community place
     ok(pg.evaluate("!!document.querySelector('.combadge')") and 'community-added' in pg.inner_text('.combadge').lower(),'community stop shows the Community-added label')
     ok(pg.evaluate("document.querySelector('.repline [data-a=report]').innerText")=='Report this place','community stop says Report this place')
+    ok(pg.evaluate("!!document.querySelector('.repline [data-a=shareplace]')"),'community stop has Share this place')
     sent=[]
     pg.route('**/',lambda r: (sent.append(r.request.post_data or '') if r.request.method=='POST' else None, r.fulfill(status=200,body='ok') if r.request.method=='POST' else r.continue_())[1])
     pg.click('.repline [data-a=report]'); pg.wait_for_selector('#report')
@@ -329,6 +330,7 @@ try:
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/admin/'); pg.wait_for_timeout(600)
     ok('Credit Probe' in pg.inner_text('#added') and 'by Dad' in pg.inner_text('#added'),'recently added list needs no key: '+pg.inner_text('#added'))
+    ok(pg.evaluate("[...document.querySelectorAll('#added a')].every(a=>a.getAttribute('href').indexOf('/play.html#story=')==0||a.getAttribute('href')=='/play.html')"),'admin place links deep-link to the story card')
     ok(pg.is_hidden('#tools'),'owner tools stay locked without a key')
     pg.fill('#k','wrong-key-wrong-key'); pg.click('#go'); pg.wait_for_selector('#err:not([hidden])'); ok('not accepted' in pg.inner_text('#err'),'admin page rejects a wrong key')
     pg.fill('#k',KEY); pg.click('#go'); pg.wait_for_selector('#tools:not([hidden])'); pg.wait_for_selector('#list .row')
