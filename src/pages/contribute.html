@@ -24,7 +24,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 .sum{margin:0;padding:0;list-style:none}.sum li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}.sum li:last-child{border:0}.sum b{flex:none;width:92px;color:var(--mut);font-weight:600;font-size:.88rem}.sum span{min-width:0;word-break:break-word}
 .stampin{width:132px;height:132px;margin:8px auto 4px;border:5px double var(--ok);border-radius:50%;display:grid;place-items:center;color:var(--ok);font:700 1.4rem/1 "Big Shoulders Display",sans-serif;text-transform:uppercase;text-align:center;transform:rotate(-8deg);animation:thud .5s cubic-bezier(.2,1.6,.4,1) both}@keyframes thud{from{opacity:0;transform:rotate(-24deg) scale(2)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
 .tl{list-style:none;margin:10px 0;padding:0}.tl li{position:relative;padding:0 0 14px 28px}.tl li::before{content:'';position:absolute;left:5px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--line)}.tl li.d::before{background:var(--ok)}.tl li::after{content:'';position:absolute;left:10px;top:18px;bottom:-2px;width:2px;background:var(--line)}.tl li:last-child::after{display:none}
-.priv summary{font-weight:600}
+.priv summary{font-weight:600}.finder{margin:4px 0 6px}.finderbtn{display:flex;align-items:center;justify-content:center;min-height:52px;border:1.5px solid var(--ac);border-radius:14px;color:var(--ac);font-weight:700;text-decoration:none;text-align:center;padding:8px 14px}.finderhow{margin-top:8px}
 </style></head><body><main>
 <p class="eyebrow">Stamp the Past · community test</p>
 <h1>Suggest one place</h1>
@@ -47,6 +47,8 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 </fieldset>
 <fieldset class="step" data-step="2" hidden><legend>Photos</legend>
 <p class="help" style="margin-top:0"><strong>Add at least one photo, old or new.</strong> With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
+<div class="finder"><a id="findph" class="finderbtn" href="https://commons.wikimedia.org/w/index.php?search=&ns6=1" target="_blank" rel="noopener">Find a photo of this place on Commons</a>
+<details class="finderhow"><summary>How do I copy the link?</summary><ol class="help" style="padding-left:1.2em;margin:.2em 0"><li>Tap the button. Commons opens in a new tab with a search for your place.</li><li>Tap a photo you like. Check that it shows the right place.</li><li>Check the license box on that page says public domain, CC0, CC BY or CC BY-SA.</li><li>Copy the address from your browser's address bar and paste it below. It looks like commons.wikimedia.org/wiki/File:...</li></ol><p class="help">No luck? Photos that are not on Commons can't be used yet. You can still send the place with whichever photo you have.</p></details></div>
 <div class="era"><span>Then</span> an old photo</div>
 <label for="then">Link to the photo's page on Wikimedia Commons</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off">
 <p class="help">The address should start with commons.wikimedia.org/wiki/File:. We check the license for you.</p><div id="pvt" aria-live="polite"></div>
@@ -94,9 +96,14 @@ var ST={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'
 (function(){var dl=document.getElementById('sts');Object.keys(ST).forEach(function(k){var o=document.createElement('option');o.value=k;o.label=ST[k];dl.appendChild(o);});})();
 function $(id){return document.getElementById(id);}
 $('state').addEventListener('blur',function(){var t=this.value.trim().toLowerCase();if(!t)return;for(var k in ST){if(ST[k].toLowerCase()===t||k.toLowerCase()===t){this.value=k;break;}}mock();});
-function mock(){var n=$('place').value.trim(),c=$('city').value.trim(),st=$('state').value.trim();$('mkn').textContent=n||'Your place';$('mkt').textContent=[c,st].filter(Boolean).join(', ')||'Town, State';}
-['place','city','state'].forEach(function(i){$(i).addEventListener('input',mock);});
+function finder(){var q=[$('place').value.trim(),$('city').value.trim()].filter(Boolean).join(' ');$('findph').href='https://commons.wikimedia.org/w/index.php?ns6=1&search='+encodeURIComponent(q);}
+function mock(){finder();var n=$('place').value.trim(),c=$('city').value.trim(),st=$('state').value.trim();$('mkn').textContent=n||'Your place';$('mkt').textContent=[c,st].filter(Boolean).join(', ')||'Town, State';}
+['place','city','state'].forEach(function(i){$(i).addEventListener('input',function(){dupOk=null;$('nx1').textContent='Next: photos';mock();});});
 $('one').addEventListener('input',function(){$('cnt').textContent=this.value.length+'/300';});
+var dupOk=null,known=[];
+function norm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+fetch('/community/places.json').then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return;(j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){known.push({n:st.name,c:p.name});});});(j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){known.push({n:st.name,c:t.name});});});}).catch(function(){});
+function dupFor(place,city){var a=norm(place),c=norm(city);if(a.length<4)return null;for(var i=0;i<known.length;i++){var b=norm(known[i].n);if(norm(known[i].c)===c&&b&&(a===b||a.indexOf(b)>-1||b.indexOf(a)>-1))return known[i].n;}return null;}
 var cur=1;
 function goStep(n){cur=n;document.querySelectorAll('#f [data-step]').forEach(function(f){var on=+f.getAttribute('data-step')===n;f.hidden=!on;if(on){f.classList.remove('step');void f.offsetWidth;f.classList.add('step');}});
   document.querySelectorAll('#steps li').forEach(function(li){var k=+li.getAttribute('data-s');li.className=k===n?'on':(k<n?'dn':'');});
@@ -104,7 +111,9 @@ function goStep(n){cur=n;document.querySelectorAll('#f [data-step]').forEach(fun
 function bad(id,on){$(id).classList.toggle('bad',!!on);}
 function showE(id,msg){var e=$(id);e.textContent=msg;e.hidden=!msg;}
 $('nx1').addEventListener('click',function(){var miss=[];if(!v('place').trim()){miss.push('the name of the place');bad('place',1);}else bad('place',0);if(!v('city').trim()){miss.push('the town');bad('city',1);}else bad('city',0);if(v('one').trim().length<10){miss.push('one line about it (at least a few words)');bad('one',1);}else bad('one',0);
-  if(miss.length){showE('e1','Please add '+miss.join(', ')+'.');return;}showE('e1','');goStep(2);});
+  if(miss.length){showE('e1','Please add '+miss.join(', ')+'.');return;}
+  var key=norm(v('place'))+'|'+norm(v('city'));if(dupOk!==key){var d=dupFor(v('place'),v('city'));if(d){dupOk=key;showE('e1','A place like "'+d+'" is already in '+v('city').trim()+'. If yours is different, tap Next again to continue.');this.textContent='Next anyway: photos';return;}}
+  this.textContent='Next: photos';showE('e1','');goStep(2);});
 $('bk2').addEventListener('click',function(){goStep(1);});$('bk3').addEventListener('click',function(){goStep(2);});
 $('nx2').addEventListener('click',function(){if(!v('then').trim()&&!v('now').trim()&&!photo){showE('e2','Please add at least one photo, an old one, a recent one, or both.');return;}showE('e2','');goStep(3);});
 function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
@@ -122,7 +131,7 @@ function preview(inputId,boxId,key){
     if(o.chip){t.appendChild(document.createElement('br'));var c=document.createElement('span');c.className='chip'+(o.good?' good':'');c.textContent=o.chip;t.appendChild(c);}
     d.appendChild(t);box.appendChild(d);if(kind==='ok'){PV[key]=o.thumb;fadeUpd();}}
   function run(){var u=inp.value.trim(),my=++seq;if(!u){render(null);return;}var title=cTitle(u);
-    if(!title){render('bad',{head:'That is not a Commons photo page',line:'The address should start with commons.wikimedia.org/wiki/File:'});return;}
+    if(!title){if(/(^|\.)loc\.gov\//i.test(u.replace(/^https?:\/\//i,''))){render('bad',{head:'Library of Congress links are not supported yet',line:'Try the Find a photo button above. Many LoC photos are also on Commons.'});return;}render('bad',{head:'That is not a Commons photo page',line:'The address should start with commons.wikimedia.org/wiki/File:'});return;}
     render('info',{head:'Checking…',line:title.replace(/^File:/,'')});
     var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},7000);
     fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=240&titles='+encodeURIComponent(title),ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);if(my!==seq)return;
