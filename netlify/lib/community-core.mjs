@@ -21,7 +21,33 @@ export function parseSourceLink(raw) {
     if (t.length > 250) return null;
     return { kind: 'commons', title: t, page: 'https://commons.wikimedia.org/wiki/' + encodeURIComponent(t.replace(/ /g, '_')).replace(/%3A/g, ':').replace(/%2F/g, '/') };
   }
+  // Library of Congress item pages: /item/<id>/ or /pictures/item/<id>/ (read from the LoC JSON record, checked Nov 5 2026).
+  if (u.hostname === 'www.loc.gov' || u.hostname === 'loc.gov') {
+    const m = u.pathname.match(/^\/(?:pictures\/)?item\/([A-Za-z0-9._-]{3,40})\/?$/);
+    if (!m) return null;
+    return { kind: 'loc', id: m[1], page: 'https://www.loc.gov/item/' + m[1] + '/' };
+  }
   return null;
+}
+
+// Library of Congress: accept ONLY when its own rights statement is a plain "No known restrictions" (the wording used on
+// Detroit Publishing, FSA/OWI and similar records). Anything that says "may be restricted", "images copied from other sources",
+// "publication may be restricted" or is missing is refused, so we never guess.
+export function readLoc(json) {
+  const it = json?.item;
+  if (!it || typeof it !== 'object') return { ok: false, error: 'The Library of Congress has no record with that address.' };
+  const rights = clean(Array.isArray(it.rights_advisory) ? it.rights_advisory.join(' ') : it.rights_advisory || (Array.isArray(it.rights_information) ? it.rights_information.join(' ') : it.rights_information));
+  const fine = /^no known restrictions\b/i.test(rights) && !/copied from other sources|may be restricted|publication may be|not evaluated|restricted/i.test(rights.replace(/^no known restrictions/i, ''));
+  if (!fine) return { ok: false, error: `The Library of Congress does not clearly say this photo is free to use (its rights note: "${rights.slice(0, 120) || 'not stated'}"). Please pick another photo.` };
+  if (it.access_restricted === true) return { ok: false, error: 'That Library of Congress record has no downloadable photo (it may be a group of images). Open a single photo from it and paste that link.' };
+  const imgs = (it.image_url || []).map((x) => String(x).split('#')[0]).filter((x) => /^https:\/\/tile\.loc\.gov\/.+\.jpe?g$/i.test(x));
+  const thumb = imgs.find((x) => /r\.jpe?g$/i.test(x)) || imgs.filter((x) => !/150px/.test(x)).pop();
+  if (!thumb) return { ok: false, error: 'That Library of Congress record has no photo we can use.' };
+  const who = (it.contributor_names || []).map((n) => clean(n).replace(/,\s*(photographer|publisher|copyright claimant|creator|author|artist|printer|lithographer|engraver|delineator)\b.*$/i, '')).filter(Boolean)[0];
+  const credit = (who ? who + ' (Library of Congress)' : 'Library of Congress').slice(0, 120);
+  const year = (String(it.date || '') + ' ' + [].concat(it.created_published || []).join(' ')).match(/\b(1[5-9]\d\d|20\d\d)\b/)?.[0] || '';
+  const desc = '';
+  return { ok: true, meta: { license: 'Public domain', credit, year, title: stripHtml(it.title).slice(0, 160), desc, thumb, mime: 'image/jpeg' } };
 }
 
 // Map a Commons license string to one of our four labels, or null when it is not free enough.
@@ -73,8 +99,8 @@ export function validate(input) {
   };
   // At least one photo is needed. "Then" only = waits for a "now" photo. "Now" only = becomes a Story stop (no old photo yet).
   const hasThenUrl = clean(input.thenUrl), hasNowUrl = clean(input.nowUrl), hasUpload = !!input.nowPhoto;
-  if (hasThenUrl) { v.then = parseSourceLink(input.thenUrl); if (!v.then) errs.push('"Then" photo: paste the link to its File: page on commons.wikimedia.org, or leave it empty.'); }
-  if (hasNowUrl) { v.now = parseSourceLink(input.nowUrl); if (!v.now) errs.push('"Now" photo: paste a commons.wikimedia.org File: page link, or upload your own instead.'); }
+  if (hasThenUrl) { v.then = parseSourceLink(input.thenUrl); if (!v.then) errs.push('"Then" photo: paste the link to its File: page on commons.wikimedia.org, or its item page on loc.gov, or leave it empty.'); }
+  if (hasNowUrl) { v.now = parseSourceLink(input.nowUrl); if (!v.now) errs.push('"Now" photo: paste a commons.wikimedia.org File: page link or a loc.gov item link, or upload your own instead.'); }
   else if (hasUpload) {
     v.nowUpload = input.nowPhoto;
     if (!decodeJpegDataUrl(input.nowPhoto)) errs.push('"Now" photo: that upload could not be read. Try another photo.');

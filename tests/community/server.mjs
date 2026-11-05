@@ -21,6 +21,13 @@ const fakeFetch = async (u) => {
     if (t.includes('NC')) return new Response(JSON.stringify(ii('CC BY-NC 2.0', 'nc')));
     return new Response(JSON.stringify(ii('CC BY-SA 4.0', t)));
   }
+  if (u.startsWith('https://www.loc.gov/item/')) {
+    const id = u.split('/item/')[1].split('/')[0];
+    if (id.includes('gone')) return new Response('nf', { status: 404 });
+    const ra = id.includes('rstr') ? 'Publication may be restricted. For information see Rights and Restrictions.' : id.includes('copied') ? 'No known restrictions on images made by the U.S. Government; images copied from other sources may be restricted.' : 'No known restrictions on publication.';
+    return new Response(JSON.stringify({ item: { title: 'Fake Depot, 1906', date: '1906-01-01', rights_advisory: ra, access_restricted: false, contributor_names: ['Detroit Publishing Co., publisher'], image_url: ['https://tile.loc.gov/fake/x_150px.jpg#h=1&w=1', 'https://tile.loc.gov/fake/xr.jpg#h=640&w=505'], description: ['A test depot.'] } }));
+  }
+  if (u.startsWith('https://tile.loc.gov/fake/')) return new Response(JPG, { status: 200 });
   if (u.startsWith('https://upload.wikimedia.org/fake/')) return new Response(JPG, { status: 200 });
   throw new Error('unexpected fetch ' + u);
 };

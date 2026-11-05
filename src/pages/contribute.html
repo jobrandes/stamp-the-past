@@ -48,12 +48,12 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <fieldset class="step" data-step="2" hidden><legend>Photos</legend>
 <p class="help" style="margin-top:0"><strong>Add at least one photo, old or new.</strong> With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
 <div class="finder"><a id="findph" class="finderbtn" href="https://commons.wikimedia.org/w/index.php?search=&ns6=1" target="_blank" rel="noopener">Find a photo of this place on Commons</a>
-<details class="finderhow"><summary>How do I copy the link?</summary><ol class="help" style="padding-left:1.2em;margin:.2em 0"><li>Tap the button. Commons opens in a new tab with a search for your place.</li><li>Tap a photo you like. Check that it shows the right place.</li><li>Check the license box on that page says public domain, CC0, CC BY or CC BY-SA.</li><li>Copy the address from your browser's address bar and paste it below. It looks like commons.wikimedia.org/wiki/File:...</li></ol><p class="help">No luck? Photos that are not on Commons can't be used yet. You can still send the place with whichever photo you have.</p></details></div>
+<details class="finderhow"><summary>How do I copy the link?</summary><ol class="help" style="padding-left:1.2em;margin:.2em 0"><li>Tap the button. Commons opens in a new tab with a search for your place.</li><li>Tap a photo you like. Check that it shows the right place.</li><li>Check the license box on that page says public domain, CC0, CC BY or CC BY-SA.</li><li>Copy the address from your browser's address bar and paste it below. It looks like commons.wikimedia.org/wiki/File:...</li></ol><p class="help">No luck? Photos that are on neither Commons nor the Library of Congress can't be used yet. You can still send the place with whichever photo you have.</p></details></div>
 <div class="era"><span>Then</span> an old photo</div>
-<label for="then">Link to the photo's page on Wikimedia Commons</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off">
-<p class="help">The address should start with commons.wikimedia.org/wiki/File:. We check the license for you.</p><div id="pvt" aria-live="polite"></div>
+<label for="then">Link to the photo's page on Wikimedia Commons or the Library of Congress</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off">
+<p class="help">The address should start with commons.wikimedia.org/wiki/File: (or loc.gov/item/ for a Library of Congress photo). We check the license for you.</p><div id="pvt" aria-live="polite"></div>
 <div class="era"><span>Now</span> today</div>
-<label for="now">Link to a Commons photo page <span class="mut" style="font-weight:400">(photos must be free to use; we read the license and credit for you)</span></label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div id="pvn" aria-live="polite"></div>
+<label for="now">Link to a Commons or Library of Congress photo page <span class="mut" style="font-weight:400">(photos must be free to use; we read the license and credit for you)</span></label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div id="pvn" aria-live="polite"></div>
 <details id="own" hidden><summary>Or upload my own photo</summary>
 <label for="file">Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0"><button type="button" class="ghost" id="rmphoto" hidden>Remove photo</button>
 <label class="chk"><input type="checkbox" id="took"><span>I took this photo myself, and I agree to share it under CC BY-SA 4.0 with my credit shown</span></label>
@@ -122,6 +122,7 @@ function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')]
 // Commons link preview (browser asks Commons directly; if it cannot, the server still checks on send)
 var PV={t:null,n:null};
 function cTitle(u){var m=String(u).trim().match(/^https?:\/\/(?:[a-z]+\.)?(?:commons\.)?wikimedia\.org\/wiki\/(File:[^?#]+)/i);if(!m)return null;try{return decodeURIComponent(m[1]).replace(/_/g,' ');}catch(e){return null;}}
+function locId(u){var m=String(u).trim().match(/^https:\/\/(?:www\.)?loc\.gov\/(?:pictures\/)?item\/([A-Za-z0-9._-]{3,40})\/?$/i);return m?m[1]:null;}
 function plain(h){var d=document.createElement('div');d.innerHTML=String(h||'');return (d.textContent||'').trim().slice(0,70);}
 function preview(inputId,boxId,key){
   var inp=$(inputId),box=$(boxId),tmr=null,seq=0;
@@ -130,10 +131,17 @@ function preview(inputId,boxId,key){
     var t=document.createElement('div');t.className='t';var b=document.createElement('b');b.textContent=o.head;t.appendChild(b);var sp=document.createElement('span');sp.textContent=o.line;t.appendChild(sp);
     if(o.chip){t.appendChild(document.createElement('br'));var c=document.createElement('span');c.className='chip'+(o.good?' good':'');c.textContent=o.chip;t.appendChild(c);}
     d.appendChild(t);box.appendChild(d);if(kind==='ok'){PV[key]=o.thumb;fadeUpd();}}
-  function run(){var u=inp.value.trim(),my=++seq;if(!u){render(null);return;}var title=cTitle(u);
-    if(!title){if(/(^|\.)loc\.gov\//i.test(u.replace(/^https?:\/\//i,''))){render('bad',{head:'Library of Congress links are not supported yet',line:'Try the Find a photo button above. Many LoC photos are also on Commons.'});return;}render('bad',{head:'That is not a Commons photo page',line:'The address should start with commons.wikimedia.org/wiki/File:'});return;}
-    render('info',{head:'Checking…',line:title.replace(/^File:/,'')});
+  function run(){var u=inp.value.trim(),my=++seq;if(!u){render(null);return;}var title=cTitle(u),lid=locId(u);
+    if(!title&&!lid){render('bad',{head:'That is not a Commons or Library of Congress photo page',line:'Use an address starting with commons.wikimedia.org/wiki/File: or loc.gov/item/'});return;}
     var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},7000);
+    if(lid){render('info',{head:'Checking…',line:'Library of Congress item '+lid});
+      fetch('https://www.loc.gov/item/'+lid+'/?fo=json',ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);if(my!==seq)return;var it=j&&j.item;if(!it){render('bad',{head:'No such Library of Congress item',line:'Check that you copied the whole address.'});return;}
+        var ra=String(Array.isArray(it.rights_advisory)?it.rights_advisory.join(' '):(it.rights_advisory||it.rights_information||'')).trim(),fine=/^no known restrictions/i.test(ra)&&!/copied from other sources|may be restricted|publication may be|not evaluated|restricted/i.test(ra.replace(/^no known restrictions/i,''))&&it.access_restricted!==true&&(it.image_url||[]).some(function(x){return /tile\.loc\.gov/.test(x);});
+        var imgs=(it.image_url||[]).map(function(x){return String(x).split('#')[0];}).filter(function(x){return /^https:\/\/tile\.loc\.gov\/.+\.jpe?g$/i.test(x);}),th=imgs.filter(function(x){return /r\.jpe?g$/i.test(x);})[0]||imgs[imgs.length-1];
+        var who=((it.contributor_names||[])[0]||'').replace(/,\s*(photographer|publisher|copyright claimant|creator|author|artist|printer|lithographer|engraver|delineator)\b.*$/i,'');
+        render(fine?'ok':'bad',{thumb:th,head:plain(it.title)||'Library of Congress photo',line:who?'By '+who:'Library of Congress',chip:fine?'✓ No known restrictions':'Rights unclear: we cannot use this one',good:fine});
+      }).catch(function(){clearTimeout(to);if(my!==seq)return;render('info',{head:'Library of Congress photo',line:'Preview unavailable here. We still check the rights note when you send.'});});return;}
+    render('info',{head:'Checking…',line:title.replace(/^File:/,'')});
     fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=240&titles='+encodeURIComponent(title),ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);if(my!==seq)return;
       var pg=j&&j.query&&j.query.pages,k=pg&&Object.keys(pg)[0],ii=k&&pg[k].imageinfo&&pg[k].imageinfo[0];
       if(!ii){render('bad',{head:'No such file on Commons',line:'Check that you copied the whole address.'});return;}

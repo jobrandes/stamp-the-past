@@ -53,7 +53,11 @@ try:
   good={'place':'Old Depot','city':'Testville','state':'NV','oneLiner':'The old train depot downtown.','thenUrl':'https://commons.wikimedia.org/wiki/File:Good_then.jpg','nowUrl':'https://commons.wikimedia.org/wiki/File:Good_now.jpg','confirm':True}
   s,j=api('/api/community/submit',{'city':'X'}); ok(s==400 and j['errors'],'empty submit should be rejected')
   s,j=api('/api/community/submit',{**good,'thenUrl':'https://example.com/x.jpg'}); ok(s==400 and 'commons' in ' '.join(j['errors']).lower(),'non-commons link rejected: %r'%j)
-  s,j=api('/api/community/submit',{**good,'thenUrl':'https://www.loc.gov/pictures/item/2016800123/'}); ok(s==400,'loc link not accepted yet')
+  s,j=api('/api/community/submit',{**good,'place':'LoC Probe','thenUrl':'https://www.loc.gov/pictures/item/2016800123/'}); ok(s==200,'plain LoC link accepted: %r'%j); locid=j.get('id')
+  s,pj=api('/api/community/pending',key=KEY); lp=[x for x in pj['pending'] if x['id']==locid]; ok(lp and lp[0]['then']['kind']=='loc' and lp[0]['then']['license']=='Public domain' and 'Detroit Publishing' in lp[0]['then']['credit'] and lp[0]['then']['year']=='1906' and lp[0]['then']['page']=='https://www.loc.gov/item/2016800123/','LoC photo is stored with credit, year and page: %r'%(lp and lp[0]['then'])); api('/api/community/delete/'+locid,{},key=KEY)
+  for bad_id,why in (('rstr1','does not clearly say'),('copied1','does not clearly say'),('gone1','could not reach')):
+    s,j=api('/api/community/submit',{**good,'thenUrl':'https://www.loc.gov/item/%s/'%bad_id}); ok(s==400 and why in ' '.join(j['errors']).lower(),'LoC %s refused: %r'%(bad_id,j))
+  s,j=api('/api/community/submit',{**good,'thenUrl':'https://www.loc.gov/search/?q=x'}); ok(s==400,'LoC search page is not an item link')
   s,j=api('/api/community/submit',{**good,'thenUrl':'https://commons.wikimedia.org/wiki/File:NC_photo.jpg'}); ok(s==400 and 'license' in ' '.join(j['errors']),'non-commercial license must be rejected: %r'%j)
   s,j=api('/api/community/submit',{**good,'nowUrl':'https://commons.wikimedia.org/wiki/File:Missing.jpg'}); ok(s==400 and 'no file' in ' '.join(j['errors']).lower(),'missing Commons file: %r'%j)
   s,j=api('/api/community/submit',{**good,'confirm':False}); ok(s==400,'confirm box required')
@@ -73,7 +77,7 @@ try:
     pg.click('#nx2'); ok('at least one photo' in pg.inner_text('#e2').lower(),'photo message missing')
     pg.fill('#then','https://example.com/x.jpg'); pg.wait_for_timeout(700); ok('not a commons' in pg.inner_text('#pvt').lower(),'non-Commons link is flagged in the preview: '+pg.inner_text('#pvt'))
     ok('Old%20Depot%20Testville' in pg.get_attribute('#findph','href'),'Find a photo link searches for the place and town: '+pg.get_attribute('#findph','href'))
-    pg.fill('#then','https://www.loc.gov/pictures/item/2016800123/'); pg.wait_for_timeout(700); ok('library of congress' in pg.inner_text('#pvt').lower(),'LoC link gets a clear message: '+pg.inner_text('#pvt'))
+    pg.fill('#then','https://www.loc.gov/pictures/item/2016800123/'); pg.wait_for_timeout(700); ok('library of congress' in pg.inner_text('#pvt').lower() and 'not supported' not in pg.inner_text('#pvt').lower(),'LoC link is recognised in the preview: '+pg.inner_text('#pvt'))
     pg.fill('#then','https://commons.wikimedia.org/wiki/File:Good_then.jpg')
     pg.fill('#now','https://commons.wikimedia.org/wiki/File:Good_now.jpg'); pg.click('#nx2'); pg.wait_for_selector('#confirm')
     ok('Old Depot' in pg.inner_text('#sum') and 'Commons link' in pg.inner_text('#sum'),'review step summarises the entry')

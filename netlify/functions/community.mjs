@@ -3,7 +3,7 @@
 import { getStore } from '@netlify/blobs';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import sharp from 'sharp';
-import { validate, parseSourceLink, readCommons, isImageBytes, decodeJpegDataUrl } from '../lib/community-core.mjs';
+import { validate, parseSourceLink, readCommons, readLoc, isImageBytes, decodeJpegDataUrl } from '../lib/community-core.mjs';
 
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const sha = (t) => createHash('sha256').update(t).digest('hex');
@@ -30,6 +30,21 @@ async function commonsPhoto(link, fetchFn) {
     if (!clean) return { ok: false, error: 'That photo could not be read as an image. Try another photo.' };
     return { ok: true, meta: res.meta, buf: clean, type: 'image/jpeg' };
   } catch { return { ok: false, error: 'Could not download that photo from Commons. Try again in a minute.' }; }
+}
+
+async function locPhoto(link, fetchFn) {
+  let j;
+  try { const r = await fetchFn('https://www.loc.gov/item/' + link.id + '/?fo=json', { headers: UA }); if (!r.ok) throw new Error('x'); j = await r.json(); } catch { return { ok: false, error: 'Could not reach the Library of Congress just now (or that item does not exist). Check the link and try again in a minute.' }; }
+  const res = readLoc(j);
+  if (!res.ok) return res;
+  try {
+    const r = await fetchFn(res.meta.thumb, { headers: UA }); if (!r.ok) throw new Error('x');
+    const buf = Buffer.from(await r.arrayBuffer()); const type = isImageBytes(buf);
+    if (!type) return { ok: false, error: 'That photo could not be fetched at a small size. Try another photo.' };
+    const clean = await cleanImage(buf);
+    if (!clean) return { ok: false, error: 'That photo could not be read as an image. Try another photo.' };
+    return { ok: true, meta: res.meta, buf: clean, type: 'image/jpeg' };
+  } catch { return { ok: false, error: 'Could not download that photo from the Library of Congress. Try again in a minute.' }; }
 }
 
 const handle = (opts) => async (req, context) => {
@@ -173,15 +188,15 @@ const handle = (opts) => async (req, context) => {
 async function collectPhotos(v, id, sub, fetchFn) {
   const photos = [], errors = [];
   // "then" photo
-  if (v.then && v.then.kind === 'commons') {
-    const r = await commonsPhoto(v.then, fetchFn);
-    if (!r.ok) errors.push('"Then" photo: ' + r.error); else { sub.then = { kind: 'commons', page: v.then.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_t`, r.buf, r.type]); }
+  if (v.then && (v.then.kind === 'commons' || v.then.kind === 'loc')) {
+    const r = await (v.then.kind === 'loc' ? locPhoto : commonsPhoto)(v.then, fetchFn);
+    if (!r.ok) errors.push('"Then" photo: ' + r.error); else { sub.then = { kind: v.then.kind, page: v.then.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_t`, r.buf, r.type]); }
   }
   // "now" photo
   if (v.now) {
-    if (v.now.kind === 'commons') {
-      const r = await commonsPhoto(v.now, fetchFn);
-      if (!r.ok) errors.push('"Now" photo: ' + r.error); else { sub.now = { kind: 'commons', page: v.now.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_n`, r.buf, r.type]); }
+    if (v.now.kind === 'commons' || v.now.kind === 'loc') {
+      const r = await (v.now.kind === 'loc' ? locPhoto : commonsPhoto)(v.now, fetchFn);
+      if (!r.ok) errors.push('"Now" photo: ' + r.error); else { sub.now = { kind: v.now.kind, page: v.now.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title, desc: r.meta.desc, photo: true }; photos.push([`photo/${id}_n`, r.buf, r.type]); }
     }
   } else if (v.nowUpload) {
     const buf = await cleanImage(decodeJpegDataUrl(v.nowUpload));
