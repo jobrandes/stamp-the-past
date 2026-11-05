@@ -27,7 +27,8 @@ with sync_playwright() as p:
             out[f'{city}:{i}:checkin']=h(pg.inner_html('#main'))
             pg.click('text=Unlock the story'); out[f'{city}:{i}:unlock']=h(pg.inner_html('#main'))
             pg.click('text=sort fact from fiction'); out[f'{city}:{i}:fof']=h(pg.inner_html('#main'))
-            for rep in range(6):
+            for rep in range(8):
+                if pg.locator('[data-a=fnext]').count(): pg.click('[data-a=fnext]')
                 if pg.locator('.fcard').count()==0: break
                 for k in range(3):
                     if pg.locator('.fcard').count()==0: break

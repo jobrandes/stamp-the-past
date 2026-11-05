@@ -230,7 +230,10 @@ with sync_playwright() as p:
     need('claim 1 of 2' in pg.inner_text('.fof').lower(),'fact or fiction says which claim you are on')
     pg.locator('.fbtn').nth(0).click(); pg.wait_for_timeout(300)
     _t=pg.inner_text('.fof').lower()
-    need('claim 2 of 2' in _t and 'right: well documented' in _t and 'here is the next claim' in _t,'after a right answer the page says it was right and that this is the next claim, got '+_t[:200])
+    need('right!' in _t and 'claim 1 of 2 done' in _t and pg.locator('.fcard').count()==0 and pg.locator('.fbtn').count()==0,'after a right answer the page stops on a Right! result with no new claim yet, got '+_t[:200])
+    need(pg.locator('[data-a=fnext]').count()==1 and 'next claim (2 of 2)' in pg.inner_text('[data-a=fnext]').lower(),'a Next claim button leads to claim 2')
+    pg.click('[data-a=fnext]'); pg.wait_for_timeout(300)
+    need('claim 2 of 2' in pg.inner_text('.fof').lower() and pg.locator('.fcard').count()==1,'Next claim shows claim 2')
     # try it from home: preview unlocks the story but saves nothing
     pg=new(); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
     need(pg.locator('[data-a=demo]').count()>=1,'unstamped stop offers Explore from home')

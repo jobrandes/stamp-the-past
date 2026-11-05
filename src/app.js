@@ -1226,8 +1226,11 @@
       return nextPanel()+h+'</section>';
     }
     var c=st.claims[next];
+    if(cur.fwait&&cur.fok&&doneN>0){
+      h+='<p class="mono fcount">Claim '+doneN+' of '+n+' done</p><div class="fresult" role="status"><p class="fr-big">Right!</p><p class="fr-claim">'+cur.fok.t+'</p><p class="feedback good"><strong>'+FLAB[cur.fok.a]+'.</strong> <span class="why">'+cur.fok.why+'</span></p></div><button class="btn fnext" data-a="fnext">Next claim ('+(doneN+1)+' of '+n+') &rsaquo;</button></section>';
+      return h;
+    }
     if(n>1) h+='<p class="mono fcount">Claim '+(next+1)+' of '+n+'</p>';
-    if(cur.fok&&doneN>0) h+='<p class="feedback good" role="status"><strong>Right: '+FLAB[cur.fok.a]+'.</strong> '+cur.fok.t+' <span class="why">'+cur.fok.why+'</span> Here is the next claim.</p>';
     h+='<p class="why">Open book: the answers are in the story and sources you just read. Is this claim solid, disputed, or not true? Tap a label'+(('ontouchstart' in window)?', or swipe the card right for solid and left for not true':'')+'.</p>';
     h+='<div class="fcard'+(cur.fbad?' shake':'')+'" data-claim="'+next+'" tabindex="0"><p class="ftxt">'+c.t+'</p></div>';
     if(cur.fbad) h+='<p class="feedback bad" aria-live="polite">Not quite. Check the story and the sources, then try again.</p>';
@@ -1241,7 +1244,7 @@
     if(S.claims[gi]) return;
     closeBpop();
     if(k===c.a){
-      S.claims[gi]=1; streak++; cur.fbad=false; cur.fok=c; save(); render();
+      S.claims[gi]=1; streak++; cur.fbad=false; cur.fok=c; cur.fwait=true; save(); render();
       toast('Right. +25 XP'+(streak>1?' ('+streak+' in a row)':''));
     } else {
       streak=0; cur.fbad=true; render(); toast('Not quite. Try again.');
@@ -1482,6 +1485,7 @@
     if(a==='nbcity'){ var ck=b.getAttribute('data-c'); if(ck&&CITIES[ck]){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:ck}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbtownstory'){ var tk=b.getAttribute('data-c'), sk=b.getAttribute('data-s'); if(tk&&CITIES[tk]&&nbStory(sk)){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:sk,msg:'',town:tk}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbcityback'){ var bk=b.getAttribute('data-c'); if(bk&&CITIES[bk]){ railRegion=null; setCity(bk); } return; }
+    if(a==='fnext'){ if(cur){ cur.fwait=false; render(); window.scrollTo(0,0); } return; }
     if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbloc'){
       if(!navigator.geolocation){ nv.mode='pick'; nv.msg='This device cannot share its location. Pick a place instead.'; render(true); return; }

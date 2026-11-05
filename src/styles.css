@@ -1042,3 +1042,9 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 .reqban .feedback{min-height:1.2em;margin:.4rem 0 0}
 @media(min-width:600px){.reqban .reqrow{flex-direction:row}.reqban .btn{width:auto;white-space:nowrap}}
 .reqban .feedback:empty{display:none}
+
+.fresult{border:2px solid var(--good);border-radius:14px;padding:1rem;margin:.6rem 0 1rem;background:var(--surface)}
+.fresult .fr-big{font-family:var(--font-display);font-size:2rem;line-height:1;margin:0 0 .4rem;color:var(--good)}
+.fresult .fr-claim{font-weight:600;margin:0 0 .5rem}
+.fcount{margin:.5rem 0}
+.fnext{width:100%;min-height:3rem}
