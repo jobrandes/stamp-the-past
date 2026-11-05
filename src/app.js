@@ -1,6 +1,7 @@
 (function(){
   var DATA=__DATA__;
   var BASE_ORDER=DATA.order.slice(), CPH={}, COMON=false;
+  var TSTATE={"reno":"NV","vc":"NV","sparks":"NV","carson":"NV","tahoeicons":"CA/NV","tahoe":"CA/NV","boston":"MA","dc":"DC","ny":"NY","chicago":"IL","sf":"CA","philly":"PA","la":"CA","seattle":"WA","nola":"LA","detroit":"MI","minneapolis":"MN","atlanta":"GA","memphis":"TN","savannah":"GA","denver":"CO","santafe":"NM","phoenix":"AZ","albuquerque":"NM","tucson":"AZ","pittsburgh":"PA","baltimore":"MD","cleveland":"OH","stlouis":"MO","cincinnati":"OH","indianapolis":"IN","buffalo":"NY","richmond":"VA","williamsburg":"VA","charleston":"SC","houston":"TX","nashville":"TN","providence":"RI","saltlake":"UT","sandiego":"CA","portland":"OR","milwaukee":"WI","columbus":"OH","gettysburg":"PA","louisville":"KY","newport":"RI","knoxville":"TN","portlandme":"ME","newhaven":"CT","burlington":"VT","coloradosprings":"CO","lasvegas":"NV","flagstaff":"AZ","elpaso":"TX","sanantonio":"TX","dayton":"OH","honolulu":"HI","skagway":"AK","sitka":"AK","sacramento":"CA","nsierra":"CA"}, TFULL={"NV":"Nevada","CA":"California","MA":"Massachusetts","DC":"District of Columbia Washington","NY":"New York","IL":"Illinois","PA":"Pennsylvania","WA":"Washington","LA":"Louisiana","MI":"Michigan","MN":"Minnesota","GA":"Georgia","TN":"Tennessee","CO":"Colorado","NM":"New Mexico","AZ":"Arizona","MD":"Maryland","OH":"Ohio","MO":"Missouri","IN":"Indiana","VA":"Virginia","SC":"South Carolina","TX":"Texas","RI":"Rhode Island","UT":"Utah","OR":"Oregon","WI":"Wisconsin","KY":"Kentucky","ME":"Maine","CT":"Connecticut","VT":"Vermont","HI":"Hawaii","AK":"Alaska"};
   /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
   if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
     COMON=true;
@@ -12,7 +13,8 @@
           (cj.tours||[]).forEach(function(t){ t.stops=(t.stops||[]).filter(function(st){ return !HID[subOf(st)]; }); });
           cj.packs.forEach(function(p){ p.stops.forEach(function(st,i){ st.tag='Stop '+(i+1)+' of '+p.stops.length; }); }); }
         (cj.packs||[]).sort(function(a,b){ return String(b.added||'').localeCompare(String(a.added||'')); });
-        (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ DATA.packs[p.id]=p; DATA.order.push(p.id); } });
+        var stReg={}; DATA.order.forEach(function(k){ var q=DATA.packs[k]; if(!q||!q.region||q.community) return; var m=String(TSTATE[k]||'').split('/'); m.forEach(function(sx){ if(sx){ stReg[sx]=stReg[sx]||{}; stReg[sx][q.region]=(stReg[sx][q.region]||0)+1; } }); });
+        (cj.packs||[]).forEach(function(p){ if(p&&p.id&&!DATA.packs[p.id]){ var rs=stReg[String(p.state||'').split('/')[0]]; if(rs){ p.region=Object.keys(rs).sort(function(a,b){ return rs[b]-rs[a]; })[0]; } else { p.region='More places'; } DATA.packs[p.id]=p; DATA.order.push(p.id); } });
         DATA.tours=(DATA.tours||[]).concat((cj.tours||[]).filter(function(t){ return t&&t.id&&t.stops&&t.stops.length; })); }
     }catch(e){}
   }
@@ -371,11 +373,9 @@
     var list=townStory(k), c=CITIES[k], v=nbGet();
     var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
     h+='<p class="nbnote">Browse freely. Open any place, read its story, tick it off if you visit. Nothing here earns a stamp, and nothing needs your location.</p><h2 class="nbh">Places to explore</h2>';
-    var off=list.filter(function(sp){ return !sp.community; }), com=list.filter(function(sp){ return sp.community; });
     var seen=list.filter(function(sp){ return v[nbKey(sp)]; }).length;
     if(seen) h+='<p class="nbnote">'+seen+' of '+list.length+' visited on this device.</p>';
-    h+=off.map(function(sp){ return nbRow({kind:'story',s:sp,teaser:1}); }).join('');
-    if(com.length) h+='<h2 class="nbh">Community-added places</h2><p class="nbnote">Suggested by contributors and researched from sources. Not checked on site.</p>'+com.map(function(sp){ return nbRow({kind:'story',s:sp,teaser:1}); }).join('');
+    h+=list.map(function(sp){ return nbRow({kind:'story',s:sp,teaser:1}); }).join('');
     h+='<h2 class="nbh">Missions: earn stamps</h2><p class="nbnote">Visit in person and play the four-stop mission to earn stamps, XP and badges.</p>';
     h+=c.stops.map(function(st,i){ return nbRow({kind:'town',c:k,i:i}); }).join('');
     return h+'</section>';
@@ -840,7 +840,6 @@
   var SEALS={gold:['#f2cf72','#b8872a','#6e4b0c','Gold Seal','Master Historian'],silver:['#eceff3','#9aa3b0','#566070','Silver Seal','Sharp Eye'],bronze:['#e8b58a','#a8693a','#643415','Bronze Seal','Plaque Reader'],grand:['#f2cf72','#1d3557','#f2cf72','Grand Historian','Gold in every town']};
   function sealTier(n){ return n>=4?'gold':(n===3?'silver':(n===2?'bronze':null)); }
   function ptsOf(n){ return n===undefined||n===null?0:50*n+(n>=4?100:0); }
-    var TSTATE={"reno":"NV","vc":"NV","sparks":"NV","carson":"NV","tahoeicons":"CA/NV","tahoe":"CA/NV","boston":"MA","dc":"DC","ny":"NY","chicago":"IL","sf":"CA","philly":"PA","la":"CA","seattle":"WA","nola":"LA","detroit":"MI","minneapolis":"MN","atlanta":"GA","memphis":"TN","savannah":"GA","denver":"CO","santafe":"NM","phoenix":"AZ","albuquerque":"NM","tucson":"AZ","pittsburgh":"PA","baltimore":"MD","cleveland":"OH","stlouis":"MO","cincinnati":"OH","indianapolis":"IN","buffalo":"NY","richmond":"VA","williamsburg":"VA","charleston":"SC","houston":"TX","nashville":"TN","providence":"RI","saltlake":"UT","sandiego":"CA","portland":"OR","milwaukee":"WI","columbus":"OH","gettysburg":"PA","louisville":"KY","newport":"RI","knoxville":"TN","portlandme":"ME","newhaven":"CT","burlington":"VT","coloradosprings":"CO","lasvegas":"NV","flagstaff":"AZ","elpaso":"TX","sanantonio":"TX","dayton":"OH","honolulu":"HI","skagway":"AK","sitka":"AK","sacramento":"CA","nsierra":"CA"}, TFULL={"NV":"Nevada","CA":"California","MA":"Massachusetts","DC":"District of Columbia Washington","NY":"New York","IL":"Illinois","PA":"Pennsylvania","WA":"Washington","LA":"Louisiana","MI":"Michigan","MN":"Minnesota","GA":"Georgia","TN":"Tennessee","CO":"Colorado","NM":"New Mexico","AZ":"Arizona","MD":"Maryland","OH":"Ohio","MO":"Missouri","IN":"Indiana","VA":"Virginia","SC":"South Carolina","TX":"Texas","RI":"Rhode Island","UT":"Utah","OR":"Oregon","WI":"Wisconsin","KY":"Kentucky","ME":"Maine","CT":"Connecticut","VT":"Vermont","HI":"Hawaii","AK":"Alaska"};
     function placeLabel(k){ var nm=CITIES[k].name, st=TSTATE[k]||''; return (!st||st==='DC'||/,\s*\S+$/.test(nm))?nm:nm+', '+st; }
     function stOf(k){ var a=TSTATE[k]||''; return a.split('/').map(function(x){return TFULL[x]||x;}).join(' ')+' '+a.replace('/',' '); }
 

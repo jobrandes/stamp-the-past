@@ -438,3 +438,5 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 
 - Share + place links (Nov 5 2026): community Story cards and mission stops have "Share this place" (Web Share, else copies the /play.html link). Deep link `/play.html#story=<tour id>:<stop id>` opens a Story card; /contribute/admin/ lists link to it ("Open this place"). Mission stops have no deep link yet (they open /play.html).
 - Explore history (Nov 5 2026): community places list under their own 'Community-added places' heading after the official ones; shows 'N of M visited' once any is ticked.
+
+- No separate community section (Nov 5 2026, Jo-Anne's correction): community towns are filed into their state's normal region at load (region of the official towns in the same state, else 'More places'; `TSTATE` is now defined at the top of app.js) and Explore history lists community and official places together. They keep the small 'Community-added' tag and are still excluded from level/badge/total counts, pending Jo-Anne's decision. Open design questions: community places as missions even without an old photo, multiple photos per place (up to 3 extra).
