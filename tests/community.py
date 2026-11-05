@@ -40,7 +40,10 @@ def stop_for(sub,name,seq):
 def write_places(places):
     d=TMP+'/_places'; shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
     if not os.path.isdir(TMP+'/_stories'): os.makedirs(TMP+'/_stories')
-    for sub,name,seq in places: json.dump({'sub':sub,'town':'Testville','state':'NV','added':'2026-11-03','seq':seq,'stop':stop_for(sub,name,seq)},open(f'{d}/{sub}.json','w'))
+    for t in places:
+        sub,name,seq=t[:3]; o={'sub':sub,'town':'Testville','state':'NV','added':'2026-11-03','seq':seq,'stop':stop_for(sub,name,seq)}
+        if len(t)>3: o['by']=t[3]
+        json.dump(o,open(f'{d}/{sub}.json','w'))
     bad=cm.check(places_dir=d+'/'); ok(not bad,'fixture places invalid: %r'%bad)
     pk,ph,st,tr=cm.build(places_dir=d+'/',declined_file='/nonexistent',stories_dir=TMP+'/_stories/')
     json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
@@ -271,6 +274,39 @@ try:
     pg2=b.new_page(viewport={'width':390,'height':844}); pg2.goto(B+'/play.html'); pg2.wait_for_selector('#main'); pg2.evaluate("document.querySelector('[data-a=menu]').click()"); pg2.wait_for_timeout(300)
     ok(pg2.evaluate("!document.getElementById('mysug')"),'no My suggestions row when nothing was suggested')
     b.close()
+  # ---- nickname credit, passport grouping, reports hide a place ----
+  write_places([('cc000001','Credit Probe',1,'Dad'),('cc000002','Second Probe',2)])
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844})
+    pg.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}")
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pe2=[]; pg.on('pageerror',lambda e:pe2.append(str(e)))
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='c_testville-nv';}).click()"); pg.wait_for_timeout(400)
+    pg.evaluate("document.querySelector('[data-a=open][data-i=\"0\"]').click()"); pg.wait_for_timeout(300)
+    pg.wait_for_timeout(300); t=pg.inner_text('.combadge').lower(); ok('suggested by dad' in t,'nickname credit shown: '+t)
+    y_badge=pg.evaluate("document.querySelector('.combadge').getBoundingClientRect().top"); y_btn=pg.evaluate("document.querySelector('.stickgo').getBoundingClientRect().top")
+    ok(y_badge<y_btn,'community label sits above the check-in button')
+    b.close()
+  s,j=api('/api/community/report/dd000009',{}); ok(s==404,'cannot report a place that is not published: %s'%s)
+  for i in range(3): s,j=api('/api/community/report/cc000001',{})
+  ok(s==200 and j.get('hidden') is True,'third report hides the place: %r'%j)
+  s,j=api('/api/community/hidden'); ok(j.get('hidden')==['cc000001'],'hidden list: %r'%j)
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}")
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
+    ok(pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).some(function(e){return e.getAttribute('data-c')==='c_testville-nv';})"),'town with one hidden place still lists')
+    pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='c_testville-nv';}).click()"); pg.wait_for_timeout(400)
+    names=pg.evaluate("Array.from(document.querySelectorAll('[data-a=open]')).map(function(e){return e.textContent})"); ok(any('Second Probe' in n for n in names) and not any('Credit Probe' in n for n in names),'hidden place is gone from the town: %r'%names)
+    b.close()
+  with sync_playwright() as pw:
+    b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.add_init_script("try{localStorage.setItem('then-now-tour','1');localStorage.setItem('then-now-v3',JSON.stringify({city:'reno',home:0,p:{'c_testville-nv':{done:[1,1],claims:[0,0,0,0],ids:['p1','p2']}}}))}catch(e){}")
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.evaluate("document.querySelector('#bnav [data-t=pass]').click()"); pg.wait_for_selector('#passport')
+    ok(pg.evaluate("!!document.getElementById('cpass')"),'passport has a separate Community-added card')
+    ok(pg.evaluate("/^0 of/.test(document.querySelector('.pstats b').parentNode.textContent.trim())") or pg.evaluate("document.querySelector('.pstats')&&document.querySelector('.pstats').hidden"),'community stamps stay out of passport totals: '+pg.evaluate("document.querySelector('.passport-line').textContent"))
+    ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'passport no sideways scroll')
+    b.close()
+  s,j=api('/api/community/unhide/cc000001',{}); ok(s==404,'unhide needs the admin key')
+  s,j=api('/api/community/unhide/cc000001',{},key=KEY); ok(s==200,'admin can unhide')
+  s,j=api('/api/community/hidden'); ok(j.get('hidden')==[],'unhidden place is visible again: %r'%j)
   sv.terminate(); sv=server('branch-deploy','0')
   s,j=api('/api/community/config'); ok(s==200 and j=={'uploads':False},'config reports uploads off: %r'%j)
   up2='data:image/jpeg;base64,'+base64.b64encode(mkjpg((10,120,60))).decode()

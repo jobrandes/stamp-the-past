@@ -28,6 +28,7 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         stops=[]
         for i,p in enumerate(pl):
             st=json.loads(json.dumps(p['stop'])); st['tag']=f'Stop {i+1} of {n}'; st['community']=True
+            if p.get('by'): st['by']=p['by']
             stops.append(st)
             for era in ('then','now'):
                 ph=(st.get(era) or {}).get('ph')
@@ -45,12 +46,13 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
           'mission':f'Community-added places in {nm}. Visit each one, check in to earn its badge and unlock its story. Each place was suggested by a contributor and researched from sources, and none has been walked yet. Everything stays on this phone.',
           'afterDone':f'All {n} badges earned. {nm} is stamped.','safetyNote':'<li>Stay on public paths and sidewalks.</li>',
           'badgeMap':{st['id']:[st['now']['ph']['k'],'50% 50%'] for st in stops},
-          'level':'Community','region':'Community-added','state':state,'stops':stops})
+          'level':'Community','region':'Community-added','state':state,'added':max(p.get('added','') for p in pl),'stops':stops})
     # Story stops: places with a recent photo only. They become a "tour" per town, shown under Nearby stops / Explore history.
     tours={}
     for fn,p in load_stories(R,stories_dir):
         tid='c_'+slug(p['town']+'-'+p['state'] if p.get('state') else p['town'])
         sp=json.loads(json.dumps(p['stop'])); sp['town']=tid; sp['community']=True
+        if p.get('by'): sp['by']=p['by']
         t=tours.setdefault(tid,{'id':tid,'name':p['town'],'towns':[tid] if tid in {x['id'] for x in packs} else [],'community':True,'stops':[]})
         t['stops'].append(sp)
         ph=sp.get('ph')
@@ -74,6 +76,7 @@ def check(R=R,places_dir=None):
         if not p.get('stop'): continue
         need(re.fullmatch(r'[a-f0-9]{8}',p.get('sub','')),f'{w}: sub must be the 8-hex submission id')
         need(fn==p.get('sub','')+'.json',f'{w}: file name must be <sub>.json')
+        need(p.get('by') is None or (isinstance(p['by'],str) and 0<len(p['by'])<=30 and not re.search(r'[<>&"]',p['by'])),f'{w}: by (nickname credit) must be 1-30 plain characters')
         st=p['stop']
         for f in ('id','name','short','badge','teaser','map','clue','safety','field','fact'): need(st.get(f),f'{w}: missing {f}')
         need((p['town'],st.get('id')) not in seen,f'{w}: duplicate stop id in town'); seen.add((p['town'],st.get('id')))
@@ -99,6 +102,7 @@ def check(R=R,places_dir=None):
         for f in ('sub','town','added','stop'): need(p.get(f),f'{w}: missing {f}')
         if not p.get('stop'): continue
         need(re.fullmatch(r'[a-f0-9]{8}',p.get('sub','')) and fn==p['sub']+'.json',f'{w}: file name must be <sub>.json')
+        need(p.get('by') is None or (isinstance(p['by'],str) and 0<len(p['by'])<=30 and not re.search(r'[<>&"]',p['by'])),f'{w}: by (nickname credit) must be 1-30 plain characters')
         st=p['stop']
         for f in ('id','name','area','addr','invite','access'): need(st.get(f),f'{w}: missing {f}')
         g=st.get('geo'); need(isinstance(g,list) and len(g)==3 and -90<=g[0]<=90 and -180<=g[1]<=180 and 50<=g[2]<=1000,f'{w}: geo [lat, lon, radius 50..1000] required')

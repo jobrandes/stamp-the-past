@@ -92,6 +92,34 @@ const handle = (opts) => async (req, context) => {
     return json({ id, status, note, place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now } });
   }
 
+  // Reports: anyone may report a published place. Three reports hide it in the app until a person looks (hiding is reversible, nothing is deleted).
+  // Only a count per place is stored: no reporter id, no text. The app lets one device report a place once.
+  const HIDE_AT = 3;
+  if (req.method === 'POST' && parts[0] === 'report' && parts[1]) {
+    const id = parts[1].replace(/[^a-f0-9]/g, '').slice(0, 8);
+    if (id.length !== 8) return json({ error: 'bad id' }, 400);
+    let st = { added: [] };
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    if (!(st.added || []).includes(id)) return json({ error: 'not a published place' }, 404);
+    const cur = (await store.get('rep/' + id, { type: 'json' })) || { n: 0 };
+    cur.n = Math.min((cur.n || 0) + 1, 1000); cur.last = new Date().toISOString();
+    await store.setJSON('rep/' + id, cur);
+    return json({ ok: true, hidden: cur.n >= HIDE_AT && !cur.cleared });
+  }
+  if (req.method === 'GET' && parts[0] === 'hidden') {
+    const { blobs } = await store.list({ prefix: 'rep/' });
+    const out = [];
+    for (const b of blobs.slice(0, 200)) { const r = await store.get(b.key, { type: 'json' }); if (r && r.n >= HIDE_AT && !r.cleared) out.push(b.key.slice(4)); }
+    return new Response(JSON.stringify({ hidden: out }), { headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=60' } });
+  }
+  // Admin only: put a hidden place back (a person looked and it is fine).
+  if (req.method === 'POST' && parts[0] === 'unhide' && parts[1]) {
+    if (!isAdmin()) return json({ error: 'not found' }, 404);
+    const id = parts[1].replace(/[^a-f0-9]/g, '').slice(0, 8);
+    const cur = (await store.get('rep/' + id, { type: 'json' })) || { n: 0 }; cur.cleared = true;
+    await store.setJSON('rep/' + id, cur); return json({ ok: true });
+  }
+
   // The inbox holds unreviewed free text and nicknames, so only the research run (admin key in the x-admin-key header) can read it.
   if (req.method === 'GET' && parts[0] === 'pending') {
     if (!isAdmin()) return json({ error: 'not found' }, 404);

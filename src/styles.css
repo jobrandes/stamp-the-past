@@ -916,7 +916,7 @@ details.card[open]{padding-bottom:12px}
 .vlist li{display:flex;align-items:center;gap:12px;min-width:0}
 .vlist li>span:last-child{display:flex;flex-direction:column;min-width:0}
 .vlist em{font-style:normal;font-size:0.8125rem;color:var(--muted)}
-.vpass .bbox.sm{width:44px;height:44px;padding:3px}
+.vpass .bbox.sm,.cpass .bbox.sm{width:44px;height:44px;padding:3px}.cpass .ppstamps{display:flex;gap:6px;flex-wrap:wrap}
 
 .spot{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
 .spot .sq{margin:4px 0 10px;font-weight:600}

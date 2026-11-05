@@ -13,3 +13,5 @@ One file per researched place: `places/<submission id>.json`.
 `tools/community.py` groups places by town into packs at build time (`site/community/places.json`) and writes `site/community/status.json`.
 
 `seq`: 1, 2, 3 ... per town (town + state), never reused and never changed. New places in a town get the next number, so a player's saved stamps never shift to another place.
+
+Optional `by`: the contributor's nickname (1-30 plain characters, from the submission's `nickname`, only if they gave one). Shown as "Suggested by <nickname>" on the place. Never an email or name.
