@@ -26,6 +26,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 .tl{list-style:none;margin:10px 0;padding:0}.tl li{position:relative;padding:0 0 14px 28px}.tl li::before{content:'';position:absolute;left:5px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--line)}.tl li.d::before{background:var(--ok)}.tl li::after{content:'';position:absolute;left:10px;top:18px;bottom:-2px;width:2px;background:var(--line)}.tl li:last-child::after{display:none}
 .priv summary{font-weight:600}.finder{margin:4px 0 6px}.finderbtn{display:flex;align-items:center;justify-content:center;min-height:52px;border:1.5px solid var(--ac);border-radius:14px;color:var(--ac);font-weight:700;text-decoration:none;text-align:center;padding:8px 14px}.finderhow{margin-top:8px}
 .xrow{margin-top:10px;padding-top:6px;border-top:1px solid var(--line)}select{width:100%;font:inherit;padding:.65em;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);min-height:44px}
+.sr{position:absolute;left:-9999px;width:1px;height:1px}.pick{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed var(--ac);border-radius:18px;padding:22px 14px;text-align:center;cursor:pointer;background:var(--card);margin:6px 0 12px}.pick:focus-within,.pick:hover{background:var(--bg)}.pickicon{font-size:2rem;line-height:1;color:var(--ac);font-weight:700}.pickt{font-weight:700;font-size:1.1rem}.pickh{color:var(--mut);font-size:.9rem}.tiles{display:grid;gap:12px}.tile{display:grid;grid-template-columns:104px 1fr;gap:12px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--card)}.tile img{width:104px;height:104px;object-fit:cover;border-radius:10px}.tc{display:grid;gap:8px;align-content:start}.tc input,.tc select{margin:0}.rmtile{justify-self:start}
 </style></head><body><main>
 <p class="eyebrow">Stamp the Past · community test</p>
 <h1>Suggest one place</h1>
@@ -48,7 +49,18 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <div class="nav"><button type="button" class="only" id="nx1">Next: photos</button></div>
 </fieldset>
 <fieldset class="step" data-step="2" hidden><legend>Photos</legend>
-<p class="help" style="margin-top:0"><strong>Add at least one photo, old or new.</strong> With only a recent photo, your place appears as a history stop. With only an old one, it waits until a recent photo turns up. With both, it becomes a full then-and-now mission.</p>
+<p class="help" style="margin-top:0"><strong>Add 1 to 5 photos, old or new.</strong> Each photo is checked on its own before anything appears. A place with only recent photos shows up as a history stop; old photos help us show how it changed.</p>
+<section id="own" hidden>
+<label class="pick" for="files"><span class="pickicon" aria-hidden="true">+</span><span class="pickt">Add photos</span><span class="pickh">Take a photo or choose from your library. Up to 5.</span></label>
+<input type="file" accept="image/*" id="files" multiple class="sr">
+<div class="tiles" id="tiles" aria-live="polite"></div>
+<div id="upbox" hidden>
+<label class="chk"><input type="checkbox" id="took"><span>I took these photos myself, and I agree to share them under CC BY-SA 4.0 with my credit shown</span></label>
+<label for="credit">Credit shown with your photos</label><input id="credit" maxlength="120" placeholder="Your name or nickname" autocomplete="off">
+<p class="help">Only upload photos you took yourself. Never upload a photo from a website, a book or someone else. Anyone may reuse them under CC BY-SA 4.0 (they must credit you and share copies alike). Photos are re-saved without location data, and nothing is public until a person approves it.</p>
+</div>
+</section>
+<details id="links"><summary>Or link a free photo from Commons or the Library of Congress</summary>
 <div class="finder"><a id="findph" class="finderbtn" href="https://commons.wikimedia.org/w/index.php?search=&ns6=1" target="_blank" rel="noopener">Find a photo of this place on Commons</a>
 <details class="finderhow"><summary>How do I copy the link?</summary><ol class="help" style="padding-left:1.2em;margin:.2em 0"><li>Tap the button. Commons opens in a new tab with a search for your place.</li><li>Tap a photo you like. Check that it shows the right place.</li><li>Check the license box on that page says public domain, CC0, CC BY or CC BY-SA.</li><li>Copy the address from your browser's address bar and paste it below. It looks like commons.wikimedia.org/wiki/File:...</li></ol><p class="help">No luck? Photos that are on neither Commons nor the Library of Congress can't be used yet. You can still send the place with whichever photo you have.</p></details></div>
 <div class="era"><span>Then</span> an old photo</div>
@@ -62,11 +74,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <div class="xrow"><label for="x2u">Photo 4: Commons or Library of Congress link</label><input id="x2u" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div class="row"><div><label for="x2t">What it shows</label><select id="x2t"><option value="unsure">Not sure</option><option value="old">Old photo</option><option value="today">Recent photo</option><option value="detail">Detail</option></select></div><div><label for="x2c">Short caption</label><input id="x2c" maxlength="120"></div></div></div>
 <div class="xrow"><label for="x3u">Photo 5: Commons or Library of Congress link</label><input id="x3u" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div class="row"><div><label for="x3t">What it shows</label><select id="x3t"><option value="unsure">Not sure</option><option value="old">Old photo</option><option value="today">Recent photo</option><option value="detail">Detail</option></select></div><div><label for="x3c">Short caption</label><input id="x3c" maxlength="120"></div></div></div>
 </details>
-<details id="own" hidden><summary>Or upload my own photo</summary>
-<label for="file">Photo file</label><input type="file" accept="image/*" id="file"><img id="prev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0"><button type="button" class="ghost" id="rmphoto" hidden>Remove photo</button>
-<label class="chk"><input type="checkbox" id="took"><span>I took this photo myself, and I agree to share it under CC BY-SA 4.0 with my credit shown</span></label>
-<div class="row"><div><label for="credit">Your credit</label><input id="credit" maxlength="120"></div><div><label for="year">Year taken</label><input id="year" maxlength="4" inputmode="numeric"></div></div>
-<p class="help">Only upload a photo you took yourself. Never upload a photo from a website, a book or someone else. By uploading you agree that anyone may reuse it under CC BY-SA 4.0 (they must credit you and share copies alike). We show your credit with the photo. If you ever want it removed, email stampthepast@gmail.com. Your photo is resized in your browser and checked again on our server, which removes hidden location data. Photos of buildings and places only, please: no people, no faces, no screenshots.</p></details>
+</details>
 <div id="fadebox" hidden><div class="era"><span>Preview</span> drag to travel back</div><div class="fade" id="fade"><img id="fn" alt="Today"><img id="ft" alt="Then"><span class="tag" id="ftag">Today</span><input type="range" id="fr" min="0" max="100" value="0" aria-label="Travel back in time"></div></div>
 <p class="err" id="e2" role="alert" hidden></p>
 <div class="nav"><button type="button" class="ghost" id="bk2">Back</button><button type="button" id="nx2">Next: review</button></div>
@@ -123,9 +131,9 @@ $('nx1').addEventListener('click',function(){var miss=[];if(!v('place').trim()){
   var key=norm(v('place'))+'|'+norm(v('city'));if(dupOk!==key){var d=dupFor(v('place'),v('city'));if(d){dupOk=key;showE('e1','A place like "'+d+'" is already in '+v('city').trim()+'. If yours is different, tap Next again to continue.');this.textContent='Next anyway: photos';return;}}
   this.textContent='Next: photos';showE('e1','');goStep(2);});
 $('bk2').addEventListener('click',function(){goStep(1);});$('bk3').addEventListener('click',function(){goStep(2);});
-$('nx2').addEventListener('click',function(){if(!v('then').trim()&&!v('now').trim()&&!photo){showE('e2','Please add at least one photo, an old one, a recent one, or both.');return;}showE('e2','');goStep(3);});
+$('nx2').addEventListener('click',function(){if(!v('then').trim()&&!v('now').trim()&&!linkCount()&&!ups.length){showE('e2','Please add at least one photo, an old one, a recent one, or both.');return;}showE('e2','');goStep(3);});
 function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
-function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')].filter(function(x){return x.trim();}).join(', ')],['About',v('one')],['Extra photos',['1','2','3'].filter(function(n){return v('x'+n+'u').trim();}).length+' of 3'],['Address',v('addr')||'Not given'],['Nickname',v('nick')||'None'],['Old photo',v('then').trim()?'Commons link':'None'],['Recent photo',v('now').trim()?'Commons link':(photo?'Your upload':'None')]];
+function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')].filter(function(x){return x.trim();}).join(', ')],['About',v('one')],['Photos',(ups.length+linkCount())+' of 5'+(ups.length?' ('+ups.length+' uploaded)':'')],['Address',v('addr')||'Not given'],['Nickname',v('nick')||'None'],['Old photo',v('then').trim()?'Commons link':'None'],['Recent photo',v('now').trim()?'Commons link':(photo?'Your upload':'None')]];
   var ul=$('sum');ul.innerHTML='';rows.forEach(function(r){var li=document.createElement('li'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=r[0];sp.textContent=r[1];li.appendChild(b);li.appendChild(sp);ul.appendChild(li);});}
 // Commons link preview (browser asks Commons directly; if it cannot, the server still checks on send)
 var PV={t:null,n:null};
@@ -163,18 +171,24 @@ preview('then','pvt','t');preview('now','pvn','n');
 function fadeUpd(){var box=$('fadebox');if(PV.t&&PV.n){$('ft').src=PV.t;$('fn').src=PV.n;$('fr').value=0;$('ft').style.opacity=0;$('ftag').textContent='Today';box.hidden=false;}else box.hidden=true;}
 $('fr').addEventListener('input',function(){var x=this.value/100;$('ft').style.opacity=x;$('ftag').textContent=x>.5?'Then':'Today';});
 function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
-fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads){document.getElementById('own').hidden=false;document.getElementById('pown').hidden=false;}}).catch(function(){});
+fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads){document.getElementById('own').hidden=false;document.getElementById('pown').hidden=false;}else{document.getElementById('links').open=true;}}).catch(function(){document.getElementById('links').open=true;});
 function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
-function clearPhoto(){photo=null;var p=document.getElementById('prev');p.removeAttribute('src');p.hidden=true;document.getElementById('rmphoto').hidden=true;document.getElementById('file').value='';}
-document.getElementById('rmphoto').addEventListener('click',function(){clearPhoto();say('');});
-document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];clearPhoto();if(!f){return;}var go=document.getElementById('go');go.disabled=true;shrink(f,function(d){go.disabled=false;if(!d){document.getElementById('file').value='';say('That file could not be read as a picture. Choose another.',true);return;}say('');photo=d;var p=document.getElementById('prev');p.src=d;p.hidden=false;p.alt='Preview of your photo';document.getElementById('rmphoto').hidden=false;});});
+var ups=[];
+function shrinkBig(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var sc=Math.min(1,1024/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.72));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
+function linkCount(){return ['then','now','x1u','x2u','x3u'].filter(function(i){return v(i).trim();}).length;}
+function renderTiles(){var box=$('tiles');box.innerHTML='';ups.forEach(function(u,i){var t=document.createElement('div');t.className='tile';var im=document.createElement('img');im.src=u.d;im.alt='Preview of photo '+(i+1);t.appendChild(im);var c=document.createElement('div');c.className='tc';
+  var sel=document.createElement('select');sel.setAttribute('aria-label','What photo '+(i+1)+' shows');[['unsure','Not sure'],['old','Old photo'],['today','Recent photo'],['detail','Detail']].forEach(function(o){var op=document.createElement('option');op.value=o[0];op.textContent=o[1];if(u.type===o[0])op.selected=true;sel.appendChild(op);});sel.addEventListener('change',function(){u.type=sel.value;});c.appendChild(sel);
+  var cap=document.createElement('input');cap.maxLength=120;cap.placeholder='Caption (optional)';cap.value=u.caption;cap.setAttribute('aria-label','Caption for photo '+(i+1));cap.addEventListener('input',function(){u.caption=cap.value;});c.appendChild(cap);
+  var yr=document.createElement('input');yr.maxLength=12;yr.placeholder='Year (optional)';yr.value=u.year;yr.setAttribute('aria-label','Year of photo '+(i+1));yr.addEventListener('input',function(){u.year=yr.value;});c.appendChild(yr);
+  var rm=document.createElement('button');rm.type='button';rm.className='ghost rmtile';rm.textContent='Remove photo';rm.addEventListener('click',function(){ups.splice(i,1);renderTiles();});c.appendChild(rm);t.appendChild(c);box.appendChild(t);});
+  $('upbox').hidden=!ups.length;document.querySelector('label.pick').style.display=(ups.length+linkCount()>=5)?'none':'';}
+$('files').addEventListener('change',function(e){var fs=Array.prototype.slice.call(e.target.files||[]);e.target.value='';var room=5-ups.length-linkCount();if(fs.length>room){say('You can send up to 5 photos for one place. Only the first '+Math.max(room,0)+' were added.',true);fs=fs.slice(0,Math.max(room,0));}if(!fs.length)return;var go=$('go');go.disabled=true;var n=fs.length;fs.forEach(function(f){shrinkBig(f,function(d){n--;if(d)ups.push({d:d,type:'unsure',caption:'',year:''});else say('One file could not be read as a picture, so it was skipped.',true);if(!n){go.disabled=false;renderTiles();}});});});
 function v(id){return document.getElementById(id).value;}
 function collect(){
   var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),address:v('addr'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
   var ex=[];['1','2','3'].forEach(function(n){var u=v('x'+n+'u');if(u.trim())ex.push({url:u,type:v('x'+n+'t')||'unsure',caption:v('x'+n+'c')});});if(ex.length)o.extras=ex;
   if(ADD)o.target=ADD;
-  if(o.nowUrl.trim()&&photo){clearPhoto();}
-  if(!o.nowUrl.trim()&&photo){o.nowPhoto=photo;o.nowOwn=document.getElementById('took').checked;o.nowCredit=v('credit');o.nowYear=v('year');o.nowLicense='CC BY-SA';}
+  if(ups.length){o.uploads=ups.map(function(u){return {photo:u.d,type:u.type,caption:u.caption,year:u.year};});o.uploadOwn=$('took').checked;o.uploadCredit=v('credit');}
   return o;
 }
 document.getElementById('f').addEventListener('submit',function(e){

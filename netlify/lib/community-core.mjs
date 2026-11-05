@@ -124,9 +124,29 @@ export function validate(input) {
       v.extras.push({ link, type, caption, year: clean(x.year).slice(0, 20) });
     });
   }
+  // Uploaded photos (own photos, up to 5): each typed, with an optional year and caption. One credit and one ownership tick cover them all.
+  v.uploads = [];
+  if (input.uploads != null) {
+    if (!Array.isArray(input.uploads) || input.uploads.length > 5) errs.push('Photos: up to 5 photos in all.');
+    else {
+      input.uploads.forEach((x, i) => {
+        if (!x || typeof x !== 'object' || !decodeJpegDataUrl(x.photo)) { errs.push(`Photo ${i + 1}: that upload could not be read. Try another photo.`); return; }
+        const caption = clean(x.caption).slice(0, 120), year = clean(x.year).slice(0, 20);
+        if (/[<>]/.test(caption)) errs.push(`Photo ${i + 1}: the caption cannot contain < or >.`);
+        if (year && !/^(1[5-9]\d\d|20\d\d|c\. ?\d{4}s?|\d{4}s)$/.test(year)) errs.push(`Photo ${i + 1}: the year should look like 1925, c. 1925 or 1920s.`);
+        v.uploads.push({ photo: x.photo, type: ['old', 'today', 'detail', 'unsure'].includes(x.type) ? x.type : 'unsure', caption, year });
+      });
+      if (v.uploads.length) {
+        v.uploadCredit = t(input.uploadCredit, 2, 120, 'Your photo credit');
+        if (input.uploadOwn !== true) errs.push('Tick "I took these photos myself" for uploaded photos.');
+      }
+    }
+  }
   // Adding photos to a place that is already published: it must be named by its 8-character id.
   if (input.target != null) { if (!/^[a-f0-9]{8}$/.test(String(input.target))) errs.push('That place could not be found.'); else v.target = String(input.target); }
-  if (!hasThenUrl && !hasNowUrl && !hasUpload && !v.extras.length) errs.push('Add at least one photo: an old one, a recent one, or both.');
+  const total = (v.then ? 1 : 0) + (v.now || v.nowUpload ? 1 : 0) + v.extras.length + v.uploads.length;
+  if (total > 5) errs.push('You can send up to 5 photos for one place.');
+  if (!hasThenUrl && !hasNowUrl && !hasUpload && !v.extras.length && !v.uploads.length) errs.push('Add at least one photo: an old one, a recent one, or both.');
   if (input.confirm !== true) errs.push('Please tick the box that confirms the photos are free to use and the facts are not your private information.');
   return { errs, v };
 }

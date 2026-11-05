@@ -86,7 +86,7 @@ const handle = (opts) => async (req, context) => {
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
     if ((st.added || []).includes(id)) return json({ errors: ['This place was already added, so its photos cannot be changed here.'] }, 400);
     if ((st.declined || {})[id]) return json({ errors: ['This place was not added, so it cannot be changed.'] }, 400);
-    if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
+    if ((body.nowPhoto || (Array.isArray(body.uploads) && body.uploads.length)) && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
     const { errs, v } = validate({ city: sub.city, state: sub.state, place: sub.place, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', thenUrl: body.thenUrl, nowUrl: body.nowUrl, nowPhoto: body.nowPhoto, nowOwn: body.nowOwn, nowCredit: body.nowCredit, nowYear: body.nowYear, nowLicense: body.nowLicense, confirm: body.confirm });
     if (errs.length) return json({ errors: errs }, 400);
     const next = { ...sub };
@@ -168,7 +168,7 @@ const handle = (opts) => async (req, context) => {
 
   if (isAdmin() && req.method === 'POST' && parts[0] === 'delete' && parts[1]) {
     const id = parts[1].replace(/[^a-f0-9]/g, '');
-    for (const k of [`sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`]) await store.delete(k);
+    for (const k of [`sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`, `photo/${id}_x4`, `photo/${id}_x5`]) await store.delete(k);
     return json({ ok: true, deleted: id });
   }
 
@@ -185,7 +185,7 @@ const handle = (opts) => async (req, context) => {
     const handled = new Set([...(st.added || []), ...Object.keys(st.declined || {})]);
     const open = blobs.filter(b => !handled.has(b.key.slice(4))).length;
     if (open >= 60) return json({ errors: ['The review queue is full for now. Please try again in a few days.'] }, 429);
-    if (body.nowPhoto && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
+    if ((body.nowPhoto || (Array.isArray(body.uploads) && body.uploads.length)) && !uploadsOn) return json({ errors: ['Photo uploads are turned off for now. Please link to a free photo on Wikimedia Commons instead.'] }, 400);
     const { errs, v } = validate(body);
     if (errs.length) return json({ errors: errs }, 400);
     if (v.target && !(st.added || []).includes(v.target)) return json({ errors: ['That place is not published yet, so photos cannot be added to it.'] }, 400);
@@ -229,7 +229,15 @@ async function collectPhotos(v, id, sub, fetchFn) {
     extra.push({ n, type: x.type, caption: x.caption, yearNote: x.year, kind: x.link.kind, page: x.link.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title });
     photos.push([`photo/${id}_${n}`, r.buf, r.type, false]);
   }
-  if ((v.extras || []).length) sub.extra = extra;
+  // Own photos (several at once): re-encoded, held, shared under CC BY-SA 4.0 with the contributor's credit.
+  for (const u of (v.uploads || [])) {
+    const buf = await cleanImage(decodeJpegDataUrl(u.photo));
+    if (!buf) { errors.push('One of your photos could not be read as a photo. Try another one.'); continue; }
+    const n = 'x' + (extra.length + 1);
+    extra.push({ n, type: u.type, caption: u.caption, yearNote: u.year, kind: 'own', license: 'CC BY-SA', credit: v.uploadCredit, year: u.year });
+    photos.push([`photo/${id}_${n}`, buf, 'image/jpeg', true]);
+  }
+  if (extra.length) sub.extra = extra;
   return { errors, photos };
 }
 
