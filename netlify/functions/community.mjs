@@ -77,6 +77,27 @@ const handle = (opts) => async (req, context) => {
     return new Response(e.data, { headers: { 'content-type': e.metadata?.type || 'image/jpeg', 'cache-control': admin ? 'private, no-store' : 'public, max-age=300' } });
   }
 
+  // Admin only: the owner's decision on an item Claude left under "Needs your decision". It only records her answer;
+  // the daily run (or Claude) reads it and does the publishing, so nothing changes in the app until then.
+  if (parts[0] === 'owner') {
+    if (!isAdmin()) return json({ error: 'not found' }, 404);
+    if (req.method === 'GET' && !parts[1]) {
+      const { blobs } = await store.list({ prefix: 'own/' }); const out = {};
+      for (const b of blobs) { const v = await store.get(b.key, { type: 'json' }); if (v) out[b.key.slice(4)] = v; }
+      return json({ decisions: out });
+    }
+    if (req.method === 'POST' && /^[a-f0-9]{8}$/.test(parts[1] || '')) {
+      let body = {}; try { body = await req.json(); } catch {}
+      const d = body && body.decision;
+      if (d === 'clear') { await store.delete('own/' + parts[1]); return json({ ok: true, id: parts[1], decision: null }); }
+      if (d !== 'approve' && d !== 'decline') return json({ error: 'decision must be approve, decline or clear' }, 400);
+      const note = String((body && body.note) || '').replace(/[<>]/g, '').slice(0, 300);
+      const rec = { decision: d, note, at: new Date().toISOString() };
+      await store.setJSON('own/' + parts[1], rec); return json({ ok: true, id: parts[1], ...rec });
+    }
+    return json({ error: 'bad request' }, 400);
+  }
+
   // Admin only: hold back (or restore) ONE photo of a place. Works before and after the place is published; the photo stays stored.
   if (req.method === 'POST' && parts[0] === 'decide' && parts[1]) {
     if (!isAdmin()) return json({ error: 'not found' }, 404);
@@ -196,14 +217,14 @@ const handle = (opts) => async (req, context) => {
     for (const b of blobs) {
       const s = await store.get(b.key, { type: 'json' }); if (!s) continue;
       if ((st.added || []).includes(s.id) || (st.declined || {})[s.id] || ((st.waiting || {})[s.id] && !s.resubmitted)) continue;
-      const { tokenHash, ...pub } = s; const dd = await store.get('dec/' + s.id, { type: 'json' }); if (dd && (dd.declined || []).length) pub.heldBack = dd.declined; out.push(pub);
+      const { tokenHash, ...pub } = s; const dd = await store.get('dec/' + s.id, { type: 'json' }); if (dd && (dd.declined || []).length) pub.heldBack = dd.declined; const od = await store.get('own/' + s.id, { type: 'json' }); if (od) pub.ownerDecision = od; out.push(pub);
     }
     return json({ pending: out });
   }
 
   if (isAdmin() && req.method === 'POST' && parts[0] === 'delete' && parts[1]) {
     const id = parts[1].replace(/[^a-f0-9]/g, '');
-    for (const k of [`dec/${id}`, `sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`, `photo/${id}_x4`, `photo/${id}_x5`]) await store.delete(k);
+    for (const k of [`dec/${id}`, `own/${id}`, `sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`, `photo/${id}_x4`, `photo/${id}_x5`]) await store.delete(k);
     return json({ ok: true, deleted: id });
   }
 

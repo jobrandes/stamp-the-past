@@ -3,25 +3,38 @@
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:1.0625rem/1.5 "Public Sans",system-ui,sans-serif;padding:20px 16px 64px}main{max-width:720px;margin:0 auto;overflow-wrap:anywhere}h1{font:700 2.2rem/1 "Big Shoulders Display",sans-serif;text-transform:uppercase;margin:.2em 0}.mut{color:var(--mut)}a{color:var(--ac)}
 input{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;background:var(--ac);color:#fff;padding:0 18px;cursor:pointer}@media(prefers-color-scheme:dark){button{color:#08121c}}button.ghost{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
 .row{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:10px 0;display:grid;gap:8px}.row b{font-size:1.05rem}.tag{display:inline-block;font:500 .75rem "IBM Plex Mono",monospace;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}.tag.h{color:var(--bad);border-color:var(--bad)}.tag.v{color:var(--ok);border-color:var(--ok)}.err{color:var(--bad);font-weight:600}h2{font-size:1.25rem;margin:1.2em 0 .3em}h3{font-size:1.05rem;margin:1.2em 0 .3em}.pvs{display:flex;gap:8px}.pvs figure{margin:0;flex:1;min-width:0}.pvs img{width:100%;height:110px;object-fit:cover;border-radius:8px;background:var(--line)}.pvs figcaption{font-size:.8rem;color:var(--mut)}
-.rulesd{margin:14px 0}.rulesd summary,.more summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.rulesd summary::marker,.more summary::marker{content:""}.rulesd summary::before,.more summary::before{content:"+";display:inline-block;width:1.2em;color:var(--ac);font-weight:700}.rulesd[open]>summary::before,.more[open]>summary::before{content:"\2212"}
+.more summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.more summary::marker{content:""}.more summary::before{content:"+";display:inline-block;width:1.2em;color:var(--ac);font-weight:700}.more[open]>summary::before{content:"\2212"}
 .tag.o{color:var(--ac);border-color:var(--ac)}.row.need{border:2px solid var(--bad)}ul.rl{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}ul.rl li{display:grid;grid-template-columns:1.4em 1fr;gap:6px}.rl .p{color:var(--ok);font-weight:700}.rl .f{color:var(--bad);font-weight:700}.rl .n{color:var(--mut);font-weight:700}.rgrp{font:600 .8rem "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:14px 0 4px}.vr{font-size:.95rem}
+.bar{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:12px 0}.bar.ok{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-color:var(--ok)}button.sm{min-height:44px;font-size:.9rem}
+.tabs{display:flex;gap:6px;margin:14px 0 4px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0;overflow-x:auto}.tabs button{flex:1 1 auto;font-size:.9rem;background:var(--card);color:var(--fg);border:1.5px solid var(--line);font-weight:600;padding:0 8px}.tabs button[aria-selected=true]{background:var(--ac);color:#fff;border-color:var(--ac)}@media(prefers-color-scheme:dark){.tabs button[aria-selected=true]{color:#08121c}}.cnt:not(:empty){display:inline-block;min-width:1.4em;padding:0 6px;margin-left:4px;border-radius:99px;background:var(--bad);color:#fff;font:600 .8rem "IBM Plex Mono",monospace}@media(prefers-color-scheme:dark){.cnt:not(:empty){color:#08121c}}
+.acts{display:flex;gap:10px;flex-wrap:wrap}.acts button{flex:1 1 140px}button.no{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}.say{font-weight:600}
+[hidden]{display:none!important}
 figure.held img{opacity:.35;outline:3px solid var(--bad,#b00)}figure .link{min-height:44px}</style></head><body><main>
 <p class="mut" style="margin:0;font:500 .75rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">Stamp the Past · community test</p>
 <h1>Community review</h1>
-<p class="mut">Private page for the owner. No key is needed for the first list. The others need the admin key. Easiest way: open this page once with <b>#k=YOUR-KEY</b> on the end of the address, then bookmark it or tick Remember. The part after # is never sent to the server.</p>
-<section id="rep"><h2>What is new <span class="mut" id="nrep"></span></h2><p class="mut" id="repsum" aria-live="polite">Loading…</p>
-<div id="needs" aria-live="polite"></div>
-<div id="repl" aria-live="polite"></div>
-<details id="rulesd" class="rulesd"><summary>The rules Claude follows when approving <span class="mut" id="nrules"></span></summary><p class="mut" id="rulesintro"></p><div id="rulesl"></div></details></section>
-<section><h2>Recently added <span class="mut" id="nadd"></span></h2><p class="mut">Places the daily run published. Open one to look it over. If something is wrong, use Report this place in the app.</p><div id="added" aria-live="polite">Loading…</div></section>
-<section><h2>Owner tools</h2>
-<div id="lock"><label for="k" class="mut">Admin key</label><input id="k" type="password" autocomplete="off" spellcheck="false">
+<div id="lock" class="bar"><p class="mut" style="margin:0 0 8px">Unlock to approve, decline or look at photos. Tip: open this page once with <b>#k=YOUR-KEY</b> on the end of the address and tick Remember.</p>
+<label for="k" class="mut">Admin key</label><input id="k" type="password" autocomplete="off" spellcheck="false">
 <label class="mut" style="display:flex;gap:10px;align-items:center;margin:10px 0"><input id="rem" type="checkbox" style="width:22px;height:22px;min-height:0"> Remember on this device (this phone or computer only)</label>
-<p><button id="go" type="button">Unlock</button></p></div>
+<p style="margin:0"><button id="go" type="button">Unlock</button></p></div>
 <p class="err" id="err" role="alert" hidden></p>
-<div id="tools" hidden><p><button class="ghost" id="forget" type="button">Lock and forget the key on this device</button></p>
-<h3>Waiting for review <span class="mut" id="npend"></span></h3><div id="pending" aria-live="polite"></div>
-<h3>Reported places</h3><div id="list" aria-live="polite"></div></div></section>
+<div id="tools" class="bar ok" hidden><span>Unlocked. You can approve and decline.</span> <button class="ghost sm" id="forget" type="button">Lock and forget the key</button></div>
+<div class="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tb-needs" aria-controls="tp-needs" aria-selected="true" type="button">Needs you <span class="cnt" id="cn-needs"></span></button><button role="tab" id="tb-act" aria-controls="tp-act" aria-selected="false" type="button">Activity</button><button role="tab" id="tb-rep" aria-controls="tp-rep" aria-selected="false" type="button">Reports <span class="cnt" id="cn-rep"></span></button><button role="tab" id="tb-rules" aria-controls="tp-rules" aria-selected="false" type="button">Rules</button></div>
+
+<section role="tabpanel" id="tp-needs" aria-labelledby="tb-needs">
+<p class="mut">Things Claude would not decide alone. Tap Approve or Decline. Your answer is saved, and Claude publishes or removes the place in the next daily run (about 3 a.m. Pacific), or sooner if you ask Claude in the chat.</p>
+<h2>Waiting for your decision <span class="mut" id="nneeds"></span></h2><div id="needs" aria-live="polite">Loading…</div>
+<h2>New from contributors <span class="mut" id="npend"></span></h2><p class="mut" id="pendhint">Unlock to see new submissions and their photos.</p><div id="pending" aria-live="polite"></div></section>
+
+<section role="tabpanel" id="tp-act" aria-labelledby="tb-act" hidden>
+<p class="mut" id="repsum" aria-live="polite">Loading…</p>
+<h2>Decided by Claude <span class="mut" id="nrep"></span></h2><div id="repl" aria-live="polite"></div>
+<h2>In the app now <span class="mut" id="nadd"></span></h2><p class="mut">Places that are published. If something is wrong, use Report this place in the app.</p><div id="added" aria-live="polite">Loading…</div></section>
+
+<section role="tabpanel" id="tp-rep" aria-labelledby="tb-rep" hidden>
+<h2>Reported places</h2><p class="mut" id="replock">Unlock to see reports.</p><div id="list" aria-live="polite"></div></section>
+
+<section role="tabpanel" id="tp-rules" aria-labelledby="tb-rules" hidden>
+<h2>The rules Claude follows <span class="mut" id="nrules"></span></h2><p class="mut" id="rulesintro"></p><div id="rulesl"></div></section>
 </main><script>
 (function(){
 var names={},places=[];function $(i){return document.getElementById(i);}
@@ -30,6 +43,25 @@ function getKey(){return ($('k').value||'').trim();}
 function hdr(){return {'x-admin-key':getKey()};}
 function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+
+// tabs
+var TABS=['needs','act','rep','rules'];
+function showTab(t){TABS.forEach(function(x){var on=x===t;$('tb-'+x).setAttribute('aria-selected',on?'true':'false');$('tb-'+x).tabIndex=on?0:-1;$('tp-'+x).hidden=!on;});}
+TABS.forEach(function(t,i){var b=$('tb-'+t);b.addEventListener('click',function(){showTab(t);});b.addEventListener('keydown',function(e){var n=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(n){var o=TABS[(i+n+TABS.length)%TABS.length];showTab(o);$('tb-'+o).focus();e.preventDefault();}});});
+showTab('needs');
+var OWN={},UNLOCKED=false,REC=[];
+function loadOwner(cb){fetch('/api/community/owner',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){OWN=j.decisions||{};cb&&cb();}).catch(function(){cb&&cb();});}
+function ownerBox(x){var box=el('div','acts'),dec=OWN[x.id];
+  function send(d){fetch('/api/community/owner/'+x.id,{method:'POST',headers:Object.assign({'content-type':'application/json'},hdr()),body:JSON.stringify({decision:d})}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){if(j.decision)OWN[x.id]=j;else delete OWN[x.id];renderNeeds();}).catch(function(){$('err').hidden=false;$('err').textContent='Could not save your answer. Try again.';});}
+  if(!UNLOCKED){box.appendChild(el('span','mut','Unlock (top of the page) to approve or decline.'));return box;}
+  if(dec){var m=el('p','say',dec.decision==='approve'?'You approved this. Claude will check the history and add it to Explore History in the next daily run, or sooner if you ask Claude in the chat.':'You declined this. Claude will remove it and tell the contributor kindly in the next daily run.');var w=document.createElement('div');w.style.width='100%';w.appendChild(m);var u=el('button','ghost sm','Change my answer');u.type='button';u.addEventListener('click',function(){send('clear');});w.appendChild(u);box.appendChild(w);return box;}
+  var ap=el('button','','Approve');ap.type='button';ap.addEventListener('click',function(){ap.disabled=true;send('approve');});
+  var no=el('button','no','Decline');no.type='button';no.addEventListener('click',function(){no.disabled=true;send('decline');});
+  box.appendChild(ap);box.appendChild(no);return box;}
+function renderNeeds(){var N=$('needs');N.innerHTML='';var n=0,open=0;
+  REC.forEach(function(x){if(x.decision!=='needs-owner')return;n++;if(!OWN[x.id])open++;N.appendChild(recCard(x));});
+  $('nneeds').textContent=n?'('+n+')':'';$('cn-needs').textContent=open?String(open):'';
+  if(!n)N.textContent='Nothing is waiting for you.';}
 // public list: no key needed
 function loadPublic(){
   fetch('/community/places.json').then(function(r){return r.ok?r.json():{};}).catch(function(){return {};}).then(function(j){names={};places=[];
@@ -49,8 +81,8 @@ function decideBtn(f,id,n,held){var b=el('button','link',held?'Held back. Tap to
   f.classList.toggle('held',!!held);f.appendChild(b);}
 function loadPending(){
   fetch('/api/community/pending',{headers:hdr()}).then(function(r){if(!r.ok)throw new Error(r.status===404?'That key was not accepted.':'Could not load.');return r.json();}).then(function(j){
-    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;var L=$('pending');L.innerHTML='';var a=j.pending||[];$('npend').textContent='('+a.length+')';
-    if(!a.length){L.textContent='Nothing is waiting. The daily run has handled everything.';}
+    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner')recIds[r.id]=1;});var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
+    if(!a.length){L.textContent='Nothing new. The daily run has handled everything.';}
     a.forEach(function(x){var d=el('div','row');d.appendChild(el('b','',x.place));d.appendChild(el('span','mut',x.city+(x.state?', '+x.state:'')+' · '+(x.created||'').slice(0,10)+(x.nickname?' · nickname: '+x.nickname:'')+(x.address?' · address: '+x.address:'')+(x.resubmitted?' · photo added later':'')));
       d.appendChild(el('span','',x.oneLiner));var pv=el('div','pvs');
       [['t','Old',x.then],['n','Recent',x.now]].forEach(function(p){if(!p[2])return;var f=document.createElement('figure');f.appendChild(el('figcaption','',p[1]+': '+(p[2].kind==='own'?'uploaded by contributor':(p[2].kind==='loc'?'Library of Congress':'Commons'))+' · '+(p[2].license||'')));pv.appendChild(f);decideBtn(f,x.id,p[0],(x.heldBack||[]).indexOf(p[0])>-1);fetchBlobImg('/api/community/photo/'+x.id+'_'+p[0],f);});
@@ -59,11 +91,11 @@ function loadPending(){
       if(x.correction){d.appendChild(el('span','',"Suggested change: "+x.correction.text));if(x.correction.source){var sa=el('a','','Their source');sa.href=x.correction.source;sa.rel='noopener';sa.target='_blank';d.appendChild(sa);}}
       d.appendChild(pv);L.appendChild(d);});
     loadReports();
-  }).catch(function(e){$('err').hidden=false;$('err').textContent=e&&e.message?e.message:'Could not load.';$('lock').hidden=false;$('tools').hidden=true;try{localStorage.removeItem(KEYN);}catch(x){}});
+  }).catch(function(e){$('err').hidden=false;$('err').textContent=e&&e.message?e.message:'Could not load.';$('lock').hidden=false;$('tools').hidden=true;UNLOCKED=false;try{localStorage.removeItem(KEYN);}catch(x){}});
 }
 function loadReports(){
   fetch('/api/community/reports',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){var L=$('list');L.innerHTML='';
-    if(!j.reports.length){L.textContent='No place has been reported.';return;}
+    $('cn-rep').textContent=j.reports.length?String(j.reports.length):'';if(!j.reports.length){L.textContent='No place has been reported.';return;}
     j.reports.forEach(function(x){var nm=names[x.id]||{n:'Place '+x.id,c:''},d=el('div','row');d.appendChild(el('b','',nm.n));d.appendChild(el('span','mut',(nm.c?nm.c+' · ':'')+x.n+' report'+(x.n===1?'':'s')+(x.last?' · last '+x.last.slice(0,10):'')));
       d.appendChild(el('span','tag '+(x.hidden?'h':'v'),x.hidden?'Hidden in the app':(x.cleared?'Visible (you cleared it)':'Visible')));
       if(x.hidden){var u=el('button','','Unhide this place');u.type='button';u.addEventListener('click',function(){u.disabled=true;fetch('/api/community/unhide/'+x.id,{method:'POST',headers:hdr()}).then(function(r){if(!r.ok)throw 0;loadReports();}).catch(function(){u.disabled=false;$('err').hidden=false;$('err').textContent='Could not unhide. Try again.';});});d.appendChild(u);}
@@ -73,19 +105,12 @@ function loadReports(){
 }
 function unlock(){var k=getKey();if(!k)return;if($('rem').checked){try{localStorage.setItem(KEYN,k);}catch(x){}}loadPending();}
 $('go').addEventListener('click',unlock);$('k').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
-$('forget').addEventListener('click',function(){try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;history.replaceState(null,'',location.pathname+location.search);});
+$('forget').addEventListener('click',function(){try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;UNLOCKED=false;OWN={};PEND={};$('pending').innerHTML='';$('npend').textContent='';$('pendhint').hidden=false;$('list').innerHTML='';$('replock').hidden=false;$('cn-rep').textContent='';renderNeeds();history.replaceState(null,'',location.pathname+location.search);});
 
 // approval report + rules (public: names, dates, results; no personal data)
-var DEC={'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
-function loadReport(){
-  fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
-    var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
-    $('nrep').textContent=recs.length?'('+recs.length+')':'';
-    var bits=[];[['added','added'],['needs-owner','need your decision'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
-    if(c.recheck)bits.push(c.recheck+' to re-check');
-    $('repsum').textContent=recs.length?'Everything Claude has decided so far: '+bits.join(', ')+'.':'Nothing has been decided yet.';
-    var N=$('needs'),L=$('repl');N.innerHTML='';L.innerHTML='';
-    recs.forEach(function(x){var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]||[x.decision,'o'];
+var RL={},PEND={};
+function recCard(x){var rl=RL;
+var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]||[x.decision,'o'];
       d.appendChild(el('b','',x.place));
       d.appendChild(el('span','mut',(x.town?x.town+(x.state?', '+x.state:'')+' · ':'')+(x.kind==='place'?'New place':x.kind==='photo'?'New photo':'Correction')+' · '+x.on+' · decided by '+(x.by||'Claude')));
       var tg=el('span','');tg.appendChild(el('span','tag '+dd[1],dd[0]));if(x.legacy){tg.appendChild(document.createTextNode(' '));tg.appendChild(el('span','tag h','Needs re-check'));}d.appendChild(tg);
@@ -97,8 +122,22 @@ function loadReport(){
         if(ph.length){var up=el('ul','rl');ph.forEach(function(q){var li=document.createElement('li');li.appendChild(el('span',q.verdict==='used'?'p':'f',q.verdict==='used'?'\u2713':'\u2717'));li.appendChild(el('span','','Photo '+q.k.replace(/^cm_[a-f0-9]{8}_/,'')+': '+(q.verdict==='used'?'used':'held back')+(q.why?' ('+q.why+')':'')));up.appendChild(li);});dt.appendChild(up);}
         d.appendChild(dt);}
       if(x.url){var a=el('a','','Open this place');a.href=x.url;d.appendChild(a);}
-      (x.decision==='needs-owner'?N:L).appendChild(d);});
-    if(N.children.length){var h=el('h3','','Needs your decision');N.insertBefore(h,N.firstChild);}
+      if(x.decision==='needs-owner'){if(UNLOCKED&&PEND[x.id]){var pv=el('div','pvs');[['t','Old'],['n','Recent']].forEach(function(q){var pp=PEND[x.id][q[0]==='t'?'then':'now'];if(!pp)return;var f=document.createElement('figure');f.appendChild(el('figcaption','',q[1]));pv.appendChild(f);fetchBlobImg('/api/community/photo/'+x.id+'_'+q[0],f);});d.insertBefore(pv,d.lastChild);}d.appendChild(el('p','mut','If you approve, Claude re-checks the history and sources first and adds it to Explore History. A mission only happens if you promote it later.'));d.appendChild(ownerBox(x));}
+      return d;
+}
+
+var DEC={'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
+function loadReport(){
+  fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
+    $('nrep').textContent=recs.length?'('+recs.length+')':'';
+    var bits=[];[['added','added'],['needs-owner','need your decision'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
+    if(c.recheck)bits.push(c.recheck+' to re-check');
+    $('repsum').textContent=recs.length?'Everything Claude has decided so far: '+bits.join(', ')+'.':'Nothing has been decided yet.';
+    REC=recs;RL=rl;
+    var L=$('repl');L.innerHTML='';
+    recs.forEach(function(x){if(x.decision!=='needs-owner')L.appendChild(recCard(x));});
+    renderNeeds();
     if(!recs.length)L.textContent='Nothing yet.';
     $('nrules').textContent='('+(j.rules||[]).length+')';$('rulesintro').textContent=(j.intro||'')+(j.effective?' In force since '+j.effective+'.':'');
     var R=$('rulesl');R.innerHTML='';var g='';
