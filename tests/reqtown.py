@@ -18,6 +18,13 @@ try:
         need(pg.locator('.reqline [data-a=reqtown]').count()==1,'bottom of the town list offers a town request')
         pg.fill('#townSearch','Tombstone'); pg.wait_for_timeout(300)
         need(pg.is_visible('#townNone [data-a=reqtown]'),'no match offers ask us to add it')
+        # history-only places (Walnut Creek) are found by search and open their stops
+        pg.fill('#townSearch','walnut'); pg.wait_for_timeout(300)
+        need(pg.is_visible('#tourHits [data-a=nbtourpick]') and not pg.is_visible('#townNone'),'search finds Walnut Creek (history stops only)')
+        pg.click('#tourHits [data-a=nbtourpick]'); pg.wait_for_timeout(400)
+        need('shadelands' in pg.inner_text('body').lower(),'Walnut Creek opens its history stops')
+        pg.goto('http://localhost:8772/play.html'); pg.wait_for_timeout(600); pg.click('text=Pick a mission'); pg.wait_for_timeout(300)
+        pg.fill('#townSearch','Tombstone'); pg.wait_for_timeout(300)
         pg.click('#townNone [data-a=reqtown]'); pg.wait_for_timeout(300)
         need('which town' in pg.inner_text('#report h2').lower(),'form is titled as a town request')
         need(pg.input_value('#repMsg').startswith('Tombstone'),'search text is pre-filled')

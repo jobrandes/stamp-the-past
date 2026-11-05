@@ -101,7 +101,7 @@
   document.addEventListener('input',function(e){
     var q=e.target; if(q&&q.id==='townSearch'){ var v=q.value.trim().toLowerCase(), any=false;
       document.querySelectorAll('#missions details.reg').forEach(function(d){ var vis=0; d.querySelectorAll('li').forEach(function(li){ var m=!v||(li.textContent+' '+(li.getAttribute('data-q')||'')).toLowerCase().indexOf(v)>-1; li.hidden=!m; if(m) vis++; }); d.hidden=!!v&&!vis; if(v) d.open=vis>0; if(vis) any=true; });
-      var nn=document.getElementById('townNone'); if(nn) nn.hidden=!v||any; return; }
+      var th=0; document.querySelectorAll('#tourHits [data-q]').forEach(function(x){ var m=!!v&&x.getAttribute('data-q').toLowerCase().indexOf(v)>-1; x.hidden=!m; if(m) th++; }); var tw=document.getElementById('tourHits'); if(tw) tw.hidden=!th; var nn=document.getElementById('townNone'); if(nn) nn.hidden=!v||any||th>0; return; }
     var t=e.target; if(!t||!t.getAttribute||!t.getAttribute('data-cmp')) return;
     var top=t.closest('.cmp').querySelector('.top'); if(top) top.style.opacity=(t.value/100); slUsed(t.closest('.cmp'));
   });
@@ -342,6 +342,8 @@
     var L=closeBy(k); if(!L.length) return ''; var v=nbGet();
     return '<details class="alsonear"><summary>Also close by: '+L.length+' history place'+(L.length>1?'s':'')+'</summary><p class="nbnote">Optional reading, no stamps or XP. Straight-line estimates.</p>'+L.map(function(x){ var dn=nice(x.d); return '<button class="rcard nbrow" data-a="nbtownstory" data-c="'+k+'" data-s="'+nbKey(x.s)+'"><span><strong>'+x.s.name+'</strong><span class="rsub">'+x.s.area+' · '+dn+' from '+x.from+'</span>'+(v[nbKey(x.s)]?'<span class="nbst on">Visited</span>':'')+'</span><span class="go">Read ›</span></button>'; }).join('')+'</details>';
   }
+  /* history-only places (no mission town yet) so search can find them: Walnut Creek */
+  function tourOnlyHtml(){ var l=TOURS.filter(function(t){ return !CITIES[t.id]&&!(t.towns&&t.towns.length); }); if(!l.length) return ''; return '<div id="tourHits" hidden>'+l.map(function(t){ return '<button class="rcard" data-a="nbtourpick" data-t="'+t.id+'" data-q="'+t.name+'" hidden><span><strong>'+t.name+'</strong><span class="rsub">History places to read. No stamps yet.</span></span><span class="go">Open ›</span></button>'; }).join('')+'</div>'; }
   function viewCityExplore(k){
     var list=townStory(k), c=CITIES[k], v=nbGet();
     var h='<section class="nbwrap"><button class="link nbback" data-a="nbcityback" data-c="'+k+'">‹ '+c.name+' missions</button><p class="mono">Explore history</p><h1 id="stopTitle" tabindex="-1" class="hh2">'+c.name+': '+list.length+' places to read</h1>';
@@ -598,7 +600,7 @@
     function soonLi(o){ var nm=(typeof o==='string')?o:o.name; return '<li><div class="town soon"><span class="tph"></span><span class="tin"><h3>'+nm+'</h3><span class="sub">Coming soon</span></span></div></li>'; }
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
-    h+=reqBanHtml()+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
+    h+=reqBanHtml()+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label>'+tourOnlyHtml()+'<p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -1479,6 +1481,7 @@
     if(a==='nbcity'){ var ck=b.getAttribute('data-c'); if(ck&&CITIES[ck]){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:ck}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbtownstory'){ var tk=b.getAttribute('data-c'), sk=b.getAttribute('data-s'); if(tk&&CITIES[tk]&&nbStory(sk)){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:sk,msg:'',town:tk}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='nbcityback'){ var bk=b.getAttribute('data-c'); if(bk&&CITIES[bk]){ railRegion=null; setCity(bk); } return; }
+    if(a==='nbtourpick'){ var tk=b.getAttribute('data-t'); leave(); atHome=true; onPass=false; onNear=true; nv={mode:'area',tour:tk,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbopen'){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:null,msg:''}; confirmReset=false; save(); applyCity(); render(true); window.scrollTo(0,0); return; }
     if(a==='nbloc'){
       if(!navigator.geolocation){ nv.mode='pick'; nv.msg='This device cannot share its location. Pick a place instead.'; render(true); return; }
