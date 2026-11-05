@@ -437,3 +437,4 @@ Other docs: `docs/roadmap.md`, `docs/name-and-launch.md`, `docs/verification-che
 - Optional place address (Nov 5 2026): step 1 has "Street address or cross streets (optional)" (`address`, max 120, stored on the submission, shown in the pending list and agent inbox). docs/community-agent.md: use it with Nominatim to confirm `geo`, and send ONE PushNotification when the run received something (silent if the inbox is empty; notify if the key fails).
 
 - Share + place links (Nov 5 2026): community Story cards and mission stops have "Share this place" (Web Share, else copies the /play.html link). Deep link `/play.html#story=<tour id>:<stop id>` opens a Story card; /contribute/admin/ lists link to it ("Open this place"). Mission stops have no deep link yet (they open /play.html).
+- Explore history (Nov 5 2026): community places list under their own 'Community-added places' heading after the official ones; shows 'N of M visited' once any is ticked.
