@@ -234,6 +234,13 @@ with sync_playwright() as p:
     need(pg.locator('[data-a=fnext]').count()==1 and 'next claim (2 of 2)' in pg.inner_text('[data-a=fnext]').lower(),'a Next claim button leads to claim 2')
     pg.click('[data-a=fnext]'); pg.wait_for_timeout(300)
     need('claim 2 of 2' in pg.inner_text('.fof').lower() and pg.locator('.fcard').count()==1,'Next claim shows claim 2')
+    # tester feedback Nov 4: 'I am here' and 'explore from home' are the same size, one above the other
+    for _w,_h in ((390,844),(320,568),(1280,800)):
+        pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}}); pg.set_viewport_size({'width':_w,'height':_h})
+        pg.locator('.stop').nth(0).click(); pg.wait_for_timeout(250)
+        _g=pg.locator('.stickgo').bounding_box(); _e=pg.locator('.gosecond').bounding_box()
+        need(_g and _e and abs(_g['width']-_e['width'])<2 and abs(_g['height']-_e['height'])<2 and _e['height']>=44,f'I am here and Explore from home are the same size at {_w}')
+        need(pg.locator('[data-a=demo]').count()==1 and pg.evaluate("document.querySelector('.stickgo').nextElementSibling.getAttribute('data-a')")=='demo','Explore from home sits right under I am here, once')
     # try it from home: preview unlocks the story but saves nothing
     pg=new(); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
     need(pg.locator('[data-a=demo]').count()>=1,'unstamped stop offers Explore from home')
