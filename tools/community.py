@@ -59,12 +59,16 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         if ph: photos[ph['k']]='/api/community/photo/'+ph['k'][3:]
         for m in sp.get('more') or []:
             if m.get('k'): photos[m['k']]='/api/community/photo/'+m['k'][3:]
-    added=sorted({p['sub'] for _,p in load_places(R,places_dir)}|{p['sub'] for _,p in load_stories(R,stories_dir)})
+    mf=R+'src/community/merged.json'  # add-photo submissions the agent has merged into an existing place's `more`
+    merged=json.load(open(mf)) if os.path.exists(mf) else []
+    added=sorted({p['sub'] for _,p in load_places(R,places_dir)}|{p['sub'] for _,p in load_stories(R,stories_dir)}|set(merged))
     df=declined_file or R+'src/community/declined.json'
     declined=json.load(open(df)) if os.path.exists(df) else {}
     wf=R+'src/community/waiting.json'
     waiting=json.load(open(wf)) if os.path.exists(wf) else {}
-    return packs,photos,{'added':added,'declined':declined,'waiting':waiting},list(tours.values())
+    dpf=R+'src/community/declined-photos.json'
+    dphotos=json.load(open(dpf)) if os.path.exists(dpf) else []
+    return packs,photos,{'added':added,'declined':declined,'waiting':waiting,'declinedPhotos':dphotos},list(tours.values())
 def check(R=R,places_dir=None):
     bad=[]
     def need(c,m):

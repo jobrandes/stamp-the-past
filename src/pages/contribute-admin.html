@@ -45,6 +45,8 @@ function loadPending(){
     a.forEach(function(x){var d=el('div','row');d.appendChild(el('b','',x.place));d.appendChild(el('span','mut',x.city+(x.state?', '+x.state:'')+' · '+(x.created||'').slice(0,10)+(x.nickname?' · nickname: '+x.nickname:'')+(x.address?' · address: '+x.address:'')+(x.resubmitted?' · photo added later':'')));
       d.appendChild(el('span','',x.oneLiner));var pv=el('div','pvs');
       [['t','Old',x.then],['n','Recent',x.now]].forEach(function(p){if(!p[2])return;var f=document.createElement('figure');f.appendChild(el('figcaption','',p[1]+': '+(p[2].kind==='own'?'uploaded by contributor':(p[2].kind==='loc'?'Library of Congress':'Commons'))+' · '+(p[2].license||'')));pv.appendChild(f);fetchBlobImg('/api/community/photo/'+x.id+'_'+p[0],f);});
+      (x.extra||[]).forEach(function(e){var f=document.createElement('figure');f.appendChild(el('figcaption','',({old:'Old',today:'Recent',detail:'Detail',unsure:'Photo'})[e.type]+' ('+e.n+')'+(e.caption?': '+e.caption:'')+' · '+(e.kind==='loc'?'Library of Congress':'Commons')+' · '+(e.license||'')));pv.appendChild(f);fetchBlobImg('/api/community/photo/'+x.id+'_'+e.n,f);});
+      if(x.target)d.appendChild(el('span','tag h','Adds photos to published place '+x.target));
       d.appendChild(pv);L.appendChild(d);});
     loadReports();
   }).catch(function(e){$('err').hidden=false;$('err').textContent=e&&e.message?e.message:'Could not load.';$('lock').hidden=false;$('tools').hidden=true;try{localStorage.removeItem(KEYN);}catch(x){}});

@@ -232,6 +232,14 @@ try:
     pk,ph,st,tr=cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/'); st['waiting']={cid_w:'We still need a recent photo of this place.'}
     json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
     ok(cid_s in st['added'],'story counted as added')
+    # per-photo approval: a declined photo is hidden while its sibling stays public; photos can be added to a published place
+    st['declinedPhotos']=[cid_s+'_t']; json.dump(st,open(TMP+'/community/status.json','w'))
+    s,_pb=api(f'/api/community/photo/{cid_s}_n'); ok(s==200,'approved photo is public: %s'%s)
+    s,_pb=api(f'/api/community/photo/{cid_s}_t'); ok(s==404,'declined photo is not public even though the place is added: %s'%s)
+    s,j=api('/api/community/submit',{'place':'Hilltop Chapel','city':'Storyville','state':'NV','oneLiner':'More photos of Hilltop Chapel.','target':cid_s,'extras':[{'url':'https://commons.wikimedia.org/wiki/File:Good_then.jpg','type':'old','caption':'Inside'}],'confirm':True})
+    ok(s==200,'photos can be added to a published place: %r'%j)
+    s,j2=api('/api/community/mine/'+j['edit']); ok(j2.get('target')==cid_s and j2['photos'][0]['status']=='waiting for review','add-photo submission carries its target and waits: %r'%j2)
+
     s,j=api('/api/community/pending',key=KEY); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
     tokn=jn['edit'] if 'edit' in jn else ''
     s,j=api('/api/community/mine/'+jn['edit']); ok(j.get('status')=='added','story status added')
@@ -246,6 +254,21 @@ try:
     s,j=api('/api/community/mine/'+jt['edit']+'/photo',{'nowUrl':'https://commons.wikimedia.org/wiki/File:Good_now.jpg','confirm':True}); ok(s==200,'add-photo accepted: %r'%j)
     s,j=api('/api/community/pending',key=KEY); PW={p['id']:p for p in j['pending']}; ok(cid_w in PW and PW[cid_w].get('now') and PW[cid_w].get('then'),'resubmitted waiting place is pending again with both photos')
     s,body=api(f'/api/community/photo/{cid_w}_n',key=KEY); ok(s==200 and body[:3]==b'\xff\xd8\xff','new photo stored and visible to admin')
+    pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/contribute/?add=deadbeef&place=Old%20Depot'); pg.wait_for_selector('#place')
+    ok('add a photo to old depot' in pg.inner_text('h1').lower() and pg.input_value('#place')=='Old Depot','add-photo mode names the place')
+    ok(pg.evaluate("!!document.querySelector('#more') && document.querySelectorAll('#more select').length==3"),'form has 3 extra photo rows with a type each')
+    # multi-photo: up to 3 extra photos, each typed, held until approval, with their own status
+    xb=dict(good,place='Gallery Place',extras=[{'url':'https://commons.wikimedia.org/wiki/File:Good_then.jpg','type':'old','caption':'The front in 1920'},{'url':'https://commons.wikimedia.org/wiki/File:Good_now.jpg','type':'detail','caption':'The doorway'}])
+    s,jx=api('/api/community/submit',xb); ok(s==200,'submit with 2 extra photos: %r'%jx)
+    s,j=api('/api/community/submit',dict(xb,extras=xb['extras']*2)); ok(s==400,'more than 3 extra photos is rejected: %r'%j)
+    s,j=api('/api/community/submit',dict(xb,extras=[{'url':'https://example.com/x.jpg','type':'old'}])); ok(s==400 and 'Extra photo 1' in json.dumps(j),'a bad extra link is rejected clearly: %r'%j)
+    xid=jx['id']; s,j=api('/api/community/pending',key=KEY); XP={p['id']:p for p in j['pending']}
+    ok(xid in XP and [e['n'] for e in XP[xid].get('extra',[])]==['x1','x2'] and XP[xid]['extra'][0]['type']=='old' and XP[xid]['extra'][0]['caption']=='The front in 1920','pending lists the extra photos with type and caption')
+    s,_xb=api(f'/api/community/photo/{xid}_x1',key=KEY); ok(s==200 and _xb[:3]==b'\xff\xd8\xff','extra photo visible to admin')
+    s,_xb=api(f'/api/community/photo/{xid}_x1'); ok(s==404,'extra photo is not public before approval')
+    s,j=api('/api/community/mine/'+jx['edit']); ok([p['status'] for p in j['photos']]==['waiting for review']*4,'status page lists every photo as waiting: %r'%j.get('photos'))
+    s,j=api('/api/community/submit',dict(xb,target='deadbeef')); ok(s==400 and 'not published' in json.dumps(j),'adding photos to an unpublished place is rejected: %r'%j)
+    s,j=api('/api/community/submit',dict(xb,target='zz')); ok(s==400,'a malformed target id is rejected')
     s,j=api('/api/community/mine/'+jn['edit']+'/photo',{'nowUrl':'https://commons.wikimedia.org/wiki/File:Good_now.jpg','confirm':True}); ok(s==400 and 'already added' in json.dumps(j),'an added place cannot be changed: %r'%j)
     pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     pg.evaluate("document.querySelector('#bnav [data-t=home]').click()"); pg.wait_for_timeout(300)
@@ -257,6 +280,7 @@ try:
     ok('hilltop chapel' in pg.inner_text('body').lower() and pg.evaluate("!!document.querySelector('.nbfig img')"),'story card shows the photo')
     ok(pg.evaluate("document.querySelectorAll('.nbfig img').length")==2,'story card shows its main photo plus the extra photo')
     ok(pg.evaluate("/about 1910/i.test(document.querySelector('.nbmore').innerText)"),'extra photo has its label and credit')
+    ok(pg.evaluate("!!document.querySelector('.repline a[href^=\"/contribute/?add=\"]')"),'story card has Add a photo')
     ok(pg.evaluate("!!document.querySelector('[data-a=nbtown][data-c=reno]')"),'promoted place links to its mission')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
     ok(pg.evaluate("!!document.querySelector('.combadge')"),'community story card shows the Community-added label')

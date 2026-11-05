@@ -110,7 +110,23 @@ export function validate(input) {
     if (!/^(19\d\d|20\d\d)$/.test(v.nowYear) || +v.nowYear > new Date().getFullYear()) errs.push('Year your photo was taken: use a real year such as 2026.');
     if (input.nowOwn !== true) errs.push('Tick "I took this photo myself" for an uploaded photo.');
   }
-  if (!hasThenUrl && !hasNowUrl && !hasUpload) errs.push('Add at least one photo: an old one, a recent one, or both.');
+  // Up to 3 extra photos (links to Commons or the Library of Congress only), each marked old / today / detail / unsure.
+  v.extras = [];
+  if (input.extras != null) {
+    if (!Array.isArray(input.extras) || input.extras.length > 3) errs.push('More photos: up to 3 extra photos.');
+    else input.extras.forEach((x, i) => {
+      if (!x || typeof x !== 'object' || !clean(x.url)) return;
+      const link = parseSourceLink(x.url);
+      if (!link) { errs.push(`Extra photo ${i + 1}: paste a commons.wikimedia.org File: page link or a loc.gov item link.`); return; }
+      const type = ['old', 'today', 'detail', 'unsure'].includes(x.type) ? x.type : 'unsure';
+      const caption = clean(x.caption).slice(0, 120);
+      if (/[<>]/.test(caption)) errs.push(`Extra photo ${i + 1}: the caption cannot contain < or >.`);
+      v.extras.push({ link, type, caption, year: clean(x.year).slice(0, 20) });
+    });
+  }
+  // Adding photos to a place that is already published: it must be named by its 8-character id.
+  if (input.target != null) { if (!/^[a-f0-9]{8}$/.test(String(input.target))) errs.push('That place could not be found.'); else v.target = String(input.target); }
+  if (!hasThenUrl && !hasNowUrl && !hasUpload && !v.extras.length) errs.push('Add at least one photo: an old one, a recent one, or both.');
   if (input.confirm !== true) errs.push('Please tick the box that confirms the photos are free to use and the facts are not your private information.');
   return { errs, v };
 }
