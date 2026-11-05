@@ -733,3 +733,6 @@ Still pending "then" photos: Spirit of Detroit, Fox Theatre (Detroit), Mill City
 | wb_hero | https://commons.wikimedia.org/wiki/File:Wren Building West Exposure.jpg | Smash the Iron Cage | CC BY-SA 4.0 | resized |
 | de_fw_then | File:Fort_Wayne_Barrack_1934.jpg | S. Lucas, Historic American Buildings Survey | Public domain | 1934 |
 | de_fw_now | File:Fort_Wayne_Barracks,_Detroit.jpg | Taubuch (Flickr) | CC BY 2.0 | 2008 |
+| wk_sh | https://commons.wikimedia.org/wiki/File:Shadelands_Ranch_House_(Walnut_Creek,_CA).JPG | Sanfranman59 | CC BY-SA 3.0 | 2008 |
+| wk_bo | https://commons.wikimedia.org/wiki/File:Old_Borges_Ranch_(Walnut_Creek,_CA).JPG | Sanfranman59 | CC BY-SA 3.0 | 2008 |
+| wk_dp | https://commons.wikimedia.org/wiki/File:Walnut_Creek_SP_station,_August_2018.JPG | Pi.1415926535 | CC BY-SA 3.0 | 2018 |

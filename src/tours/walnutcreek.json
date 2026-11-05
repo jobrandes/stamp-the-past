@@ -1,0 +1,227 @@
+{
+ "id": "walnutcreek",
+ "name": "Walnut Creek",
+ "towns": [],
+ "stops": [
+  {
+   "id": "shadelands",
+   "name": "Shadelands Ranch Museum",
+   "area": "Walnut Creek",
+   "town": "walnutcreek",
+   "geo": [
+    37.92611,
+    -122.01944,
+    150
+   ],
+   "addr": "2660 Ygnacio Valley Rd, Walnut Creek, CA 94598",
+   "invite": "A pioneer built this house to protect his daughter's future, and it is now a museum run by the city's historical society.",
+   "story": [
+    "Hiram Penniman arrived in the Walnut Creek area in 1850 and came to own about 500 acres of orchards in the Ygnacio Valley. He built the ranch house for his unmarried daughter Mary, who died of influenza in 1909. The ranch then passed to his daughter Bessie and her husband, Albert Johnson, and farming there ended when Johnson died in 1948.",
+    "In 1970 the Gospel Foundation of California, which had looked after the property, gave the house to the City of Walnut Creek. The Walnut Creek Historical Society was asked to run it, and it opened as a museum in 1972. The house is on the National Register of Historic Places, listed in 1985."
+   ],
+   "facts": [
+    {
+     "t": "Hiram Penniman arrived in 1850 and owned about 500 acres of orchards in the Ygnacio Valley.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The house was built for his unmarried daughter Mary, who died of influenza in 1909.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The City of Walnut Creek received the house in 1970 and the museum opened in 1972.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The house is on the National Register of Historic Places, listed August 29, 1985.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "Sources disagree on when the house was finished: the museum says 1903 and Wikipedia says 1902.",
+     "src": [
+      0,
+      1
+     ]
+    }
+   ],
+   "access": "The museum's page lists public tours on Sundays and Wednesdays from 1 to 4 pm in the 2026 season (February 1 to October 28), so check before you go; outside those hours look from the street. Admission is not listed, so call the Historical Society at 925-935-7871.",
+   "access_check": {
+    "on": "2026-11-04",
+    "by": "Claude",
+    "how": "Story read against the Walnut Creek Historical Society museum page and Wikipedia; hours as published for the 2026 season and not confirmed by phone. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Walnut Creek Historical Society: Shadelands Ranch Museum",
+     "u": "https://wchistory.org/museum/"
+    },
+    {
+     "t": "Wikipedia: Shadelands Ranch",
+     "u": "https://en.wikipedia.org/wiki/Shadelands_Ranch"
+    }
+   ],
+   "ph": {
+    "k": "wk_sh",
+    "alt": "The two-story Shadelands Ranch house with a corner turret and a wide front porch",
+    "by": "Sanfranman59",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Shadelands_Ranch_House_(Walnut_Creek,_CA).JPG",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "borges",
+   "name": "Old Borges Ranch",
+   "area": "Walnut Creek",
+   "town": "walnutcreek",
+   "geo": [
+    37.89011,
+    -122.00252,
+    300
+   ],
+   "addr": "1035 Castle Rock Rd, Walnut Creek, CA 94598",
+   "invite": "A working-ranch landscape with goats, corrals and a 1901 farmhouse, free to walk up to, in the open space above town.",
+   "story": [
+    "Frank Borges was an early Walnut Creek pioneer, and his family's ranch house was built in 1901. Wikipedia says the Borges family bought about 700 acres in 1899, and that the City of Walnut Creek bought the ranch in 1976.",
+    "The ranch is on the National Register of Historic Places, listed in 1981. Today the farmhouse has displays on life in the early 1900s, and the ranch still has a blacksmith shop, farm equipment, and animals cared for by Pleasant Hill 4-H."
+   ],
+   "facts": [
+    {
+     "t": "The Borges family home was built in 1901.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "The ranch is on the National Register of Historic Places, listed July 7, 1981.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The family bought about 700 acres in 1899 and the city bought the ranch in 1976.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The site has a blacksmith shop, outbuildings, and animals cared for by Pleasant Hill 4-H.",
+     "src": [
+      1
+     ]
+    },
+    {
+     "t": "The park is open from 8 a.m. to sunset and parking is at Northgate High School.",
+     "src": [
+      1
+     ]
+    }
+   ],
+   "access": "The park is open 8 a.m. to sunset per a Bay Area Older Adults listing, with parking at Northgate High School. The farmhouse's own opening times were not found, so expect to see it from outside unless a sign says otherwise. The map point is an estimate from Wikipedia coordinates.",
+   "access_check": {
+    "on": "2026-11-04",
+    "by": "Claude",
+    "how": "Story and access read against Wikipedia and the Bay Area Older Adults listing; the city page could not be fetched, so hours are not confirmed with the city. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Wikipedia: Old Borges Ranch",
+     "u": "https://en.wikipedia.org/wiki/Old_Borges_Ranch"
+    },
+    {
+     "t": "Bay Area Older Adults: Old Borges Ranch",
+     "u": "https://bayareaolderadults.org/historical-sites/walnut-creek/old-borges-ranch"
+    }
+   ],
+   "ph": {
+    "k": "wk_bo",
+    "alt": "Old Borges Ranch buildings and corrals below an oak-covered hillside",
+    "by": "Sanfranman59",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Old_Borges_Ranch_(Walnut_Creek,_CA).JPG",
+    "note": "resized"
+   }
+  },
+  {
+   "id": "spdepot",
+   "name": "Southern Pacific Depot",
+   "area": "Walnut Creek",
+   "town": "walnutcreek",
+   "geo": [
+    37.89797,
+    -122.05873,
+    100
+   ],
+   "addr": "1313 N Broadway, Walnut Creek, CA 94596",
+   "invite": "The first train arrived in 1891, and the depot was later moved to make room for a street.",
+   "story": [
+    "The first passenger train rolled into Walnut Creek in 1891. Southern Pacific built a depot that year on a site across the creek, which is now under Broadway.",
+    "The depot was later put to commercial uses and was moved in 1972. A Walnut Creek Historical Society marker, number 102, stands by it near Liberty Bell Plaza on North Broadway."
+   ],
+   "facts": [
+    {
+     "t": "The first passenger train arrived in Walnut Creek in 1891.",
+     "src": [
+      0,
+      1
+     ]
+    },
+    {
+     "t": "Southern Pacific built the depot in 1891 on a site across the creek, now under Broadway.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The depot was moved in 1972 after commercial use.",
+     "src": [
+      0
+     ]
+    },
+    {
+     "t": "The Walnut Creek Historical Society erected marker number 102 near it.",
+     "src": [
+      0
+     ]
+    }
+   ],
+   "access": "The building stands on North Broadway near Mt. Diablo Boulevard, and the marker is beside it in Liberty Bell Plaza. Its current use is not confirmed, so view it from the sidewalk. The 2018 photo shows construction fencing, so it may look different now.",
+   "access_check": {
+    "on": "2026-11-04",
+    "by": "Claude",
+    "how": "Story read against the Historical Marker Database entry for the Historical Society's marker and Wikipedia; current use of the building not confirmed. Not walked yet."
+   },
+   "sources": [
+    {
+     "t": "Historical Marker Database: Southern Pacific Railroad Depot",
+     "u": "https://www.hmdb.org/m.asp?m=93738"
+    },
+    {
+     "t": "Wikipedia: Walnut Creek, California",
+     "u": "https://en.wikipedia.org/wiki/Walnut_Creek,_California"
+    }
+   ],
+   "ph": {
+    "k": "wk_dp",
+    "alt": "The brown wooden Southern Pacific depot with a tall chimney, behind a construction fence",
+    "by": "Pi.1415926535",
+    "lic": "CC BY-SA 3.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/3.0/",
+    "page": "https://commons.wikimedia.org/wiki/File:Walnut_Creek_SP_station,_August_2018.JPG",
+    "note": "resized"
+   }
+  }
+ ]
+}
