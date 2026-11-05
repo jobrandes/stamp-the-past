@@ -92,8 +92,9 @@ if os.path.exists(R+'src/community.flag'):
     sys.path.insert(0,R+'tools'); import community as _cm
     _bad=_cm.check(R); assert not _bad,'community places: '+'; '.join(_bad[:5])
     _pk,_ph,_st,_tr=_cm.build(R)
+    _off=[{'n':sp['name'],'c':p_['name']} for p_ in packs.values() for sp in p_['stops']]+[{'n':sp['name'],'c':t_.get('name','')} for t_ in tours for sp in t_.get('stops',[])]
     shutil.rmtree(R+'site/community',ignore_errors=True); os.makedirs(R+'site/community')
-    open(R+'site/community/places.json','w').write(json.dumps({'packs':_pk,'photos':_ph,'tours':_tr},ensure_ascii=False,separators=(',',':')))
+    open(R+'site/community/places.json','w').write(json.dumps({'packs':_pk,'photos':_ph,'tours':_tr,'official':_off},ensure_ascii=False,separators=(',',':')))
     open(R+'site/community/status.json','w').write(json.dumps(_st,ensure_ascii=False,separators=(',',':')))
     print('community:',len(_pk),'towns,',len(_st['added']),'places')
     os.makedirs(R+'site/contribute',exist_ok=True); shutil.copy(R+'src/pages/contribute.html',R+'site/contribute/index.html'); os.makedirs(R+'site/contribute/admin',exist_ok=True); shutil.copy(R+'src/pages/contribute-admin.html',R+'site/contribute/admin/index.html')

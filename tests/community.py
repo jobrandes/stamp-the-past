@@ -231,7 +231,7 @@ try:
     json.dump({'sub':cid_s,'town':'Storyville','state':'NV','added':'2026-11-03','stop':story},open(f'{d}/{cid_s}.json','w'))
     ok(cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/')[3][0]['stops'][0]['town']=='c_storyville-nv','story stop is tied to its town')
     pk,ph,st,tr=cm.build(places_dir=TMP+'/_places/',declined_file='/nonexistent',stories_dir=d+'/'); st['waiting']={cid_w:'We still need a recent photo of this place.'}
-    json.dump({'packs':pk,'photos':ph,'tours':tr},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
+    json.dump({'packs':pk,'photos':ph,'tours':tr,'official':[{'n':'The Reno Arch','c':'Reno'}]},open(TMP+'/community/places.json','w')); json.dump(st,open(TMP+'/community/status.json','w'))
     ok(cid_s in st['added'],'story counted as added')
     # per-photo approval: a declined photo is hidden while its sibling stays public; photos can be added to a published place
     st['declinedPhotos']=[cid_s+'_t']; json.dump(st,open(TMP+'/community/status.json','w'))
@@ -286,6 +286,8 @@ try:
     pg.fill('#place','Hilltop Chapel'); pg.wait_for_timeout(300)
     ok(pg.is_visible('#sugg') and pg.evaluate("document.querySelector('#sugg a').getAttribute('href').indexOf('/contribute/?add=')==0"),'typing an existing place offers Add photos to it: '+pg.inner_text('#sugg'))
     pg.fill('#place','Completely New Thing'); pg.wait_for_timeout(300); ok(not pg.is_visible('#sugg'),'no suggestion for a new place')
+    pg.fill('#city','Reno'); pg.fill('#place','Reno Arch'); pg.wait_for_timeout(300)
+    ok(pg.is_visible('#sugg') and 'already in the app' in pg.inner_text('#sugg').lower(),'an official stop is flagged as already in the app: '+pg.inner_text('#sugg')[:120])
     pg.fill('#city','walnut creek, ca'); pg.press('#city','Tab'); ok(pg.input_value('#city')=='Walnut Creek' and pg.input_value('#state')=='CA','the form tidies the town as you leave the field: %r %r'%(pg.input_value('#city'),pg.input_value('#state')))
     # several uploaded photos at once (the main way people will contribute)
     def U(i,t='unsure'): return {'photo':'data:image/jpeg;base64,'+base64.b64encode(mkjpg((20*i,120,60))).decode(),'type':t,'caption':'View %d'%i,'year':'1925' if t=='old' else ''}
