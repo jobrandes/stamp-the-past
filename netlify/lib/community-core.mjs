@@ -109,12 +109,25 @@ export function validate(input) {
   const errs = [];
   const t = (s, min, max, label) => { const v = clean(s); if (v.length < min || v.length > max) errs.push(`${label}: ${min ? min + ' to ' : 'up to '}${max} characters`); return v; };
   const ncs = normCityState(clean(input.city), clean(input.state));
+  // A correction to a published place: text only, no photo needed. It never edits anything by itself; a person reads it against sources.
+  const isFix = input.correction != null;
+  if (isFix && (!input.correction || typeof input.correction !== 'object' || Array.isArray(input.correction))) errs.push('Correction: please describe what should change.');
+  let correction;
+  if (isFix && input.correction && typeof input.correction === 'object') {
+    const ct = clean(input.correction.text), cs = clean(input.correction.source);
+    if (ct.length < 10 || ct.length > 600) errs.push('Correction: 10 to 600 characters');
+    if (/[<>]/.test(ct)) errs.push('Correction: it cannot contain < or >.');
+    if (cs && (cs.length > 200 || !/^https:\/\/[^\s<>"]+$/.test(cs))) errs.push('Correction source: a link starting with https://, or leave it empty.');
+    correction = { text: ct, ...(cs ? { source: cs } : {}) };
+    if (!input.oneLiner) input = { ...input, oneLiner: ('Correction: ' + ct).slice(0, 300) };
+  }
   const v = {
     city: t(ncs.city, 2, 60, 'Town or city'), state: t(ncs.state, 0, 30, 'State or region'),
     place: t(input.place, 3, 80, 'Name of the place'), oneLiner: t(input.oneLiner, 10, 300, 'One line about it'),
     nickname: t(input.nickname, 0, 30, 'Nickname'), address: t(input.address, 0, 120, 'Street address or cross streets'),
   };
   // At least one photo is needed. "Then" only = waits for a "now" photo. "Now" only = becomes a Story stop (no old photo yet).
+  v.correction = correction;
   const hasThenUrl = clean(input.thenUrl), hasNowUrl = clean(input.nowUrl), hasUpload = !!input.nowPhoto;
   if (hasThenUrl) { v.then = parseSourceLink(input.thenUrl); if (!v.then) errs.push('"Then" photo: paste the link to its File: page on commons.wikimedia.org, or its item page on loc.gov, or leave it empty.'); }
   if (hasNowUrl) { v.now = parseSourceLink(input.nowUrl); if (!v.now) errs.push('"Now" photo: paste a commons.wikimedia.org File: page link or a loc.gov item link, or upload your own instead.'); }
@@ -163,7 +176,8 @@ export function validate(input) {
   if (input.target != null) { if (!/^[a-f0-9]{8}$/.test(String(input.target))) errs.push('That place could not be found.'); else v.target = String(input.target); }
   const total = (v.then ? 1 : 0) + (v.now || v.nowUpload ? 1 : 0) + v.extras.length + v.uploads.length;
   if (total > 5) errs.push('You can send up to 5 photos for one place.');
-  if (!hasThenUrl && !hasNowUrl && !hasUpload && !v.extras.length && !v.uploads.length) errs.push('Add at least one photo: an old one, a recent one, or both.');
+  if (isFix && !v.target) errs.push('A correction must name the place it is about.');
+  if (!isFix && !hasThenUrl && !hasNowUrl && !hasUpload && !v.extras.length && !v.uploads.length) errs.push('Add at least one photo: an old one, a recent one, or both.');
   if (input.confirm !== true) errs.push('Please tick the box that confirms the photos are free to use and the facts are not your private information.');
   return { errs, v };
 }

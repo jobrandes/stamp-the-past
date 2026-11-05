@@ -1503,6 +1503,9 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
     paint(); document.body.appendChild(o); o.querySelector('.galx').focus(); }
   function moreHtml(sp){ return ''; }
   function comPid(st){ var k=((st.ph&&st.ph.k)||(st.now&&st.now.ph&&st.now.ph.k)||(st.then&&st.then.ph&&st.then.ph.k)||''); var m=/^cm_([a-f0-9]{8})_/.exec(k); return m?m[1]:''; }
+  function fixBtn(st,ck){ var id=comPid(st); if(!id) return ''; var t=CITIES[st.town||ck]?CITIES[st.town||ck]:null, tr=null; TOURS.forEach(function(x){ if(x.id===st.town) tr=x; });
+    var city=(tr&&tr.name)||(t&&t.name)||'', state=(tr&&tr.state)||'';
+    return '<a class="link" href="/contribute/?fix='+id+'&amp;place='+encodeURIComponent(String(st.name).slice(0,80))+(city?'&amp;city='+encodeURIComponent(city):'')+(state?'&amp;state='+encodeURIComponent(state):'')+'">Suggest a correction</a>'; }
   function addPhotoBtn(st){ var id=comPid(st); if(!id) return ''; return '<a class="link" href="/contribute/?add='+id+'&amp;place='+encodeURIComponent(String(st.name).slice(0,80))+'">Add a photo</a>'; }
   function viewStory(sp){
     var v=nbGet()[nbKey(sp)], d=nbDist(sp), ac=sp.access_check||{};
@@ -1512,7 +1515,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       +(sp.community?comBadge(sp):'')+sensHtml(sp)+galHtml(sp)+'<p class="nbinvite">'+sp.invite+'</p>'+sp.story.map(function(t){ return '<p>'+t+'</p>'; }).join('')
       +(sp.mission&&CITIES[sp.mission.town]?'<section class="card"><p class="mono">Mission</p><p>This place is also a mission. Visit in person to earn its stamp.</p><button class="btn" data-a="nbtown" data-c="'+sp.mission.town+'" data-i="'+(sp.mission.i||0)+'">Play the mission</button></section>':'')+'<section class="card nbvisit"><button class="btn'+(v?' ghost':'')+'" data-a="nbvisit" data-s="'+nbKey(sp)+'" aria-pressed="'+(v?'true':'false')+'">'+(v?'Visited. Tap to undo':'Mark visited')+'</button><p class="hint">Story stops give no stamp and no XP. This mark is saved on this device only and is not part of your backup code.</p></section>'
       +'<section class="card nbaccess"><h2 class="nbh2">Getting there</h2><p>'+sp.access+'</p><p class="hint">Details read against official pages on '+ac.on+'. Not walked yet.</p><a class="btn ghost" href="'+dir+'" target="_blank" rel="noopener">Walking directions in Maps</a><p class="hint">Opens in Maps, outside this app. '+sp.addr+'.</p></section>'
-      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="shareplace" data-n="'+String(sp.name).replace(/[<>&"]/g,'')+'">Share this place</button> · '+addPhotoBtn(sp)+' · <button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
+      +'<section class="card nbsrcs"><h2 class="nbh2">Sources</h2><ul class="nbsrc">'+sp.sources.map(function(x){ return '<li><a href="'+x.u+'" target="_blank" rel="noopener">'+x.t+'</a></li>'; }).join('')+'</ul></section>'+(sp.community?'<p class="repline"><button class="link" data-a="shareplace" data-n="'+String(sp.name).replace(/[<>&"]/g,'')+'">Share this place</button> · '+addPhotoBtn(sp)+' · '+fixBtn(sp)+' · <button class="link" data-a="report" data-com="'+String(sp.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button></p>':'')+'</section>';
   }
   function tourState(t){ return String(t.state||TSTATE[(t.towns||[])[0]]||TSTATE[t.id]||'').split('/')[0].toUpperCase(); }
   function nbPickHtml(){
@@ -2460,7 +2463,7 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
       h+='</div></div>';
     }
     if(cur.step===3 && d){ h+=factGame(st); }
-    h+='<p class="repline">'+(st.community?'<button class="link" data-a="shareplace" data-n="'+String(st.name).replace(/[<>&"]/g,'')+'">Share this place</button> · '+addPhotoBtn(st)+' · <button class="link" data-a="report" data-com="'+String(st.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button>':'<button class="link" data-a="report">Something wrong here? Tell us</button>')+'</p>';
+    h+='<p class="repline">'+(st.community?'<button class="link" data-a="shareplace" data-n="'+String(st.name).replace(/[<>&"]/g,'')+'">Share this place</button> · '+addPhotoBtn(st)+' · '+fixBtn(st,cityId)+' · <button class="link" data-a="report" data-com="'+String(st.id).replace(/[^A-Za-z0-9_-]/g,'')+'">Report this place</button>':'<button class="link" data-a="report">Something wrong here? Tell us</button>')+'</p>';
     return h;
   }
 

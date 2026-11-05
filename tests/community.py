@@ -240,6 +240,25 @@ try:
     s,j=api('/api/community/submit',{'place':'Hilltop Chapel','city':'Storyville','state':'NV','oneLiner':'More photos of Hilltop Chapel.','target':cid_s,'extras':[{'url':'https://commons.wikimedia.org/wiki/File:Good_then.jpg','type':'old','caption':'Inside'}],'confirm':True})
     ok(s==200,'photos can be added to a published place: %r'%j)
     s,j2=api('/api/community/mine/'+j['edit']); ok(j2.get('target')==cid_s and j2['photos'][0]['status']=='waiting for review','add-photo submission carries its target and waits: %r'%j2)
+    # a correction to a published place: text only, never edits anything by itself, goes to the inbox flagged
+    fx={'place':'Hilltop Chapel','city':'Storyville','state':'NV','target':cid_s,'correction':{'text':'The chapel was built in 1911, not 1910, according to the county record.','source':'https://example.org/record'},'confirm':True}
+    s,jf=api('/api/community/submit',fx); ok(s==200,'a correction can be sent with no photo: %r'%jf)
+    s,j=api('/api/community/pending',key=KEY); FP={p['id']:p for p in j['pending']}
+    ok(jf['id'] in FP and FP[jf['id']]['correction']['text'].startswith('The chapel was built') and FP[jf['id']]['correction']['source']=='https://example.org/record' and FP[jf['id']]['target']==cid_s,'pending shows the correction, its source and the place it is about')
+    s,j=api('/api/community/mine/'+jf['edit']); ok(j.get('correction') is True and j['photos']==[],'status says it is a correction: %r'%j)
+    s,j=api('/api/community/submit',dict(fx,correction={'text':'short'})); ok(s==400,'a too-short correction is rejected')
+    s,j=api('/api/community/submit',dict(fx,correction={'text':'The chapel was built in 1911 per the record.','source':'http://example.org/x'})); ok(s==400,'a non-https correction source is rejected')
+    s,j=api('/api/community/submit',dict(fx,correction={'text':'Built in <b>1911</b> according to the record.'})); ok(s==400,'markup in a correction is rejected')
+    s,j=api('/api/community/submit',{k:v for k,v in fx.items() if k!='target'}); ok(s==400,'a correction must name its place')
+    s,j=api('/api/community/submit',dict(fx,target='deadbeef')); ok(s==400,'a correction to an unpublished place is rejected')
+    # per-photo decisions by the owner: hold one photo back, the rest stay
+    s,_=api(f'/api/community/decide/{cid_s}_n',{'decline':True}); ok(s==404,'deciding needs the admin key')
+    s,_=api(f'/api/community/decide/zz_n',{'decline':True},key=KEY); ok(s==400,'a bad photo id is rejected')
+    s,j=api(f'/api/community/decide/{cid_s}_n',{'decline':True},key=KEY); ok(s==200 and 'n' in j['declined'],'owner can hold a photo back: %r'%j)
+    s,_=api(f'/api/community/photo/{cid_s}_n'); ok(s==404,'a held-back photo is not public even though the place is added')
+    s,_=api(f'/api/community/photo/{cid_s}_n',key=KEY); ok(s==200,'the owner can still see a held-back photo')
+    s,j=api(f'/api/community/decide/{cid_s}_n',{'decline':False},key=KEY); ok(s==200 and 'n' not in j['declined'],'owner can restore it')
+    s,_=api(f'/api/community/photo/{cid_s}_n'); ok(s==200,'a restored photo is public again')
 
     s,j=api('/api/community/pending',key=KEY); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
     tokn=jn['edit'] if 'edit' in jn else ''
@@ -289,6 +308,12 @@ try:
     pg.fill('#city','Reno'); pg.fill('#place','Reno Arch'); pg.wait_for_timeout(300)
     ok(pg.is_visible('#sugg') and 'already in the app' in pg.inner_text('#sugg').lower(),'an official stop is flagged as already in the app: '+pg.inner_text('#sugg')[:120])
     pg.fill('#city','walnut creek, ca'); pg.press('#city','Tab'); ok(pg.input_value('#city')=='Walnut Creek' and pg.input_value('#state')=='CA','the form tidies the town as you leave the field: %r %r'%(pg.input_value('#city'),pg.input_value('#state')))
+    pg.goto(B+'/contribute/?fix='+cid_s+'&place=Hilltop+Chapel&city=Storyville&state=NV'); pg.wait_for_timeout(500)
+    ok(pg.is_visible('#fixsec') and pg.is_hidden('#f'),'correction link opens the short correction form')
+    pg.click('#fixgo'); pg.wait_for_timeout(500); ok(pg.is_visible('#fixerr'),'an empty correction shows an error')
+    pg.fill('#fixtext','The chapel opened in 1911 according to the county record.'); pg.check('#fixconf'); pg.click('#fixgo'); pg.wait_for_selector('#done:not([hidden])')
+    ok(pg.is_visible('#done') and pg.is_hidden('#fixsec'),'a sent correction shows the Received screen')
+    ok(pg.evaluate("document.getElementById('pfile').multiple"),'the status-page upload takes several photos')
     # several uploaded photos at once (the main way people will contribute)
     def U(i,t='unsure'): return {'photo':'data:image/jpeg;base64,'+base64.b64encode(mkjpg((20*i,120,60))).decode(),'type':t,'caption':'View %d'%i,'year':'1925' if t=='old' else ''}
     ub={'place':'Upload Gallery','city':'Testville','state':'NV','oneLiner':'A place sent with several of my own photos.','uploads':[U(1,'old'),U(2,'today'),U(3,'detail')],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}
@@ -301,6 +326,12 @@ try:
     s,j=api('/api/community/submit',dict(ub,uploads=[U(i) for i in range(1,5)],nowUrl='https://commons.wikimedia.org/wiki/File:Good_now.jpg',thenUrl='https://commons.wikimedia.org/wiki/File:Good_then.jpg')); ok(s==400 and 'up to 5' in json.dumps(j),'links plus uploads over 5 is rejected: %r'%j)
     s,j=api('/api/community/submit',dict(ub,uploadOwn=False)); ok(s==400 and 'took these photos' in json.dumps(j),'uploads need the ownership tick')
     s,j=api('/api/community/submit',dict(ub,uploadCredit='')); ok(s==400,'uploads need a credit')
+    # adding several uploaded photos later from the status link: appended after the existing ones, 5 in all
+    s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(4),U(5)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==200,'status page can add two more uploaded photos: %r'%j)
+    s,j=api('/api/community/pending',key=KEY); UP={p['id']:p for p in j['pending']}
+    ok([e['n'] for e in UP[uid]['extra']]==['x1','x2','x3','x4','x5'],'new uploads are appended after the existing photos: %r'%[e['n'] for e in UP[uid]['extra']])
+    s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==400 and '5 photos' in json.dumps(j),'a sixth photo is refused: %r'%j)
+    s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':False,'uploadCredit':'Dad','confirm':True}); ok(s==400,'status-page uploads need the ownership tick')
     s,j=api('/api/community/submit',dict(ub,uploads=[dict(U(1),year='yesterday')])); ok(s==400 and 'year' in json.dumps(j),'a bad photo year is rejected')
     s,j=api('/api/community/submit',dict(ub,uploads=[{'photo':'data:image/jpeg;base64,'+base64.b64encode(b'\xff\xd8\xff'+b'A'*3000).decode()}])); ok(s==400,'a fake jpeg in uploads is rejected')
     # multi-photo: up to 3 extra photos, each typed, held until approval, with their own status
@@ -335,6 +366,7 @@ try:
     pg.keyboard.press('Escape'); pg.wait_for_timeout(150)
     ok(pg.evaluate("!document.getElementById('galbox')"),'Escape closes the viewer')
     ok(pg.evaluate("!!document.querySelector('.repline a[href^=\"/contribute/?add=\"]')"),'story card has Add a photo')
+    ok(pg.evaluate("!!document.querySelector('.repline a[href^=\"/contribute/?fix=\"]')"),'story card has Suggest a correction')
     ok(pg.evaluate("!!document.querySelector('[data-a=nbtown][data-c=reno]')"),'promoted place links to its mission')
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
     ok(pg.evaluate("!!document.querySelector('.combadge')"),'community story card shows the Community-added label')
@@ -416,6 +448,12 @@ try:
     pg.fill('#k',KEY); pg.click('#go'); pg.wait_for_selector('#tools:not([hidden])'); pg.wait_for_selector('#list .row')
     ok('Pending Probe' in pg.inner_text('#pending') and 'nickname: Dad' in pg.inner_text('#pending'),'waiting list shows the pending place: '+pg.inner_text('#pending')[:200])
     pg.wait_for_timeout(800); ok(pg.evaluate("Array.from(document.querySelectorAll('#pending img')).some(function(i){return i.src.indexOf('blob:')===0&&i.naturalWidth>0})"),'pending photos preview with the key')
+    ok(pg.evaluate("document.querySelectorAll('#pending figure button[aria-pressed]').length")>=1,'each pending photo has a hold-back button')
+    ok(pg.evaluate("/correction for published place/i.test(document.getElementById('pending').innerText)") and pg.evaluate("/the chapel was built in 1911/i.test(document.getElementById('pending').innerText)"),'a correction shows in the waiting list with its text')
+    pg.evaluate("document.querySelector('#pending figure button[aria-pressed=false]').click()"); pg.wait_for_timeout(700)
+    ok(pg.evaluate("!!document.querySelector('#pending figure.held button[aria-pressed=true]')"),'tapping Hold back marks the photo held')
+    pg.evaluate("document.querySelector('#pending figure.held button').click()"); pg.wait_for_timeout(700)
+    ok(pg.evaluate("!document.querySelector('#pending figure.held')"),'tapping again restores it')
     ok('Credit Probe' in pg.inner_text('#list') and 'Hidden in the app' in pg.inner_text('#list') and '3 reports' in pg.inner_text('#list'),'admin page lists the hidden place: '+pg.inner_text('#list'))
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'admin page fits the phone'); pg.click('text=Unhide this place'); pg.wait_for_timeout(600)
     ok('Visible' in pg.inner_text('#list') and 'Hidden in the app' not in pg.inner_text('#list'),'unhide from the admin page works: '+pg.inner_text('#list'))

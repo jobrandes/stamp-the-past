@@ -36,6 +36,11 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <div class="banner" id="tbanner"><strong>Test copy only.</strong> Nothing here reaches the real app or the App Store until it has been checked.</div>
 <details class="priv" id="priv"><summary>What happens to what you send (test only)</summary><p class="help" style="font-size:.95rem">We keep the place name, town, your one-liner, your optional nickname, and any photo or credit you give. Photos you upload stay private until a person approves the place. If it is approved, the name, town, nickname, text and photo are shown publicly in this test copy of the app. We store no email, name or location. To have something removed, use the Report button on the place in the app, or email <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a>. This is a test and is not covered by the live app's privacy page.</p></details>
 <ol class="steps" id="steps" aria-label="Progress"><li class="on" data-s="1">1 Place</li><li data-s="2">2 Photos</li><li data-s="3">3 Send</li></ol>
+<section id="fixsec" hidden><h2 id="fixT">Suggest a correction</h2><p class="help">Tell us what looks wrong or missing. Nothing changes by itself: a person checks it against sources first, and the place stays as it is until then.</p>
+<label for="fixtext">What should change?</label><textarea id="fixtext" rows="5" maxlength="600" aria-describedby="fixcount"></textarea><p class="help" id="fixcount">0 of 600</p>
+<label for="fixsrc">A source link that shows it (optional, https only)</label><input id="fixsrc" inputmode="url" maxlength="200" placeholder="https://...">
+<label class="chk"><input type="checkbox" id="fixconf"><span>This is not private information, and I understand the correction is only a suggestion</span></label>
+<p class="err" id="fixerr" role="alert" hidden></p><button type="button" class="btn" id="fixgo">Send correction</button></section>
 <form id="f" novalidate>
 <input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
 <fieldset class="step" data-step="1"><legend>The place</legend>
@@ -95,10 +100,10 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><ul id="stph" class="sum" hidden aria-label="Photo status"></ul><details id="addp" hidden><summary>Add or change a photo</summary><p class="help">Add the missing photo (or replace one) and your place goes back into review.</p>
 <label for="pthen">Old photo: Commons link</label><input id="pthen" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
 <label for="pnow">Recent photo: Commons link</label><input id="pnow" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
-<details id="pown" hidden><summary>Or upload my own recent photo</summary>
-<label for="pfile">Photo file</label><input type="file" accept="image/*" id="pfile"><img id="pprev" alt="" hidden style="max-width:100%;max-height:200px;border-radius:8px;margin:8px 0">
-<label class="chk"><input type="checkbox" id="ptook"><span>I took this photo myself, and I agree to share it under CC BY-SA 4.0 with my credit shown</span></label>
-<div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
+<details id="pown" hidden><summary>Or upload my own photos (up to 5)</summary>
+<label for="pfile">Photo file</label><input type="file" accept="image/*" id="pfile" multiple><div id="pprevs" style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0"></div>
+<label class="chk"><input type="checkbox" id="ptook"><span>I took these photos myself, and I agree to share them under CC BY-SA 4.0 with my credit shown</span></label>
+<div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken (optional)</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
 </details>
 <label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or I took them myself, and I am not including anyone's private information. I can be asked to remove a photo if someone objects.</span></label>
 <p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></details>
@@ -221,19 +226,30 @@ document.getElementById('copy').addEventListener('click',function(){var t=docume
 var ADD='';
 try{var qp=new URLSearchParams(location.search),qa=(qp.get('add')||'');if(/^[a-f0-9]{8}$/.test(qa)){ADD=qa;var pl=(qp.get('place')||'').slice(0,80);if(pl)document.getElementById('place').value=pl;if(!document.getElementById('one').value)document.getElementById('one').value='More photos of '+pl+'.';var h1=document.querySelector('h1');if(h1)h1.textContent='Add a photo to '+(pl||'this place');}}catch(e){}
 try{var qp=new URLSearchParams(location.search),qc=(qp.get('city')||'').slice(0,60),qs=(qp.get('state')||'').slice(0,30);if(qc)document.getElementById('city').value=qc;if(qs)document.getElementById('state').value=qs;}catch(e){}
+var FIX='';
+try{var qf=new URLSearchParams(location.search),fid=(qf.get('fix')||'');if(/^[a-f0-9]{8}$/.test(fid)){FIX=fid;var fpl=(qf.get('place')||'').slice(0,80),fc=(qf.get('city')||'').slice(0,60),fs=(qf.get('state')||'').slice(0,30);document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;document.getElementById('fixsec').hidden=false;document.getElementById('fixT').textContent='Suggest a correction'+(fpl?': '+fpl:'');var h1f=document.querySelector('h1');if(h1f)h1f.textContent='Suggest a correction';
+  document.getElementById('fixtext').addEventListener('input',function(){document.getElementById('fixcount').textContent=this.value.length+' of 600';});
+  document.getElementById('fixgo').addEventListener('click',function(){var b=this,er=document.getElementById('fixerr');er.hidden=true;b.disabled=true;
+    var o={target:FIX,place:fpl||'A published place',city:fc||'Unknown',state:fs,correction:{text:document.getElementById('fixtext').value,source:document.getElementById('fixsrc').value},confirm:document.getElementById('fixconf').checked,hp:''};
+    fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
+      if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';return;}
+      var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,'Correction: '+(fpl||'a place'),fc);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('fixsec').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+    }).catch(function(){b.disabled=false;er.hidden=false;er.textContent='Could not reach the test server. Try again.';});});
+}}catch(e){}
 function hideIntro(){['intro','tbanner','priv','steps'].forEach(function(i){var e=document.getElementById(i);if(e)e.hidden=true;});}
 function sugGet(){try{return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){return x&&/^[a-f0-9]{9,}$/.test(x.t);});}catch(e){return[];}}
 function saveSug(t,place,city){try{var a=sugGet().filter(function(x){return x.t!==t;});a.unshift({t:t,p:String(place).slice(0,80),c:String(city).slice(0,60)});localStorage.setItem('stp-sugg',JSON.stringify(a.slice(0,20)));}catch(e){}}
 var LBL={received:'Received',added:'Added',waiting:'Waiting for a photo',declined:'Not added'};
 function showSug(){var a=sugGet();if(!a.length)return;var ul=document.getElementById('minelist');document.getElementById('mine').hidden=false;ul.innerHTML='';a.slice(0,10).forEach(function(x){var li=document.createElement('li'),l=document.createElement('a');l.href='/contribute/?status='+x.t;l.textContent=x.p+(x.c?' ('+x.c+')':'');li.appendChild(l);var sp=document.createElement('span');sp.className='mut';li.appendChild(sp);ul.appendChild(li);fetch('/api/community/mine/'+x.t).then(function(r){return r.ok?r.json():null;}).then(function(j){if(j)sp.textContent=': '+(LBL[j.status]||j.status);}).catch(function(){});});}
 showSug();
-var pphoto=null;
-function pclear(){pphoto=null;var p=document.getElementById('pprev');p.removeAttribute('src');p.hidden=true;document.getElementById('pfile').value='';}
-document.getElementById('pfile').addEventListener('change',function(e){var f=e.target.files[0];pclear();if(!f)return;var b=document.getElementById('psend');b.disabled=true;shrink(f,function(d){b.disabled=false;var m=document.getElementById('pstatus');if(!d){document.getElementById('pfile').value='';m.textContent='That file could not be read as a picture. Choose another.';return;}m.textContent='';pphoto=d;var p=document.getElementById('pprev');p.src=d;p.hidden=false;p.alt='Preview of your photo';});});
+var pphotos=[];
+function pclear(){pphotos=[];document.getElementById('pprevs').innerHTML='';document.getElementById('pfile').value='';}
+document.getElementById('pfile').addEventListener('change',function(e){var fs=Array.prototype.slice.call(e.target.files||[],0,5);pclear();if(!fs.length)return;var b=document.getElementById('psend'),m=document.getElementById('pstatus');b.disabled=true;var left=fs.length;
+  fs.forEach(function(f){shrink(f,function(d){left--;if(d){pphotos.push(d);var i=document.createElement('img');i.src=d;i.alt='Preview of photo '+pphotos.length;i.style.cssText='height:72px;border-radius:8px';document.getElementById('pprevs').appendChild(i);}else m.textContent='One file could not be read as a picture, so it was skipped.';if(!left)b.disabled=false;});});});
 document.getElementById('psend').addEventListener('click',function(){
   var tok=(location.search.match(/[?&]status=([a-f0-9]{9,})/)||[])[1];if(!tok)return;var b=this,er=document.getElementById('perrs'),m=document.getElementById('pstatus');er.hidden=true;
   var o={thenUrl:v('pthen'),nowUrl:v('pnow'),confirm:document.getElementById('pconfirm').checked};
-  if(!o.nowUrl.trim()&&pphoto){o.nowPhoto=pphoto;o.nowOwn=document.getElementById('ptook').checked;o.nowCredit=v('pcredit');o.nowYear=v('pyear');o.nowLicense='CC BY-SA';}
+  if(pphotos.length){o.uploads=pphotos.map(function(d){return {photo:d,type:'unsure',caption:'',year:v('pyear')};});o.uploadOwn=document.getElementById('ptook').checked;o.uploadCredit=v('pcredit');}
   b.disabled=true;m.textContent='Sending… checking photo links can take a few seconds.';
   fetch('/api/community/mine/'+tok+'/photo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
     if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';m.textContent='';return;}
@@ -241,6 +257,6 @@ document.getElementById('psend').addEventListener('click',function(){
 var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
 if(m){document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
   var T={received:['Received','We have your place and will research it. We aim to review within about a day. If approved, it appears in the test copy.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
-  document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');(function(){var ul=document.getElementById('stph');if(!ul)return;ul.innerHTML='';(j.photos||[]).forEach(function(p){var li=document.createElement('li');li.textContent=p.label+': '+p.status;ul.appendChild(li);});ul.hidden=!(j.photos||[]).length;})();if(j.status==='received'||j.status==='waiting'){var ad=document.getElementById('addp');ad.hidden=false;if(j.status==='waiting')ad.open=true;}});}
+  if(j.correction){T=j.status==='added'?['Reviewed','Your correction was reviewed. If it was supported by a source, the place has been updated.']:j.status==='declined'?['Not used','We could not use this correction.']:['Received','Your correction is waiting for a person to check it against sources.'];}document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');(function(){var ul=document.getElementById('stph');if(!ul)return;ul.innerHTML='';(j.photos||[]).forEach(function(p){var li=document.createElement('li');li.textContent=p.label+': '+p.status;ul.appendChild(li);});ul.hidden=!(j.photos||[]).length;})();if(j.status==='received'||j.status==='waiting'){var ad=document.getElementById('addp');ad.hidden=false;if(j.status==='waiting')ad.open=true;}});}
 })();
 </script></body></html>
