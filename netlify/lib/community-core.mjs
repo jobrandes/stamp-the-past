@@ -88,12 +88,29 @@ export function decodeJpegDataUrl(d) {
   return isImageBytes(b) === 'image/jpeg' ? b : null;
 }
 
+
+// US state names and codes, so "Reno NV", "Reno, Nevada" and "Reno" with state "nv" all become city "Reno", state "NV".
+const US_STATES = {AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
+const titleCase = (t) => t === t.toLowerCase() || t === t.toUpperCase() ? t.toLowerCase().replace(/(^|[\s\-'])([a-z])/g, (m, a, b) => a + b.toUpperCase()) : t;
+export function normCityState(cityIn, stateIn) {
+  let city = String(cityIn || '').replace(/\s+/g, ' ').trim(), state = String(stateIn || '').replace(/\s+/g, ' ').trim();
+  const code = (x) => { const t = x.toLowerCase().replace(/\./g, ''); for (const k of Object.keys(US_STATES)) if (US_STATES[k].toLowerCase() === t || k.toLowerCase() === t) return k; return ''; };
+  if (state) state = code(state) || state;
+  if (city.includes(',')) { const i = city.lastIndexOf(','), tail = city.slice(i + 1).trim(), c = code(tail); if (c) { if (!state) state = c; if (state === c) city = city.slice(0, i).trim(); } }
+  if (!city.includes(',')) {
+    const w = city.split(' ');
+    for (const n of [3, 2, 1]) { if (w.length > n) { const tail = w.slice(-n).join(' '), c = code(tail); if (c && (n > 1 || /^[A-Za-z]{2}$/.test(tail) || US_STATES[c].toLowerCase() === tail.toLowerCase() && n === 1 && false)) { if (!state) state = c; if (state === c) { city = w.slice(0, -n).join(' '); break; } } } }
+  }
+  return { city: titleCase(city.replace(/[,.]+$/, '').trim()), state };
+}
+
 // Validate the short form. Returns { errs, v }. Links are parsed here; photos are fetched by the handler.
 export function validate(input) {
   const errs = [];
   const t = (s, min, max, label) => { const v = clean(s); if (v.length < min || v.length > max) errs.push(`${label}: ${min ? min + ' to ' : 'up to '}${max} characters`); return v; };
+  const ncs = normCityState(clean(input.city), clean(input.state));
   const v = {
-    city: t(input.city, 2, 60, 'Town or city'), state: t(input.state, 0, 30, 'State or region'),
+    city: t(ncs.city, 2, 60, 'Town or city'), state: t(ncs.state, 0, 30, 'State or region'),
     place: t(input.place, 3, 80, 'Name of the place'), oneLiner: t(input.oneLiner, 10, 300, 'One line about it'),
     nickname: t(input.nickname, 0, 30, 'Nickname'), address: t(input.address, 0, 120, 'Street address or cross streets'),
   };

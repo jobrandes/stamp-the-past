@@ -27,6 +27,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 .priv summary{font-weight:600}.finder{margin:4px 0 6px}.finderbtn{display:flex;align-items:center;justify-content:center;min-height:52px;border:1.5px solid var(--ac);border-radius:14px;color:var(--ac);font-weight:700;text-decoration:none;text-align:center;padding:8px 14px}.finderhow{margin-top:8px}
 .xrow{margin-top:10px;padding-top:6px;border-top:1px solid var(--line)}select{width:100%;font:inherit;padding:.65em;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);min-height:44px}
 .sr{position:absolute;left:-9999px;width:1px;height:1px}.pick{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed var(--ac);border-radius:18px;padding:22px 14px;text-align:center;cursor:pointer;background:var(--card);margin:6px 0 12px}.pick:focus-within,.pick:hover{background:var(--bg)}.pickicon{font-size:2rem;line-height:1;color:var(--ac);font-weight:700}.pickt{font-weight:700;font-size:1.1rem}.pickh{color:var(--mut);font-size:.9rem}.tiles{display:grid;gap:12px}.tile{display:grid;grid-template-columns:104px 1fr;gap:12px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--card)}.tile img{width:104px;height:104px;object-fit:cover;border-radius:10px}.tc{display:grid;gap:8px;align-content:start}.tc input,.tc select{margin:0}.rmtile{justify-self:start}
+.sugg{border:1px solid var(--ac);border-radius:14px;padding:10px;margin:10px 0;background:var(--card)}.sgg{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);margin-top:6px;text-decoration:none;color:var(--fg);min-height:44px}.sgg span{color:var(--ac);font-size:.9rem}
 </style></head><body><main>
 <p class="eyebrow">Stamp the Past · community test</p>
 <h1>Suggest one place</h1>
@@ -41,6 +42,7 @@ details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{
 <label for="place">Name of the place</label><input id="place" maxlength="80" placeholder="e.g. Mill Valley Depot" autocomplete="off">
 <div class="row"><div><label for="city">Town or city</label><input id="city" maxlength="60" autocomplete="off"></div><div><label for="state">State or region</label><input id="state" maxlength="30" list="sts" autocomplete="off" placeholder="e.g. CA"></div></div>
 <datalist id="sts"></datalist>
+<div id="sugg" class="sugg" hidden aria-live="polite"></div>
 <label for="one">One line about it <span class="cnt" id="cnt">0/300</span></label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
 <label for="addr">Street address or cross streets (optional)</label><input id="addr" maxlength="120" placeholder="e.g. 1 Depot Plaza, or Main St and 3rd" autocomplete="off"><p class="help">The address of the place itself, never your own. It helps us put the place on the map correctly.</p>
 <label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30" autocomplete="off">
@@ -118,8 +120,22 @@ function mock(){finder();var n=$('place').value.trim(),c=$('city').value.trim(),
 $('one').addEventListener('input',function(){$('cnt').textContent=this.value.length+'/300';});
 var dupOk=null,known=[];
 function norm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
-fetch('/community/places.json').then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return;(j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){known.push({n:st.name,c:p.name});});});(j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){known.push({n:st.name,c:t.name});});});}).catch(function(){});
+fetch('/community/places.json').then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return;function kid(st){var k=((st.ph&&st.ph.k)||(st.now&&st.now.ph&&st.now.ph.k)||(st.then&&st.then.ph&&st.then.ph.k)||'');var m=/^cm_([a-f0-9]{8})_/.exec(k);return m?m[1]:'';}(j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){known.push({n:st.name,c:p.name,id:kid(st)});});});(j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){known.push({n:st.name,c:t.name,id:kid(st)});});});suggest();}).catch(function(){});
 function dupFor(place,city){var a=norm(place),c=norm(city);if(a.length<4)return null;for(var i=0;i<known.length;i++){var b=norm(known[i].n);if(norm(known[i].c)===c&&b&&(a===b||a.indexOf(b)>-1||b.indexOf(a)>-1))return known[i].n;}return null;}
+function codeOf(x){var t=String(x||'').toLowerCase().replace(/\./g,'');for(var k in ST){if(ST[k].toLowerCase()===t||k.toLowerCase()===t)return k;}return '';}
+function normCS(){var city=$('city').value.replace(/\s+/g,' ').trim(),state=$('state').value.replace(/\s+/g,' ').trim();if(state)state=codeOf(state)||state;
+  if(city.indexOf(',')>-1){var i=city.lastIndexOf(','),c=codeOf(city.slice(i+1).trim());if(c){if(!state)state=c;if(state===c)city=city.slice(0,i).trim();}}
+  else{var w=city.split(' ');for(var n=3;n>=1;n--){if(w.length>n){var tail=w.slice(-n).join(' '),c2=codeOf(tail);if(c2&&(n>1||/^[A-Za-z]{2}$/.test(tail))){if(!state)state=c2;if(state===c2){city=w.slice(0,-n).join(' ');break;}}}}}
+  city=city.replace(/[,.]+$/,'').trim();if(city&&(city===city.toLowerCase()||city===city.toUpperCase()))city=city.toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,a,b){return a+b.toUpperCase();});
+  $('city').value=city;$('state').value=state;mock();}
+$('city').addEventListener('blur',normCS);
+function words(t){return norm(t).split(' ').filter(function(w){return w.length>2&&w!=='the'&&w!=='and';});}
+function suggest(){var box=$('sugg');if(!box)return;box.innerHTML='';var pl=v('place').trim();if(pl.length<3||ADD){box.hidden=true;return;}var pw=words(pl),c=norm(v('city')),hits=[];
+  known.forEach(function(k){if(!k.id)return;var kw=words(k.n),shared=pw.filter(function(w){return kw.indexOf(w)>-1;}).length,same=norm(k.n)===norm(pl)||norm(k.n).indexOf(norm(pl))>-1||norm(pl).indexOf(norm(k.n))>-1;
+    if((same||shared>=Math.min(2,pw.length)&&shared>0)&&(!c||norm(k.c)===c))hits.push(k);});
+  if(!hits.length){box.hidden=true;return;}box.hidden=false;var h=document.createElement('p');h.className='help';h.style.margin='0 0 6px';h.textContent='Is it one of these? Adding photos to a place that is already here is better than making a second one.';box.appendChild(h);
+  hits.slice(0,3).forEach(function(k){var a=document.createElement('a');a.className='sgg';a.href='/contribute/?add='+k.id+'&place='+encodeURIComponent(k.n)+'&city='+encodeURIComponent(k.c);a.innerHTML='<b></b><span></span>';a.querySelector('b').textContent=k.n;a.querySelector('span').textContent=k.c+' · Add photos to this place';box.appendChild(a);});}
+['place','city'].forEach(function(i){$(i).addEventListener('input',suggest);});
 var cur=1;
 function goStep(n){cur=n;document.querySelectorAll('#f [data-step]').forEach(function(f){var on=+f.getAttribute('data-step')===n;f.hidden=!on;if(on){f.classList.remove('step');void f.offsetWidth;f.classList.add('step');}});
   document.querySelectorAll('#steps li').forEach(function(li){var k=+li.getAttribute('data-s');li.className=k===n?'on':(k<n?'dn':'');});

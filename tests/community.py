@@ -275,6 +275,18 @@ try:
     pg.click('#bk3'); pg.check('#took'); pg.fill('#credit','Test Dad'); pg.click('#nx2'); pg.wait_for_selector('#confirm'); pg.check('#confirm') if not pg.is_checked('#confirm') else None; pg.click('#go'); pg.wait_for_selector('#done:not([hidden])')
     s,j=api('/api/community/pending',key=KEY); TP=[p for p in j['pending'] if p['place']=='Tile Test Hall']
     ok(len(TP)==1 and [e['type'] for e in TP[0]['extra']]==['old','unsure'] and TP[0]['extra'][0]['caption']=='Front in 1925' and TP[0]['extra'][0]['year']=='1925','the form sent both photos with their type, caption and year: %r'%(TP and TP[0].get('extra')))
+    # city names are normalised on the server, so Reno / Reno NV / Reno, Nevada become one town
+    for cin,sin in (('reno nv',''),('Reno, Nevada',''),('RENO','nv'),('Reno','Nevada')):
+        s,jc=api('/api/community/submit',{**good,'place':'Norm Probe %d'%len(cin+sin),'city':cin,'state':sin,'nowUrl':'','thenUrl':'https://commons.wikimedia.org/wiki/File:Good_then.jpg'}); ok(s==200,'submit %r %r: %r'%(cin,sin,jc))
+    s,j=api('/api/community/pending',key=KEY); NP=[p for p in j['pending'] if p['place'].startswith('Norm Probe')]
+    ok(len(NP)==4 and {(p['city'],p['state']) for p in NP}=={('Reno','NV')},'four spellings become one town: %r'%{(p['city'],p['state']) for p in NP})
+    s,jc=api('/api/community/submit',{**good,'place':'Carson Probe','city':'Carson City','state':'NV'}); s,j=api('/api/community/pending',key=KEY); ok(any(p['place']=='Carson Probe' and p['city']=='Carson City' for p in j['pending']),'Carson City keeps its name')
+    # the form: a place that already exists is offered as 'Add photos to this place'
+    pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/contribute/'); pg.wait_for_timeout(700)
+    pg.fill('#place','Hilltop Chapel'); pg.wait_for_timeout(300)
+    ok(pg.is_visible('#sugg') and pg.evaluate("document.querySelector('#sugg a').getAttribute('href').indexOf('/contribute/?add=')==0"),'typing an existing place offers Add photos to it: '+pg.inner_text('#sugg'))
+    pg.fill('#place','Completely New Thing'); pg.wait_for_timeout(300); ok(not pg.is_visible('#sugg'),'no suggestion for a new place')
+    pg.fill('#city','walnut creek, ca'); pg.press('#city','Tab'); ok(pg.input_value('#city')=='Walnut Creek' and pg.input_value('#state')=='CA','the form tidies the town as you leave the field: %r %r'%(pg.input_value('#city'),pg.input_value('#state')))
     # several uploaded photos at once (the main way people will contribute)
     def U(i,t='unsure'): return {'photo':'data:image/jpeg;base64,'+base64.b64encode(mkjpg((20*i,120,60))).decode(),'type':t,'caption':'View %d'%i,'year':'1925' if t=='old' else ''}
     ub={'place':'Upload Gallery','city':'Testville','state':'NV','oneLiner':'A place sent with several of my own photos.','uploads':[U(1,'old'),U(2,'today'),U(3,'detail')],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}
