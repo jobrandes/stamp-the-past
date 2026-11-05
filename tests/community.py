@@ -56,6 +56,7 @@ import glob as _g
 ok(not any('10587d75' in f for f in _g.glob(R+'src/community/stories/*')) and os.path.exists(R+'src/community/held/10587d75.json'),'Liberty Island is held back, not published')
 _rp=cm.report(R); ok(_rp['counts']['needs-owner']>=1 and _rp['rules'] and all('id' in r for r in _rp['records']),'report lists rules and decisions')
 ok(json.load(open(TMP+'/community/report.json'))['counts']==_rp['counts'],'built report.json matches the log')
+
 def server(ctx,uploads='1'):
     pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE,'UPLOADS':uploads},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
 B=f'http://localhost:{PORT}'
@@ -75,11 +76,16 @@ def stop_for(sub,name,seq):
      'story':[f'{name} opened in 1908. It served the town for decades.','Today it is a small museum. Hours vary, so check before you go.'],'fact':f'{name} opened in 1908 and is a museum today.','disputed':'',
      'claims':[{'t':'It opened in 1908.','a':0,'why':'The source says 1908.'},{'t':'It is still a school.','a':2,'why':'It is a museum now.'}],
      'sources':[{'t':'Town history','u':'https://example.org/h'},{'t':'Museum page','u':'https://example.org/m'}],'card':{'a':'1908','b':'2026','la':'Opened','lb':'Museum'}}
+import tempfile as _tf
+_td=_tf.mkdtemp(); _m={'sub':'aaaaaaaa','town':'Reno','state':'NV','added':'2026-11-05','seq':1,'stop':stop_for('aaaaaaaa','Mission Probe',1)}
+json.dump(_m,open(_td+'/aaaaaaaa.json','w')); ok(any('promoted_by' in x for x in cm.check(places_dir=_td+'/')),'a mission file without Jo-Anne\'s promotion is refused')
+_m.update(promoted_by='Jo-Anne',promoted_on='2026-11-05'); json.dump(_m,open(_td+'/aaaaaaaa.json','w')); ok(not any('promoted_by' in x for x in cm.check(places_dir=_td+'/')),'a promoted mission file passes')
+ok(isinstance(json.load(open(R+'site/community/status.json')).get('photos'),list),'built status.json lists the published photos')
 def write_places(places):
     d=TMP+'/_places'; shutil.rmtree(d,ignore_errors=True); os.makedirs(d)
     if not os.path.isdir(TMP+'/_stories'): os.makedirs(TMP+'/_stories')
     for t in places:
-        sub,name,seq=t[:3]; o={'sub':sub,'town':'Testville','state':'NV','added':'2026-11-03','seq':seq,'stop':stop_for(sub,name,seq)}
+        sub,name,seq=t[:3]; o={'sub':sub,'town':'Testville','state':'NV','added':'2026-11-03','seq':seq,'promoted_by':'Jo-Anne','promoted_on':'2026-11-03','stop':stop_for(sub,name,seq)}
         if len(t)>3: o['by']=t[3]
         json.dump(o,open(f'{d}/{sub}.json','w'))
     bad=cm.check(places_dir=d+'/'); ok(not bad,'fixture places invalid: %r'%bad)
@@ -491,6 +497,13 @@ try:
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'passport no sideways scroll')
     b.close()
   s,pj=api('/api/community/submit',{**good,'place':'Pending Probe','nickname':'Dad'}); ok(s==200,'pending probe: %r'%pj); pend=pj.get('id')
+  # published-photo gate: a photo is public only if the build lists it, even when its place is live
+  s,_gj=api('/api/community/submit',{**good,'place':'Gate Probe'}); gid=_gj.get('id'); ok(s==200,'gate probe submitted: %r'%_gj)
+  _stf=TMP+'/community/status.json'; _old=open(_stf).read()
+  json.dump({'added':[gid],'declined':{},'photos':[]},open(_stf,'w')); s,_=api(f'/api/community/photo/{gid}_n'); ok(s==404,'a photo not listed as published stays private even when its place is added')
+  json.dump({'added':[gid],'declined':{},'photos':[gid+'_n']},open(_stf,'w')); s,_gb=api(f'/api/community/photo/{gid}_n'); ok(s==200,'a listed photo is public once its place is added')
+  json.dump({'added':[],'declined':{},'photos':[gid+'_n']},open(_stf,'w')); s,_=api(f'/api/community/photo/{gid}_n'); ok(s==404,'a listed photo is still private when its place is not added')
+  open(_stf,'w').write(_old)
   s,_=api('/api/community/owner/10587d75',{'decision':'approve'}); ok(s==404,'owner decision needs the admin key')
   s,_=api('/api/community/owner'); ok(s==404,'owner decision list needs the admin key')
   s,_=api('/api/community/owner/10587d75',{'decision':'maybe'},key=KEY); ok(s==400,'owner decision must be approve, decline or clear')

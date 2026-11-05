@@ -71,7 +71,7 @@ const handle = (opts) => async (req, context) => {
     const admin = isAdmin();
     if (!admin) {
       let approved = false;
-      try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const st = await r.json(); const pk = key.split('/')[1]; approved = (st.added || []).includes(pk.split('_')[0]) && !(st.declinedPhotos || []).includes(pk); } } catch {}
+      try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) { const st = await r.json(); const pk = key.split('/')[1]; approved = (st.added || []).includes(pk.split('_')[0]) && !(st.declinedPhotos || []).includes(pk) && (!Array.isArray(st.photos) || st.photos.includes(pk)); } } catch {}
       if (!approved) return new Response('not found', { status: 404 });
     }
     return new Response(e.data, { headers: { 'content-type': e.metadata?.type || 'image/jpeg', 'cache-control': admin ? 'private, no-store' : 'public, max-age=300' } });

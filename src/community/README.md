@@ -1,17 +1,12 @@
 # Community places (test branch)
 
-One file per researched place: `places/<submission id>.json`.
+Current model (Jo-Anne, Nov 5 2026): every community place is an **Explore History Story stop**. Missions are promoted only by Jo-Anne.
 
-```json
-{"sub":"ab12cd34","town":"Mill Valley","state":"CA","added":"2026-11-03","stop":{ ...a normal pack stop... }}
-```
-
-`stop` uses the same schema as `src/packs/*.json` stops (id, name, short, badge, teaser, map, geo, clue, safety, field, q, then, now, story, fact, disputed, claims[2], sources[2+], card), plus the rules in `docs/community-agent.md`. Photo keys are `cm_<sub>_t` and `cm_<sub>_n`; the bytes live in the test deploy's storage and are served from `/api/community/photo/<sub>_t|n`.
-
-`declined.json`: `{"<sub id>": "plain-language reason"}` for submissions that cannot be added.
-
-`tools/community.py` groups places by town into packs at build time (`site/community/places.json`) and writes `site/community/status.json`.
-
-`seq`: 1, 2, 3 ... per town (town + state), never reused and never changed. New places in a town get the next number, so a player's saved stamps never shift to another place.
-
-Optional `by`: the contributor's nickname (1-30 plain characters, from the submission's `nickname`, only if they gave one). Shown as "Suggested by <nickname>" on the place. Never an email or name.
+- `stories/<submission id>.json` is the published place: `{"sub","town","state","added","by"?,"stop":{...Story-stop schema...}}`. Photo keys `cm_<sub>_<n|t|x1..x5>`; bytes live in the test deploy's storage. Rules for writing one: `docs/community-agent.md`.
+- `rules.json` are the approval rules (shown on /contribute/admin/). `approvals.json` is the decision log, one record per submission (added, declined, needs-owner, waiting, removed). `tools/community.py check` enforces both.
+- `held/<id>.json`: a place taken out of the app that waits for Jo-Anne's decision. Never built, never published.
+- `declined.json` `{id: reason}`, `declined-photos.json` (photo suffixes held back), `waiting.json` (needs a photo), `merged.json` (add-photo and correction submissions already handled).
+- `places/<id>.json` is the OLD mission-pack path. It is not used for new places. A file there is refused by `check` unless it carries `"promoted_by": "Jo-Anne"` and `"promoted_on"`.
+- Photos are public only when the built `status.json` lists them in `photos` (every photo that is part of a published place) and their place is in `added`.
+- `tools/community.py build` writes `site/community/places.json`, `status.json` and `report.json`.
+- Optional `by`: the contributor's nickname (1-30 plain characters). Never an email or name.

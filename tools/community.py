@@ -68,7 +68,10 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
     waiting=json.load(open(wf)) if os.path.exists(wf) else {}
     dpf=R+'src/community/declined-photos.json'
     dphotos=json.load(open(dpf)) if os.path.exists(dpf) else []
-    return packs,photos,{'added':added,'declined':declined,'waiting':waiting,'declinedPhotos':dphotos},list(tours.values())
+    # `photos` = every photo that is actually part of a published place. The server serves ONLY these to the public, so a photo
+    # nobody approved (an extra the agent left out, an add-photo upload not yet merged) stays private even when its place is live.
+    pub=sorted({k[3:] for k in photos if k.startswith('cm_')}-set(dphotos))
+    return packs,photos,{'added':added,'declined':declined,'waiting':waiting,'declinedPhotos':dphotos,'photos':pub},list(tours.values())
 def check(R=R,places_dir=None):
     bad=[]
     def need(c,m):
@@ -82,6 +85,7 @@ def check(R=R,places_dir=None):
         if not p.get('stop'): continue
         need(re.fullmatch(r'[a-f0-9]{8}',p.get('sub','')),f'{w}: sub must be the 8-hex submission id')
         need(fn==p.get('sub','')+'.json',f'{w}: file name must be <sub>.json')
+        need(p.get('promoted_by')=='Jo-Anne' and p.get('promoted_on'),f'{w}: a mission file needs "promoted_by": "Jo-Anne" and "promoted_on". New community places are Story stops under stories/; only Jo-Anne promotes a mission.')
         need(p.get('by') is None or (isinstance(p['by'],str) and 0<len(p['by'])<=30 and not re.search(r'[<>&"]',p['by'])),f'{w}: by (nickname credit) must be 1-30 plain characters')
         st=p['stop']
         for f in ('id','name','short','badge','teaser','map','clue','safety','field','fact'): need(st.get(f),f'{w}: missing {f}')
