@@ -181,3 +181,12 @@ export function validate(input) {
   if (input.confirm !== true) errs.push('Please tick the box that confirms the photos are free to use and the facts are not your private information.');
   return { errs, v };
 }
+
+// Text-only edit of a place that is still waiting for review (no photos involved).
+export function validateText(input) {
+  const errs = [];
+  const f = (x, min, max, label) => { const v = clean(x); if (v.length < min || v.length > max) errs.push(`${label}: ${min ? min + ' to ' : 'up to '}${max} characters`); return v; };
+  const v = { place: f(input.place, 3, 80, 'Name of the place'), oneLiner: f(input.oneLiner, 10, 300, 'One line about it'), nickname: f(input.nickname, 0, 30, 'Nickname'), address: f(input.address, 0, 120, 'Street address or cross streets') };
+  if (/[<>]/.test(v.place + v.oneLiner + v.nickname + v.address)) errs.push('Please leave out < and > characters.');
+  return { errs, v };
+}

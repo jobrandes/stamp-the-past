@@ -263,6 +263,7 @@ try:
     s,j=api('/api/community/pending',key=KEY); ok(cid_s not in [p['id'] for p in j['pending']] and cid_w not in [p['id'] for p in j['pending']],'story and waiting leave pending')
     tokn=jn['edit'] if 'edit' in jn else ''
     s,j=api('/api/community/mine/'+jn['edit']); ok(j.get('status')=='added','story status added')
+    s,j=api('/api/community/mine/'+jn['edit']+'/edit',{'oneLiner':'A valid one-line description here.'}); ok(s==400 and 'already added' in json.dumps(j),'an added place cannot be edited, only corrected: %r'%j)
     s,j=api('/api/community/mine/'+jt['edit']); ok(j.get('status')=='waiting' and 'recent photo' in j.get('note',''),'waiting status: %r'%j)
     pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/contribute/?status='+jt['edit']); pg.wait_for_selector('#stat:not([hidden])'); ok('Waiting for a photo' in pg.inner_text('#stT'),'waiting page text: '+pg.inner_text('#stT'))
     ok(pg.is_visible('#addp'),'waiting status page offers Add or change a photo')
@@ -314,6 +315,10 @@ try:
     pg.fill('#fixtext','The chapel opened in 1911 according to the county record.'); pg.check('#fixconf'); pg.click('#fixgo'); pg.wait_for_selector('#done:not([hidden])')
     ok(pg.is_visible('#done') and pg.is_hidden('#fixsec'),'a sent correction shows the Received screen')
     ok(pg.evaluate("document.getElementById('pfile').multiple"),'the status-page upload takes several photos')
+    s,jq=api('/api/community/submit',{**good,'place':'Edit Probe'}); pg.goto(B+'/contribute/?status='+jq['edit']); pg.wait_for_selector('#edtw:not([hidden])')
+    pg.evaluate("document.getElementById('edtw').open=true"); pg.fill('#edo','Updated from the status page, still a good place.'); pg.click('#edgo'); pg.wait_for_timeout(700)
+    ok('back in review' in pg.inner_text('#edmsg').lower(),'status page edit form saves: '+pg.inner_text('#edmsg'))
+    s,j=api('/api/community/mine/'+jq['edit']); ok(j['oneLiner'].startswith('Updated from the status page'),'saved edit is returned by status')
     # several uploaded photos at once (the main way people will contribute)
     def U(i,t='unsure'): return {'photo':'data:image/jpeg;base64,'+base64.b64encode(mkjpg((20*i,120,60))).decode(),'type':t,'caption':'View %d'%i,'year':'1925' if t=='old' else ''}
     ub={'place':'Upload Gallery','city':'Testville','state':'NV','oneLiner':'A place sent with several of my own photos.','uploads':[U(1,'old'),U(2,'today'),U(3,'detail')],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}
@@ -332,6 +337,15 @@ try:
     ok([e['n'] for e in UP[uid]['extra']]==['x1','x2','x3','x4','x5'],'new uploads are appended after the existing photos: %r'%[e['n'] for e in UP[uid]['extra']])
     s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==400 and '5 photos' in json.dumps(j),'a sixth photo is refused: %r'%j)
     s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':False,'uploadCredit':'Dad','confirm':True}); ok(s==400,'status-page uploads need the ownership tick')
+    # editing the words of a place that is still waiting
+    s,j=api('/api/community/mine/'+ju['edit']+'/edit',{'oneLiner':'A better one-line description of the gallery place.','nickname':'Dad2','address':'12 Main St'}); ok(s==200,'owner can edit the words of a waiting place: %r'%j)
+    s,j=api('/api/community/pending',key=KEY); UP={p['id']:p for p in j['pending']}
+    ok(UP[uid]['oneLiner'].startswith('A better one-line') and UP[uid]['nickname']=='Dad2' and UP[uid]['address']=='12 Main St' and UP[uid]['place']=='Upload Gallery' and len(UP[uid]['extra'])==5,'edit changes only the words, photos untouched')
+    s,j=api('/api/community/mine/'+ju['edit']); ok(j.get('oneLiner','').startswith('A better') and j.get('nickname')=='Dad2','status returns the current words for the edit form')
+    s,j=api('/api/community/mine/'+ju['edit']+'/edit',{'oneLiner':'short'}); ok(s==400,'a too-short line is rejected')
+    s,j=api('/api/community/mine/'+ju['edit']+'/edit',{'place':'<b>Bad</b> name'}); ok(s==400,'markup in an edit is rejected')
+    s,j=api('/api/community/mine/'+ju['edit'][:-2]+'zz/edit',{'oneLiner':'A valid one-line description here.'}); ok(s==404,'edit with a wrong token is 404')
+    s,j=api('/api/community/mine/'+jf['edit']+'/edit',{'oneLiner':'A valid one-line description here.'}) if 'jf' in dir() else (400,{}); ok(s==400,'a correction cannot be edited')
     s,j=api('/api/community/submit',dict(ub,uploads=[dict(U(1),year='yesterday')])); ok(s==400 and 'year' in json.dumps(j),'a bad photo year is rejected')
     s,j=api('/api/community/submit',dict(ub,uploads=[{'photo':'data:image/jpeg;base64,'+base64.b64encode(b'\xff\xd8\xff'+b'A'*3000).decode()}])); ok(s==400,'a fake jpeg in uploads is rejected')
     # multi-photo: up to 3 extra photos, each typed, held until approval, with their own status
@@ -443,7 +457,6 @@ try:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.goto(B+'/contribute/admin/'); pg.wait_for_timeout(600)
     ok('Credit Probe' in pg.inner_text('#added') and 'by Dad' in pg.inner_text('#added'),'recently added list needs no key: '+pg.inner_text('#added'))
     ok(pg.evaluate("[...document.querySelectorAll('#added a')].every(a=>a.getAttribute('href').indexOf('/play.html#story=')==0||a.getAttribute('href')=='/play.html')"),'admin place links deep-link to the story card')
-    ok(pg.is_hidden('#tools'),'owner tools stay locked without a key')
     pg.fill('#k','wrong-key-wrong-key'); pg.click('#go'); pg.wait_for_selector('#err:not([hidden])'); ok('not accepted' in pg.inner_text('#err'),'admin page rejects a wrong key')
     pg.fill('#k',KEY); pg.click('#go'); pg.wait_for_selector('#tools:not([hidden])'); pg.wait_for_selector('#list .row')
     ok('Pending Probe' in pg.inner_text('#pending') and 'nickname: Dad' in pg.inner_text('#pending'),'waiting list shows the pending place: '+pg.inner_text('#pending')[:200])
@@ -465,6 +478,13 @@ try:
     pg.fill('#k',KEY); pg.check('#rem'); pg.click('#go'); pg.wait_for_selector('#tools:not([hidden])')
     pg.goto(B+'/contribute/admin/'); pg.wait_for_selector('#tools:not([hidden])'); ok(True,'remembered key unlocks on return')
     pg.click('#forget'); ok(pg.evaluate("Object.keys(localStorage).length")==0 and pg.is_hidden('#tools'),'forget clears the stored key')
+    pg.goto(B+'/play.html#stop=reno:depot'); pg.wait_for_timeout(900)
+    ok(pg.evaluate("document.body.classList.contains('instop')") and 'depot' in pg.inner_text('#stopTitle').lower(),'a #stop= link opens that mission stop: '+pg.inner_text('body')[:80].replace('\n',' '))
+    pg.goto(B+'/play.html#stop=reno:nonsense'); pg.wait_for_timeout(700)
+    ok(not pg.evaluate("document.body.classList.contains('instop')"),'an unknown #stop= link falls back to Home')
+    pg.goto(B+'/play.html#stop=nowhere:arch'); pg.wait_for_timeout(700)
+    ok(not pg.evaluate("document.body.classList.contains('instop')"),'an unknown town in #stop= falls back to Home')
+    ok(pg.is_hidden('#tools'),'owner tools stay locked without a key')
     b.close()
   api('/api/community/delete/'+pend,{},key=KEY)
   s,j=api('/api/community/reports'); ok(s==404,'reports list needs the admin key')

@@ -3,7 +3,7 @@
 import { getStore } from '@netlify/blobs';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import sharp from 'sharp';
-import { validate, parseSourceLink, readCommons, readLoc, isImageBytes, decodeJpegDataUrl } from '../lib/community-core.mjs';
+import { validate, validateText, parseSourceLink, readCommons, readLoc, isImageBytes, decodeJpegDataUrl } from '../lib/community-core.mjs';
 
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const sha = (t) => createHash('sha256').update(t).digest('hex');
@@ -113,6 +113,25 @@ const handle = (opts) => async (req, context) => {
     return json({ ok: true, status: 'received' });
   }
 
+  // Change the words of a place that is still waiting for review (name, one line, nickname, address). Photos have their own route.
+  if (req.method === 'POST' && parts[0] === 'mine' && parts[1] && parts[2] === 'edit') {
+    const id = parts[1].slice(0, 8).replace(/[^a-f0-9]/g, ''), token = parts[1].slice(8);
+    const sub = await store.get('sub/' + id, { type: 'json' });
+    if (!sub || sub.tokenHash !== sha(token)) return json({ error: 'That link is not valid.' }, 404);
+    if (sub.correction) return json({ errors: ['A correction cannot be edited. Send a new one instead.'] }, 400);
+    let body; try { body = await req.json(); } catch { return json({ errors: ['Could not read the form.'] }, 400); }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ errors: ['Could not read the form.'] }, 400);
+    let st = { added: [], declined: {} };
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    if ((st.added || []).includes(id)) return json({ errors: ['This place was already added. Use "Suggest a correction" on its page instead.'] }, 400);
+    if ((st.declined || {})[id]) return json({ errors: ['This place was not added, so it cannot be changed.'] }, 400);
+    const { errs, v } = validateText({ place: body.place ?? sub.place, oneLiner: body.oneLiner ?? sub.oneLiner, nickname: body.nickname ?? sub.nickname ?? '', address: body.address ?? sub.address ?? '' });
+    if (errs.length) return json({ errors: errs }, 400);
+    const next = { ...sub, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, address: v.address, resubmitted: new Date().toISOString(), edited: new Date().toISOString() };
+    await store.setJSON('sub/' + id, next);
+    return json({ ok: true, status: 'received' });
+  }
+
   if (req.method === 'GET' && parts[0] === 'mine' && parts[1]) {
     const id = parts[1].slice(0, 8).replace(/[^a-f0-9]/g, ''), token = parts[1].slice(8);
     const sub = await store.get('sub/' + id, { type: 'json' });
@@ -127,7 +146,7 @@ const handle = (opts) => async (req, context) => {
     if (sub.then) photos.push({ label: 'Old photo', status: ps('t', true) });
     if (sub.now) photos.push({ label: 'Recent photo', status: ps('n', true) });
     (sub.extra || []).forEach(x => photos.push({ label: ({ old: 'Old photo', today: 'Recent photo', detail: 'Detail photo', unsure: 'Photo' })[x.type] + (x.caption ? ': ' + x.caption : ''), status: ps(x.n, true) }));
-    return json({ id, status, note, place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now }, photos, target: sub.target || '', correction: !!sub.correction });
+    return json({ id, status, note, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now }, photos, target: sub.target || '', correction: !!sub.correction });
   }
 
   // Reports: anyone may report a published place. Three reports hide it in the app until a person looks (hiding is reversible, nothing is deleted).
