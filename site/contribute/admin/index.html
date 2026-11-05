@@ -58,10 +58,12 @@ function ownerBox(x){var box=el('div','acts'),dec=OWN[x.id];
   var ap=el('button','','Approve');ap.type='button';ap.addEventListener('click',function(){ap.disabled=true;send('approve');});
   var no=el('button','no','Decline');no.type='button';no.addEventListener('click',function(){no.disabled=true;send('decline');});
   box.appendChild(ap);box.appendChild(no);return box;}
-function renderNeeds(){var N=$('needs');N.innerHTML='';var n=0,open=0;
-  REC.forEach(function(x){if(x.decision!=='needs-owner')return;n++;if(!OWN[x.id])open++;N.appendChild(recCard(x));});
-  $('nneeds').textContent=n?'('+n+')':'';$('cn-needs').textContent=open?String(open):'';
-  if(!n)N.textContent='Nothing is waiting for you.';}
+function renderNeeds(){var N=$('needs');N.innerHTML='';var open=[],done=[];
+  REC.forEach(function(x){if(x.decision!=='needs-owner')return;(OWN[x.id]?done:open).push(x);});
+  open.forEach(function(x){N.appendChild(recCard(x));});
+  if(!open.length)N.appendChild(el('p','mut','Nothing is waiting for your decision.'));
+  if(done.length){N.appendChild(el('h3','','You answered. Waiting for Claude to carry it out'));N.appendChild(el('p','mut','These leave this list once the next daily run has published or removed them.'));done.forEach(function(x){N.appendChild(recCard(x));});}
+  $('nneeds').textContent=open.length?'('+open.length+')':'';$('cn-needs').textContent=open.length?String(open.length):'';}
 // public list: no key needed
 function loadPublic(){
   fetch('/community/places.json').then(function(r){return r.ok?r.json():{};}).catch(function(){return {};}).then(function(j){names={};places=[];
