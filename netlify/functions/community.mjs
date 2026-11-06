@@ -3,6 +3,7 @@
 import { getStore } from '@netlify/blobs';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import sharp from 'sharp';
+import { wikiLookup, readPage } from '../lib/research-core.mjs';
 import { validate, validateText, parseSourceLink, readCommons, readLoc, isImageBytes, decodeJpegDataUrl } from '../lib/community-core.mjs';
 
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
@@ -56,6 +57,17 @@ const handle = (opts) => async (req, context) => {
   const parts = url.pathname.replace(/^\/api\/community\/?/, '').split('/').filter(Boolean);
   const adminKey = (opts.adminKey ?? globalThis.Netlify?.env?.get?.('COMMUNITY_ADMIN_KEY') ?? '');
   const isAdmin = () => { const k = req.headers.get('x-admin-key') || ''; return adminKey.length >= 16 && k.length === adminKey.length && timingSafeEqual(Buffer.from(k), Buffer.from(adminKey)); };
+
+  // Research helper for the daily run (admin key only): Wikipedia lookup, or plain text of one official page (.gov, .edu, Wikipedia).
+  if (req.method === 'GET' && parts[0] === 'research') {
+    if (!isAdmin()) return json({ error: 'not found' }, 404);
+    const f = url.searchParams.get('fetch');
+    if (f) { const r = await readPage(f, fetchFn); return json(r, r.ok ? 200 : 422); }
+    const place = (url.searchParams.get('place') || '').trim();
+    if (place.length < 2 || place.length > 100) return json({ error: 'place is required (2 to 100 characters)' }, 400);
+    const r = await wikiLookup(place, (url.searchParams.get('city') || '').slice(0, 60), (url.searchParams.get('state') || '').slice(0, 30), fetchFn);
+    return json(r, r.ok ? 200 : 502);
+  }
 
   // Own-photo uploads are OFF unless COMMUNITY_UPLOADS=1 (no image scanning yet: links to Commons/LoC only).
   const uploadsOn = opts.uploads ?? (globalThis.Netlify?.env?.get?.('COMMUNITY_UPLOADS') === '1');

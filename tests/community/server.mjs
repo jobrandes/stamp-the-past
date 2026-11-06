@@ -30,6 +30,22 @@ const fakeFetch = async (u) => {
   }
   if (u.startsWith('https://tile.loc.gov/fake/')) return new Response(JPG, { status: 200 });
   if (u.startsWith('https://upload.wikimedia.org/fake/')) return new Response(JPG, { status: 200 });
+  if (u.startsWith('https://en.wikipedia.org/w/api.php')) {
+    const sp = new URL(u).searchParams;
+    if (sp.get('generator') === 'search') {
+      const q = sp.get('gsrsearch') || '';
+      if (q.includes('Nowhere')) return new Response(JSON.stringify({ batchcomplete: '' }));
+      const pg = q.includes('Unrelated') ? { 5: { index: 1, title: 'Bridge Over Water', fullurl: 'https://en.wikipedia.org/wiki/Bridge_Over_Water', extract: 'A bridge.' } }
+        : { 7: { index: 1, title: 'Fake Depot', fullurl: 'https://en.wikipedia.org/wiki/Fake_Depot', extract: 'Fake Depot is a historic railroad depot in Reno, Nevada, built in 1906.', coordinates: [{ lat: 39.53, lon: -119.81 }] }, 8: { index: 2, title: 'Fake Depot (band)', fullurl: 'https://en.wikipedia.org/wiki/Fake_Depot_(band)', extract: 'A band.' } };
+      return new Response(JSON.stringify({ query: { pages: pg } }));
+    }
+    if (sp.get('action') === 'parse') return new Response(JSON.stringify({ parse: { externallinks: ['https://www.nps.gov/fake/depot.htm', 'https://shop.example.com/x', 'https://en.wikipedia.org/wiki/Other', '//www.nevadaculture.gov/fake', 'http://insecure.gov/x'] } }));
+  }
+  if (u === 'https://www.nps.gov/fake/depot.htm') return new Response('<html><head><title>Fake Depot - NPS</title><style>.a{}</style></head><body><nav>menu</nav><p>The depot opened in 1906 &amp; closed in 1971.</p><script>x()</script></body></html>', { status: 200, headers: { 'content-type': 'text/html' } });
+  if (u === 'https://www.example.gov/redirect') return new Response('', { status: 301, headers: { location: 'https://evil.example.com/x' } });
+  if (u === 'https://www.example.gov/moved') return new Response('', { status: 301, headers: { location: 'https://www.nps.gov/fake/depot.htm' } });
+  if (u === 'https://www.example.gov/file.pdf') return new Response('%PDF', { status: 200, headers: { 'content-type': 'application/pdf' } });
+  if (u === 'https://www.example.gov/missing') return new Response('nf', { status: 404 });
   throw new Error('unexpected fetch ' + u);
 };
 const handler = makeHandler({ getStoreFn: store, fetchFn: fakeFetch, adminKey: 'testkey-testkey-1234', uploads: process.env.UPLOADS !== '0' });

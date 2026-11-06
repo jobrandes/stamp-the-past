@@ -569,6 +569,25 @@ try:
     pg3=b.new_context(**pw.devices['iPhone 17']).new_page()
     pg3.route('**/api/community/pending',lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(_pend)))
     pg3.route('**/api/community/photo/10587d75_*',lambda r:r.fulfill(status=200,content_type='image/jpeg',body=_jpg))
+    # research helper (admin only; Wikipedia API + official pages)
+    RS='/api/community/research?'
+    ok(api(RS+'place=Fake+Depot')[0]==404,'research needs the admin key (404 without it)')
+    ok(api(RS+'place=x',key=KEY)[0]==400,'research needs a real place name')
+    _s,_j=api(RS+'place=Fake+Depot&city=Reno&state=NV',key=KEY)
+    ok(_s==200 and _j['best']=='Fake Depot' and _j['candidates'][0]['match']=='strong' and _j['candidates'][0]['geo']==[39.53,-119.81] and 'built in 1906' in _j['candidates'][0]['summary'],'Wikipedia lookup returns the article, summary and coordinates: %s'%str(_j)[:200])
+    ok(_j['candidates'][0]['links']==['https://www.nps.gov/fake/depot.htm','https://www.nevadaculture.gov/fake'],'reference links keep only https official sites: %s'%_j['candidates'][0]['links'])
+    ok(_j['candidates'][1]['match']!='strong','a similarly named page is not treated as a strong match')
+    _s,_j=api(RS+'place=Unrelated+Thing&city=Reno',key=KEY); ok(_s==200 and _j['best'] is None,'a wrong article is not offered as the best match')
+    _s,_j=api(RS+'place=Nowhere+Special',key=KEY); ok(_s==200 and _j['candidates']==[] and _j['best'] is None,'no article means no candidates')
+    import urllib.parse as _up
+    F=lambda u: api(RS+'fetch='+_up.quote(u,safe=''),key=KEY)
+    _s,_j=F('https://www.nps.gov/fake/depot.htm'); ok(_s==200 and _j['title']=='Fake Depot - NPS' and 'opened in 1906 & closed in 1971' in _j['text'] and 'menu' not in _j['text'] and 'x()' not in _j['text'],'an official page is read as plain text: %s'%str(_j)[:160])
+    for bad in ['http://www.nps.gov/x','https://shop.example.com/x','https://127.0.0.1/x','https://localhost/x','https://user:pw@www.nps.gov/x','https://www.nps.gov:8443/x','file:///etc/passwd','not a url']:
+        _s,_j=F(bad); ok(_s==422 and _j['ok'] is False,'refused: '+bad+' -> '+str(_s))
+    _s,_j=F('https://www.example.gov/redirect'); ok(_s==422 and 'not allowed' in _j['error'],'a redirect to another site is not followed: '+_j['error'])
+    _s,_j=F('https://www.example.gov/moved'); ok(_s==422 and 'https://www.nps.gov/fake/depot.htm' in _j['error'],'a redirect to an allowed page suggests the new address')
+    _s,_j=F('https://www.example.gov/file.pdf'); ok(_s==422 and 'not a text page' in _j['error'],'non-text pages are refused')
+    _s,_j=F('https://www.example.gov/missing'); ok(_s==422 and '404' in _j['error'],'a missing page gives a clear error')
     ST={'dec':[],'app':[],'fail':False,'calls':[]}
     def _pendh(r):
         d=json.loads(json.dumps(_pend)); d['pending'][0]['heldBack']=list(ST['dec']); d['pending'][0]['approvedPhotos']=list(ST['app']); r.fulfill(status=200,content_type='application/json',body=json.dumps(d))
