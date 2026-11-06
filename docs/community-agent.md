@@ -84,3 +84,5 @@ Up to 5 photos per place is fine as long as each one shows something a little di
 
 ## 6. Retention (90 days)
 At the end of every run send `POST /api/community/cleanup` with the admin header. It deletes declined or never-reviewed submissions (record, photos, notes, status link) older than 90 days; published places are kept. Report the number removed in the run summary. The privacy page promises this.
+
+- Per-photo owner choice (Nov 6 2026): a pending item may carry `approvedPhotos` (suffixes Jo-Anne approved on the admin page) and `heldBack` (suffixes she declined). Treat `heldBack` as declined (add to declined-photos.json). An approved photo still gets the safety check and the five-photo cap, but she has already said yes to it, so list it as used with the reason 'approved by the owner'.

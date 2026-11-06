@@ -105,10 +105,13 @@ const handle = (opts) => async (req, context) => {
     if (!m) return json({ error: 'bad photo id' }, 400);
     let body = {}; try { body = await req.json(); } catch {}
     const cur = (await store.get('dec/' + m[1], { type: 'json' })) || { declined: [] };
-    const set = new Set(cur.declined || []);
-    if (body && body.decline === false) set.delete(m[2]); else set.add(m[2]);
-    cur.declined = [...set]; await store.setJSON('dec/' + m[1], cur);
-    return json({ ok: true, id: m[1], declined: cur.declined });
+    const set = new Set(cur.declined || []), ok = new Set(cur.approved || []);
+    // approve:true = the owner approves this photo; decline:true = holds it back; decline:false (no approve) = clears her choice
+    if (body && body.approve === true) { ok.add(m[2]); set.delete(m[2]); }
+    else if (body && body.decline === false) { set.delete(m[2]); ok.delete(m[2]); }
+    else { set.add(m[2]); ok.delete(m[2]); }
+    cur.declined = [...set]; cur.approved = [...ok]; await store.setJSON('dec/' + m[1], cur);
+    return json({ ok: true, id: m[1], declined: cur.declined, approved: cur.approved });
   }
 
   // Add or replace photos from the private status link (e.g. a place that is "Waiting for a photo"). Puts the place back in the review queue.
@@ -217,7 +220,7 @@ const handle = (opts) => async (req, context) => {
     for (const b of blobs) {
       const s = await store.get(b.key, { type: 'json' }); if (!s) continue;
       if ((st.added || []).includes(s.id) || (st.declined || {})[s.id] || ((st.waiting || {})[s.id] && !s.resubmitted)) continue;
-      const { tokenHash, ...pub } = s; const dd = await store.get('dec/' + s.id, { type: 'json' }); if (dd && (dd.declined || []).length) pub.heldBack = dd.declined; const od = await store.get('own/' + s.id, { type: 'json' }); if (od) pub.ownerDecision = od; out.push(pub);
+      const { tokenHash, ...pub } = s; const dd = await store.get('dec/' + s.id, { type: 'json' }); if (dd && (dd.declined || []).length) pub.heldBack = dd.declined; if (dd && (dd.approved || []).length) pub.approvedPhotos = dd.approved; const od = await store.get('own/' + s.id, { type: 'json' }); if (od) pub.ownerDecision = od; out.push(pub);
     }
     return json({ pending: out });
   }
