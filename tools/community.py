@@ -183,7 +183,7 @@ def check_approvals(rules,approvals,stories,official,declined,merged,dphotos):
         w='approvals/'+sub
         need(re.fullmatch(r'[a-f0-9]{8}',sub),f'{w}: id must be 8 hex')
         need(a.get('kind') in ('place','photo','correction'),f'{w}: kind must be place, photo or correction')
-        need(a.get('decision') in ('added','declined','needs-owner','waiting','removed'),f'{w}: bad decision')
+        need(a.get('decision') in ('added','declined','needs-owner','needs-sources','waiting','removed'),f'{w}: bad decision')
         need(re.fullmatch(r'\d{4}-\d\d-\d\d',str(a.get('on',''))) and a.get('place'),f'{w}: on (date) and place are required')
         for k,v in (a.get('rules') or {}).items():
             need(k in ids,f'{w}: unknown rule {k}'); need(isinstance(v,str) and (v=='pass' or v.startswith('na: ') or v.startswith('fail: ')),f'{w}: rule {k} must be "pass", "na: why" or "fail: why"')
@@ -197,7 +197,7 @@ def check_approvals(rules,approvals,stories,official,declined,merged,dphotos):
                 for ph in a.get('photos') or []:
                     need(ph.get('verdict') in ('used','held back') and ph.get('k'),f'{w}: each photo needs k and verdict')
                     if ph.get('verdict')=='held back': need(ph['k'][3:] in dphotos and ph.get('why'),f'{w}: held-back photo {ph.get("k")} must be in declined-photos.json with a reason')
-        elif a.get('decision') in ('declined','needs-owner'):
+        elif a.get('decision') in ('declined','needs-owner','needs-sources'):
             need(a.get('notes') or a.get('rules'),f'{w}: say why')
     for d,n in by_day.items():
         need(n<=MAX_PER_DAY,f'{d}: {n} places added in one day, the limit is {MAX_PER_DAY}')
@@ -237,7 +237,7 @@ def report(R=R):
         if a.get('decision')=='added' and sub in tid: r['url']=tid[sub]
         recs.append(r)
     recs.sort(key=lambda r:(r.get('on',''),r['id']),reverse=True)
-    c={'added':0,'declined':0,'needs-owner':0,'waiting':0,'removed':0,'recheck':0}
+    c={'added':0,'declined':0,'needs-owner':0,'needs-sources':0,'waiting':0,'removed':0,'recheck':0}
     for r in recs:
         c[r['decision']]=c.get(r['decision'],0)+1
         if r.get('legacy'): c['recheck']+=1

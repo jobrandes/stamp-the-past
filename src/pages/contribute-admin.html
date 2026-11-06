@@ -30,6 +30,7 @@ input{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--c
 <section role="tabpanel" id="tp-needs" aria-labelledby="tb-needs">
 <p class="mut">Things Claude would not decide alone. Tap Approve or Decline. Your answer is saved, and Claude publishes or removes the place in the next daily run (about 3 a.m. Pacific), or sooner if you ask Claude in the chat.</p>
 <h2>Waiting for your decision <span class="mut" id="nneeds"></span></h2><div id="needs" aria-live="polite">Loading…</div>
+<h2>Waiting for sources <span class="mut" id="nsrc"></span></h2><p class="mut">Claude could not fetch two reliable sources for these, so it did not publish them. They stay here (and in the list below) and the daily run tries again. To clear them sooner, ask Claude in a chat session where you are present: &ldquo;research the places waiting for sources&rdquo;.</p><div id="srcs" aria-live="polite"></div>
 <h2>New from contributors <span class="mut" id="npend"></span></h2><p class="mut" id="pendhint">Unlock to see new submissions and their photos.</p><div id="pending" aria-live="polite"></div></section>
 
 <section role="tabpanel" id="tp-act" aria-labelledby="tb-act" hidden>
@@ -76,7 +77,7 @@ function mark(k,ok){if(!(k in SRC))return;SRC[k]=ok?'ok':'fail';var ks=Object.ke
 function incomplete(){return Object.keys(SRC).some(function(x){return SRC[x]!=='ok';});}
 function summary(){if(!UNLOCKED){$('dash').hidden=true;return;}$('dash').hidden=false;
   var need=0,wait=0;REC.forEach(function(x){if(x.decision==='needs-owner'){if(OWN[x.id])wait++;else need++;}});
-  var bits=[];bits.push(need+' need'+(need===1?'s':'')+' your decision');bits.push(CNT.pend+' new from contributors (Claude handles these)');if(wait)bits.push(wait+' answered, waiting for Claude to carry out');bits.push(places.length+' published');bits.push(CNT.rep+' reported');
+  var bits=[];bits.push(need+' need'+(need===1?'s':'')+' your decision');bits.push(CNT.pend+' new from contributors (Claude handles these)');if(wait)bits.push(wait+' answered, waiting for Claude to carry out');var ns=REC.filter(function(x){return x.decision==='needs-sources';}).length;if(ns)bits.push(ns+' waiting for sources');bits.push(places.length+' published');bits.push(CNT.rep+' reported');
   $('sum').textContent=(incomplete()?'Counts may be incomplete while loading or after an error. ':'')+(need?'Action needed: ':'Nothing needs you right now. ')+bits.join(' · ')+'.';}
 function refreshAll(){$('flash').textContent='';begin(UNLOCKED?['report','pub','pend','rep']:['report','pub']);loadReport();loadPublic();if(UNLOCKED)loadPending();}
 // tabs
@@ -104,6 +105,7 @@ function renderNeeds(){revokeBucket('needs');var N=$('needs');N.innerHTML='';var
   open.forEach(function(x){N.appendChild(recCard(x));});
   if(!open.length)N.appendChild(el('p','mut','Nothing is waiting for your decision.'));
   if(done.length){N.appendChild(el('h3','','You answered. Waiting for Claude to carry it out'));N.appendChild(el('p','mut','These leave this list once the next daily run has published or removed them.'));done.forEach(function(x){N.appendChild(recCard(x));});}
+  var S=$('srcs');S.innerHTML='';var sr=REC.filter(function(x){return x.decision==='needs-sources';});sr.forEach(function(x){S.appendChild(recCard(x));});if(!sr.length)S.appendChild(el('p','mut','Nothing is waiting for sources.'));$('nsrc').textContent=sr.length?'('+sr.length+')':'';
   $('nneeds').textContent=open.length?'('+open.length+')':'';$('cn-needs').textContent=open.length?String(open.length):'';summary();}
 // public list: no key needed
 function loadPublic(){
@@ -180,7 +182,7 @@ function photoFigs(x,pv,bucket,opts){opts=opts||{};var items=itemsOf(x);if(!item
 function loadPending(){
   ['pend','rep'].forEach(function(k){if(!(k in SRC))SRC[k]='loading';});
   fetch('/api/community/pending',{headers:hdr()}).then(function(r){if(!r.ok){var er=new Error('load');er.keyBad=(r.status===404||r.status===401);throw er;}return r.json();}).then(function(j){
-    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner')recIds[r.id]=1;});revokeBucket('pending');var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';CNT.pend=a.length;$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
+    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner'||r.decision==='needs-sources')recIds[r.id]=1;});revokeBucket('pending');var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';CNT.pend=a.length;$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
     if(!a.length){L.textContent='Nothing new. The daily run has handled everything.';}
     a.forEach(function(x){var d=el('div','row');d.appendChild(el('b','',x.place));d.appendChild(el('span','mut',x.city+(x.state?', '+x.state:'')+' · '+(x.created||'').slice(0,10)+(x.nickname?' · nickname: '+x.nickname:'')+(x.address?' · address: '+x.address:'')+(x.resubmitted?' · photo added later':'')));
       d.appendChild(el('span','',x.oneLiner));var pv=el('div','pvs');
@@ -232,20 +234,21 @@ var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]
         d.appendChild(dt);}
       if(x.url){var a=el('a','','Open this place');a.href=x.url;d.appendChild(a);}
       if(x.decision==='needs-owner'){if(UNLOCKED&&PEND[x.id]){var P=PEND[x.id],pv=el('div','pvs'),nph=(P.then?1:0)+(P.now?1:0)+(P.extra||[]).length;d.appendChild(el('span','tag h',nph+' photo'+(nph===1?'':'s')+' on this place'+(P.resubmitted?' · new photos added '+String(P.resubmitted).slice(0,10):'')));photoFigs(P,pv,'needs',{line:'Submission: new place \u00B7 Place status: waiting for your decision \u00B7 Owner decision still needed'});d.appendChild(pv);}d.appendChild(el('p','mut','If you approve, Claude re-checks the history and sources first and adds it to Explore History. A mission only happens if you promote it later.'));d.appendChild(ownerBox(x));}
+      if(x.decision==='needs-sources'&&UNLOCKED&&PEND[x.id]){var P2=PEND[x.id],pv2=el('div','pvs');photoFigs(P2,pv2,'needs',{line:'Submission: new place \u00B7 Place status: waiting for sources \u00B7 Your choices on photos are optional'});d.appendChild(pv2);}
       return d;
 }
 
-var DEC={'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
+var DEC={'needs-sources':['Waiting for sources','o'],'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
 function loadReport(){
   fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
     mark('report',true);var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
     $('nrep').textContent=recs.length?'('+recs.length+')':'';
-    var bits=[];[['added','added'],['needs-owner','need your decision'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
+    var bits=[];[['added','added'],['needs-owner','need your decision'],['needs-sources','waiting for sources'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
     if(c.recheck)bits.push(c.recheck+' to re-check');
     $('repsum').textContent=recs.length?'Everything Claude has decided so far: '+bits.join(', ')+'.':'Nothing has been decided yet.';
     REC=recs;RL=rl;
     var L=$('repl');L.innerHTML='';
-    recs.forEach(function(x){if(x.decision!=='needs-owner')L.appendChild(recCard(x));});
+    recs.forEach(function(x){if(x.decision!=='needs-owner'&&x.decision!=='needs-sources')L.appendChild(recCard(x));});
     renderNeeds();
     if(!recs.length)L.textContent='Nothing yet.';
     $('nrules').textContent='('+(j.rules||[]).length+')';$('rulesintro').textContent=(j.intro||'')+(j.effective?' In force since '+j.effective+'.':'');
