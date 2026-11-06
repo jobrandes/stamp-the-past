@@ -41,6 +41,13 @@ Photos: a submission may have up to 5. `ph` = the main photo (prefer the cleares
 - First try for a few minutes to find a free "then" photo (Commons, Library of Congress, HABS) for a recent-only place; add it to `more` with its credit if clearly the same place.
 - Promotion to a mission is NOT your job. If a place looks like a good candidate, mention it in your report line so Jo-Anne can decide.
 
+## 2f. How to fetch sources in an unattended run (added Nov 6 2026)
+Unattended runs have been refused page fetches whose address was only recalled from memory ("provenance required"). Fetch like this instead:
+1. Start with WebSearch for the place (name + town). Only fetch URLs that WebSearch returned, or that appear as links inside a page you already fetched (for example the references at the bottom of the Wikipedia article, or the official site it links to). Never build a URL by editing one you have seen or by recalling it.
+2. Good sources that fetch: en.wikipedia.org articles, www.nps.gov pages, official city, county, state and museum sites. These sites refuse automated fetching, so do not rely on them: nominatim.openstreetmap.org and www.loc.gov search pages (robots rules). For map coordinates use the Wikipedia article's coordinates or the official site, not Nominatim page fetches.
+3. If a fetch is refused, try one other source from the search results. If you still have fewer than 2 fetched sources, do NOT publish: leave the place pending, and send one PushNotification naming the place and "could not fetch sources".
+4. Never use curl to get around a refused fetch (curl is only for the community API with the admin header).
+
 ## 3. When you must decline
 Write the reason in plain, kind language into `src/community/declined.json` as `{"<id>": "reason"}`. Decline when: fewer than 2 reliable sources can be found, the place is private or unsafe to visit, the place is not historical, it duplicates an existing place in that town, or the photos do not show the place. Never decline silently and never add something you could not verify. Log it in approvals.json (section 0).
 
