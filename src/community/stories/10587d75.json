@@ -1,0 +1,115 @@
+{
+ "sub": "10587d75",
+ "town": "New York",
+ "state": "NY",
+ "added": "2026-11-06",
+ "stop": {
+  "id": "libertyisland",
+  "name": "Liberty Island",
+  "area": "New York",
+  "geo": [
+   40.6892,
+   -74.0445,
+   400
+  ],
+  "addr": "Liberty Island, New York, NY",
+  "invite": "Before it was the home of the Statue of Liberty, this small island was a quarantine station, a hospital site, and a star-shaped fort, under a different name.",
+  "story": [
+   "Liberty Island is a federally owned island in Upper New York Bay. Wikipedia says it was long known as Bedloe's Island and was renamed by an act of Congress in 1956. The National Park Service chronology says the island was one of three \"Oyster Islands\" in the harbor, that Isaac Bedloe, a Dutch colonist, obtained it in 1667, and that New York City used it as a quarantine station from 1738. A hospital was built there in 1759 to 1760.",
+   "In 1808 the army began work on an 11-point star fort, completed in 1811 and renamed Fort Wood in 1814. The NPS gives the start as 1807 on its Fort Wood page and 1808 on its chronology, so the exact year is shown as approximate here. The remnants of the fort are still visible today as the base on which the Statue of Liberty stands. The army kept a post on the island until 1937, the year it became part of the Statue of Liberty National Monument.",
+   "This card is about the island and its layers of history, not the statue itself, which already has its own stop in the New York missions. The three photos were taken by the contributor in 2026: the statue and pedestal beyond a flagpole and plaza, a close view of the statue's face and torch, and the statue with the Manhattan skyline across the water. No old photo of the island has been added yet."
+  ],
+  "facts": [
+   {
+    "t": "Long known as Bedloe's Island, the island was renamed Liberty Island by an act of Congress in 1956.",
+    "src": [
+     0
+    ]
+   },
+   {
+    "t": "New York City used the island as a quarantine station from 1738, and a hospital was built there in 1759 to 1760.",
+    "src": [
+     1
+    ]
+   },
+   {
+    "t": "An 11-point star fort was built from 1808 to 1811 and renamed Fort Wood in 1814 (the NPS Fort Wood page says 1807 for the start).",
+    "src": [
+     1,
+     3
+    ]
+   },
+   {
+    "t": "The fort's remnants are still visible as the base on which the Statue of Liberty stands.",
+    "src": [
+     3
+    ]
+   },
+   {
+    "t": "Statue City Cruises is the only authorized ferry service to the island, and visitors pass airport-style security before boarding.",
+    "src": [
+     2
+    ]
+   },
+   {
+    "t": "The crown climb is 162 steps with no elevator, and pedestal and crown access need advance tickets.",
+    "src": [
+     2
+    ]
+   }
+  ],
+  "access": "Liberty Island can only be reached by the Statue City Cruises ferry from Liberty State Park or The Battery, after airport-style security. Check the National Park Service page for current tickets and hours before you go.",
+  "access_check": {
+   "on": "2026-11-06",
+   "by": "Claude",
+   "how": "Story read against the NPS Liberty Island chronology, the NPS Fort Wood page, the NPS plan-your-visit page and the Wikipedia summary. The NPS pages list no opening hours, so none are given. Map point agrees between the Wikipedia pages for Liberty Island and the Statue of Liberty. Not walked."
+  },
+  "sources": [
+   {
+    "t": "Wikipedia: Liberty Island",
+    "u": "https://en.wikipedia.org/wiki/Liberty_Island"
+   },
+   {
+    "t": "National Park Service: Liberty Island Chronology",
+    "u": "https://home.nps.gov/stli/learn/historyculture/liberty-island-a-chronology.htm"
+   },
+   {
+    "t": "National Park Service: Statue of Liberty, plan your visit",
+    "u": "https://www.nps.gov/stli/planyourvisit/index.htm"
+   },
+   {
+    "t": "National Park Service: Fort Wood and Fort Gibson",
+    "u": "https://www.nps.gov/places/fort-wood-fort-gibson.htm"
+   }
+  ],
+  "ph": {
+   "k": "cm_10587d75_n",
+   "alt": "The Statue of Liberty and its pedestal seen across a plaza on Liberty Island, with an American flag on a tall pole, photo supplied by the contributor",
+   "by": "Julian Brandes",
+   "lic": "CC BY-SA",
+   "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "page": "https://stampthepast.com/",
+   "note": "Photo by the contributor"
+  },
+  "more": [
+   {
+    "k": "cm_10587d75_x1",
+    "alt": "Close view of the Statue of Liberty's face, crown and torch against a blue sky, photo supplied by the contributor",
+    "by": "Julian Brandes",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://stampthepast.com/",
+    "label": "Today: the face and torch"
+   },
+   {
+    "k": "cm_10587d75_x2",
+    "alt": "The Statue of Liberty and its pedestal with the Manhattan skyline across the water, photo supplied by the contributor",
+    "by": "Julian Brandes",
+    "lic": "CC BY-SA 4.0",
+    "lu": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "page": "https://stampthepast.com/",
+    "label": "Today: the skyline view"
+   }
+  ]
+ }
+}

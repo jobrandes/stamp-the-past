@@ -4,38 +4,97 @@
   "decision": "added",
   "on": "2026-11-04",
   "by": "Claude",
-  "legacy": true,
   "place": "Mount Tamalpais",
   "town": "Mill Valley",
   "state": "CA",
-  "notes": "Added before the written rules existed. The text, sources and location pass the code checks. The photo still needs to be looked at again under the no-people rule; the next daily run does this first.",
+  "notes": "Photo rechecked on 2026-11-06 under the no-people and safety rules: a landscape view, no people or private details. Text, sources and map point (agrees with Wikipedia) pass.",
   "photos": [
    {
     "k": "cm_67743c32_n",
     "verdict": "used",
-    "why": "View over the hills and bay"
+    "why": "landscape view over the hills and bay; no people"
    }
-  ]
+  ],
+  "rules": {
+   "ph-people": "pass",
+   "ph-safe": "pass",
+   "ph-private": "pass",
+   "ph-subject": "pass",
+   "ph-rights": "pass",
+   "ph-different": "na: one photo",
+   "ct-historic": "pass",
+   "dp-place": "pass",
+   "ct-geo": "pass",
+   "ct-access": "pass",
+   "ct-story-only": "pass",
+   "ct-sources": "pass",
+   "ct-honest": "pass",
+   "ct-nodata": "pass",
+   "ct-sens": "pass",
+   "ct-tone": "pass",
+   "ct-nick": "pass",
+   "lm-rate": "pass",
+   "lm-unsure": "pass"
+  }
  },
  "10587d75": {
   "kind": "place",
-  "decision": "needs-owner",
-  "on": "2026-11-05",
+  "decision": "added",
+  "on": "2026-11-06",
   "by": "Claude",
+  "dup_ok_by": "Jo-Anne",
   "place": "Liberty Island",
   "town": "New York",
   "state": "NY",
   "rules": {
-   "dp-place": "fail: its map point is about 50 m from the official Statue of Liberty stop in New York"
+   "ph-people": "pass",
+   "ph-safe": "pass",
+   "ph-private": "pass",
+   "ph-subject": "pass",
+   "ph-rights": "pass",
+   "ph-different": "pass",
+   "ct-historic": "pass",
+   "dp-place": "na: approved by Jo-Anne",
+   "ct-geo": "pass",
+   "ct-access": "pass",
+   "ct-story-only": "pass",
+   "ct-sources": "pass",
+   "ct-honest": "pass",
+   "ct-nodata": "pass",
+   "ct-sens": "pass",
+   "ct-tone": "pass",
+   "ct-nick": "pass",
+   "lm-rate": "pass",
+   "lm-unsure": "pass"
   },
-  "notes": "Claude published this before the rules existed and has now taken it out of the app. It breaks the duplicate rule. The photo also still needs the no-people check. Your call: leave it out, or allow it as a separate island-history card.",
   "photos": [
    {
     "k": "cm_10587d75_n",
     "verdict": "used",
-    "why": "Statue and plaza"
+    "why": "approved by the owner; plaza and statue"
+   },
+   {
+    "k": "cm_10587d75_x1",
+    "verdict": "used",
+    "why": "approved by the owner; close detail"
+   },
+   {
+    "k": "cm_10587d75_x2",
+    "verdict": "used",
+    "why": "approved by the owner; skyline view"
+   },
+   {
+    "k": "cm_10587d75_x3",
+    "verdict": "held back",
+    "why": "held back by the owner"
+   },
+   {
+    "k": "cm_10587d75_x4",
+    "verdict": "held back",
+    "why": "held back by the owner"
    }
-  ]
+  ],
+  "notes": "Approved by Jo-Anne on 2026-11-05. Research redone on 2026-11-06 from NPS and Wikipedia pages. It stays in Explore History as an island-history card, not a mission."
  },
  "45b3e43b": {
   "kind": "place",
