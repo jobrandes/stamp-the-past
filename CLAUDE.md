@@ -34,6 +34,7 @@ Built by Jo-Anne (builder, on-site verifier) and her 14-year-old son (tester and
 - XP: 100 per stop, 25 per claim, 600 max per town. Save code is `TN3-` plus one 12-char group per town, so the dash count equals the town count. When adding towns, bump the counts in `tests/flows.py` (town count, `code.count('-')`, and the "too many towns" test with N+1 groups).
 - Validator rules: 3+ distinct correct-answer positions per pack, hint must not give the answer, boss answers not all in one slot, 4 distinct boss options.
 - Home: regions are collapsible groups and rails. The passport has its own page (rail button next to Home, `onPass` state, `viewPass()`), and Home shows a teaser row. The passport is grouped by region (folds, with per-region stamp counts). The hero circles and "How it works" badges follow the current mission. "Try it from home" demo mode earns no saved stamp.
+- Phone testing rule (Jo-Anne, Nov 6 2026): always test phone layouts on a simulated iPhone 17 (Playwright `pw.devices['iPhone 17']`, 402x874 at 3x, touch, Safari) and look at a screenshot, not only at assertions. Other sizes (320, 360, 390) are extra checks.
 - Tests: `sh tests/run_all.sh`. If only expected screens change, accept with `python3 tests/snapshot.py index.html tests/baseline.json`.
 - Commits: author is Jo-Anne Brandes (jobrandes@gmail.com). Do NOT add Co-Authored-By trailers, Claude attribution or session links to commits or PRs (Jo-Anne's standing instruction, Oct 31 2026). Credit goes to Jo-Anne as the builder.
 

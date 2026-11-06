@@ -554,7 +554,7 @@ try:
     import base64
     _jpg=base64.b64decode('/9j/4AAQSkZJRgABAQEASABIAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAABAAEBAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=')
     _pend={'pending':[{'id':'10587d75','city':'New York','state':'NY','place':'Liberty Island','oneLiner':'x','now':{'kind':'own','license':'CC BY-SA','credit':'A','year':'2026','photo':True},'extra':[{'n':'x1','type':'unsure','kind':'own','license':'CC BY-SA','credit':'A'},{'n':'x2','type':'unsure','kind':'own','license':'CC BY-SA','credit':'A'}],'resubmitted':'2026-11-06T00:27:28.188Z'}]}
-    pg3=b.new_page(viewport={'width':390,'height':844})
+    pg3=b.new_context(**pw.devices['iPhone 17']).new_page()
     pg3.route('**/api/community/pending',lambda r:r.fulfill(status=200,content_type='application/json',body=json.dumps(_pend)))
     pg3.route('**/api/community/photo/10587d75_*',lambda r:r.fulfill(status=200,content_type='image/jpeg',body=_jpg))
     pg3.goto(B+'/contribute/admin/#k='+KEY); pg3.wait_for_selector('#tools:not([hidden])'); pg3.wait_for_selector('#needs figure',state='attached'); pg3.wait_for_timeout(500)
@@ -567,6 +567,7 @@ try:
     ok(pg3.locator('#needs figure .pst').count()==3 and 'not public yet' in pg3.inner_text('#needs'),'each photo states its status in words')
     ok(pg3.evaluate("(()=>{var f=[...document.querySelectorAll('#needs figure')];return f.every(x=>x.getBoundingClientRect().width>300)&&document.documentElement.scrollWidth<=innerWidth})()"),'photo cards are full width on a phone, no sideways scroll')
     ok(pg3.evaluate("[...document.querySelectorAll('#needs figure button')].every(b=>b.getBoundingClientRect().height>=44&&b.getBoundingClientRect().width>200)"),'photo buttons are wide and tall enough to tap')
+    pg3.locator('#needs figure').first.scroll_into_view_if_needed(); pg3.evaluate('window.scrollBy(0,-120)'); pg3.screenshot(path=os.environ.get('ADMIN_SHOT','/tmp/admin_shot.png'),full_page=False)
     pg3.close()
     ok('Pending Probe' in pg.inner_text('#pending') and 'nickname: Dad' in pg.inner_text('#pending'),'waiting list shows the pending place: '+pg.inner_text('#pending')[:200])
     pg.wait_for_timeout(800); ok(pg.evaluate("Array.from(document.querySelectorAll('#pending img')).some(function(i){return i.src.indexOf('blob:')===0&&i.naturalWidth>0})"),'pending photos preview with the key')
