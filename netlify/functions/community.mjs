@@ -183,7 +183,7 @@ const handle = (opts) => async (req, context) => {
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
     if (!(st.added || []).includes(id)) return json({ error: 'not a published place' }, 404);
     const cur = (await store.get('rep/' + id, { type: 'json' })) || { n: 0 };
-    cur.n = Math.min((cur.n || 0) + 1, 1000); cur.last = new Date().toISOString();
+    cur.n = Math.min((cur.n || 0) + 1, 1000); cur.last = new Date().toISOString(); if (!cur.first) cur.first = cur.last;
     await store.setJSON('rep/' + id, cur);
     return json({ ok: true, hidden: cur.n >= HIDE_AT && !cur.cleared });
   }
@@ -198,7 +198,7 @@ const handle = (opts) => async (req, context) => {
     if (!isAdmin()) return json({ error: 'not found' }, 404);
     const { blobs } = await store.list({ prefix: 'rep/' });
     const out = [];
-    for (const b of blobs.slice(0, 200)) { const r = await store.get(b.key, { type: 'json' }); if (r) out.push({ id: b.key.slice(4), n: r.n || 0, last: r.last || '', cleared: !!r.cleared, hidden: (r.n || 0) >= HIDE_AT && !r.cleared }); }
+    for (const b of blobs.slice(0, 200)) { const r = await store.get(b.key, { type: 'json' }); if (r) out.push({ id: b.key.slice(4), n: r.n || 0, first: r.first || '', last: r.last || '', cleared: !!r.cleared, hidden: (r.n || 0) >= HIDE_AT && !r.cleared, log: (r.log || []).slice(-5) }); }
     out.sort((a, b) => (b.hidden - a.hidden) || String(b.last).localeCompare(String(a.last)));
     return new Response(JSON.stringify({ reports: out }), { headers: { 'content-type': 'application/json', 'cache-control': 'private, no-store' } });
   }
@@ -206,7 +206,12 @@ const handle = (opts) => async (req, context) => {
   if (req.method === 'POST' && parts[0] === 'unhide' && parts[1]) {
     if (!isAdmin()) return json({ error: 'not found' }, 404);
     const id = parts[1].replace(/[^a-f0-9]/g, '').slice(0, 8);
-    const cur = (await store.get('rep/' + id, { type: 'json' })) || { n: 0 }; cur.cleared = true;
+    const cur = (await store.get('rep/' + id, { type: 'json' })) || { n: 0 };
+    // Only a place that is actually hidden can be restored (so a stray tap cannot clear a place that is merely reported).
+    if (!((cur.n || 0) >= HIDE_AT && !cur.cleared)) return json({ error: 'That place is not hidden.' }, 400);
+    let body = {}; try { body = await req.json(); } catch {}
+    const note = String((body && body.note) || '').replace(/[<>&"]/g, '').trim().slice(0, 300);
+    cur.cleared = true; cur.log = [...(cur.log || []), { at: new Date().toISOString(), action: 'restored', reports: cur.n || 0, note }].slice(-10);
     await store.setJSON('rep/' + id, cur); return json({ ok: true });
   }
 

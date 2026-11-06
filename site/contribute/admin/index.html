@@ -9,6 +9,7 @@ input{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--c
 .tabs{display:flex;gap:6px;margin:14px 0 4px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0;overflow-x:auto}.tabs button{flex:1 1 auto;font-size:.9rem;background:var(--card);color:var(--fg);border:1.5px solid var(--line);font-weight:600;padding:0 8px}.tabs button[aria-selected=true]{background:var(--ac);color:#fff;border-color:var(--ac)}@media(prefers-color-scheme:dark){.tabs button[aria-selected=true]{color:#08121c}}.cnt:not(:empty){display:inline-block;min-width:1.4em;padding:0 6px;margin-left:4px;border-radius:99px;background:var(--bad);color:#fff;font:600 .8rem "IBM Plex Mono",monospace}@media(prefers-color-scheme:dark){.cnt:not(:empty){color:#08121c}}
 .acts{display:flex;gap:10px;flex-wrap:wrap}.acts button{flex:1 1 140px}button.no{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}.say{font-weight:600}
 [hidden]{display:none!important}
+#vw{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:12px}.vwb{background:var(--card);color:var(--fg);border-radius:14px;max-width:min(96vw,900px);max-height:96vh;padding:12px;display:grid;gap:8px;overflow:auto}.vwi{overflow:auto;max-height:62vh;text-align:center}#vwimg{max-width:100%;max-height:60vh;object-fit:contain}#vwimg.z{max-width:none;max-height:none;width:200%}#vw .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}#vw .acts button{min-height:48px;width:100%}
 figure .pst{margin:4px 0;font-size:.9rem}figure .pst.no{color:var(--bad);font-weight:700}figure .pst.yes{color:var(--ok);font-weight:700}figure .acts{display:grid;grid-template-columns:1fr;gap:10px}figure .acts button{width:100%;min-height:48px}figure button.ok{background:var(--ok);color:#fff}figure button[aria-pressed=true]{outline:3px solid var(--fg);outline-offset:2px}figure.okd img{outline:3px solid var(--ok)}.cf textarea{width:100%;font:inherit;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0}
 figure.held img{opacity:.35;outline:3px solid var(--bad,#b00)}figure .link{min-height:48px;width:100%;background:transparent;color:var(--ac);border:1.5px solid var(--ac)}figure.held .link{color:var(--bad);border-color:var(--bad)}</style></head><body><main>
 <p class="mut" style="margin:0;font:500 .75rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">Stamp the Past · community test</p>
@@ -37,7 +38,10 @@ figure.held img{opacity:.35;outline:3px solid var(--bad,#b00)}figure .link{min-h
 
 <section role="tabpanel" id="tp-rules" aria-labelledby="tb-rules" hidden>
 <h2>The rules Claude follows <span class="mut" id="nrules"></span></h2><p class="mut" id="rulesintro"></p><div id="rulesl"></div></section>
-</main><script>
+</main>
+<div id="vw" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden><div class="vwb"><div class="vwi"><img id="vwimg" alt="Photo being reviewed"></div><p class="mut" id="vwcap" aria-live="polite"></p>
+<div class="acts"><button type="button" class="ghost sm" id="vwprev">Previous</button><button type="button" class="ghost sm" id="vwnext">Next</button><button type="button" class="ghost sm" id="vwzoom" aria-pressed="false">Zoom in</button><button type="button" id="vwx">Close</button></div></div></div>
+<script>
 (function(){
 var names={},places=[];function $(i){return document.getElementById(i);}
 var KEYN='stp-admin-key';
@@ -46,14 +50,31 @@ function hdr(){return {'x-admin-key':getKey()};}
 function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
 function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
 
+// in-page photo viewer (lightweight): previous/next within one place, zoom, Esc to close, focus returns to the photo
+var VW={grp:[],i:0,opener:null};
+function vwShow(){var f=VW.grp[VW.i],a=f.querySelector('a[data-u]');$('vwimg').src=a.dataset.u;$('vwimg').classList.remove('z');$('vwzoom').setAttribute('aria-pressed','false');$('vwzoom').textContent='Zoom in';
+  var cap=f.querySelector('figcaption'),st=f.querySelector('.pst');$('vwcap').textContent='Photo '+(VW.i+1)+' of '+VW.grp.length+'. '+(cap?cap.textContent:'')+' '+(st?st.textContent:'');
+  $('vwprev').disabled=VW.grp.length<2;$('vwnext').disabled=VW.grp.length<2;}
+function openViewer(fig,a){VW.grp=Array.prototype.filter.call(fig.parentNode.querySelectorAll('figure'),function(f){return f.querySelector('a[data-u]');});VW.i=Math.max(0,VW.grp.indexOf(fig));VW.opener=a;$('vw').hidden=false;document.body.style.overflow='hidden';vwShow();$('vwx').focus();}
+function closeViewer(){if($('vw').hidden)return;$('vw').hidden=true;$('vwimg').removeAttribute('src');document.body.style.overflow='';if(VW.opener&&document.body.contains(VW.opener))VW.opener.focus();}
+$('vwx').addEventListener('click',closeViewer);$('vwprev').addEventListener('click',function(){VW.i=(VW.i+VW.grp.length-1)%VW.grp.length;vwShow();});$('vwnext').addEventListener('click',function(){VW.i=(VW.i+1)%VW.grp.length;vwShow();});
+$('vwzoom').addEventListener('click',function(){var z=$('vwimg').classList.toggle('z');this.setAttribute('aria-pressed',z?'true':'false');this.textContent=z?'Fit to screen':'Zoom in';});
+document.addEventListener('keydown',function(e){if($('vw').hidden)return;if(e.key==='Escape'){closeViewer();}else if(e.key==='ArrowRight'&&VW.grp.length>1){$('vwnext').click();}else if(e.key==='ArrowLeft'&&VW.grp.length>1){$('vwprev').click();}
+  else if(e.key==='Tab'){var b=[].slice.call($('vw').querySelectorAll('button:not([disabled])'));var f=b[0],l=b[b.length-1];if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault();}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault();}}});
 // summary + refresh
-var CNT={pend:0,rep:0};
-function stamp(){var d=new Date();$('upd').textContent='Last updated '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'});}
+var CNT={pend:0,rep:0},SRC={},SRCN={pend:'new submissions',rep:'reports',pub:'published places',report:'review records'};
+function stamp(){var d=new Date();$('upd').style.color='';$('upd').textContent='Last updated '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+' (everything loaded)';}
+function begin(keys){SRC={};keys.forEach(function(k){SRC[k]='loading';});$('upd').style.color='';$('upd').textContent='Loading…';}
+function mark(k,ok){if(!(k in SRC))return;SRC[k]=ok?'ok':'fail';var ks=Object.keys(SRC),bad=ks.filter(function(x){return SRC[x]==='fail';});
+  if(bad.length){$('upd').style.color='var(--bad)';$('upd').textContent='Could not load: '+bad.map(function(x){return SRCN[x];}).join(', ')+'. What you see may be out of date. Tap Refresh.';}
+  else if(ks.every(function(x){return SRC[x]==='ok';}))stamp();
+  summary();}
+function incomplete(){return Object.keys(SRC).some(function(x){return SRC[x]!=='ok';});}
 function summary(){if(!UNLOCKED){$('dash').hidden=true;return;}$('dash').hidden=false;
   var need=0,wait=0;REC.forEach(function(x){if(x.decision==='needs-owner'){if(OWN[x.id])wait++;else need++;}});
   var bits=[];bits.push(need+' need'+(need===1?'s':'')+' your decision');bits.push(CNT.pend+' new from contributors (Claude handles these)');if(wait)bits.push(wait+' answered, waiting for Claude to carry out');bits.push(places.length+' published');bits.push(CNT.rep+' reported');
-  $('sum').textContent=(need?'Action needed: ':'Nothing needs you right now. ')+bits.join(' · ')+'.';}
-function refreshAll(){$('flash').textContent='';loadReport();loadPublic();loadPending();}
+  $('sum').textContent=(incomplete()?'Counts may be incomplete while loading or after an error. ':'')+(need?'Action needed: ':'Nothing needs you right now. ')+bits.join(' · ')+'.';}
+function refreshAll(){$('flash').textContent='';begin(UNLOCKED?['report','pub','pend','rep']:['report','pub']);loadReport();loadPublic();if(UNLOCKED)loadPending();}
 // tabs
 var TABS=['needs','act','rep','rules'];
 function showTab(t){TABS.forEach(function(x){var on=x===t;$('tb-'+x).setAttribute('aria-selected',on?'true':'false');$('tb-'+x).tabIndex=on?0:-1;$('tp-'+x).hidden=!on;});}
@@ -74,7 +95,7 @@ function ownerBox(x){var box=el('div','acts'),dec=OWN[x.id];
   yes.addEventListener('click',function(){yes.disabled=true;send('decline',ta.value.trim());});
   cf.appendChild(el('p','say','Decline this place? Claude will remove it and tell the contributor kindly in the next daily run.'));cf.appendChild(lb);cf.appendChild(ta);var r2=el('div','acts');r2.appendChild(yes);r2.appendChild(back);cf.appendChild(r2);
   box.appendChild(ap);box.appendChild(no);box.appendChild(cf);return box;}
-function renderNeeds(){var N=$('needs');N.innerHTML='';var open=[],done=[];
+function renderNeeds(){revokeBucket('needs');var N=$('needs');N.innerHTML='';var open=[],done=[];
   REC.forEach(function(x){if(x.decision!=='needs-owner')return;(OWN[x.id]?done:open).push(x);});
   open.forEach(function(x){N.appendChild(recCard(x));});
   if(!open.length)N.appendChild(el('p','mut','Nothing is waiting for your decision.'));
@@ -82,18 +103,21 @@ function renderNeeds(){var N=$('needs');N.innerHTML='';var open=[],done=[];
   $('nneeds').textContent=open.length?'('+open.length+')':'';$('cn-needs').textContent=open.length?String(open.length):'';summary();}
 // public list: no key needed
 function loadPublic(){
-  fetch('/community/places.json').then(function(r){return r.ok?r.json():{};}).catch(function(){return {};}).then(function(j){names={};places=[];
-    (j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){var k=((st.then&&st.then.ph)||(st.now&&st.now.ph)||{}).k||'',id=k.replace(/^cm_/,'').slice(0,8);names[id]={n:st.name,c:p.name,kind:'Mission stop',by:st.by||'',added:p.added||''};places.push(id);});});
-    (j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){var k=(st.ph||{}).k||'',id=k.replace(/^cm_/,'').slice(0,8);names[id]={n:st.name,c:t.name,kind:'Story stop',by:st.by||'',added:'',u:'/play.html#story='+encodeURIComponent(t.id+':'+st.id).replace(/%3A/g,':')};places.push(id);});});
+  fetch('/community/places.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){names={};places=[];
+    function ph(st){var n=0;['then','now'].forEach(function(e){if(st[e]&&st[e].ph)n++;});if(st.ph)n=1+(st.more||[]).length;return n;}
+    (j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){var id=st.sub||'';if(!id)return;names[id]={n:st.name,c:p.name+(p.state?', '+p.state:''),kind:'Mission',by:st.by||'',added:st.addedOn||p.added||'',photos:ph(st),u:'/play.html#stop='+encodeURIComponent(p.id)+':'+encodeURIComponent(st.id)};places.push(id);});});
+    (j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){var id=st.sub||'';if(!id)return;names[id]={n:st.name,c:t.name+(t.state?', '+t.state:''),kind:st.mission?'Explore History (has a Mission)':'Explore History',by:st.by||'',added:st.addedOn||'',photos:ph(st),u:'/play.html#story='+encodeURIComponent(t.id+':'+st.id).replace(/%3A/g,':')};places.push(id);});});
     var L=$('added');L.innerHTML='';$('nadd').textContent=places.length?'('+places.length+')':'';
-    if(!places.length){L.textContent='Nothing has been added yet.';return;}
+    mark('pub',true);
+    if(!places.length){L.textContent='Nothing has been published yet. Approved places appear here once Claude has added them to Explore History.';return;}
     places.sort(function(a,b){return String(names[b].added).localeCompare(String(names[a].added));});
-    places.forEach(function(id){var x=names[id],d=el('div','row'),b=el('b','',x.n);d.appendChild(b);d.appendChild(el('span','mut',x.c+' · '+x.kind+(x.by?' · by '+x.by:'')+(x.added?' · '+x.added:'')));
-      var a=el('a','',x.u?'Open this place':'Open in the app');a.href=x.u||'/play.html';d.appendChild(a);L.appendChild(d);});
-  });
+    places.forEach(function(id){var x=names[id],d=el('div','row'),b=el('b','',x.n);d.appendChild(b);d.appendChild(el('span','mut',x.c+' · '+x.kind+' · '+x.photos+' photo'+(x.photos===1?'':'s')+(x.by?' · by '+x.by:'')+(x.added?' · published '+x.added:'')));
+      var a=el('a','','Open this place');a.href=x.u;d.appendChild(a);L.appendChild(d);});
+  }).catch(function(){$('added').textContent='Could not load the published places. Tap Refresh. Do not treat this as "nothing published".';mark('pub',false);});
 }
 // owner tools
-function fetchBlobImg(url,fig){fetch(url,{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.blob();}).then(function(b){var u=URL.createObjectURL(b),i=document.createElement('img');i.alt='';i.src=u;var a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','Open this photo full size');a.style.display='block';a.appendChild(i);fig.insertBefore(a,fig.firstChild);}).catch(function(){fig.insertBefore(el('div','mut','No photo'),fig.firstChild);});}
+var URLS={pending:[],needs:[]};function revokeBucket(b){(URLS[b]||[]).forEach(function(u){try{URL.revokeObjectURL(u);}catch(x){}});URLS[b]=[];}
+function fetchBlobImg(url,fig,bucket){fetch(url,{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.blob();}).then(function(b){var u=URL.createObjectURL(b);(URLS[bucket]=URLS[bucket]||[]).push(u);var i=document.createElement('img');i.alt='';i.src=u;var a=document.createElement('a');a.href=u;a.dataset.u=u;a.target='_blank';a.addEventListener('click',function(ev){ev.preventDefault();openViewer(fig,a);});a.rel='noopener';a.setAttribute('aria-label','Open this photo in a larger view');a.style.display='block';a.appendChild(i);fig.insertBefore(a,fig.firstChild);}).catch(function(){fig.insertBefore(el('div','mut','No photo'),fig.firstChild);});}
 function decideBtn(f,id,n,state){var cur=state||'none';
   var st=el('p','pst'),sv=el('span','mut');sv.setAttribute('role','status');
   var ap=el('button','ok','Approve this photo'),no=el('button','no','Decline this photo'),un=el('button','ghost sm','Undo my choice');ap.type=no.type=un.type='button';
@@ -108,37 +132,48 @@ function decideBtn(f,id,n,state){var cur=state||'none';
   paint();f.appendChild(st);f.appendChild(row);f.appendChild(un);f.appendChild(sv);}
 function phState(x,n){return (x.heldBack||[]).indexOf(n)>-1?'declined':(x.approvedPhotos||[]).indexOf(n)>-1?'approved':'none';}
 function srcLink(f,o){if(o&&o.page&&/^https:\/\//.test(o.page)){var a=el('a','','Original source (opens a new tab)');a.href=o.page;a.target='_blank';a.rel='noopener';f.appendChild(a);}}
-function photoFigs(x,pv){
-      [['t','Old',x.then],['n','Recent',x.now]].forEach(function(p){if(!p[2])return;var f=document.createElement('figure');f.appendChild(el('figcaption','',p[1]+': '+(p[2].kind==='own'?'uploaded by contributor':(p[2].kind==='loc'?'Library of Congress':'Commons'))+' · '+(p[2].license||'')));pv.appendChild(f);srcLink(f,p[2]);decideBtn(f,x.id,p[0],phState(x,p[0]));fetchBlobImg('/api/community/photo/'+x.id+'_'+p[0],f);});
-  (x.extra||[]).forEach(function(e){var f=document.createElement('figure');f.appendChild(el('figcaption','',({old:'Old',today:'Recent',detail:'Detail',unsure:'Photo'})[e.type]+' ('+e.n+')'+(e.caption?': '+e.caption:'')+(e.year||e.yearNote?' · about '+(e.yearNote||e.year):'')+' · '+(e.kind==='loc'?'Library of Congress':e.kind==='own'?'Uploaded by contributor, credit: '+(e.credit||''):'Commons')+' · '+(e.license||'')));pv.appendChild(f);srcLink(f,e);decideBtn(f,x.id,e.n,phState(x,e.n));fetchBlobImg('/api/community/photo/'+x.id+'_'+e.n,f);});
+function photoFigs(x,pv,bucket){
+      [['t','Old',x.then],['n','Recent',x.now]].forEach(function(p){if(!p[2])return;var f=document.createElement('figure');f.appendChild(el('figcaption','',p[1]+': '+(p[2].kind==='own'?'uploaded by contributor':(p[2].kind==='loc'?'Library of Congress':'Commons'))+' · '+(p[2].license||'')));pv.appendChild(f);srcLink(f,p[2]);decideBtn(f,x.id,p[0],phState(x,p[0]));fetchBlobImg('/api/community/photo/'+x.id+'_'+p[0],f,bucket);});
+  (x.extra||[]).forEach(function(e){var f=document.createElement('figure');f.appendChild(el('figcaption','',({old:'Old',today:'Recent',detail:'Detail',unsure:'Photo'})[e.type]+' ('+e.n+')'+(e.caption?': '+e.caption:'')+(e.year||e.yearNote?' · about '+(e.yearNote||e.year):'')+' · '+(e.kind==='loc'?'Library of Congress':e.kind==='own'?'Uploaded by contributor, credit: '+(e.credit||''):'Commons')+' · '+(e.license||'')));pv.appendChild(f);srcLink(f,e);decideBtn(f,x.id,e.n,phState(x,e.n));fetchBlobImg('/api/community/photo/'+x.id+'_'+e.n,f,bucket);});
 }
 function loadPending(){
-  fetch('/api/community/pending',{headers:hdr()}).then(function(r){if(!r.ok)throw new Error(r.status===404?'That key was not accepted.':'Could not load.');return r.json();}).then(function(j){
-    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner')recIds[r.id]=1;});var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';CNT.pend=a.length;$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
+  ['pend','rep'].forEach(function(k){if(!(k in SRC))SRC[k]='loading';});
+  fetch('/api/community/pending',{headers:hdr()}).then(function(r){if(!r.ok){var er=new Error('load');er.keyBad=(r.status===404||r.status===401);throw er;}return r.json();}).then(function(j){
+    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner')recIds[r.id]=1;});revokeBucket('pending');var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';CNT.pend=a.length;$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
     if(!a.length){L.textContent='Nothing new. The daily run has handled everything.';}
     a.forEach(function(x){var d=el('div','row');d.appendChild(el('b','',x.place));d.appendChild(el('span','mut',x.city+(x.state?', '+x.state:'')+' · '+(x.created||'').slice(0,10)+(x.nickname?' · nickname: '+x.nickname:'')+(x.address?' · address: '+x.address:'')+(x.resubmitted?' · photo added later':'')));
       d.appendChild(el('span','',x.oneLiner));var pv=el('div','pvs');
-      photoFigs(x,pv);
+      photoFigs(x,pv,'pending');
       if(x.target)d.appendChild(el('span','tag h',x.correction?'Correction for published place '+x.target:'Adds photos to published place '+x.target));
       if(x.correction){d.appendChild(el('span','',"Suggested change: "+x.correction.text));if(x.correction.source){var sa=el('a','','Their source');sa.href=x.correction.source;sa.rel='noopener';sa.target='_blank';d.appendChild(sa);}}
       d.appendChild(pv);L.appendChild(d);});
     loadReports();stamp();summary();
-  }).catch(function(e){$('err').hidden=false;$('err').textContent=e&&e.message?e.message:'Could not load.';$('lock').hidden=false;$('tools').hidden=true;UNLOCKED=false;try{localStorage.removeItem(KEYN);}catch(x){}});
+  mark('pend',true);}).catch(function(e){var bad=e&&e.keyBad;$('err').hidden=false;
+    if(bad){$('err').textContent='That key was not accepted.';$('lock').hidden=false;$('tools').hidden=true;UNLOCKED=false;lockClear();try{localStorage.removeItem(KEYN);}catch(x){}}
+    else{$('err').textContent='Could not load new submissions. Nothing was changed, and your key is still saved. Tap Refresh to try again.';mark('pend',false);}});
 }
 function loadReports(){
-  fetch('/api/community/reports',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){var L=$('list');L.innerHTML='';
+  fetch('/api/community/reports',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){mark('rep',true);var L=$('list');L.innerHTML='';
     $('cn-rep').textContent=j.reports.length?String(j.reports.length):'';CNT.rep=j.reports.length;summary();if(!j.reports.length){L.textContent='No place has been reported.';return;}
-    j.reports.forEach(function(x){var nm=names[x.id]||{n:'Place '+x.id,c:''},d=el('div','row');d.appendChild(el('b','',nm.n));d.appendChild(el('span','mut',(nm.c?nm.c+' · ':'')+x.n+' report'+(x.n===1?'':'s')+(x.last?' · last '+x.last.slice(0,10):'')));
-      d.appendChild(el('span','tag '+(x.hidden?'h':'v'),x.hidden?'Hidden in the app':(x.cleared?'Visible (you cleared it)':'Visible')));
-      if(x.hidden){var u=el('button','','Unhide this place');u.type='button';u.addEventListener('click',function(){u.disabled=true;fetch('/api/community/unhide/'+x.id,{method:'POST',headers:hdr()}).then(function(r){if(!r.ok)throw 0;loadReports();}).catch(function(){u.disabled=false;$('err').hidden=false;$('err').textContent='Could not unhide. Try again.';});});d.appendChild(u);}
+    j.reports.forEach(function(x){var nm=names[x.id]||{n:'Place '+x.id+' (no longer published)',c:''},d=el('div','row');d.appendChild(el('b','',nm.n));
+      d.appendChild(el('span','mut',(nm.c?nm.c+' · ':'')+x.n+' report'+(x.n===1?'':'s')+(x.first?' · first '+x.first.slice(0,10):'')+(x.last?' · last '+x.last.slice(0,10):'')));
+      d.appendChild(el('span','tag '+(x.hidden?'h':'v'),x.hidden?'Hidden in the app. Needs your review':(x.cleared?'Visible. You reviewed it and restored it':'Visible. Not enough reports to hide')));
+      (x.log||[]).forEach(function(g){d.appendChild(el('span','mut','Restored '+String(g.at).slice(0,10)+' by you'+(g.note?': '+g.note:' (no reason given)')));});
+      if(x.hidden){var u=el('button','','Review and restore this place');u.type='button';var cf=el('div','cf');cf.hidden=true;
+        var lb=el('label','mut','Why is it safe to restore? (optional, saved with the record)'),ta=document.createElement('textarea');ta.maxLength=300;ta.rows=2;ta.id='rs-'+x.id;lb.htmlFor=ta.id;
+        var yes=el('button','','Yes, put it back in the app'),no=el('button','ghost sm','Cancel');yes.type=no.type='button';
+        u.addEventListener('click',function(){cf.hidden=false;u.hidden=true;ta.focus();});no.addEventListener('click',function(){cf.hidden=true;u.hidden=false;});
+        yes.addEventListener('click',function(){yes.disabled=true;fetch('/api/community/unhide/'+x.id,{method:'POST',headers:Object.assign({'content-type':'application/json'},hdr()),body:JSON.stringify({note:ta.value.trim()})}).then(function(r){if(!r.ok)throw 0;$('flash').textContent='Restored. The place is visible in the app again.';loadReports();}).catch(function(){yes.disabled=false;$('err').hidden=false;$('err').textContent='Could not restore. Nothing changed. Try again.';});});
+        cf.appendChild(el('p','say','This puts the place back in front of players. Only do it after you have looked at it.'));cf.appendChild(lb);cf.appendChild(ta);var r2=el('div','acts');r2.appendChild(yes);r2.appendChild(no);cf.appendChild(r2);d.appendChild(u);d.appendChild(cf);}
       if(nm.u){var o=el('a','','Open this place');o.href=nm.u;d.appendChild(o);}
       L.appendChild(d);});
-  }).catch(function(){$('list').textContent='Could not load reports.';});
+  }).catch(function(){$('list').textContent='Could not load reports. Tap Refresh.';mark('rep',false);});
 }
 function unlock(){var k=getKey();if(!k)return;if($('rem').checked){try{localStorage.setItem(KEYN,k);}catch(x){}}loadPending();}
 $('go').addEventListener('click',unlock);$('k').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
 $('refresh').addEventListener('click',refreshAll);
-$('forget').addEventListener('click',function(){try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;UNLOCKED=false;OWN={};PEND={};$('pending').innerHTML='';$('npend').textContent='';$('pendhint').hidden=false;$('list').innerHTML='';$('replock').hidden=false;$('cn-rep').textContent='';renderNeeds();history.replaceState(null,'',location.pathname+location.search);});
+function lockClear(){closeViewer();revokeBucket('pending');revokeBucket('needs');OWN={};PEND={};CNT.pend=0;CNT.rep=0;$('pending').innerHTML='';$('npend').textContent='';$('list').innerHTML='';$('cn-rep').textContent='';$('flash').textContent='';SRC={};}
+$('forget').addEventListener('click',function(){lockClear();try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;UNLOCKED=false;OWN={};PEND={};$('pending').innerHTML='';$('npend').textContent='';$('pendhint').hidden=false;$('list').innerHTML='';$('replock').hidden=false;$('cn-rep').textContent='';renderNeeds();history.replaceState(null,'',location.pathname+location.search);});
 
 // approval report + rules (public: names, dates, results; no personal data)
 var RL={},PEND={};
@@ -155,14 +190,14 @@ var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]
         if(ph.length){var up=el('ul','rl');ph.forEach(function(q){var li=document.createElement('li');li.appendChild(el('span',q.verdict==='used'?'p':'f',q.verdict==='used'?'\u2713':'\u2717'));li.appendChild(el('span','','Photo '+q.k.replace(/^cm_[a-f0-9]{8}_/,'')+': '+(q.verdict==='used'?'used':'held back')+(q.why?' ('+q.why+')':'')));up.appendChild(li);});dt.appendChild(up);}
         d.appendChild(dt);}
       if(x.url){var a=el('a','','Open this place');a.href=x.url;d.appendChild(a);}
-      if(x.decision==='needs-owner'){if(UNLOCKED&&PEND[x.id]){var P=PEND[x.id],pv=el('div','pvs'),nph=(P.then?1:0)+(P.now?1:0)+(P.extra||[]).length;d.appendChild(el('span','tag h',nph+' photo'+(nph===1?'':'s')+' on this place'+(P.resubmitted?' · new photos added '+String(P.resubmitted).slice(0,10):'')));photoFigs(P,pv);d.appendChild(pv);}d.appendChild(el('p','mut','If you approve, Claude re-checks the history and sources first and adds it to Explore History. A mission only happens if you promote it later.'));d.appendChild(ownerBox(x));}
+      if(x.decision==='needs-owner'){if(UNLOCKED&&PEND[x.id]){var P=PEND[x.id],pv=el('div','pvs'),nph=(P.then?1:0)+(P.now?1:0)+(P.extra||[]).length;d.appendChild(el('span','tag h',nph+' photo'+(nph===1?'':'s')+' on this place'+(P.resubmitted?' · new photos added '+String(P.resubmitted).slice(0,10):'')));photoFigs(P,pv,'needs');d.appendChild(pv);}d.appendChild(el('p','mut','If you approve, Claude re-checks the history and sources first and adds it to Explore History. A mission only happens if you promote it later.'));d.appendChild(ownerBox(x));}
       return d;
 }
 
 var DEC={'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
 function loadReport(){
   fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
-    var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
+    mark('report',true);var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
     $('nrep').textContent=recs.length?'('+recs.length+')':'';
     var bits=[];[['added','added'],['needs-owner','need your decision'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
     if(c.recheck)bits.push(c.recheck+' to re-check');
@@ -176,8 +211,9 @@ function loadReport(){
     var R=$('rulesl');R.innerHTML='';var g='';
     (j.rules||[]).forEach(function(r){if(r.group!==g){g=r.group;R.appendChild(el('div','rgrp',g));}
       var d=el('div','row'),by={code:'Checked by code',claude:'Checked by Claude',both:'Checked by code and Claude'}[r.by]||'';d.appendChild(el('span','',r.text));d.appendChild(el('span','mut',by+' · applies to '+(r.for||[]).join(', ')));R.appendChild(d);});
-  }).catch(function(){$('repsum').textContent='Could not load the report.';});
+  }).catch(function(){$('repsum').textContent='Could not load the report. Tap Refresh.';mark('report',false);});
 }
+begin(['report','pub']);
 loadReport();
 loadPublic();
 // key from the address (#k=...) or from this device; the # part is never sent to the server

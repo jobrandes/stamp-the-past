@@ -27,7 +27,7 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         thr=[0]+[round(mx*r/600) for r in (100,250,450,600)]
         stops=[]
         for i,p in enumerate(pl):
-            st=json.loads(json.dumps(p['stop'])); st['tag']=f'Stop {i+1} of {n}'; st['community']=True
+            st=json.loads(json.dumps(p['stop'])); st['tag']=f'Stop {i+1} of {n}'; st['community']=True; st['sub']=p['sub']; st['addedOn']=p.get('added','')
             if p.get('by'): st['by']=p['by']
             stops.append(st)
             for era in ('then','now'):
@@ -51,7 +51,7 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
     tours={}
     for fn,p in load_stories(R,stories_dir):
         tid='c_'+slug(p['town']+'-'+p['state'] if p.get('state') else p['town'])
-        sp=json.loads(json.dumps(p['stop'])); sp['town']=tid; sp['community']=True
+        sp=json.loads(json.dumps(p['stop'])); sp['town']=tid; sp['community']=True; sp['sub']=p['sub']; sp['addedOn']=p.get('added','')
         if p.get('by'): sp['by']=p['by']
         t=tours.setdefault(tid,{'id':tid,'name':p['town'],'towns':[tid] if tid in {x['id'] for x in packs} else [],'community':True,'state':p.get('state',''),'stops':[]})
         t['stops'].append(sp)
