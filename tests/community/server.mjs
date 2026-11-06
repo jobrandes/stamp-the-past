@@ -36,6 +36,7 @@ const handler = makeHandler({ getStoreFn: store, fetchFn: fakeFetch, adminKey: '
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.jpg': 'image/jpeg', '.png': 'image/png', '.css': 'text/css', '.woff2': 'font/woff2', '.webmanifest': 'application/json' };
 http.createServer(async (req, res) => {
   const u = new URL(req.url, 'http://x');
+  if (u.pathname.startsWith('/__age/')) { const id = u.pathname.slice(7), k = 'sub/' + id, o = mem.get(k); if (o) { o.created = new Date(Date.now() - Number(u.searchParams.get('days')) * 86400000).toISOString(); } res.writeHead(o ? 200 : 404).end('ok'); return; }
   if (u.pathname.startsWith('/api/')) {
     const chunks = []; for await (const c of req) chunks.push(c);
     const r = await handler(new Request('http://x' + req.url, { method: req.method, body: req.method === 'POST' ? Buffer.concat(chunks) : undefined, headers: req.headers }), { deploy: { context: ctxName } });

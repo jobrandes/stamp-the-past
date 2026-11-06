@@ -84,6 +84,7 @@ ok(isinstance(json.load(open(R+'site/community/status.json')).get('photos'),list
 _pv=open(R+'site/privacy.html').read(); _sp=open(R+'site/support.html').read()
 ok('If you suggest a place' in _pv and 'data-com' not in _pv and 'data-nocom' not in _pv and 'We do not let you upload photos' not in _pv,'privacy page describes suggestions on the community build')
 ok('suggested a place and want it removed' in _sp and 'data-com' not in _sp,'support page explains removal of a suggestion on the community build')
+ok('90 days after you send them' in _pv,'privacy page promises 90-day deletion')
 import re as _r3
 _src=open(R+'src/pages/privacy.html').read(); _plain=_r3.sub(r'<span data-nocom>(.*?)</span>',r'\1',_r3.sub(r'<span data-com>.*?</span>\n?','',_src,flags=_r3.S),flags=_r3.S)
 ok('suggest a place' not in _plain.lower() and 'We do not let you upload photos' in _plain,'without the community flag the privacy page keeps its original wording')
@@ -142,6 +143,15 @@ try:
     pg.goto(B+'/contribute/?status='+tok); pg.wait_for_selector('#stat:not([hidden])'); ok('Received' in pg.inner_text('#stT'),'status should say Received: '+pg.inner_text('#stT'))
     pg.goto(B+'/contribute/?status='+tok[:-2]+'zz'); pg.wait_for_selector('#stat:not([hidden])'); ok('not recognised' in pg.inner_text('#stT'),'bad status link message')
     # ---- admin ----
+    # retention: 90-day cleanup removes old unhandled submissions and keeps recent ones
+    s,j=api('/api/community/cleanup',{}); ok(s==404,'cleanup without key must 404')
+    _a=api('/api/community/submit',{**good,'place':'Old Mill Test','oneLiner':'An old mill used to test cleanup.','thenUrl':'https://commons.wikimedia.org/wiki/File:Good_then3.jpg','nowUrl':''})[1]; _b=api('/api/community/submit',{**good,'place':'Fresh Mill Test','oneLiner':'A fresh mill used to test cleanup.','thenUrl':'https://commons.wikimedia.org/wiki/File:Good_then4.jpg','nowUrl':''})[1]
+    ok(_a.get('ok') and _b.get('ok'),'retention test submissions accepted: %r %r'%(_a,_b))
+    urllib.request.urlopen(B+'/__age/%s?days=100'%_a['id']); urllib.request.urlopen(B+'/__age/%s?days=10'%_b['id'])
+    s,j=api('/api/community/cleanup',{},key=KEY); ok(s==200 and _a['id'] in j['removed'] and _b['id'] not in j['removed'],'cleanup removes only the 100-day-old one: %r'%j)
+    _ids=[x['id'] for x in api('/api/community/pending',key=KEY)[1]['pending']]; ok(_a['id'] not in _ids and _b['id'] in _ids,'old gone, fresh kept')
+    s,_=api('/api/community/photo/%s_t'%_a['id'],key=KEY); ok(s==404,'old submission photo removed')
+    api('/api/community/delete/'+_b['id'],{},key=KEY)
     s,j=api('/api/community/delete/aaaaaaaa',{}); ok(s==404,'delete without key must 404')
     s,j=api('/api/community/delete/aaaaaaaa',{},key='wrong-wrong-wrong-1'); ok(s==404,'delete with wrong key must 404')
     s,j=api('/api/community/pending',key=KEY); ok(s==200 and len(j['pending'])==2 and all('tokenHash' not in p and 'edit=' not in json.dumps(p) for p in j['pending']),'pending lists both without token hashes: %r'%j)

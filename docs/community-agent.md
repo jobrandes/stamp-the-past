@@ -81,3 +81,6 @@ If the run received any new submissions (added, declined or waiting) or a place 
 
 ## 2e. Several photos of one place (Jo-Anne, Nov 5 2026)
 Up to 5 photos per place is fine as long as each one shows something a little different: another angle, a different view, a detail, another season or time, or an old versus recent view. Publish those. Hold back (add to `declined-photos.json`) near-duplicates, meaning nearly the same shot from the same spot, so a place never ends up with a pile of almost identical pictures. When unsure, keep the clearer one and say in the report that you held the other back.
+
+## 6. Retention (90 days)
+At the end of every run send `POST /api/community/cleanup` with the admin header. It deletes declined or never-reviewed submissions (record, photos, notes, status link) older than 90 days; published places are kept. Report the number removed in the run summary. The privacy page promises this.

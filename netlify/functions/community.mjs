@@ -228,6 +228,23 @@ const handle = (opts) => async (req, context) => {
     return json({ ok: true, deleted: id });
   }
 
+  // Retention: remove declined or never-reviewed suggestions (and their photos, notes and status links) 90 days after they were sent.
+  // Published places are kept. The daily research run calls this with the admin key.
+  if (isAdmin() && req.method === 'POST' && parts[0] === 'cleanup') {
+    let st = {};
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    const cutoff = Date.now() - 90 * 86400000, removed = [];
+    const { blobs } = await store.list({ prefix: 'sub/' });
+    for (const b of blobs) {
+      const id = b.key.slice(4); if ((st.added || []).includes(id)) continue;
+      const sub = await store.get(b.key, { type: 'json' }); const t = sub && Date.parse(sub.created);
+      if (!sub || !(t < cutoff)) continue;
+      for (const k of [`dec/${id}`, `own/${id}`, `sub/${id}`, ...['t', 'n', 'x1', 'x2', 'x3', 'x4', 'x5'].map(x => `photo/${id}_${x}`)]) await store.delete(k);
+      removed.push(id);
+    }
+    return json({ ok: true, removed });
+  }
+
   if (req.method === 'POST' && parts[0] === 'submit') {
     let body;
     try { body = await req.json(); } catch { return json({ errors: ['Could not read the form.'] }, 400); }
