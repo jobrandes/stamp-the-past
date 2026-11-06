@@ -565,6 +565,8 @@ try:
     ok('Action needed' in pg3.inner_text('#sum') or 'Nothing needs you' in pg3.inner_text('#sum'),'dashboard summary line is shown: '+pg3.inner_text('#sum'))
     ok('Last updated' in pg3.inner_text('#upd'),'last updated time is shown'); pg3.click('#refresh'); pg3.wait_for_timeout(500); ok('Last updated' in pg3.inner_text('#upd'),'refresh works')
     ok(pg3.locator('#needs figure .pst').count()==3 and 'not public yet' in pg3.inner_text('#needs'),'each photo states its status in words')
+    ok(pg3.evaluate("(()=>{var f=[...document.querySelectorAll('#needs figure')];return f.every(x=>x.getBoundingClientRect().width>300)&&document.documentElement.scrollWidth<=innerWidth})()"),'photo cards are full width on a phone, no sideways scroll')
+    ok(pg3.evaluate("[...document.querySelectorAll('#needs figure button')].every(b=>b.getBoundingClientRect().height>=44&&b.getBoundingClientRect().width>200)"),'photo buttons are wide and tall enough to tap')
     pg3.close()
     ok('Pending Probe' in pg.inner_text('#pending') and 'nickname: Dad' in pg.inner_text('#pending'),'waiting list shows the pending place: '+pg.inner_text('#pending')[:200])
     pg.wait_for_timeout(800); ok(pg.evaluate("Array.from(document.querySelectorAll('#pending img')).some(function(i){return i.src.indexOf('blob:')===0&&i.naturalWidth>0})"),'pending photos preview with the key')
