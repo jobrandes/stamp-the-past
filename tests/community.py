@@ -403,6 +403,12 @@ try:
     s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(4),U(5)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==200,'status page can add two more uploaded photos: %r'%j)
     s,j=api('/api/community/pending',key=KEY); UP={p['id']:p for p in j['pending']}
     ok([e['n'] for e in UP[uid]['extra']]==['x1','x2','x3','x4','x5'],'new uploads are appended after the existing photos: %r'%[e['n'] for e in UP[uid]['extra']])
+    # the same photo is never stored twice for one place
+    s,jd=api('/api/community/submit',dict(ub,place='Twin Photo Probe',uploads=[U(1),U(1),U(2)])); ok(s==200,'submit with a repeated photo: %r'%jd)
+    s,j=api('/api/community/pending',key=KEY); _dp={p['id']:p for p in j['pending']}[jd['id']]
+    ok(len(_dp.get('extra',[]))==2 and jd.get('skipped')==1,'a photo sent twice in one go is stored once: %r %r'%([e['n'] for e in _dp.get('extra',[])],jd.get('skipped')))
+    s,j2=api('/api/community/mine/'+jd['edit']+'/photo',{'uploads':[U(1)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==200 and j2.get('skipped')==1,'sending the same photo again from the status link adds nothing: %r'%j2)
+    s,j=api('/api/community/pending',key=KEY); ok(len({p['id']:p for p in j['pending']}[jd['id']]['extra'])==2,'still two photos after the repeat')
     s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':True,'uploadCredit':'Dad','confirm':True}); ok(s==400 and '5 photos' in json.dumps(j),'a sixth photo is refused: %r'%j)
     s,j=api('/api/community/mine/'+ju['edit']+'/photo',{'uploads':[U(6)],'uploadOwn':False,'uploadCredit':'Dad','confirm':True}); ok(s==400,'status-page uploads need the ownership tick')
     # editing the words of a place that is still waiting

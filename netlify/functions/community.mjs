@@ -129,12 +129,12 @@ const handle = (opts) => async (req, context) => {
     const { errs, v } = validate({ city: sub.city, state: sub.state, place: sub.place, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', thenUrl: body.thenUrl, nowUrl: body.nowUrl, nowPhoto: body.nowPhoto, nowOwn: body.nowOwn, nowCredit: body.nowCredit, nowYear: body.nowYear, nowLicense: body.nowLicense, extras: body.extras, uploads: body.uploads, uploadOwn: body.uploadOwn, uploadCredit: body.uploadCredit, confirm: body.confirm });
     if (errs.length) return json({ errors: errs }, 400);
     const next = { ...sub };
-    const { errors, photos } = await collectPhotos(v, id, next, fetchFn);
+    const { errors, photos, skipped } = await collectPhotos(v, id, next, fetchFn);
     if (errors.length) return json({ errors }, 400);
     for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
     next.resubmitted = new Date().toISOString();
     await store.setJSON('sub/' + id, next);
-    return json({ ok: true, status: 'received' });
+    return json({ ok: true, status: 'received', skipped });
   }
 
   // Change the words of a place that is still waiting for review (name, one line, nickname, address). Photos have their own route.
@@ -267,7 +267,7 @@ const handle = (opts) => async (req, context) => {
     if (v.target && !(st.added || []).includes(v.target)) return json({ errors: ['That place is not published yet, so photos cannot be added to it.'] }, 400);
     const id = randomBytes(4).toString('hex'), token = randomBytes(12).toString('hex');
     const sub = { ...(v.target ? { target: v.target } : {}), ...(v.correction ? { correction: v.correction } : {}), id, city: v.city, state: v.state, place: v.place, oneLiner: v.oneLiner, nickname: v.nickname, address: v.address, created: new Date().toISOString(), tokenHash: sha(token) };
-    const { errors, photos } = await collectPhotos(v, id, sub, fetchFn);
+    const { errors, photos, skipped } = await collectPhotos(v, id, sub, fetchFn);
     if (errors.length) return json({ errors }, 400);
     if (v.target && photos.length) {
       // One place holds at most 5 photos in all: count the ones already published plus the ones other add-photo suggestions have waiting.
@@ -281,7 +281,7 @@ const handle = (opts) => async (req, context) => {
     }
     for (const [k, b, type, own] of photos) await store.set(k, b, { metadata: own ? { type, own: true } : { type } });
     await store.setJSON('sub/' + id, sub);
-    return json({ ok: true, id, status: 'received', edit: id + token });
+    return json({ ok: true, id, status: 'received', edit: id + token, skipped });
   }
 
   return json({ error: 'not found' }, 404);
@@ -289,7 +289,10 @@ const handle = (opts) => async (req, context) => {
 
 // Reads the photos named in a validated submission into `sub` and returns the blobs to store.
 async function collectPhotos(v, id, sub, fetchFn) {
-  const photos = [], errors = [];
+  const photos = [], errors = []; let skipped = 0;
+  // Never store the same photo twice for one place: compare the re-encoded bytes (uploads) and the source page (links) with what is already there.
+  const seenH = new Set(), seenP = new Set();
+  for (const o of [sub.then, sub.now, ...(sub.extra || [])]) { if (o && o.h) seenH.add(o.h); if (o && o.page && /^https:/.test(o.page)) seenP.add(o.page); }
   // "then" photo
   if (v.then && (v.then.kind === 'commons' || v.then.kind === 'loc')) {
     const r = await (v.then.kind === 'loc' ? locPhoto : commonsPhoto)(v.then, fetchFn);
@@ -304,16 +307,19 @@ async function collectPhotos(v, id, sub, fetchFn) {
   } else if (v.nowUpload) {
     const buf = await cleanImage(decodeJpegDataUrl(v.nowUpload));
     if (!buf) errors.push('"Now" photo: that upload could not be read as a photo. Try another one.');
-    else sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true }; if (buf) photos.push([`photo/${id}_n`, buf, 'image/jpeg', true]);
+    else { const h = sha(buf); if (seenH.has(h)) { skipped++; } else { seenH.add(h); sub.now = { kind: 'own', license: v.nowLicense, credit: v.nowCredit, year: v.nowYear, photo: true, h }; photos.push([`photo/${id}_n`, buf, 'image/jpeg', true]); } }
   }
   // Extra photos (up to 3): links only. Each is held like every other photo until the place is approved.
   const keep = Array.isArray(sub.extra) ? sub.extra.slice() : [];
   let nextN = keep.reduce((m, e) => Math.max(m, +String(e.n).slice(1) || 0), 0) + 1;
   const extra = keep.slice();
   for (let i = 0; i < (v.extras || []).length; i++) {
-    const x = v.extras[i], n = 'x' + (nextN++);
+    const x = v.extras[i];
+    if (x.link && x.link.page && seenP.has(x.link.page)) { skipped++; continue; }
+    const n = 'x' + (nextN++);
     const r = await (x.link.kind === 'loc' ? locPhoto : commonsPhoto)(x.link, fetchFn);
     if (!r.ok) { errors.push(`Extra photo ${i + 1}: ${r.error}`); continue; }
+    if (x.link.page) seenP.add(x.link.page);
     extra.push({ n, type: x.type, caption: x.caption, yearNote: x.year, kind: x.link.kind, page: x.link.page, license: r.meta.license, credit: r.meta.credit, year: r.meta.year, title: r.meta.title });
     photos.push([`photo/${id}_${n}`, r.buf, r.type, false]);
   }
@@ -321,13 +327,14 @@ async function collectPhotos(v, id, sub, fetchFn) {
   for (const u of (v.uploads || [])) {
     const buf = await cleanImage(decodeJpegDataUrl(u.photo));
     if (!buf) { errors.push('One of your photos could not be read as a photo. Try another one.'); continue; }
+    const h = sha(buf); if (seenH.has(h)) { skipped++; continue; } seenH.add(h);
     const n = 'x' + (nextN++);
-    extra.push({ n, type: u.type, caption: u.caption, yearNote: u.year, kind: 'own', license: 'CC BY-SA', credit: v.uploadCredit, year: u.year });
+    extra.push({ n, type: u.type, caption: u.caption, yearNote: u.year, kind: 'own', license: 'CC BY-SA', credit: v.uploadCredit, year: u.year, h });
     photos.push([`photo/${id}_${n}`, buf, 'image/jpeg', true]);
   }
   if (nextN - 1 > 5 || extra.length + (sub.then ? 1 : 0) + (sub.now ? 1 : 0) > 5) errors.push('A place can have up to 5 photos in all.');
   if (extra.length) sub.extra = extra;
-  return { errors, photos };
+  return { errors, photos, skipped };
 }
 
 export const makeHandler = (opts = {}) => {
