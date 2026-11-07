@@ -1,0 +1,267 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><meta name="description" content="Private review page for the Stamp the Past community test: recently added places, places waiting for review and reported places."><title>Reports · Stamp the Past test</title>
+<link rel="stylesheet" href="/fonts/fonts.css"><style>:root{--bg:#EDF0F3;--fg:#13202C;--mut:#53626F;--ac:#1B58B8;--line:#C9D1D9;--card:#fff;--bad:#B3322B;--ok:#17653A}@media(prefers-color-scheme:dark){:root{--bg:#0D141B;--fg:#E9EFF4;--mut:#9AAAB8;--ac:#7BB0FF;--line:#2B3946;--card:#16222F;--bad:#FF8A80;--ok:#59C58E}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:1.0625rem/1.5 "Public Sans",system-ui,sans-serif;padding:20px 16px 64px}main{max-width:720px;margin:0 auto;overflow-wrap:anywhere}h1{font:700 2.2rem/1 "Big Shoulders Display",sans-serif;text-transform:uppercase;margin:.2em 0}.mut{color:var(--mut)}a{color:var(--ac)}
+input{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px}button{min-height:48px;font:inherit;font-weight:700;border:0;border-radius:12px;background:var(--ac);color:#fff;padding:0 18px;cursor:pointer}@media(prefers-color-scheme:dark){button{color:#08121c}}button.ghost{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
+.row{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:10px 0;display:grid;gap:8px}.row b{font-size:1.05rem}.tag{display:inline-block;font:500 .75rem "IBM Plex Mono",monospace;padding:2px 8px;border-radius:99px;border:1px solid var(--line)}.tag.h{color:var(--bad);border-color:var(--bad)}.tag.v{color:var(--ok);border-color:var(--ok)}.err{color:var(--bad);font-weight:600}h2{font-size:1.25rem;margin:1.2em 0 .3em}h3{font-size:1.05rem;margin:1.2em 0 .3em}.pvs{display:grid;grid-template-columns:1fr;gap:14px}@media(min-width:700px){.pvs{grid-template-columns:1fr 1fr}}.pvs figure{margin:0;min-width:0;border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:6px;align-content:start}.pvs img{width:100%;height:auto;max-height:360px;object-fit:contain;border-radius:8px;background:var(--line);display:block}.pvs figcaption{font-size:.9rem;color:var(--mut)}
+.more summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.more summary::marker{content:""}.more summary::before{content:"+";display:inline-block;width:1.2em;color:var(--ac);font-weight:700}.more[open]>summary::before{content:"\2212"}
+.tag.o{color:var(--ac);border-color:var(--ac)}.row.need{border:2px solid var(--bad)}ul.rl{list-style:none;margin:6px 0;padding:0;display:grid;gap:6px}ul.rl li{display:grid;grid-template-columns:1.4em 1fr;gap:6px}.rl .p{color:var(--ok);font-weight:700}.rl .f{color:var(--bad);font-weight:700}.rl .n{color:var(--mut);font-weight:700}.rgrp{font:600 .8rem "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:14px 0 4px}.vr{font-size:.95rem}
+.bar{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:12px 0}.bar.ok{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;border-color:var(--ok)}button.sm{min-height:44px;font-size:.9rem}
+.tabs{display:flex;gap:6px;margin:14px 0 4px;position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0;overflow-x:auto}.tabs button{flex:1 1 auto;font-size:.9rem;background:var(--card);color:var(--fg);border:1.5px solid var(--line);font-weight:600;padding:0 8px}.tabs button[aria-selected=true]{background:var(--ac);color:#fff;border-color:var(--ac)}@media(prefers-color-scheme:dark){.tabs button[aria-selected=true]{color:#08121c}}.cnt:not(:empty){display:inline-block;min-width:1.4em;padding:0 6px;margin-left:4px;border-radius:99px;background:var(--bad);color:#fff;font:600 .8rem "IBM Plex Mono",monospace}@media(prefers-color-scheme:dark){.cnt:not(:empty){color:#08121c}}
+.acts{display:flex;gap:10px;flex-wrap:wrap}.acts button{flex:1 1 140px}button.no{background:transparent;color:var(--bad);border:1.5px solid var(--bad)}.say{font-weight:600}
+[hidden]{display:none!important}
+#vw{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.86);display:flex;align-items:center;justify-content:center;padding:12px}.vwb{background:var(--card);color:var(--fg);border-radius:14px;max-width:min(96vw,900px);max-height:96vh;padding:12px;display:grid;gap:8px;overflow:auto}.vwi{overflow:auto;max-height:62vh;text-align:center}#vwimg{max-width:100%;max-height:60vh;object-fit:contain}#vwimg.z{max-width:none;max-height:none;width:200%}#vw .acts{display:grid;grid-template-columns:1fr 1fr;gap:8px}#vw .acts button{min-height:48px;width:100%}
+.cf textarea{width:100%;font:inherit;color:var(--fg);background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:6px 0}
+.pvs{display:block}.rv{border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:10px;background:var(--card)}.rvline{margin:0;font-size:.9rem;color:var(--mut)}.rvprog .sm{padding:0 12px;min-height:44px}.rvprog{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.rvprog b{font-size:.95rem}.rvbar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}.rvbar span{display:block;height:100%;background:var(--ac)}
+.rvstrip{display:flex;gap:8px;overflow-x:auto;padding:3px}.th{position:relative;flex:0 0 auto;width:64px;height:64px;min-height:44px;padding:0;border-radius:10px;border:2px solid var(--line);background:var(--bg);overflow:hidden;color:var(--fg)}.th[aria-pressed=true]{border-color:var(--fg)}.th img{width:100%;height:100%;object-fit:cover;display:block}.th .bd{position:absolute;right:2px;bottom:2px;min-width:20px;height:20px;border-radius:99px;background:var(--card);border:1px solid var(--fg);font:700 .75rem/18px sans-serif;text-align:center;color:var(--fg)}.th .bd.approved{color:var(--ok);border-color:var(--ok)}.th .bd.declined{color:var(--bad);border-color:var(--bad)}
+.rvmain{display:grid;gap:10px;min-width:0}.rvimg{display:block;width:100%;min-height:0;padding:0;border:0;border-radius:10px;background:var(--line);color:var(--mut);overflow:hidden}.rvimg img{display:block;width:100%;max-height:260px;object-fit:contain}.rvimg:disabled{padding:40px 0;cursor:default}.rvinfo{display:grid;gap:6px;align-content:start;min-width:0}.rvt{margin:0;font-weight:700}.rvmeta{margin:0;font-size:.88rem;color:var(--mut);overflow-wrap:anywhere}.chip{display:inline-flex;gap:6px;align-items:center;font-weight:700;font-size:.9rem;padding:3px 10px;border-radius:99px;border:1.5px solid var(--line);width:fit-content}.chip.yes{color:var(--ok);border-color:var(--ok)}.chip.no{color:var(--bad);border-color:var(--bad)}
+.rvtr{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.rvstat{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:10px 12px}.rvstat.none{border:0;padding:0}.rvstat.edit{display:grid}.rvstat b{display:block}.rvstat .rvacts{flex:0 0 auto}.rvstat.none .rvacts{flex:1 1 100%}.th .nm{position:absolute;left:3px;top:3px;min-width:18px;height:18px;border-radius:6px;background:var(--card);color:var(--fg);font:700 .7rem/18px sans-serif;text-align:center;border:1px solid var(--line)}.rvacts{display:flex;gap:8px;flex-wrap:wrap}.rvstat:not(.none):not(.edit) .rvacts button{flex:0 0 auto;padding:0 14px}.rvacts button{flex:1 1 110px;min-height:44px;font-size:.9rem}.rvacts .ok{background:var(--ok);color:#fff}@media(min-width:700px){.rvmain{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);align-items:start}}
+</style></head><body><main>
+<p class="mut" style="margin:0;font:500 .75rem 'IBM Plex Mono',monospace;text-transform:uppercase;letter-spacing:.1em">Stamp the Past · community test</p>
+<h1>Community review</h1>
+<div id="lock" class="bar"><p class="mut" style="margin:0 0 8px">Unlock to approve, decline or look at photos. Tip: open this page once with <b>#k=YOUR-KEY</b> on the end of the address and tick Remember.</p>
+<label for="k" class="mut">Admin key</label><input id="k" type="password" autocomplete="off" spellcheck="false">
+<label class="mut" style="display:flex;gap:10px;align-items:center;margin:10px 0"><input id="rem" type="checkbox" style="width:22px;height:22px;min-height:0"> Remember on this device (this phone or computer only)</label>
+<p style="margin:0"><button id="go" type="button">Unlock</button></p></div>
+<p class="err" id="err" role="alert" hidden></p>
+<div id="tools" class="bar ok" hidden><span>Unlocked. You can approve and decline.</span> <button class="ghost sm" id="forget" type="button">Lock and forget the key</button></div>
+<div id="dash" class="bar" hidden><p id="sum" class="say" style="margin:0 0 8px" aria-live="polite">Loading…</p><p class="mut" id="flash" role="status" style="margin:0 0 8px"></p><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="ghost sm" id="refresh" type="button">Refresh</button><span class="mut" id="upd">Not loaded yet</span></div></div>
+<div class="tabs" role="tablist" aria-label="Sections"><button role="tab" id="tb-needs" aria-controls="tp-needs" aria-selected="true" type="button">Needs you <span class="cnt" id="cn-needs"></span></button><button role="tab" id="tb-act" aria-controls="tp-act" aria-selected="false" type="button">Activity</button><button role="tab" id="tb-rep" aria-controls="tp-rep" aria-selected="false" type="button">Reports <span class="cnt" id="cn-rep"></span></button><button role="tab" id="tb-rules" aria-controls="tp-rules" aria-selected="false" type="button">Rules</button></div>
+
+<section role="tabpanel" id="tp-needs" aria-labelledby="tb-needs">
+<p class="mut">Things Claude would not decide alone. Tap Approve or Decline. Your answer is saved, and Claude publishes or removes the place in the next daily run (about 3 a.m. Pacific), or sooner if you ask Claude in the chat.</p>
+<h2>Waiting for your decision <span class="mut" id="nneeds"></span></h2><div id="needs" aria-live="polite">Loading…</div>
+<h2>Waiting for sources <span class="mut" id="nsrc"></span></h2><p class="mut">Claude could not fetch two reliable sources for these, so it did not publish them. They stay here (and in the list below) and the daily run tries again. To clear them sooner, ask Claude in a chat session where you are present: &ldquo;research the places waiting for sources&rdquo;.</p><div id="srcs" aria-live="polite"></div>
+<h2>New from contributors <span class="mut" id="npend"></span></h2><p class="mut" id="pendhint">Unlock to see new submissions and their photos.</p><div id="pending" aria-live="polite"></div></section>
+
+<section role="tabpanel" id="tp-act" aria-labelledby="tb-act" hidden>
+<p class="mut" id="repsum" aria-live="polite">Loading…</p>
+<h2>Decided by Claude <span class="mut" id="nrep"></span></h2><div id="repl" aria-live="polite"></div>
+<h2>In the app now <span class="mut" id="nadd"></span></h2><p class="mut">Places that are published. If something is wrong, use Report this place in the app.</p><div id="added" aria-live="polite">Loading…</div></section>
+
+<section role="tabpanel" id="tp-rep" aria-labelledby="tb-rep" hidden>
+<h2>Reported places</h2><p class="mut" id="replock">Unlock to see reports.</p><div id="list" aria-live="polite"></div></section>
+
+<section role="tabpanel" id="tp-rules" aria-labelledby="tb-rules" hidden>
+<h2>The rules Claude follows <span class="mut" id="nrules"></span></h2><p class="mut" id="rulesintro"></p><div id="rulesl"></div></section>
+</main>
+<div id="vw" role="dialog" aria-modal="true" aria-label="Photo viewer" hidden><div class="vwb"><div class="vwi"><img id="vwimg" alt="Photo being reviewed"></div><p class="mut" id="vwcap" aria-live="polite"></p>
+<div class="acts"><button type="button" class="ghost sm" id="vwprev">Previous</button><button type="button" class="ghost sm" id="vwnext">Next</button><button type="button" class="ghost sm" id="vwzoom" aria-pressed="false">Zoom in</button><button type="button" id="vwx">Close</button></div></div></div>
+<script>
+(function(){
+var names={},places=[];function $(i){return document.getElementById(i);}
+var KEYN='stp-admin-key';
+function getKey(){return ($('k').value||'').trim();}
+function hdr(){return {'x-admin-key':getKey()};}
+function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
+function el(tag,cls,txt){var e=document.createElement(tag);if(cls)e.className=cls;if(txt!=null)e.textContent=txt;return e;}
+
+// in-page photo viewer (lightweight): previous/next within one place, zoom, Esc to close, focus returns to the photo
+var VW={grp:[],i:0,opener:null};
+function vwShow(){var m=VW.grp[VW.i];$('vwimg').src=m.url;$('vwimg').classList.remove('z');$('vwzoom').setAttribute('aria-pressed','false');$('vwzoom').textContent='Zoom in';
+  $('vwcap').textContent='Photo '+(VW.i+1)+' of '+VW.grp.length+'. '+m.kind+(m.cap?': '+m.cap:'')+'. '+WORD[m.state]+'.';
+  $('vwprev').disabled=VW.grp.length<2;$('vwnext').disabled=VW.grp.length<2;}
+function openViewer(items,i,opener){VW.grp=items.filter(function(m){return m.url;});VW.i=Math.max(0,VW.grp.indexOf(items[i]));VW.opener=opener;$('vw').hidden=false;document.body.style.overflow='hidden';vwShow();$('vwx').focus();}
+function closeViewer(){if($('vw').hidden)return;$('vw').hidden=true;$('vwimg').removeAttribute('src');document.body.style.overflow='';if(VW.opener)VW.opener.focus();}
+$('vwx').addEventListener('click',closeViewer);$('vwprev').addEventListener('click',function(){VW.i=(VW.i+VW.grp.length-1)%VW.grp.length;vwShow();});$('vwnext').addEventListener('click',function(){VW.i=(VW.i+1)%VW.grp.length;vwShow();});
+$('vwzoom').addEventListener('click',function(){var z=$('vwimg').classList.toggle('z');this.setAttribute('aria-pressed',z?'true':'false');this.textContent=z?'Fit to screen':'Zoom in';});
+document.addEventListener('keydown',function(e){if($('vw').hidden)return;if(e.key==='Escape'){closeViewer();}else if(e.key==='ArrowRight'&&VW.grp.length>1){$('vwnext').click();}else if(e.key==='ArrowLeft'&&VW.grp.length>1){$('vwprev').click();}
+  else if(e.key==='Tab'){var b=[].slice.call($('vw').querySelectorAll('button:not([disabled])'));var f=b[0],l=b[b.length-1];if(e.shiftKey&&document.activeElement===f){l.focus();e.preventDefault();}else if(!e.shiftKey&&document.activeElement===l){f.focus();e.preventDefault();}}});
+// summary + refresh
+var CNT={pend:0,rep:0},SRC={},SRCN={pend:'new submissions',rep:'reports',pub:'published places',report:'review records'};
+function stamp(){var d=new Date();$('upd').style.color='';$('upd').textContent='Last updated '+d.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})+' (everything loaded)';}
+function begin(keys){SRC={};keys.forEach(function(k){SRC[k]='loading';});$('upd').style.color='';$('upd').textContent='Loading…';}
+function mark(k,ok){if(!(k in SRC))return;SRC[k]=ok?'ok':'fail';var ks=Object.keys(SRC),bad=ks.filter(function(x){return SRC[x]==='fail';});
+  if(bad.length){$('upd').style.color='var(--bad)';$('upd').textContent='Could not load: '+bad.map(function(x){return SRCN[x];}).join(', ')+'. What you see may be out of date. Tap Refresh.';}
+  else if(ks.every(function(x){return SRC[x]==='ok';}))stamp();
+  summary();}
+function incomplete(){return Object.keys(SRC).some(function(x){return SRC[x]!=='ok';});}
+function summary(){if(!UNLOCKED){$('dash').hidden=true;return;}$('dash').hidden=false;
+  var need=0,wait=0;REC.forEach(function(x){if(x.decision==='needs-owner'){if(OWN[x.id])wait++;else need++;}});
+  var bits=[];bits.push(need+' need'+(need===1?'s':'')+' your decision');bits.push(CNT.pend+' new from contributors (Claude handles these)');if(wait)bits.push(wait+' answered, waiting for Claude to carry out');var ns=REC.filter(function(x){return x.decision==='needs-sources';}).length;if(ns)bits.push(ns+' waiting for sources');bits.push(places.length+' published');bits.push(CNT.rep+' reported');
+  $('sum').textContent=(incomplete()?'Counts may be incomplete while loading or after an error. ':'')+(need?'Action needed: ':'Nothing needs you right now. ')+bits.join(' · ')+'.';}
+function refreshAll(){$('flash').textContent='';begin(UNLOCKED?['report','pub','pend','rep']:['report','pub']);loadReport();loadPublic();if(UNLOCKED)loadPending();}
+// tabs
+var TABS=['needs','act','rep','rules'];
+function showTab(t){TABS.forEach(function(x){var on=x===t;$('tb-'+x).setAttribute('aria-selected',on?'true':'false');$('tb-'+x).tabIndex=on?0:-1;$('tp-'+x).hidden=!on;});}
+TABS.forEach(function(t,i){var b=$('tb-'+t);b.addEventListener('click',function(){showTab(t);});b.addEventListener('keydown',function(e){var n=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(n){var o=TABS[(i+n+TABS.length)%TABS.length];showTab(o);$('tb-'+o).focus();e.preventDefault();}});});
+showTab('needs');
+var OWN={},UNLOCKED=false,REC=[];
+function loadOwner(cb){fetch('/api/community/owner',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){OWN=j.decisions||{};cb&&cb();}).catch(function(){cb&&cb();});}
+function ownerBox(x){var box=el('div','acts'),dec=OWN[x.id];
+  var busy=false;function send(d,note){if(busy)return;busy=true;fetch('/api/community/owner/'+x.id,{method:'POST',headers:Object.assign({'content-type':'application/json'},hdr()),body:JSON.stringify(note?{decision:d,note:note}:{decision:d})}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){busy=false;if(j.decision)OWN[x.id]=j;else delete OWN[x.id];renderNeeds();$('flash').textContent='Saved. This is not published yet. Claude still has to check it.';stamp();}).catch(function(){busy=false;$('err').hidden=false;$('err').textContent='Could not save your answer. Nothing changed. Try again.';});}
+  if(!UNLOCKED){box.appendChild(el('span','mut','Unlock (top of the page) to approve or decline.'));return box;}
+  if(dec){var m=el('p','say',dec.decision==='approve'?'You approved this for checking. It is NOT published yet: Claude still has to verify the history and sources, then add it to Explore History in the next daily run, or sooner if you ask Claude in the chat.':'You declined this'+(dec.note?' (reason: '+dec.note+')':'')+'. Claude will remove it and tell the contributor kindly in the next daily run. Nothing is deleted until then, so you can still change your answer.');var w=document.createElement('div');w.style.width='100%';w.appendChild(m);var u=el('button','ghost sm','Change my answer');u.type='button';u.addEventListener('click',function(){send('clear');});w.appendChild(u);box.appendChild(w);return box;}
+  var ap=el('button','','Approve for Claude to check');ap.type='button';ap.addEventListener('click',function(){ap.disabled=true;send('approve');});
+  var no=el('button','no','Decline');no.type='button';
+  var cf=el('div','cf');cf.hidden=true;var lb=el('label','mut','Reason (optional, kept with your decision)'),ta=document.createElement('textarea');ta.maxLength=300;ta.rows=2;ta.id='why-'+x.id;lb.htmlFor=ta.id;
+  var yes=el('button','no','Yes, decline this place');yes.type='button';var back=el('button','ghost sm','Cancel');back.type='button';
+  no.addEventListener('click',function(){cf.hidden=false;no.hidden=true;ap.hidden=true;ta.focus();});
+  back.addEventListener('click',function(){cf.hidden=true;no.hidden=false;ap.hidden=false;});
+  yes.addEventListener('click',function(){yes.disabled=true;send('decline',ta.value.trim());});
+  cf.appendChild(el('p','say','Decline this place? Claude will remove it and tell the contributor kindly in the next daily run.'));cf.appendChild(lb);cf.appendChild(ta);var r2=el('div','acts');r2.appendChild(yes);r2.appendChild(back);cf.appendChild(r2);
+  box.appendChild(ap);box.appendChild(no);box.appendChild(cf);return box;}
+function renderNeeds(){revokeBucket('needs');var N=$('needs');N.innerHTML='';var open=[],done=[];
+  REC.forEach(function(x){if(x.decision!=='needs-owner')return;(OWN[x.id]?done:open).push(x);});
+  open.forEach(function(x){N.appendChild(recCard(x));});
+  if(!open.length)N.appendChild(el('p','mut','Nothing is waiting for your decision.'));
+  if(done.length){N.appendChild(el('h3','','You answered. Waiting for Claude to carry it out'));N.appendChild(el('p','mut','These leave this list once the next daily run has published or removed them.'));done.forEach(function(x){N.appendChild(recCard(x));});}
+  var S=$('srcs');S.innerHTML='';var sr=REC.filter(function(x){return x.decision==='needs-sources';});sr.forEach(function(x){S.appendChild(recCard(x));});if(!sr.length)S.appendChild(el('p','mut','Nothing is waiting for sources.'));$('nsrc').textContent=sr.length?'('+sr.length+')':'';
+  $('nneeds').textContent=open.length?'('+open.length+')':'';$('cn-needs').textContent=open.length?String(open.length):'';summary();}
+// public list: no key needed
+function loadPublic(){
+  fetch('/community/places.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){names={};places=[];
+    function ph(st){var n=0;['then','now'].forEach(function(e){if(st[e]&&st[e].ph)n++;});if(st.ph)n=1+(st.more||[]).length;return n;}
+    (j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){var id=st.sub||'';if(!id)return;names[id]={n:st.name,c:p.name+(p.state?', '+p.state:''),kind:'Mission',by:st.by||'',added:st.addedOn||p.added||'',photos:ph(st),u:'/play.html#stop='+encodeURIComponent(p.id)+':'+encodeURIComponent(st.id)};places.push(id);});});
+    (j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){var id=st.sub||'';if(!id)return;names[id]={n:st.name,c:t.name+(t.state?', '+t.state:''),kind:st.mission?'Explore History (has a Mission)':'Explore History',by:st.by||'',added:st.addedOn||'',photos:ph(st),u:'/play.html#story='+encodeURIComponent(t.id+':'+st.id).replace(/%3A/g,':')};places.push(id);});});
+    var L=$('added');L.innerHTML='';$('nadd').textContent=places.length?'('+places.length+')':'';
+    mark('pub',true);
+    if(!places.length){L.textContent='Nothing has been published yet. Approved places appear here once Claude has added them to Explore History.';return;}
+    places.sort(function(a,b){return String(names[b].added).localeCompare(String(names[a].added));});
+    places.forEach(function(id){var x=names[id],d=el('div','row'),b=el('b','',x.n);d.appendChild(b);d.appendChild(el('span','mut',x.c+' · '+x.kind+' · '+x.photos+' photo'+(x.photos===1?'':'s')+(x.by?' · by '+x.by:'')+(x.added?' · published '+x.added:'')));
+      var a=el('a','','Open this place');a.href=x.u;d.appendChild(a);L.appendChild(d);});
+  }).catch(function(){$('added').textContent='Could not load the published places. Tap Refresh. Do not treat this as "nothing published".';mark('pub',false);});
+}
+// owner tools
+var URLS={pending:[],needs:[]};function revokeBucket(b){(URLS[b]||[]).forEach(function(u){try{URL.revokeObjectURL(u);}catch(x){}});URLS[b]=[];}
+function srcLink(f,o){if(o&&o.page&&/^https:\/\//.test(o.page)){var a=el('a','','Original source (opens a new tab)');a.href=o.page;a.target='_blank';a.rel='noopener';f.appendChild(a);}}
+function phState(x,n){return (x.heldBack||[]).indexOf(n)>-1?'declined':(x.approvedPhotos||[]).indexOf(n)>-1?'approved':'none';}
+function itemsOf(x){var it=[];
+  [['t','Historic',x.then],['n','Recent',x.now]].forEach(function(p){if(p[2])it.push({n:p[0],kind:p[1],cap:'',yr:'',o:p[2]});});
+  (x.extra||[]).forEach(function(e){it.push({n:e.n,kind:({old:'Historic',today:'Recent',detail:'Detail',unsure:'Unsorted'})[e.type]||'Photo',cap:e.caption||'',yr:e.yearNote||e.year||'',o:e});});
+  return it;}
+function srcName(o){return o.kind==='loc'?'Library of Congress':o.kind==='own'?'Uploaded by contributor':'Wikimedia Commons';}
+var GLYPH={none:'○',approved:'✓',declined:'✕'},WORD={none:'Awaiting review',approved:'Approved',declined:'Declined'};
+function loadItemImg(x,m,bucket,done){fetch('/api/community/photo/'+x.id+'_'+m.n,{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.blob();}).then(function(b){var u=URL.createObjectURL(b);(URLS[bucket]=URLS[bucket]||[]).push(u);m.url=u;done();}).catch(function(){m.url='';m.fail=true;done();});}
+// compact photo reviewer: one summary line, a thumbnail strip, ONE selected photo with only the actions that fit its state
+function photoFigs(x,pv,bucket,opts){opts=opts||{};var items=itemsOf(x);if(!items.length)return;
+  items.forEach(function(m){m.state=phState(x,m.n);m.url=null;});
+  var sel=0,editing=false,busy=false,msg='';
+  var root=el('div','rv'),info=el('p','rvline',opts.line||''),prog=el('div','rvprog'),pt=el('b',''),hint=el('p','rvmeta','Tap a thumbnail to inspect a photo and make a decision.'),nxt=el('button','ghost sm','Next to review'),bar=el('div','rvbar'),fill=el('span',''),strip=el('div','rvstrip'),main=el('div','rvmain');
+  nxt.type='button';bar.setAttribute('aria-hidden','true');bar.appendChild(fill);strip.setAttribute('role','group');strip.setAttribute('aria-label','Photos in this submission');
+  prog.appendChild(pt);prog.appendChild(nxt);if(opts.line)root.appendChild(info);root.appendChild(prog);root.appendChild(bar);if(items.length>1){root.appendChild(strip);root.appendChild(hint);}root.appendChild(main);pv.appendChild(root);
+  var thumbs=items.map(function(m,i){var b=el('button','th');b.type='button';b.addEventListener('click',function(){sel=i;editing=false;msg='';paint();});strip.appendChild(b);return b;});
+  function nextOpen(){for(var k=1;k<=items.length;k++){var j=(sel+k)%items.length;if(items[j].state==='none')return j;}return -1;}
+  nxt.addEventListener('click',function(){var j=nextOpen();if(j>-1){sel=j;editing=false;msg='';paint('img');}});
+  function reviewed(){return items.filter(function(m){return m.state!=='none';}).length;}
+  function send(body,label,i){if(busy)return;busy=true;msg='Saving…';paint('msg');
+    fetch('/api/community/decide/'+x.id+'_'+items[i].n,{method:'POST',headers:Object.assign({'content-type':'application/json'},hdr()),body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+      items[i].state=(j.declined||[]).indexOf(items[i].n)>-1?'declined':(j.approved||[]).indexOf(items[i].n)>-1?'approved':'none';busy=false;editing=false;msg='Saved: '+label+'.';paint('chg');
+    }).catch(function(){busy=false;msg='Could not save. Your saved decision is unchanged. Try again.';paint('msg');});}
+  function btn(cls,txt,fn){var b=el('button',cls,txt);b.type='button';b.disabled=busy;b.addEventListener('click',fn);return b;}
+  function paint(focus){var m=items[sel],i=sel,r=reviewed();
+    pt.textContent=r+' of '+items.length+' photo'+(items.length===1?'':'s')+' reviewed';fill.style.width=Math.round(100*r/items.length)+'%';
+    var j=nextOpen();nxt.hidden=!(j>-1&&(items.length>1));
+    thumbs.forEach(function(b,k){var it=items[k];b.setAttribute('aria-pressed',k===sel?'true':'false');b.setAttribute('aria-label','Photo '+(k+1)+' of '+items.length+', '+it.kind+': '+WORD[it.state]);b.innerHTML='';
+      if(it.url){var im=document.createElement('img');im.alt='';im.src=it.url;b.appendChild(im);}else b.appendChild(el('span','mut',it.fail?'—':'…'));
+      var nm=el('span','nm',String(k+1));nm.setAttribute('aria-hidden','true');b.appendChild(nm);var bd=el('span','bd '+it.state,GLYPH[it.state]);bd.setAttribute('aria-hidden','true');b.appendChild(bd);});
+    main.innerHTML='';
+    var ib=el('button','rvimg');ib.type='button';ib.setAttribute('aria-label','Open photo '+(i+1)+' in a larger view');
+    if(m.url){var big=document.createElement('img');big.alt='';big.src=m.url;ib.appendChild(big);ib.addEventListener('click',function(){openViewer(items,i,{focus:function(){var q=main.querySelector('.rvimg');if(q)q.focus();}});});}
+    else{ib.disabled=true;ib.appendChild(el('span','mut',m.fail?'No photo':'Loading photo…'));}
+    main.appendChild(ib);
+    var side=el('div','rvinfo'),tr=el('div','rvtr');tr.appendChild(el('p','rvt','Photo '+(i+1)+' of '+items.length+' \u00B7 '+m.kind+(m.yr?' \u00B7 about '+m.yr:'')));
+    var chip=el('span','chip st '+(m.state==='approved'?'yes':m.state==='declined'?'no':''));chip.appendChild(el('span','',GLYPH[m.state]));chip.appendChild(el('span','',WORD[m.state]));tr.appendChild(chip);side.appendChild(tr);
+    if(m.cap)side.appendChild(el('p','rvmeta',m.cap));
+    side.appendChild(el('p','rvmeta','Credit: '+(m.o.credit||(m.o.kind==='own'?'contributor':'see source'))+' \u00B7 '+srcName(m.o)+' \u00B7 '+(m.o.license||'license not stated')));
+    var f=document.createElement('div');srcLink(f,m.o);if(f.firstChild)side.appendChild(f.firstChild);
+    var box=el('div','rvstat'+(m.state==='none'?' none':'')),txt=el('div','');
+    if(m.state==='approved'){txt.appendChild(el('b','','Photo approved'));txt.appendChild(el('span','rvmeta','Waiting for publication. Nothing is public until the place is added.'));}
+    if(m.state==='declined'){txt.appendChild(el('b','','Photo declined'));txt.appendChild(el('span','rvmeta','Will not be shown publicly.'));}
+    if(m.state!=='none')box.appendChild(txt);
+    var acts=el('div','rvacts');
+    if(m.state==='none'){acts.appendChild(btn('ok','\u2713 Approve',function(){send({approve:true},'photo approved',i);}));acts.appendChild(btn('no','Decline',function(){send({decline:true},'photo declined',i);}));}
+    else if(!editing){var ch=btn('ghost sm chg','Change decision',function(){editing=true;msg='';paint('chg2');});acts.appendChild(ch);}
+    else{if(m.state==='declined')acts.appendChild(btn('ok','Approve instead',function(){send({approve:true},'photo approved',i);}));else acts.appendChild(btn('no','Decline instead',function(){send({decline:true},'photo declined',i);}));
+      acts.appendChild(btn('ghost sm','Clear decision',function(){send({decline:false},'decision cleared',i);}));acts.appendChild(btn('ghost sm cancel','Cancel',function(){editing=false;msg='';paint('chg');}));box.classList.add('edit');}
+    box.appendChild(acts);side.appendChild(box);
+    var st=el('p','rvmeta',msg);st.setAttribute('role','status');side.appendChild(st);main.appendChild(side);
+    if(focus==='chg'){var c=main.querySelector('.chg')||main.querySelector('.ok');if(c)c.focus();}else if(focus==='chg2'){var c2=main.querySelector('.rvacts button');if(c2)c2.focus();}
+  }
+  paint();items.forEach(function(m){loadItemImg(x,m,bucket,function(){paint();});});
+}
+function loadPending(){
+  ['pend','rep'].forEach(function(k){if(!(k in SRC))SRC[k]='loading';});
+  fetch('/api/community/pending',{headers:hdr()}).then(function(r){if(!r.ok){var er=new Error('load');er.keyBad=(r.status===404||r.status===401);throw er;}return r.json();}).then(function(j){
+    $('lock').hidden=true;$('tools').hidden=false;$('err').hidden=true;UNLOCKED=true;PEND={};(j.pending||[]).forEach(function(x){PEND[x.id]=x;});var recIds={};REC.forEach(function(r){if(r.decision==='needs-owner'||r.decision==='needs-sources')recIds[r.id]=1;});revokeBucket('pending');var L=$('pending');L.innerHTML='';var a=(j.pending||[]).filter(function(x){return !recIds[x.id];});$('npend').textContent='('+a.length+')';CNT.pend=a.length;$('pendhint').hidden=true;$('replock').hidden=true;loadOwner(renderNeeds);
+    if(!a.length){L.textContent='Nothing new. The daily run has handled everything.';}
+    a.forEach(function(x){var d=el('div','row');d.appendChild(el('b','',x.place));d.appendChild(el('span','mut',x.city+(x.state?', '+x.state:'')+' · '+(x.created||'').slice(0,10)+(x.nickname?' · nickname: '+x.nickname:'')+(x.address?' · address: '+x.address:'')+(x.resubmitted?' · photo added later':'')));
+      d.appendChild(el('span','',x.oneLiner));var pv=el('div','pvs');
+      photoFigs(x,pv,'pending',{line:'Submission: '+(x.correction?'correction':x.target?'photos for a published place':'new place')+' \u00B7 Place status: waiting for review \u00B7 Your choices on photos are optional'});
+      if(x.target)d.appendChild(el('span','tag h',x.correction?'Correction for published place '+x.target:'Adds photos to published place '+x.target));
+      if(x.correction){d.appendChild(el('span','',"Suggested change: "+x.correction.text));if(x.correction.source){var sa=el('a','','Their source');sa.href=x.correction.source;sa.rel='noopener';sa.target='_blank';d.appendChild(sa);}}
+      d.appendChild(pv);L.appendChild(d);});
+    loadReports();stamp();summary();
+  mark('pend',true);}).catch(function(e){var bad=e&&e.keyBad;$('err').hidden=false;
+    if(bad){$('err').textContent='That key was not accepted.';$('lock').hidden=false;$('tools').hidden=true;UNLOCKED=false;lockClear();try{localStorage.removeItem(KEYN);}catch(x){}}
+    else{$('err').textContent='Could not load new submissions. Nothing was changed, and your key is still saved. Tap Refresh to try again.';mark('pend',false);}});
+}
+function loadReports(){
+  fetch('/api/community/reports',{headers:hdr()}).then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){mark('rep',true);var L=$('list');L.innerHTML='';
+    $('cn-rep').textContent=j.reports.length?String(j.reports.length):'';CNT.rep=j.reports.length;summary();if(!j.reports.length){L.textContent='No place has been reported.';return;}
+    j.reports.forEach(function(x){var nm=names[x.id]||{n:'Place '+x.id+' (no longer published)',c:''},d=el('div','row');d.appendChild(el('b','',nm.n));
+      d.appendChild(el('span','mut',(nm.c?nm.c+' · ':'')+x.n+' report'+(x.n===1?'':'s')+(x.first?' · first '+x.first.slice(0,10):'')+(x.last?' · last '+x.last.slice(0,10):'')));
+      d.appendChild(el('span','tag '+(x.hidden?'h':'v'),x.hidden?'Hidden in the app. Needs your review':(x.cleared?'Visible. You reviewed it and restored it':'Visible. Not enough reports to hide')));
+      (x.log||[]).forEach(function(g){d.appendChild(el('span','mut','Restored '+String(g.at).slice(0,10)+' by you'+(g.note?': '+g.note:' (no reason given)')));});
+      if(x.hidden){var u=el('button','','Review and restore this place');u.type='button';var cf=el('div','cf');cf.hidden=true;
+        var lb=el('label','mut','Why is it safe to restore? (optional, saved with the record)'),ta=document.createElement('textarea');ta.maxLength=300;ta.rows=2;ta.id='rs-'+x.id;lb.htmlFor=ta.id;
+        var yes=el('button','','Yes, put it back in the app'),no=el('button','ghost sm','Cancel');yes.type=no.type='button';
+        u.addEventListener('click',function(){cf.hidden=false;u.hidden=true;ta.focus();});no.addEventListener('click',function(){cf.hidden=true;u.hidden=false;});
+        yes.addEventListener('click',function(){yes.disabled=true;fetch('/api/community/unhide/'+x.id,{method:'POST',headers:Object.assign({'content-type':'application/json'},hdr()),body:JSON.stringify({note:ta.value.trim()})}).then(function(r){if(!r.ok)throw 0;$('flash').textContent='Restored. The place is visible in the app again.';loadReports();}).catch(function(){yes.disabled=false;$('err').hidden=false;$('err').textContent='Could not restore. Nothing changed. Try again.';});});
+        cf.appendChild(el('p','say','This puts the place back in front of players. Only do it after you have looked at it.'));cf.appendChild(lb);cf.appendChild(ta);var r2=el('div','acts');r2.appendChild(yes);r2.appendChild(no);cf.appendChild(r2);d.appendChild(u);d.appendChild(cf);}
+      if(nm.u){var o=el('a','','Open this place');o.href=nm.u;d.appendChild(o);}
+      L.appendChild(d);});
+  }).catch(function(){$('list').textContent='Could not load reports. Tap Refresh.';mark('rep',false);});
+}
+function unlock(){var k=getKey();if(!k)return;if($('rem').checked){try{localStorage.setItem(KEYN,k);}catch(x){}}loadPending();}
+$('go').addEventListener('click',unlock);$('k').addEventListener('keydown',function(e){if(e.key==='Enter')unlock();});
+$('refresh').addEventListener('click',refreshAll);
+function lockClear(){closeViewer();revokeBucket('pending');revokeBucket('needs');OWN={};PEND={};CNT.pend=0;CNT.rep=0;$('pending').innerHTML='';$('npend').textContent='';$('list').innerHTML='';$('cn-rep').textContent='';$('flash').textContent='';SRC={};}
+$('forget').addEventListener('click',function(){lockClear();try{localStorage.removeItem(KEYN);}catch(x){}$('k').value='';$('tools').hidden=true;$('lock').hidden=false;UNLOCKED=false;OWN={};PEND={};$('pending').innerHTML='';$('npend').textContent='';$('pendhint').hidden=false;$('list').innerHTML='';$('replock').hidden=false;$('cn-rep').textContent='';renderNeeds();history.replaceState(null,'',location.pathname+location.search);});
+
+// approval report + rules (public: names, dates, results; no personal data)
+var RL={},PEND={};
+function recCard(x){var rl=RL;
+var d=el('div','row'+(x.decision==='needs-owner'?' need':'')),dd=DEC[x.decision]||[x.decision,'o'];
+      d.appendChild(el('b','',x.place));
+      d.appendChild(el('span','mut',(x.town?x.town+(x.state?', '+x.state:'')+' · ':'')+(x.kind==='place'?'New place':x.kind==='photo'?'New photo':'Correction')+' · '+x.on+' · decided by '+(x.by||'Claude')));
+      var tg=el('span','');tg.appendChild(el('span','tag '+dd[1],dd[0]));if(x.legacy){tg.appendChild(document.createTextNode(' '));tg.appendChild(el('span','tag h','Needs re-check'));}d.appendChild(tg);
+      if(x.notes)d.appendChild(el('span','vr',x.notes));
+      var ru=x.rules||{},ks=Object.keys(ru),ph=x.photos||[];
+      if(ks.length||ph.length){var dt=el('details','more'),sm=el('summary','','What was checked');dt.appendChild(sm);
+        if(ks.length){var ul=el('ul','rl');ks.forEach(function(k){var v=String(ru[k]),li=document.createElement('li'),m=v==='pass'?['p','\u2713']:v.indexOf('fail')===0?['f','\u2717']:['n','\u2013'];
+          li.appendChild(el('span',m[0],m[1]));li.appendChild(el('span','',(rl[k]?rl[k].text.split('. ')[0].replace(/\.$/,''):k)+(v==='pass'?'':': '+v.replace(/^(na|fail): /,''))));ul.appendChild(li);});dt.appendChild(ul);}
+        if(ph.length){var up=el('ul','rl');ph.forEach(function(q){var li=document.createElement('li');li.appendChild(el('span',q.verdict==='used'?'p':'f',q.verdict==='used'?'\u2713':'\u2717'));li.appendChild(el('span','','Photo '+q.k.replace(/^cm_[a-f0-9]{8}_/,'')+': '+(q.verdict==='used'?'used':'held back')+(q.why?' ('+q.why+')':'')));up.appendChild(li);});dt.appendChild(up);}
+        d.appendChild(dt);}
+      if(x.url){var a=el('a','','Open this place');a.href=x.url;d.appendChild(a);}
+      if(x.decision==='needs-owner'){if(UNLOCKED&&PEND[x.id]){var P=PEND[x.id],pv=el('div','pvs'),nph=(P.then?1:0)+(P.now?1:0)+(P.extra||[]).length;d.appendChild(el('span','tag h',nph+' photo'+(nph===1?'':'s')+' on this place'+(P.resubmitted?' · new photos added '+String(P.resubmitted).slice(0,10):'')));photoFigs(P,pv,'needs',{line:'Submission: new place \u00B7 Place status: waiting for your decision \u00B7 Owner decision still needed'});d.appendChild(pv);}d.appendChild(el('p','mut','If you approve, Claude re-checks the history and sources first and adds it to Explore History. A mission only happens if you promote it later.'));d.appendChild(ownerBox(x));}
+      if(x.decision==='needs-sources'&&UNLOCKED&&PEND[x.id]){var P2=PEND[x.id],pv2=el('div','pvs');photoFigs(P2,pv2,'needs',{line:'Submission: new place \u00B7 Place status: waiting for sources \u00B7 Your choices on photos are optional'});d.appendChild(pv2);}
+      return d;
+}
+
+var DEC={'needs-sources':['Waiting for sources','o'],'added':['Added','v'],'declined':['Not added','h'],'needs-owner':['Needs your decision','h'],'waiting':['Waiting for a photo','o'],'removed':['Removed','o']};
+function loadReport(){
+  fetch('/community/report.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){
+    mark('report',true);var rl={};(j.rules||[]).forEach(function(r){rl[r.id]=r;});var c=j.counts||{},recs=j.records||[];
+    $('nrep').textContent=recs.length?'('+recs.length+')':'';
+    var bits=[];[['added','added'],['needs-owner','need your decision'],['needs-sources','waiting for sources'],['declined','not added'],['removed','removed']].forEach(function(x){if(c[x[0]])bits.push(c[x[0]]+' '+x[1]);});
+    if(c.recheck)bits.push(c.recheck+' to re-check');
+    $('repsum').textContent=recs.length?'Everything Claude has decided so far: '+bits.join(', ')+'.':'Nothing has been decided yet.';
+    REC=recs;RL=rl;
+    var L=$('repl');L.innerHTML='';
+    recs.forEach(function(x){if(x.decision!=='needs-owner'&&x.decision!=='needs-sources')L.appendChild(recCard(x));});
+    renderNeeds();
+    if(!recs.length)L.textContent='Nothing yet.';
+    $('nrules').textContent='('+(j.rules||[]).length+')';$('rulesintro').textContent=(j.intro||'')+(j.effective?' In force since '+j.effective+'.':'');
+    var R=$('rulesl');R.innerHTML='';var g='';
+    (j.rules||[]).forEach(function(r){if(r.group!==g){g=r.group;R.appendChild(el('div','rgrp',g));}
+      var d=el('div','row'),by={code:'Checked by code',claude:'Checked by Claude',both:'Checked by code and Claude'}[r.by]||'';d.appendChild(el('span','',r.text));d.appendChild(el('span','mut',by+' · applies to '+(r.for||[]).join(', ')));R.appendChild(d);});
+  }).catch(function(){$('repsum').textContent='Could not load the report. Tap Refresh.';mark('report',false);});
+}
+begin(['report','pub']);
+loadReport();
+loadPublic();
+// key from the address (#k=...) or from this device; the # part is never sent to the server
+var m=location.hash.match(/[#&]k=([^&]+)/),saved=null;try{saved=localStorage.getItem(KEYN);}catch(x){}
+var start=m?decodeURIComponent(m[1]):saved;if(start){$('k').value=start;if(m)$('rem').checked=false;loadPending();}
+})();
+</script></body></html>

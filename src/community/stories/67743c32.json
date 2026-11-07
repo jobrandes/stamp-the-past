@@ -1,0 +1,24 @@
+{"sub":"67743c32","town":"Mill Valley","state":"CA","added":"2026-11-04","stop":{
+"id":"tamalpais","name":"Mount Tamalpais","area":"Mill Valley",
+"geo":[37.92909,-122.57783,400],
+"addr":"Mount Tamalpais State Park, Mill Valley, California",
+"invite":"A mountain above the Golden Gate with a name older than California, and once a railway that was called the crookedest in the world.",
+"story":[
+"Mount Tamalpais rises north of San Francisco Bay. Wikipedia gives the East Peak as 2,571 feet (784 m) and the West Peak, the highest point, as about 2,560 to 2,579 feet depending on the measurement. The name comes from the Coast Miwok words támal pájiṣ, which the page translates as \"west hill\". It was first recorded in 1845. The popular \"sleeping maiden\" legend is described there as having no basis in Coast Miwok tradition.",
+"From 1896 to 1930 the Mount Tamalpais and Muir Woods Railway climbed about 8 miles from downtown Mill Valley to the East Peak on standard-gauge track with geared steam locomotives. It was nicknamed \"The Crookedest Railroad in the World\". An auto road to the peak was built in the 1920s. California State Parks mentions that volunteers at the Gravity Car Barn share the railway's stories.",
+"Today the mountain is part of Mount Tamalpais State Park. Each summer the Mountain Play Association stages Broadway musicals in the open-air amphitheatre on the slopes, and volunteers staff a fire lookout on the East Peak in summer. The contributor's photo looks out over the bay from the mountain."
+],
+"facts":[
+{"t":"Wikipedia lists the East Peak at 2,571 feet (784 m); West Peak figures vary between about 2,560 and 2,579 feet.","src":[0]},
+{"t":"The name comes from Coast Miwok támal pájiṣ, \"west hill\", first recorded in 1845.","src":[0]},
+{"t":"The Mount Tamalpais and Muir Woods Railway ran about 8 miles from Mill Valley to the East Peak from 1896 to 1930.","src":[0]},
+{"t":"The state park is open daily 7:00 a.m. to sunset; East Peak, Pantoll and Bootjack parking areas charge fees.","src":[1]}
+],
+"access":"The mountain is a state park open daily from 7:00 a.m. to sunset, and there is no main entrance fee, but the East Peak, Pantoll and Bootjack parking areas charge fees. Check the State Parks page for current hours and road access before you go.",
+"access_check":{"on":"2026-11-04","by":"Claude","how":"Story read against Wikipedia and the California State Parks Mount Tamalpais page. The park's founding year was not stated on either page, so it is left out. Not walked. Submitted as a test, no old photo shown."},
+"sources":[
+{"t":"Wikipedia: Mount Tamalpais","u":"https://en.wikipedia.org/wiki/Mount_Tamalpais"},
+{"t":"California State Parks: Mount Tamalpais State Park","u":"https://www.parks.ca.gov/?page_id=471"}
+],
+"ph":{"k":"cm_67743c32_n","alt":"View over the hills and bay from Mount Tamalpais, photo supplied by the contributor","by":"Julian J Brandes","lic":"CC BY-SA","lu":"https://creativecommons.org/licenses/by-sa/4.0/","page":"https://stampthepast.com/","note":"Photo by the contributor"}
+}}

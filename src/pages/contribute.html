@@ -1,0 +1,270 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"><title>Suggest a place · Stamp the Past test</title><meta name="description" content="Test page: add your own city, places and photos to the Stamp the Past test copy. Not part of the live app.">
+<link rel="stylesheet" href="/fonts/fonts.css"><style>:root{--bg:#EDF0F3;--fg:#13202C;--mut:#53626F;--ac:#1B58B8;--acs:#E4EDFA;--line:#C9D1D9;--card:#fff;--bad:#B3322B;--ok:#17653A;--warn:#8A4F06;--gold:#F2B01E;--ink2:#2D3C4B}@media(prefers-color-scheme:dark){:root{--bg:#0D141B;--fg:#E9EFF4;--mut:#9AAAB8;--ac:#7BB0FF;--acs:#1B2B3F;--line:#2B3946;--card:#16202A;--bad:#FF8A80;--ok:#59C58E;--warn:#F0A957;--gold:#FFC83D;--ink2:#C9D6E2}}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--bg);color:var(--fg);font:1.0625rem/1.55 "Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding:20px max(16px,env(safe-area-inset-left)) 72px max(16px,env(safe-area-inset-right))}
+main{max-width:720px;margin:0 auto;overflow-wrap:anywhere}a{color:var(--ac)}h1{font:700 clamp(2.2rem,9vw,3.2rem)/1 "Big Shoulders Display","Public Sans",system-ui,sans-serif;text-transform:uppercase;letter-spacing:.01em;margin:.15em 0 .25em}h2{font-size:1.25rem;margin:0 0 .5em}.mut{color:var(--mut)}
+.eyebrow{margin:0;text-transform:uppercase;letter-spacing:.12em;font:500 .75rem "IBM Plex Mono",ui-monospace,monospace;color:var(--mut)}
+.lede{color:var(--mut);margin:.2em 0 1em}
+.banner{border:2px dashed var(--ac);border-radius:12px;padding:12px 14px;margin:14px 0;font-size:.95rem}
+.fine{font-size:.9rem;color:var(--mut);margin:18px 0 8px}
+.steps{display:flex;gap:6px;margin:14px 0 4px;padding:0;list-style:none}.steps li{flex:1;min-width:0;text-align:center;font:500 .72rem "IBM Plex Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);padding-top:10px;border-top:4px solid var(--line);border-radius:2px;transition:border-color .25s,color .25s}.steps li.on{color:var(--fg);border-top-color:var(--ac)}.steps li.dn{color:var(--ok);border-top-color:var(--ok)}
+fieldset{border:1px solid var(--line);background:var(--card);border-radius:16px;padding:18px 16px;margin:12px 0;min-width:0;box-shadow:0 1px 0 rgba(0,0,0,.03)}legend{font-weight:700;padding:0 6px}
+.step{animation:slidein .28s ease both}@keyframes slidein{from{opacity:0;transform:translateX(14px)}to{opacity:1;transform:none}}@media(prefers-reduced-motion:reduce){.step,.stampin{animation:none!important}}
+label{display:block;font-weight:600;margin:14px 0 4px}label:first-of-type{margin-top:4px}input,textarea,select{width:100%;min-height:48px;font:inherit;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;min-width:0}input:focus-visible,textarea:focus-visible,button:focus-visible,summary:focus-visible,a:focus-visible{outline:3px solid var(--ac);outline-offset:2px}input.bad{border-color:var(--bad)}textarea{min-height:120px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:520px){.row{grid-template-columns:1fr}}
+.help{font-size:.9rem;color:var(--mut);margin:4px 0 0}.chk{display:flex;gap:10px;align-items:flex-start;font-weight:500}.chk input{width:22px;height:22px;min-height:0;margin-top:3px;flex:none;accent-color:var(--ac)}.cnt{float:right;font:500 .75rem "IBM Plex Mono",ui-monospace,monospace;color:var(--mut)}
+button{min-height:52px;font:inherit;font-weight:700;border:0;border-radius:14px;background:var(--ac);color:#fff;padding:0 22px;cursor:pointer;transition:transform .08s,opacity .15s}button:active{transform:scale(.98)}button:disabled{opacity:.55;cursor:default}button.ghost{background:transparent;color:var(--ac);border:1.5px solid var(--ac)}
+@media(prefers-color-scheme:dark){button:not(.ghost){color:#08121c}}
+.nav{display:grid;grid-template-columns:1fr 2fr;gap:10px;margin:14px 0 0}.nav .only{grid-column:1/-1}
+.err{color:var(--bad);margin:10px 0;font-weight:500}.ok{color:var(--ok);font-weight:600}.hp{position:absolute;left:-9999px}.box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;word-break:break-all}
+details{margin-top:10px}.actions{display:grid;gap:10px;margin:14px 0}.actions a{display:block;text-decoration:none}.actions button{width:100%}.mineBox{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 14px;margin:12px 0}.mineBox h2{font-size:1.05rem;margin:0 0 .3em}summary{cursor:pointer;min-height:48px;display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:600;border:1px solid var(--line);background:var(--card);border-radius:12px;padding:0 14px}summary::after{content:'+';font-size:1.4rem;color:var(--ac)}details[open]>summary::after{content:'\2212'}details[open]>summary{margin-bottom:8px}
+.pv{display:flex;gap:12px;align-items:center;border:1.5px solid var(--line);background:var(--bg);border-radius:12px;padding:8px;margin:10px 0}.pv img{width:84px;height:64px;object-fit:cover;border-radius:8px;flex:none;background:var(--line)}.pv .t{min-width:0;font-size:.88rem;line-height:1.35}.pv .t b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.chip{display:inline-block;font:500 .72rem "IBM Plex Mono",ui-monospace,monospace;padding:2px 8px;border-radius:99px;background:var(--acs);color:var(--ac);margin-top:3px}.chip.good{background:rgba(30,122,76,.14);color:var(--ok)}.pv.warn{border-color:var(--bad)}.pv.warn .t{color:var(--bad)}
+.era{display:flex;align-items:center;gap:8px;font:600 .8rem "IBM Plex Mono",ui-monospace,monospace;text-transform:uppercase;letter-spacing:.06em;margin:18px 0 2px}.era span{background:var(--ink2);color:var(--bg);border-radius:6px;padding:2px 8px}
+.fade{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;background:var(--line);margin:8px 0;user-select:none}.fade img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.fade .tag{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.6);color:#fff;font:500 .7rem "IBM Plex Mono",monospace;padding:2px 8px;border-radius:6px}.fade input{position:absolute;left:0;right:0;bottom:6px;width:calc(100% - 24px);margin:0 12px;min-height:36px;background:transparent;border:0;accent-color:var(--gold)}
+.mock{border:1.5px solid var(--line);border-radius:16px;background:var(--card);padding:12px 14px;margin:14px 0 0;position:relative}.mock .badge{display:inline-block;font:500 .68rem "IBM Plex Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:var(--warn);background:rgba(242,176,30,.2);border-radius:6px;padding:2px 8px}.mock b{display:block;font:700 1.6rem/1.05 "Big Shoulders Display","Public Sans",sans-serif;text-transform:uppercase;margin:6px 0 2px;word-break:break-word}.mock p{margin:0;color:var(--mut);font-size:.9rem}.mock .lbl{position:absolute;top:-9px;right:12px;background:var(--bg);padding:0 6px;font:500 .68rem "IBM Plex Mono",monospace;color:var(--mut);text-transform:uppercase}
+.sum{margin:0;padding:0;list-style:none}.sum li{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}.sum li:last-child{border:0}.sum b{flex:none;width:92px;color:var(--mut);font-weight:600;font-size:.88rem}.sum span{min-width:0;word-break:break-word}
+.stampin{width:132px;height:132px;margin:8px auto 4px;border:5px double var(--ok);border-radius:50%;display:grid;place-items:center;color:var(--ok);font:700 1.4rem/1 "Big Shoulders Display",sans-serif;text-transform:uppercase;text-align:center;transform:rotate(-8deg);animation:thud .5s cubic-bezier(.2,1.6,.4,1) both}@keyframes thud{from{opacity:0;transform:rotate(-24deg) scale(2)}to{opacity:1;transform:rotate(-8deg) scale(1)}}
+.tl{list-style:none;margin:10px 0;padding:0}.tl li{position:relative;padding:0 0 14px 28px}.tl li::before{content:'';position:absolute;left:5px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--line)}.tl li.d::before{background:var(--ok)}.tl li::after{content:'';position:absolute;left:10px;top:18px;bottom:-2px;width:2px;background:var(--line)}.tl li:last-child::after{display:none}
+.priv summary{font-weight:600}.finder{margin:4px 0 6px}.finderbtn{display:flex;align-items:center;justify-content:center;min-height:52px;border:1.5px solid var(--ac);border-radius:14px;color:var(--ac);font-weight:700;text-decoration:none;text-align:center;padding:8px 14px}.finderhow{margin-top:8px}
+.xrow{margin-top:10px;padding-top:6px;border-top:1px solid var(--line)}select{width:100%;font:inherit;padding:.65em;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg);min-height:44px}
+.sr{position:absolute;left:-9999px;width:1px;height:1px}.pick{display:flex;flex-direction:column;align-items:center;gap:4px;border:2px dashed var(--ac);border-radius:18px;padding:22px 14px;text-align:center;cursor:pointer;background:var(--card);margin:6px 0 12px}.pick:focus-within,.pick:hover{background:var(--bg)}.pickicon{font-size:2rem;line-height:1;color:var(--ac);font-weight:700}.pickt{font-weight:700;font-size:1.1rem}.pickh{color:var(--mut);font-size:.9rem}.tiles{display:grid;gap:12px}.tile{display:grid;grid-template-columns:104px 1fr;gap:12px;border:1px solid var(--line);border-radius:14px;padding:10px;background:var(--card)}.tile img{width:104px;height:104px;object-fit:cover;border-radius:10px}.tc{display:grid;gap:8px;align-content:start}.tc input,.tc select{margin:0}.rmtile{justify-self:start}
+.sugg{border:1px solid var(--ac);border-radius:14px;padding:10px;margin:10px 0;background:var(--card)}.sgg{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:10px;border:1px solid var(--line);margin-top:6px;text-decoration:none;color:var(--fg);min-height:44px}.sgg span{color:var(--ac);font-size:.9rem}
+</style></head><body><main>
+<p class="eyebrow">Stamp the Past · community test</p>
+<h1>Suggest one place</h1>
+<section id="mine" class="mineBox" hidden><h2>Your suggestions</h2><ul id="minelist" style="padding-left:1.1em;margin:.2em 0"></ul><p class="help">Saved in this browser only. Keep each private link too.</p></section>
+<p id="intro" class="lede">Know a historic place in your town? Give us its name and a photo. We do the research, story and quiz. About a minute. No account, no email.</p>
+<div class="banner" id="tbanner"><strong>Test copy only.</strong> Nothing here reaches the real app or the App Store until it has been checked.</div>
+<details class="priv" id="priv"><summary>What happens to what you send (test only)</summary><p class="help" style="font-size:.95rem">We keep the place name, town, your one-liner, your optional nickname, and any photo or credit you give. Photos you upload stay private until a person approves the place. If it is approved, the name, town, nickname, text and photo are shown publicly in this test copy of the app. We store no email, name or location. To have something removed, use the Report button on the place in the app, or email <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a>. This is a test and is not covered by the live app's privacy page.</p></details>
+<ol class="steps" id="steps" aria-label="Progress"><li class="on" data-s="1">1 Place</li><li data-s="2">2 Photos</li><li data-s="3">3 Send</li></ol>
+<section id="fixsec" hidden><h2 id="fixT">Suggest a correction</h2><p class="help">Tell us what looks wrong or missing. Nothing changes by itself: a person checks it against sources first, and the place stays as it is until then.</p>
+<label for="fixtext">What should change?</label><textarea id="fixtext" rows="5" maxlength="600" aria-describedby="fixcount"></textarea><p class="help" id="fixcount">0 of 600</p>
+<label for="fixsrc">A source link that shows it (optional, https only)</label><input id="fixsrc" inputmode="url" maxlength="200" placeholder="https://...">
+<label class="chk"><input type="checkbox" id="fixconf"><span>This is not private information, and I understand the correction is only a suggestion</span></label>
+<p class="err" id="fixerr" role="alert" hidden></p><button type="button" class="btn" id="fixgo">Send correction</button></section>
+<form id="f" novalidate>
+<input class="hp" name="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+<fieldset class="step" data-step="1"><legend>The place</legend>
+<label for="place">Name of the place</label><input id="place" maxlength="80" placeholder="e.g. Mill Valley Depot" autocomplete="off">
+<div class="row"><div><label for="city">Town or city</label><input id="city" maxlength="60" autocomplete="off"></div><div><label for="state">State or region</label><input id="state" maxlength="30" list="sts" autocomplete="off" placeholder="e.g. CA"></div></div>
+<datalist id="sts"></datalist>
+<div id="sugg" class="sugg" hidden aria-live="polite"></div>
+<label for="one">One line about it <span class="cnt" id="cnt">0/300</span></label><input id="one" maxlength="300" placeholder="What is it, and why does it matter?"><p class="help">Just a pointer. We research the real story from sources.</p>
+<label for="addr">Street address or cross streets (optional)</label><input id="addr" maxlength="120" placeholder="e.g. 1 Depot Plaza, or Main St and 3rd" autocomplete="off"><p class="help">The address of the place itself, never your own. It helps us put the place on the map correctly.</p>
+<label for="nick">Nickname (optional, shown as the contributor)</label><input id="nick" maxlength="30" autocomplete="off">
+<div class="mock" aria-hidden="true"><span class="lbl">How it will look</span><span class="badge">Community-added</span><b id="mkn">Your place</b><p id="mkt">Town, State</p></div>
+<p class="err" id="e1" role="alert" hidden></p>
+<div class="nav"><button type="button" class="only" id="nx1">Next: photos</button></div>
+</fieldset>
+<fieldset class="step" data-step="2" hidden><legend>Photos</legend>
+<p class="help" style="margin-top:0"><strong>Add 1 to 5 photos, old or new.</strong> Each photo is checked on its own before anything appears. A place with only recent photos shows up as a history stop; old photos help us show how it changed.</p>
+<section id="own" hidden>
+<label class="pick" for="files"><span class="pickicon" aria-hidden="true">+</span><span class="pickt">Add photos</span><span class="pickh">Take a photo or choose from your library. Up to 5.</span></label>
+<input type="file" accept="image/*" id="files" multiple class="sr">
+<div class="tiles" id="tiles" aria-live="polite"></div>
+<div id="upbox" hidden>
+<label class="chk"><input type="checkbox" id="took"><span>I took these photos myself, and I agree to share them under CC BY-SA 4.0 with my credit shown</span></label>
+<label for="credit">Credit shown with your photos</label><input id="credit" maxlength="120" placeholder="Your name or nickname" autocomplete="off">
+<p class="help">Only upload photos you took yourself. Never upload a photo from a website, a book or someone else. Anyone may reuse them under CC BY-SA 4.0 (they must credit you and share copies alike). Photos are re-saved without location data, and nothing is public until a person approves it.</p>
+</div>
+</section>
+<details id="links"><summary>Or link a free photo from Commons or the Library of Congress</summary>
+<div class="finder"><a id="findph" class="finderbtn" href="https://commons.wikimedia.org/w/index.php?search=&ns6=1" target="_blank" rel="noopener">Find a photo of this place on Commons</a>
+<details class="finderhow"><summary>How do I copy the link?</summary><ol class="help" style="padding-left:1.2em;margin:.2em 0"><li>Tap the button. Commons opens in a new tab with a search for your place.</li><li>Tap a photo you like. Check that it shows the right place.</li><li>Check the license box on that page says public domain, CC0, CC BY or CC BY-SA.</li><li>Copy the address from your browser's address bar and paste it below. It looks like commons.wikimedia.org/wiki/File:...</li></ol><p class="help">No luck? Photos that are on neither Commons nor the Library of Congress can't be used yet. You can still send the place with whichever photo you have.</p></details></div>
+<div class="era"><span>Then</span> an old photo</div>
+<label for="then">Link to the photo's page on Wikimedia Commons or the Library of Congress</label><input id="then" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off">
+<p class="help">The address should start with commons.wikimedia.org/wiki/File: (or loc.gov/item/ for a Library of Congress photo). We check the license for you.</p><div id="pvt" aria-live="polite"></div>
+<div class="era"><span>Now</span> today</div>
+<label for="now">Link to a Commons or Library of Congress photo page <span class="mut" style="font-weight:400">(photos must be free to use; we read the license and credit for you)</span></label><input id="now" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div id="pvn" aria-live="polite"></div>
+<details id="more"><summary>More photos (optional, up to 3)</summary>
+<p class="help">Other photos of the same place: an old view, a detail, a different angle. Each one is checked on its own, so one that does not pass never holds back the others.</p>
+<div class="xrow"><label for="x1u">Photo 3: Commons or Library of Congress link</label><input id="x1u" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div class="row"><div><label for="x1t">What it shows</label><select id="x1t"><option value="unsure">Not sure</option><option value="old">Old photo</option><option value="today">Recent photo</option><option value="detail">Detail</option></select></div><div><label for="x1c">Short caption</label><input id="x1c" maxlength="120"></div></div></div>
+<div class="xrow"><label for="x2u">Photo 4: Commons or Library of Congress link</label><input id="x2u" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div class="row"><div><label for="x2t">What it shows</label><select id="x2t"><option value="unsure">Not sure</option><option value="old">Old photo</option><option value="today">Recent photo</option><option value="detail">Detail</option></select></div><div><label for="x2c">Short caption</label><input id="x2c" maxlength="120"></div></div></div>
+<div class="xrow"><label for="x3u">Photo 5: Commons or Library of Congress link</label><input id="x3u" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:..." autocomplete="off"><div class="row"><div><label for="x3t">What it shows</label><select id="x3t"><option value="unsure">Not sure</option><option value="old">Old photo</option><option value="today">Recent photo</option><option value="detail">Detail</option></select></div><div><label for="x3c">Short caption</label><input id="x3c" maxlength="120"></div></div></div>
+</details>
+</details>
+<div id="fadebox" hidden><div class="era"><span>Preview</span> drag to travel back</div><div class="fade" id="fade"><img id="fn" alt="Today"><img id="ft" alt="Then"><span class="tag" id="ftag">Today</span><input type="range" id="fr" min="0" max="100" value="0" aria-label="Travel back in time"></div></div>
+<p class="err" id="e2" role="alert" hidden></p>
+<div class="nav"><button type="button" class="ghost" id="bk2">Back</button><button type="button" id="nx2">Next: review</button></div>
+</fieldset>
+<fieldset class="step" data-step="3" hidden><legend>Check and send</legend>
+<ul class="sum" id="sum"></ul>
+<label class="chk" style="margin-top:14px"><input type="checkbox" id="confirm"><span>The photos are free to use (Commons) or I took them myself, and I am not including anyone's private information. I can be asked to remove a photo if someone objects.</span></label>
+<p class="err" id="errs" role="alert" hidden></p>
+<div class="nav"><button type="button" class="ghost" id="bk3">Back</button><button type="submit" id="go">Send this place</button></div>
+<p class="mut" id="status" role="status"></p>
+</fieldset>
+</form>
+<section id="done" hidden><div class="stampin" aria-hidden="true">Received</div><h2 style="text-align:center">Thank you!</h2><ol class="tl"><li class="d"><b>Received</b><br><span class="mut">We have your place.</span></li><li><b>Researched</b><br><span class="mut">We read sources and write the story. About a day.</span></li><li><b>Added</b><br><span class="mut">It appears in the test copy of the app. It could also be declined, or wait for another photo.</span></li></ol>
+<div class="actions"><a id="viewstat" href="#"><button type="button">View submission status</button></a><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a><a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></div>
+<details><summary>Your private status link</summary><p class="help">Keep this link. We cannot recover it for you.</p><div class="box" id="editlink"></div><p><button class="ghost" id="copy" type="button">Copy the link</button></p></details></section>
+<section id="stat" hidden><h2 id="stT">Your place</h2><p id="stP"></p><ul id="stph" class="sum" hidden aria-label="Photo status"></ul><details id="edtw" hidden><summary>Change the words</summary><p class="help">Fix the name, the one-line description, your nickname or the address. Your place goes back into review.</p>
+<label for="edp">Name of the place</label><input id="edp" maxlength="80"><label for="edo">One line about it</label><textarea id="edo" rows="3" maxlength="300"></textarea>
+<label for="edn">Nickname (optional)</label><input id="edn" maxlength="30"><label for="eda">Street address or cross streets (optional)</label><input id="eda" maxlength="120">
+<p class="err" id="ederr" role="alert" hidden></p><button type="button" class="btn" id="edgo">Save changes</button><p class="help" id="edmsg" role="status"></p></details>
+<details id="addp" hidden><summary>Add or change a photo</summary><p class="help">Add the missing photo (or replace one) and your place goes back into review.</p>
+<label for="pthen">Old photo: Commons link</label><input id="pthen" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<label for="pnow">Recent photo: Commons link</label><input id="pnow" inputmode="url" placeholder="https://commons.wikimedia.org/wiki/File:...">
+<details id="pown" hidden><summary>Or upload my own photos (up to 5)</summary>
+<label for="pfile">Photo file</label><input type="file" accept="image/*" id="pfile" multiple><div id="pprevs" style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0"></div>
+<label class="chk"><input type="checkbox" id="ptook"><span>I took these photos myself, and I agree to share them under CC BY-SA 4.0 with my credit shown</span></label>
+<div class="row"><div><label for="pcredit">Your credit</label><input id="pcredit" maxlength="120"></div><div><label for="pyear">Year taken (optional)</label><input id="pyear" maxlength="4" inputmode="numeric"></div></div>
+</details>
+<label class="chk"><input type="checkbox" id="pconfirm"><span>The photos are free to use (Commons) or I took them myself, and I am not including anyone's private information. I can be asked to remove a photo if someone objects.</span></label>
+<p class="err" id="perrs" role="alert" hidden></p><p><button type="button" id="psend">Send for review</button></p><p class="mut" id="pstatus" role="status"></p></details>
+<div class="actions"><a href="/contribute/"><button type="button" class="ghost">Suggest another place</button></a><a href="/play.html"><button type="button" class="ghost">Return to the app</button></a></div></section>
+<p class="fine" id="contactline">Questions or something to remove? Email <a href="mailto:stampthepast@gmail.com">stampthepast@gmail.com</a>.</p>
+</main>
+<script>
+(function(){
+var photo=null;
+
+// ---- stepper, previews, helpers ----
+var ST={AL:'Alabama',AK:'Alaska',AZ:'Arizona',AR:'Arkansas',CA:'California',CO:'Colorado',CT:'Connecticut',DE:'Delaware',DC:'District of Columbia',FL:'Florida',GA:'Georgia',HI:'Hawaii',ID:'Idaho',IL:'Illinois',IN:'Indiana',IA:'Iowa',KS:'Kansas',KY:'Kentucky',LA:'Louisiana',ME:'Maine',MD:'Maryland',MA:'Massachusetts',MI:'Michigan',MN:'Minnesota',MS:'Mississippi',MO:'Missouri',MT:'Montana',NE:'Nebraska',NV:'Nevada',NH:'New Hampshire',NJ:'New Jersey',NM:'New Mexico',NY:'New York',NC:'North Carolina',ND:'North Dakota',OH:'Ohio',OK:'Oklahoma',OR:'Oregon',PA:'Pennsylvania',RI:'Rhode Island',SC:'South Carolina',SD:'South Dakota',TN:'Tennessee',TX:'Texas',UT:'Utah',VT:'Vermont',VA:'Virginia',WA:'Washington',WV:'West Virginia',WI:'Wisconsin',WY:'Wyoming'};
+(function(){var dl=document.getElementById('sts');Object.keys(ST).forEach(function(k){var o=document.createElement('option');o.value=k;o.label=ST[k];dl.appendChild(o);});})();
+function $(id){return document.getElementById(id);}
+$('state').addEventListener('blur',function(){var t=this.value.trim().toLowerCase();if(!t)return;for(var k in ST){if(ST[k].toLowerCase()===t||k.toLowerCase()===t){this.value=k;break;}}mock();});
+function finder(){var q=[$('place').value.trim(),$('city').value.trim()].filter(Boolean).join(' ');$('findph').href='https://commons.wikimedia.org/w/index.php?ns6=1&search='+encodeURIComponent(q);}
+function mock(){finder();var n=$('place').value.trim(),c=$('city').value.trim(),st=$('state').value.trim();$('mkn').textContent=n||'Your place';$('mkt').textContent=[c,st].filter(Boolean).join(', ')||'Town, State';}
+['place','city','state'].forEach(function(i){$(i).addEventListener('input',function(){dupOk=null;$('nx1').textContent='Next: photos';mock();});});
+$('one').addEventListener('input',function(){$('cnt').textContent=this.value.length+'/300';});
+var dupOk=null,known=[],offs=[];
+function norm(t){return String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();}
+fetch('/community/places.json').then(function(r){return r.ok?r.json():null;}).then(function(j){if(!j)return;function kid(st){var k=((st.ph&&st.ph.k)||(st.now&&st.now.ph&&st.now.ph.k)||(st.then&&st.then.ph&&st.then.ph.k)||'');var m=/^cm_([a-f0-9]{8})_/.exec(k);return m?m[1]:'';}(j.packs||[]).forEach(function(p){(p.stops||[]).forEach(function(st){known.push({n:st.name,c:p.name,id:kid(st)});});});(j.official||[]).forEach(function(o){offs.push({n:o.n,c:o.c});});(j.tours||[]).forEach(function(t){(t.stops||[]).forEach(function(st){known.push({n:st.name,c:t.name,id:kid(st)});});});suggest();}).catch(function(){});
+function dupFor(place,city){var a=norm(place),c=norm(city);if(a.length<4)return null;for(var i=0;i<known.length;i++){var b=norm(known[i].n);if(norm(known[i].c)===c&&b&&(a===b||a.indexOf(b)>-1||b.indexOf(a)>-1))return known[i].n;}return null;}
+function codeOf(x){var t=String(x||'').toLowerCase().replace(/\./g,'');for(var k in ST){if(ST[k].toLowerCase()===t||k.toLowerCase()===t)return k;}return '';}
+function normCS(){var city=$('city').value.replace(/\s+/g,' ').trim(),state=$('state').value.replace(/\s+/g,' ').trim();if(state)state=codeOf(state)||state;
+  if(city.indexOf(',')>-1){var i=city.lastIndexOf(','),c=codeOf(city.slice(i+1).trim());if(c){if(!state)state=c;if(state===c)city=city.slice(0,i).trim();}}
+  else{var w=city.split(' ');for(var n=3;n>=1;n--){if(w.length>n){var tail=w.slice(-n).join(' '),c2=codeOf(tail);if(c2&&(n>1||/^[A-Za-z]{2}$/.test(tail))){if(!state)state=c2;if(state===c2){city=w.slice(0,-n).join(' ');break;}}}}}
+  city=city.replace(/[,.]+$/,'').trim();if(city&&(city===city.toLowerCase()||city===city.toUpperCase()))city=city.toLowerCase().replace(/(^|[\s\-'])([a-z])/g,function(m,a,b){return a+b.toUpperCase();});
+  $('city').value=city;$('state').value=state;mock();}
+$('city').addEventListener('blur',normCS);
+function words(t){return norm(t).split(' ').filter(function(w){return w.length>2&&w!=='the'&&w!=='and';});}
+function suggest(){var box=$('sugg');if(!box)return;box.innerHTML='';var pl=v('place').trim();if(pl.length<3||ADD){box.hidden=true;return;}var pw=words(pl),c=norm(v('city')),hits=[];
+  known.forEach(function(k){if(!k.id)return;var kw=words(k.n),shared=pw.filter(function(w){return kw.indexOf(w)>-1;}).length,same=norm(k.n)===norm(pl)||norm(k.n).indexOf(norm(pl))>-1||norm(pl).indexOf(norm(k.n))>-1;
+    if((same||shared>=Math.min(2,pw.length)&&shared>0)&&(!c||norm(k.c)===c))hits.push(k);});
+  var oh=offs.filter(function(k){var kw=words(k.n),shared=pw.filter(function(w){return kw.indexOf(w)>-1;}).length;return (norm(k.n)===norm(pl)||norm(k.n).indexOf(norm(pl))>-1&&pl.length>=5||shared>=Math.min(2,pw.length)&&shared>0&&pw.length>1)&&(!c||norm(k.c)===c);}).slice(0,2);
+  if(!hits.length&&!oh.length){box.hidden=true;return;}box.hidden=false;var h=document.createElement('p');h.className='help';h.style.margin='0 0 6px';h.textContent='Is it one of these? Adding photos to a place that is already here is better than making a second one.';box.appendChild(h);
+  hits.slice(0,3).forEach(function(k){var a=document.createElement('a');a.className='sgg';a.href='/contribute/?add='+k.id+'&place='+encodeURIComponent(k.n)+'&city='+encodeURIComponent(k.c);a.innerHTML='<b></b><span></span>';a.querySelector('b').textContent=k.n;a.querySelector('span').textContent=k.c+' · Add photos to this place';box.appendChild(a);});
+  oh.forEach(function(k){var d=document.createElement('div');d.className='sgg';d.innerHTML='<b></b><span></span>';d.querySelector('b').textContent=k.n;d.querySelector('span').textContent=k.c+' · Already in the app, no need to suggest it';box.appendChild(d);});}
+['place','city'].forEach(function(i){$(i).addEventListener('input',suggest);});
+var cur=1;
+function goStep(n){cur=n;document.querySelectorAll('#f [data-step]').forEach(function(f){var on=+f.getAttribute('data-step')===n;f.hidden=!on;if(on){f.classList.remove('step');void f.offsetWidth;f.classList.add('step');}});
+  document.querySelectorAll('#steps li').forEach(function(li){var k=+li.getAttribute('data-s');li.className=k===n?'on':(k<n?'dn':'');});
+  if(n===3)summary();var t=$('steps');if(t&&t.scrollIntoView)t.scrollIntoView({block:'start'});}
+function bad(id,on){$(id).classList.toggle('bad',!!on);}
+function showE(id,msg){var e=$(id);e.textContent=msg;e.hidden=!msg;}
+$('nx1').addEventListener('click',function(){var miss=[];if(!v('place').trim()){miss.push('the name of the place');bad('place',1);}else bad('place',0);if(!v('city').trim()){miss.push('the town');bad('city',1);}else bad('city',0);if(v('one').trim().length<10){miss.push('one line about it (at least a few words)');bad('one',1);}else bad('one',0);
+  if(miss.length){showE('e1','Please add '+miss.join(', ')+'.');return;}
+  var key=norm(v('place'))+'|'+norm(v('city'));if(dupOk!==key){var d=dupFor(v('place'),v('city'));if(d){dupOk=key;showE('e1','A place like "'+d+'" is already in '+v('city').trim()+'. If yours is different, tap Next again to continue.');this.textContent='Next anyway: photos';return;}}
+  this.textContent='Next: photos';showE('e1','');goStep(2);});
+$('bk2').addEventListener('click',function(){goStep(1);});$('bk3').addEventListener('click',function(){goStep(2);});
+$('nx2').addEventListener('click',function(){if(!v('then').trim()&&!v('now').trim()&&!linkCount()&&!ups.length){showE('e2','Please add at least one photo, an old one, a recent one, or both.');return;}showE('e2','');goStep(3);});
+function esc(t){return String(t==null?'':t).replace(/[<>&"]/g,'');}
+function summary(){var rows=[['Place',v('place')],['Town',[v('city'),v('state')].filter(function(x){return x.trim();}).join(', ')],['About',v('one')],['Photos',(ups.length+linkCount())+' of 5'+(ups.length?' ('+ups.length+' uploaded)':'')],['Address',v('addr')||'Not given'],['Nickname',v('nick')||'None'],['Old photo',v('then').trim()?'Commons link':'None'],['Recent photo',v('now').trim()?'Commons link':(photo?'Your upload':'None')]];
+  var ul=$('sum');ul.innerHTML='';rows.forEach(function(r){var li=document.createElement('li'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=r[0];sp.textContent=r[1];li.appendChild(b);li.appendChild(sp);ul.appendChild(li);});}
+// Commons link preview (browser asks Commons directly; if it cannot, the server still checks on send)
+var PV={t:null,n:null};
+function cTitle(u){var m=String(u).trim().match(/^https?:\/\/(?:[a-z]+\.)?(?:commons\.)?wikimedia\.org\/wiki\/(File:[^?#]+)/i);if(!m)return null;try{return decodeURIComponent(m[1]).replace(/_/g,' ');}catch(e){return null;}}
+function locId(u){var m=String(u).trim().match(/^https:\/\/(?:www\.)?loc\.gov\/(?:pictures\/)?item\/([A-Za-z0-9._-]{3,40})\/?$/i);return m?m[1]:null;}
+function plain(h){var d=document.createElement('div');d.innerHTML=String(h||'');return (d.textContent||'').trim().slice(0,70);}
+function preview(inputId,boxId,key){
+  var inp=$(inputId),box=$(boxId),tmr=null,seq=0;
+  function render(kind,o){box.innerHTML='';PV[key]=null;fadeUpd();if(!kind)return;var d=document.createElement('div');d.className='pv'+(kind==='bad'?' warn':'');
+    if(kind==='ok'){var im=document.createElement('img');im.alt='';im.src=o.thumb;d.appendChild(im);}
+    var t=document.createElement('div');t.className='t';var b=document.createElement('b');b.textContent=o.head;t.appendChild(b);var sp=document.createElement('span');sp.textContent=o.line;t.appendChild(sp);
+    if(o.chip){t.appendChild(document.createElement('br'));var c=document.createElement('span');c.className='chip'+(o.good?' good':'');c.textContent=o.chip;t.appendChild(c);}
+    d.appendChild(t);box.appendChild(d);if(kind==='ok'){PV[key]=o.thumb;fadeUpd();}}
+  function run(){var u=inp.value.trim(),my=++seq;if(!u){render(null);return;}var title=cTitle(u),lid=locId(u);
+    if(!title&&!lid){render('bad',{head:'That is not a Commons or Library of Congress photo page',line:'Use an address starting with commons.wikimedia.org/wiki/File: or loc.gov/item/'});return;}
+    var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){if(ctl)ctl.abort();},7000);
+    if(lid){render('info',{head:'Checking…',line:'Library of Congress item '+lid});
+      fetch('https://www.loc.gov/item/'+lid+'/?fo=json',ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);if(my!==seq)return;var it=j&&j.item;if(!it){render('bad',{head:'No such Library of Congress item',line:'Check that you copied the whole address.'});return;}
+        var ra=String(Array.isArray(it.rights_advisory)?it.rights_advisory.join(' '):(it.rights_advisory||it.rights_information||'')).trim(),fine=/^no known restrictions/i.test(ra)&&!/copied from other sources|may be restricted|publication may be|not evaluated|restricted/i.test(ra.replace(/^no known restrictions/i,''))&&it.access_restricted!==true&&(it.image_url||[]).some(function(x){return /tile\.loc\.gov/.test(x);});
+        var imgs=(it.image_url||[]).map(function(x){return String(x).split('#')[0];}).filter(function(x){return /^https:\/\/tile\.loc\.gov\/.+\.jpe?g$/i.test(x);}),th=imgs.filter(function(x){return /r\.jpe?g$/i.test(x);})[0]||imgs[imgs.length-1];
+        var who=((it.contributor_names||[])[0]||'').replace(/,\s*(photographer|publisher|copyright claimant|creator|author|artist|printer|lithographer|engraver|delineator)\b.*$/i,'');
+        render(fine?'ok':'bad',{thumb:th,head:plain(it.title)||'Library of Congress photo',line:who?'By '+who:'Library of Congress',chip:fine?'✓ No known restrictions':'Rights unclear: we cannot use this one',good:fine});
+      }).catch(function(){clearTimeout(to);if(my!==seq)return;render('info',{head:'Library of Congress photo',line:'Preview unavailable here. We still check the rights note when you send.'});});return;}
+    render('info',{head:'Checking…',line:title.replace(/^File:/,'')});
+    fetch('https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url|extmetadata&iiurlwidth=240&titles='+encodeURIComponent(title),ctl?{signal:ctl.signal}:{}).then(function(r){return r.json();}).then(function(j){clearTimeout(to);if(my!==seq)return;
+      var pg=j&&j.query&&j.query.pages,k=pg&&Object.keys(pg)[0],ii=k&&pg[k].imageinfo&&pg[k].imageinfo[0];
+      if(!ii){render('bad',{head:'No such file on Commons',line:'Check that you copied the whole address.'});return;}
+      var m=ii.extmetadata||{},lic=(m.LicenseShortName&&m.LicenseShortName.value)||'',cr=plain(m.Artist&&m.Artist.value);
+      var okLic=/public domain|pd|cc0|cc[- ]by(?![- ]n)/i.test(lic)&&!/nc|nd/i.test(lic.replace(/cc[- ]by/i,''));
+      render(okLic?'ok':'bad',{thumb:ii.thumburl,head:title.replace(/^File:/,''),line:(cr?'By '+cr:'Credit read on send'),chip:lic?(okLic?'✓ '+lic:'License not accepted: '+lic):'License checked on send',good:okLic});
+    }).catch(function(){clearTimeout(to);if(my!==seq)return;render('info',{head:title.replace(/^File:/,''),line:'Preview unavailable here. We still check the license when you send.'});});}
+  var last=null;function go2(){if(inp.value.trim()===last)return;last=inp.value.trim();run();}
+  inp.addEventListener('input',function(){box.style.minHeight=inp.value.trim()?'84px':'';clearTimeout(tmr);tmr=setTimeout(go2,450);});inp.addEventListener('change',function(){clearTimeout(tmr);go2();});}
+preview('then','pvt','t');preview('now','pvn','n');
+function fadeUpd(){var box=$('fadebox');if(PV.t&&PV.n){$('ft').src=PV.t;$('fn').src=PV.n;$('fr').value=0;$('ft').style.opacity=0;$('ftag').textContent='Today';box.hidden=false;}else box.hidden=true;}
+$('fr').addEventListener('input',function(){var x=this.value/100;$('ft').style.opacity=x;$('ftag').textContent=x>.5?'Then':'Today';});
+function say(t,bad){var s=document.getElementById('status');s.textContent=t;s.style.color=bad?'var(--bad)':'';}
+fetch('/api/community/config').then(function(r){return r.json();}).then(function(c){if(c&&c.uploads){document.getElementById('own').hidden=false;document.getElementById('pown').hidden=false;}else{document.getElementById('links').open=true;}}).catch(function(){document.getElementById('links').open=true;});
+function shrink(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(1,640/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.6));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
+var ups=[];
+function shrinkBig(file,cb){var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var sc=Math.min(1,1024/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.round(im.width*sc);c.height=Math.round(im.height*sc);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',0.72));};im.onerror=function(){cb(null);};im.src=fr.result;};fr.onerror=function(){cb(null);};fr.readAsDataURL(file);}
+function linkCount(){return ['then','now','x1u','x2u','x3u'].filter(function(i){return v(i).trim();}).length;}
+function renderTiles(){var box=$('tiles');box.innerHTML='';ups.forEach(function(u,i){var t=document.createElement('div');t.className='tile';var im=document.createElement('img');im.src=u.d;im.alt='Preview of photo '+(i+1);t.appendChild(im);var c=document.createElement('div');c.className='tc';
+  var sel=document.createElement('select');sel.setAttribute('aria-label','What photo '+(i+1)+' shows');[['unsure','Not sure'],['old','Old photo'],['today','Recent photo'],['detail','Detail']].forEach(function(o){var op=document.createElement('option');op.value=o[0];op.textContent=o[1];if(u.type===o[0])op.selected=true;sel.appendChild(op);});sel.addEventListener('change',function(){u.type=sel.value;});c.appendChild(sel);
+  var cap=document.createElement('input');cap.maxLength=120;cap.placeholder='Caption (optional)';cap.value=u.caption;cap.setAttribute('aria-label','Caption for photo '+(i+1));cap.addEventListener('input',function(){u.caption=cap.value;});c.appendChild(cap);
+  var yr=document.createElement('input');yr.maxLength=12;yr.placeholder='Year (optional)';yr.value=u.year;yr.setAttribute('aria-label','Year of photo '+(i+1));yr.addEventListener('input',function(){u.year=yr.value;});c.appendChild(yr);
+  var rm=document.createElement('button');rm.type='button';rm.className='ghost rmtile';rm.textContent='Remove photo';rm.addEventListener('click',function(){ups.splice(i,1);renderTiles();});c.appendChild(rm);t.appendChild(c);box.appendChild(t);});
+  $('upbox').hidden=!ups.length;document.querySelector('label.pick').style.display=(ups.length+linkCount()>=5)?'none':'';}
+$('files').addEventListener('change',function(e){var fs=Array.prototype.slice.call(e.target.files||[]);e.target.value='';var room=5-ups.length-linkCount();if(fs.length>room){say('You can send up to 5 photos for one place. Only the first '+Math.max(room,0)+' were added.',true);fs=fs.slice(0,Math.max(room,0));}if(!fs.length)return;var go=$('go');go.disabled=true;var n=fs.length;fs.forEach(function(f){shrinkBig(f,function(d){n--;if(d)ups.push({d:d,type:'unsure',caption:'',year:''});else say('One file could not be read as a picture, so it was skipped.',true);if(!n){go.disabled=false;renderTiles();}});});});
+function v(id){return document.getElementById(id).value;}
+function collect(){
+  var o={place:v('place'),city:v('city'),state:v('state'),oneLiner:v('one'),nickname:v('nick'),address:v('addr'),thenUrl:v('then'),nowUrl:v('now'),confirm:document.getElementById('confirm').checked,hp:document.querySelector('[name=hp]').value};
+  var ex=[];['1','2','3'].forEach(function(n){var u=v('x'+n+'u');if(u.trim())ex.push({url:u,type:v('x'+n+'t')||'unsure',caption:v('x'+n+'c')});});if(ex.length)o.extras=ex;
+  if(ADD)o.target=ADD;
+  if(ups.length){o.uploads=ups.map(function(u){return {photo:u.d,type:u.type,caption:u.caption,year:u.year};});o.uploadOwn=$('took').checked;o.uploadCredit=v('credit');}
+  return o;
+}
+document.getElementById('f').addEventListener('submit',function(e){
+  e.preventDefault();if(cur<3){$('nx'+cur).click();return;}var errs=document.getElementById('errs');errs.hidden=true;document.getElementById('go').disabled=true;say('Sending… checking your photo links can take a few seconds.');
+  fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(collect())}).then(function(r){return r.json().then(function(j){return {s:r.status,j:j};});}).then(function(x){
+    document.getElementById('go').disabled=false;
+    if(x.s!==200){errs.hidden=false;errs.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(m){return '<li>'+String(m).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';say('');errs.scrollIntoView({block:'center'});return;}
+    var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,document.getElementById('place').value,document.getElementById('city').value);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+  }).catch(function(){document.getElementById('go').disabled=false;say('Could not reach the test server. Try again.',true);});
+});
+document.getElementById('copy').addEventListener('click',function(){var t=document.getElementById('editlink').textContent,b=this;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){b.textContent='Copied';}).catch(function(){});});
+var ADD='';
+try{var qp=new URLSearchParams(location.search),qa=(qp.get('add')||'');if(/^[a-f0-9]{8}$/.test(qa)){ADD=qa;var pl=(qp.get('place')||'').slice(0,80);if(pl)document.getElementById('place').value=pl;if(!document.getElementById('one').value)document.getElementById('one').value='More photos of '+pl+'.';var h1=document.querySelector('h1');if(h1)h1.textContent='Add a photo to '+(pl||'this place');}}catch(e){}
+try{var qp=new URLSearchParams(location.search),qc=(qp.get('city')||'').slice(0,60),qs=(qp.get('state')||'').slice(0,30);if(qc)document.getElementById('city').value=qc;if(qs)document.getElementById('state').value=qs;}catch(e){}
+var FIX='';
+try{var qf=new URLSearchParams(location.search),fid=(qf.get('fix')||'');if(/^[a-f0-9]{8}$/.test(fid)){FIX=fid;var fpl=(qf.get('place')||'').slice(0,80),fc=(qf.get('city')||'').slice(0,60),fs=(qf.get('state')||'').slice(0,30);document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;document.getElementById('fixsec').hidden=false;document.getElementById('fixT').textContent='Suggest a correction'+(fpl?': '+fpl:'');var h1f=document.querySelector('h1');if(h1f)h1f.textContent='Suggest a correction';
+  document.getElementById('fixtext').addEventListener('input',function(){document.getElementById('fixcount').textContent=this.value.length+' of 600';});
+  document.getElementById('fixgo').addEventListener('click',function(){var b=this,er=document.getElementById('fixerr');er.hidden=true;b.disabled=true;
+    var o={target:FIX,place:fpl||'A published place',city:fc||'Unknown',state:fs,correction:{text:document.getElementById('fixtext').value,source:document.getElementById('fixsrc').value},confirm:document.getElementById('fixconf').checked,hp:''};
+    fetch('/api/community/submit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
+      if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';return;}
+      var link=location.origin+'/contribute/?status='+x.j.edit;saveSug(x.j.edit,'Correction: '+(fpl||'a place'),fc);document.getElementById('viewstat').href='/contribute/?status='+x.j.edit;document.getElementById('editlink').textContent=link;document.getElementById('fixsec').hidden=true;document.getElementById('done').hidden=false;window.scrollTo(0,0);
+    }).catch(function(){b.disabled=false;er.hidden=false;er.textContent='Could not reach the test server. Try again.';});});
+}}catch(e){}
+function hideIntro(){['intro','tbanner','priv','steps'].forEach(function(i){var e=document.getElementById(i);if(e)e.hidden=true;});}
+function sugGet(){try{return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){return x&&/^[a-f0-9]{9,}$/.test(x.t);});}catch(e){return[];}}
+function saveSug(t,place,city){try{var a=sugGet().filter(function(x){return x.t!==t;});a.unshift({t:t,p:String(place).slice(0,80),c:String(city).slice(0,60)});localStorage.setItem('stp-sugg',JSON.stringify(a.slice(0,20)));}catch(e){}}
+var LBL={received:'Received',added:'Added',waiting:'Waiting for a photo',declined:'Not added'};
+function showSug(){var a=sugGet();if(!a.length)return;var ul=document.getElementById('minelist');document.getElementById('mine').hidden=false;ul.innerHTML='';a.slice(0,10).forEach(function(x){var li=document.createElement('li'),l=document.createElement('a');l.href='/contribute/?status='+x.t;l.textContent=x.p+(x.c?' ('+x.c+')':'');li.appendChild(l);var sp=document.createElement('span');sp.className='mut';li.appendChild(sp);ul.appendChild(li);fetch('/api/community/mine/'+x.t).then(function(r){return r.ok?r.json():null;}).then(function(j){if(j)sp.textContent=': '+(LBL[j.status]||j.status);}).catch(function(){});});}
+showSug();
+var pphotos=[];
+function pclear(){pphotos=[];document.getElementById('pprevs').innerHTML='';document.getElementById('pfile').value='';}
+document.getElementById('pfile').addEventListener('change',function(e){var fs=Array.prototype.slice.call(e.target.files||[],0,5);pclear();if(!fs.length)return;var b=document.getElementById('psend'),m=document.getElementById('pstatus');b.disabled=true;var left=fs.length;
+  fs.forEach(function(f){shrink(f,function(d){left--;if(d){pphotos.push(d);var i=document.createElement('img');i.src=d;i.alt='Preview of photo '+pphotos.length;i.style.cssText='height:72px;border-radius:8px';document.getElementById('pprevs').appendChild(i);}else m.textContent='One file could not be read as a picture, so it was skipped.';if(!left)b.disabled=false;});});});
+document.getElementById('psend').addEventListener('click',function(){
+  var tok=(location.search.match(/[?&]status=([a-f0-9]{9,})/)||[])[1];if(!tok)return;var b=this,er=document.getElementById('perrs'),m=document.getElementById('pstatus');er.hidden=true;
+  var o={thenUrl:v('pthen'),nowUrl:v('pnow'),confirm:document.getElementById('pconfirm').checked};
+  if(pphotos.length){o.uploads=pphotos.map(function(d){return {photo:d,type:'unsure',caption:'',year:v('pyear')};});o.uploadOwn=document.getElementById('ptook').checked;o.uploadCredit=v('pcredit');}
+  b.disabled=true;m.textContent='Sending… checking photo links can take a few seconds.';
+  fetch('/api/community/mine/'+tok+'/photo',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(o)}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
+    if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';m.textContent='';return;}
+    m.textContent='Sent. Your place is back in review.'+(x.j.skipped?' '+x.j.skipped+(x.j.skipped===1?' photo was':' photos were')+' already there, so we kept just one copy.':'');document.getElementById('stT').textContent=document.getElementById('stT').textContent.replace(/:.*$/,'')+': Received';}).catch(function(){b.disabled=false;m.textContent='Could not reach the test server. Try again.';});});
+document.getElementById('edgo').addEventListener('click',function(){var tok=(location.search.match(/[?&]status=([a-f0-9]{9,})/)||[])[1];if(!tok)return;var b=this,er=document.getElementById('ederr'),m=document.getElementById('edmsg');er.hidden=true;b.disabled=true;
+  fetch('/api/community/mine/'+tok+'/edit',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({place:v('edp'),oneLiner:v('edo'),nickname:v('edn'),address:v('eda')})}).then(function(r){return r.json().then(function(j){return{s:r.status,j:j};});}).then(function(x){b.disabled=false;
+    if(x.s!==200){er.hidden=false;er.innerHTML='Fix these and send again:<ul>'+(x.j.errors||['Something went wrong.']).map(function(t){return '<li>'+String(t).replace(/[<>&]/g,'')+'</li>';}).join('')+'</ul>';return;}
+    m.textContent='Saved. Your place is back in review.';}).catch(function(){b.disabled=false;er.hidden=false;er.textContent='Could not reach the test server. Try again.';});});
+var m=location.search.match(/[?&]status=([a-f0-9]{9,})/);
+if(m){document.getElementById('f').hidden=true;hideIntro();document.getElementById('mine').hidden=true;fetch('/api/community/mine/'+m[1]).then(function(r){return r.ok?r.json():null;}).then(function(j){var st=document.getElementById('stat');st.hidden=false;if(!j){document.getElementById('stT').textContent='Link not recognised';document.getElementById('stP').textContent='That status link is not valid. Check that you copied all of it.';return;}
+  var T={received:['Received','We have your place and will research it. We aim to review within about a day. If approved, it appears in the test copy.'],added:['Added','Your place is in the test copy of the app. In the test app, a full mission is under the "Community-added" group on the Towns tab. A history stop (a place with only a recent photo) is under Nearby stops, in '+(j.city||'your town')+'.'],waiting:['Waiting for a photo','We have your place but need a recent photo of it to build the then-and-now. '+(j.note||'')],declined:['Not added','We could not add this one. '+(j.note||'')]}[j.status]||['Received',''];
+  if(j.correction){T=j.status==='added'?['Reviewed','Your correction was reviewed. If it was supported by a source, the place has been updated.']:j.status==='declined'?['Not used','We could not use this correction.']:['Received','Your correction is waiting for a person to check it against sources.'];}document.getElementById('stT').textContent=j.place+': '+T[0];document.getElementById('stP').textContent=T[1];saveSug(m[1],j.place,j.city||'');(function(){var ul=document.getElementById('stph');if(!ul)return;ul.innerHTML='';(j.photos||[]).forEach(function(p){var li=document.createElement('li');li.textContent=p.label+': '+p.status;ul.appendChild(li);});ul.hidden=!(j.photos||[]).length;})();if((j.status==='received'||j.status==='waiting')&&!j.correction){var ew=document.getElementById('edtw');ew.hidden=false;document.getElementById('edp').value=j.place||'';document.getElementById('edo').value=j.oneLiner||'';document.getElementById('edn').value=j.nickname||'';document.getElementById('eda').value=j.address||'';}if(j.status==='received'||j.status==='waiting'){var ad=document.getElementById('addp');ad.hidden=false;if(j.status==='waiting')ad.open=true;}});}
+})();
+</script></body></html>
