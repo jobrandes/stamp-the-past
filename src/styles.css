@@ -1093,3 +1093,125 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 .cc-in{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;overflow-wrap:anywhere}
 .cc-sub{font-size:0.875rem;color:var(--muted)}
 .cc-t{margin:10px 0;font-size:0.9375rem}
+
+/* ---------- Slim Home (Nov 10 2026) ---------- */
+.shead{display:flex;flex-direction:column;align-items:flex-start;gap:0;padding:6px 0 0}
+.shead .wordmark{font-size:clamp(1.375rem,6.4vw,2rem);border-width:3px;padding:7px 11px 5px;margin:2px 0 10px}
+.htag{font:800 clamp(1.5rem,6.6vw,2.25rem)/1 var(--font-display);text-transform:uppercase;letter-spacing:.01em;margin:0}
+.scard{background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 30px -18px rgba(10,25,45,.45)}
+.scard:focus{outline:none}
+.sc-in{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:14px 16px 10px}
+.sc-in .mono{margin:0;color:var(--accent)}
+.sc-in h2{font:800 clamp(1.75rem,8vw,2.5rem)/1 var(--font-display);text-transform:uppercase;margin:0;overflow-wrap:anywhere}
+.sc-sub{margin:0;color:var(--muted);font-size:.9375rem}
+.sc-go{margin-top:8px;font-size:1.0625rem;min-height:56px;border-radius:14px;box-shadow:0 6px 0 -1px color-mix(in srgb,var(--accent) 55%,#000)}
+.sc-dots{display:flex;align-items:center;gap:6px;margin:8px 0 0;color:var(--muted);font:500 .75rem var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.sc-dots i{width:9px;height:9px;border-radius:50%;border:1.5px solid var(--muted);box-sizing:border-box}
+.sc-dots i.cur{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 25%,transparent)}
+.sc-dots i.on{background:var(--accent);border-color:var(--accent)}
+.sc-dots span{margin-left:4px}
+.sc-in .link{text-align:left}
+.sc-chg{color:var(--muted);font-weight:500}
+.sc-note{margin:0;padding:12px 16px;background:var(--mat);color:var(--mat-ink);font-size:.9375rem}
+.sc-note .link{padding:0;min-height:44px}
+.scard.ask .hstamps{max-width:230px;margin:18px auto 26px}
+.sc-states{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;margin:8px 0 2px}
+.stsel{width:100%;min-height:52px;margin:6px 0 2px;padding:0 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:inherit;font-size:1rem}
+.sc-more{margin:10px 0 0 !important;color:var(--muted) !important}
+.sc-towns{display:flex;flex-wrap:wrap;gap:8px}
+.sc-towns .chip.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+/* the self-fading Then/Now photo, with a perforated stamp edge and a postmark */
+.fph{width:100%}
+.fbox{position:relative;aspect-ratio:16/10;max-height:38vh;width:100%;overflow:hidden;background:var(--surface-2)}
+.fbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.fbox::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(8,16,26,.0) 55%,rgba(8,16,26,.42));mix-blend-mode:multiply}
+.fbox.perf::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:12px;z-index:3;pointer-events:none;background:radial-gradient(circle at 6px 6px,var(--surface) 4.5px,transparent 5px) 0 0/12px 12px repeat-x}
+.f-then{filter:sepia(.25) contrast(1.02)}
+.f-yr{position:absolute;left:12px;bottom:14px;z-index:4;display:grid;font:600 .75rem var(--font-mono);letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.f-yr b{grid-area:1/1;padding:4px 9px;border-radius:999px;background:rgba(10,18,28,.72);font-weight:600;justify-self:start}
+.f-yr .y-then{opacity:0}
+.fph .f-then{opacity:0}
+.pmark{position:absolute;right:10px;top:10px;z-index:4;width:112px;height:60px;color:#fff;opacity:.82;transform:rotate(-7deg);filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))}
+.fcred{margin:0;padding:8px 16px 0;font-size:.6875rem;line-height:1.35;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){
+  .fph.two .f-then,.fph.two .y-then{animation:fadeThen 9s ease-in-out infinite}
+  .fph.two .y-now{animation:fadeNow 9s ease-in-out infinite}
+  @keyframes fadeThen{0%,12%{opacity:0}42%,70%{opacity:1}96%,100%{opacity:0}}
+  @keyframes fadeNow{0%,12%{opacity:1}42%,70%{opacity:0}96%,100%{opacity:1}}
+  /* springy taps */
+  .btn,.bigbtn,.rcard,.hrow,.town,.chip,.nextrow,.rbtn,.tcard{transition:transform .18s cubic-bezier(.3,1.6,.5,1),box-shadow .18s ease}
+  .btn:active,.bigbtn:active,.rcard:active,.hrow:active,.town:active,.chip:active,.nextrow:active,.tcard:active{transform:scale(.965)}
+  .sc-go:active{transform:translateY(4px) scale(.985);box-shadow:0 1px 0 -1px color-mix(in srgb,var(--accent) 55%,#000)}
+  .scard{animation:cardin .5s cubic-bezier(.2,.9,.3,1) both}
+  @keyframes cardin{from{transform:translateY(14px);opacity:0}}
+  .pmark{animation:pmin .5s .35s cubic-bezier(.2,1.5,.4,1) both}
+  @keyframes pmin{from{transform:rotate(-18deg) scale(1.7);opacity:0}}
+}
+.sc-ph .fbox,.st-ph .fbox,.banner.b0{view-transition-name:heroph}
+::view-transition-group(heroph){animation-duration:.32s;animation-timing-function:cubic-bezier(.3,.9,.3,1)}
+/* returning: the progress card carries the next stop's photo */
+.stat{overflow:hidden}
+.stat .st-ph{flex:0 0 auto;width:calc(100% + 28px);margin:-12px -14px 4px}
+.stat .st-ph .fbox{aspect-ratio:16/9;max-height:30vh}
+.stat .st-ph .fcred{padding:6px 14px 0}
+/* quiet rows */
+.today{display:flex;flex-direction:column;gap:6px}
+.today>.mono{margin:0}
+.today .dailycard{margin:0}
+.srow{justify-content:flex-start;border-color:var(--line)}
+.srow .srt{flex:1;min-width:0}
+.srow strong{font-size:1.25rem}
+.hlinks{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.hlinks:empty{display:none}
+.hrow{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:10px 14px;border:0;border-top:1px solid var(--line);background:none;color:var(--ink);font:inherit;font-size:.9375rem;text-align:left;cursor:pointer}
+.hrow:first-child{border-top:0}
+.hr-i{flex:none;display:flex}
+.hr-t{flex:1;min-width:0;color:var(--muted)}
+.hr-t b{color:var(--ink);font-weight:700;margin-right:4px}
+.hr-go{flex:none;color:var(--accent);font-size:1.25rem;line-height:1}
+.hrow:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+body.ishome .home-foot{margin-top:6px}
+/* paper grain: a whisper of texture so the page does not read as a flat template */
+body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* stamp press: ink flecks fly as the stamp lands */
+@media (prefers-reduced-motion:no-preference){
+  .earned .bbox.thud::before{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:var(--accent);opacity:0;pointer-events:none;animation:flecks .7s .26s ease-out both;box-shadow:0 0 0 0 var(--accent)}
+  @keyframes flecks{0%{opacity:.9;box-shadow:0 0 0 0 var(--accent),0 0 0 0 var(--accent),0 0 0 0 var(--accent),0 0 0 0 var(--accent),0 0 0 0 var(--accent),0 0 0 0 var(--accent)}100%{opacity:0;box-shadow:-46px -30px 0 -1px var(--accent),44px -38px 0 -2px var(--accent),58px 14px 0 -1px var(--accent),-54px 22px 0 -2px var(--accent),14px 54px 0 -1px var(--accent),-18px -56px 0 -2px var(--accent)}}
+}
+@media (min-width:900px){
+  .scard:not(.ask){display:grid;grid-template-columns:1.15fr 1fr;align-items:stretch}
+  .scard:not(.ask) .sc-note{grid-column:1/-1}
+  .scard:not(.ask) .fph{display:flex;flex-direction:column}
+  .scard:not(.ask) .fbox{aspect-ratio:auto;flex:1;min-height:300px;max-height:none}
+  .scard:not(.ask) .fbox.perf::after{display:none}
+  .sc-in{justify-content:center;padding:22px 24px}
+}
+.shead{flex-direction:row;align-items:center;flex-wrap:wrap;gap:4px 14px;padding:2px 64px 0 0}
+.shead .wordmark{font-size:1.25rem;border-width:3px;padding:6px 9px 4px;margin:0;box-shadow:inset 0 0 0 2px var(--bg),inset 0 0 0 3.5px var(--accent)}
+.htag{font-size:1.125rem;letter-spacing:.03em;color:var(--muted)}
+.sc-ph .fbox{aspect-ratio:16/9;max-height:30vh}
+.scard{display:flex;flex-direction:column}
+.scard>.fcred{order:9;padding:0 16px 12px}
+.sc-in{gap:4px;padding:12px 16px 6px}
+.sc-in .link{min-height:44px;padding:4px 0}
+.sc-chg{font-size:.875rem}
+.sc-dots{margin:10px 0 2px}
+.stat>.fcred{order:9;flex:0 0 100%;padding:4px 0 0}
+.stat .bigbtn{flex:1 1 100%}
+.hr-t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (min-width:900px){.scard:not(.ask){display:grid}.scard>.fcred{grid-column:1/-1;padding-top:8px}}
+.sc-note .link{display:block;min-height:44px;padding:4px 0 0}
+.scard.ask .hstamps-cap{display:none}
+.scard.ask .hstamps{margin-bottom:10px}
+.btn.gold.sc-go{box-shadow:0 6px 0 -1px #5e4100}
+@media (min-width:900px){
+  .stat:has(.st-ph){display:grid;grid-template-columns:1.15fr 1fr;column-gap:22px;align-items:center;padding:0 22px 0 0}
+  .stat:has(.st-ph) .st-ph{grid-row:1/3;width:auto;margin:0;align-self:stretch}
+  .stat:has(.st-ph) .st-ph .fbox{aspect-ratio:16/10;max-height:none;height:100%}
+  .stat:has(.st-ph) .st-ph .fbox.perf::after{display:none}
+  .stat:has(.st-ph) .stl{align-self:end;padding-top:18px}
+  .stat:has(.st-ph) .bigbtn{align-self:start;margin-bottom:18px}
+  .stat:has(.st-ph)>.fcred{grid-column:1/-1;padding:8px 0 10px 16px}
+}
+
+#todayBox{display:contents}

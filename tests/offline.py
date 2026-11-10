@@ -15,8 +15,8 @@ try:
         if not pg.evaluate("!!navigator.serviceWorker.controller"): bad.append('service worker is not controlling the page')
         ctx.set_offline(True)
         pg.reload(); pg.wait_for_timeout(800)
-        if 'pick a mission' not in pg.inner_text('#main').lower(): bad.append('offline reload did not show Home')
-        pg.click('.town >> nth=0'); pg.click('.stop >> nth=0'); pg.click('text=I am here')
+        if not pg.locator('#startBox, .stat').count(): bad.append('offline reload did not show Home')
+        pg.click('#bnav [data-t=towns]'); pg.click('.town >> nth=0'); pg.click('.stop >> nth=0'); pg.click('text=I am here')
         if pg.locator('.opt').count()<4: bad.append('offline: check-in question did not load')
         if not pg.evaluate("document.querySelector('link[rel=manifest]')!==null"): bad.append('manifest link missing')
         bad+=['page error: '+e for e in errs]

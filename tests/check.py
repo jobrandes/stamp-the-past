@@ -12,10 +12,10 @@ def need(c,m):
 with sync_playwright() as p:
     b=p.chromium.launch()
     for w,h,cs in [(360,740,'light'),(390,844,'dark'),(768,1024,'light'),(1280,900,'light'),(1280,900,'dark')]:
-        cx=b.new_context(viewport={'width':w,'height':h},color_scheme=cs,reduced_motion='reduce'); cx.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}"); pg=cx.new_page()
+        cx=b.new_context(viewport={'width':w,'height':h},color_scheme=cs,reduced_motion='reduce',timezone_id='America/New_York'); cx.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}"); pg=cx.new_page()
         pg.on('pageerror',lambda e:errs.append(str(e)))
         pg.goto('file://'+R+'src/_chk.html'); tag=f'{w}px/{cs}'
-        pg.click('#missions .town:not(.soon) >> nth=0')
+        pg.click('#bnav [data-t=towns]'); pg.click('#missions .town:not(.soon) >> nth=0')
         for city in ('Reno','Virginia City'):
             pg.click('.city >> text='+city)
             for step in range(4):

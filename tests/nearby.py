@@ -29,14 +29,17 @@ with sync_playwright() as p:
         return pg
     def txt(pg): return pg.inner_text('#main')
     # 1. entry points on Home (first run and returning) and in the Towns tab
-    pg=new(); need(pg.locator('[data-a=nbopen]').count()>=2,'first-run Home has the Nearby card and the Towns row')
-    first_hero=pg.evaluate("(()=>{var a=document.querySelector('.home-hero'),c=document.querySelector('.nbcard');return a&&c&&(a.compareDocumentPosition(c)&Node.DOCUMENT_POSITION_FOLLOWING)>0})()")
-    need(first_hero,'first-run Home keeps the hero above the Nearby card')
+    def N(pg):
+        # slim Home: the start card links to Nearby for new players; everyone else opens it from the Towns page
+        if not pg.locator('[data-a=nbopen]').count(): pg.click('#bnav [data-t=towns]'); pg.wait_for_timeout(150)
+        pg.click('[data-a=nbopen] >> nth=0')
+    pg=new(); need(pg.locator('#startBox [data-a=nbopen]').count()==1,'first-run Home: the start card links to Nearby stops')
+    pg.click('#bnav [data-t=towns]'); need(pg.locator('#missions [data-a=nbopen]').count()==1,'the Towns page has the Nearby row')
     pg=new(seed={'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
-    need(pg.locator('.nbcard [data-a=nbopen]').count()==1,'returning Home has the Nearby card')
+    need(pg.locator('#main [data-a=nbopen]').count()==0,'returning Home has no Nearby card until location is on (it lives on Towns)')
     need(pg.evaluate("window.__geo.get+window.__geo.watch")==0,'no location request just from loading Home')
     # 2. nothing is asked until the tap
-    pg.click('.nbcard [data-a=nbopen]'); pg.wait_for_timeout(200)
+    N(pg); pg.wait_for_timeout(200)
     t=txt(pg).lower()
     need('nearby stops' in t and 'find stops near me' in t and 'continue without location' in t,'ask screen offers both choices')
     need('stays on this phone' in t and 'only while the app is open' in t,'ask screen explains why location is needed')
@@ -61,7 +64,7 @@ with sync_playwright() as p:
     # 4. Story stop card
     pg=new(seed={'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
     prog=lambda: json.loads(pg.evaluate("localStorage.getItem('then-now-v3')"))['p']
-    pg.click('.nbcard [data-a=nbopen]'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
+    N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     pg.locator('.nbrow[data-a=nbstory]').first.click(); pg.wait_for_timeout(200)
     t=txt(pg).lower()
     need('photo pending' not in t and (pg.locator('#main img').count()==0 or ('photo:' in t and pg.locator('.nbfig a').count()>=1)),'a Story stop shows either no image, or a photo with its credit and license link (never a placeholder)')
@@ -78,16 +81,16 @@ with sync_playwright() as p:
     after=prog()
     need(before==after,'marking a Story stop does not touch town progress or XP')
     pre=pg.evaluate("localStorage.getItem('stp-tour')")
-    pg.reload(); pg.click('.nbcard [data-a=nbopen]'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
+    pg.reload(); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     pg.wait_for_timeout(300)
     need('visited' in txt(pg).lower() and pg.locator('.nbst.on').count()>=1,'Visited persists across reload '+txt(pg)[:200].replace(chr(10),'|')+' pre='+str(pre)+' post='+str(pg.evaluate("localStorage.getItem('stp-tour')")))
     # backup code unchanged by Visited
     pg.click('#bnav [data-t=pass]'); code1=pg.input_value('#codeOut')
-    pg.click('#bnav [data-t=home]'); pg.click('.nbcard [data-a=nbopen]'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
+    pg.click('#bnav [data-t=home]'); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     pg.locator('.nbrow[data-a=nbstory]').first.click(); pg.click('[data-a=nbvisit]')
     pg.click('#bnav [data-t=pass]'); need(pg.input_value('#codeOut')==code1,'Visited marks are not in the backup code')
     # 5. no location: choose a place first, no distances, no route order
-    pg=new(allow=False); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbnoloc]')
+    pg=new(allow=False); N(pg); pg.click('[data-a=nbnoloc]')
     t=txt(pg).lower(); need('reno and sparks' in t and 'pick any other town' in t,'no-location path offers places first')
     need(pg.evaluate("window.__geo.get+window.__geo.watch")==0,'continuing without location never asks for it')
     pg.click('[data-a=nbarea][data-t=reno-sparks]'); t=txt(pg).lower()
@@ -96,14 +99,14 @@ with sync_playwright() as p:
     need(not re.search(r'about [\d.]+ (m|km)',t),'no distances are shown without location')
     pg.click('[data-a=nbnoloc]'); pg.click('[data-a=nbtowns]'); need(pg.locator('#missions').count()==1 and 'pick a mission' in txt(pg).lower(),'"Pick any other town" returns to the town list')
     # 6. location denied by the phone
-    pg=new(allow=False); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_timeout(600)
+    pg=new(allow=False); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_timeout(600)
     t=txt(pg).lower(); need('location is off for this app' in t and 'reno and sparks' in t,'denied location explains itself and offers places')
     pg.click('[data-a=nbarea][data-t=reno-sparks]'); need(pg.locator('.nbrow[data-a=nbstory]').count()==12,'Story stops still reachable after a denial')
     # 7. nothing nearby
-    pg=new(lat=0.0,lon=0.0); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.card [data-a=nbnoloc]'); pg.wait_for_timeout(500)
+    pg=new(lat=0.0,lon=0.0); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.card [data-a=nbnoloc]'); pg.wait_for_timeout(500)
     need('no stops within about 25 miles' in txt(pg).lower(),'nothing nearby gets a clear message and a way out')
     # 8. nothing leaves the phone and the data is in the one built file
-    pg=new(); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow'); pg.locator('.nbrow[data-a=nbstory]').first.click()
+    pg=new(); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow'); pg.locator('.nbrow[data-a=nbstory]').first.click()
     ext=[u for u in pg.reqs if not u.startswith('http://localhost:8771/') and not u.startswith('data:') and not u.startswith('blob:')]
     need(not ext,f'no network requests during Nearby stops ({ext[:3]})')
     for f in ('site/play.html','index.html'):
@@ -118,7 +121,7 @@ with sync_playwright() as p:
             need(not small,f'{label} at {w}px: touch targets under 44px high: {small}')
             clr=pg.evaluate("(()=>{window.scrollTo(0,document.documentElement.scrollHeight);const n=document.querySelector('#bnav');if(!n||getComputedStyle(n).display==='none'||n.offsetParent===null&&getComputedStyle(n).position!=='fixed')return 99;const nt=n.getBoundingClientRect().top;let m=0;document.querySelectorAll('#main *').forEach(e=>{const r=e.getBoundingClientRect();if(r.height>0&&r.width>0&&getComputedStyle(e).visibility!=='hidden')m=Math.max(m,r.bottom)});return nt-m})()")
             need(clr>=8,f'rb07: {label} at {w}px: last content ends {clr}px above the bottom bar (needs 8+)')
-        pg.click('[data-a=nbopen] >> nth=0'); check('ask screen')
+        N(pg); check('ask screen')
         pg.click('[data-a=nbnoloc]'); check('place picker')
         pg.click('[data-a=nbarea][data-t=reno-sparks]'); check('place view')
         pg.locator('.nbrow[data-a=nbstory]').first.click(); check('Story card')
@@ -156,7 +159,7 @@ with sync_playwright() as p:
             small=pg.evaluate("[...document.querySelectorAll('#main button, #main a.btn')].filter(e=>e.offsetParent!==null).map(e=>[Math.round(e.getBoundingClientRect().height),(e.textContent||'').trim().slice(0,24)]).filter(x=>x[0]<44)")
             need(not small,f'explore {label} at {w}px: touch targets under 44px high: {small}')
     # larger text
-    pg=new(); pg.evaluate("document.documentElement.style.fontSize='32px'"); pg.click('[data-a=nbopen] >> nth=0'); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
+    pg=new(); pg.evaluate("document.documentElement.style.fontSize='32px'"); N(pg); pg.click('[data-a=nbloc]'); pg.wait_for_selector('.nbrow')
     need(pg.evaluate("document.documentElement.scrollWidth-document.documentElement.clientWidth")<=1,'nearby list fits at 200% text')
     def clr2(label):
         c=pg.evaluate("(()=>{window.scrollTo(0,document.documentElement.scrollHeight);const n=document.querySelector('#bnav');if(!n||getComputedStyle(n).display==='none')return 99;let m=0;document.querySelectorAll('#main *').forEach(e=>{const r=e.getBoundingClientRect();if(r.height>0&&r.width>0)m=Math.max(m,r.bottom)});return n.getBoundingClientRect().top-m})()")

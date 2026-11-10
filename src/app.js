@@ -119,6 +119,7 @@
     var sp=st.spot; if(!sp||!sp.options) return '';
     return '<div class="spot" id="spot"><p class="stag"><span aria-hidden="true">?</span> Puzzle: spot the change</p><p class="sq">'+sp.q+'</p><div class="spopts" role="group" aria-label="Spot the change answers">'+sp.options.map(function(o,k){ return '<button type="button" class="btn ghost small spo" data-a="spotpick" data-k="'+k+'">'+o+'</button>'; }).join('')+'</div><p class="sfb" aria-live="polite"></p></div>';
   }
+  document.addEventListener('change',function(e){ var q=e.target; if(q&&q.id==='stSel'&&q.value) startState(q.value); });
   document.addEventListener('input',function(e){
     var q=e.target; if(q&&q.id==='townSearch'){ var v=q.value.trim().toLowerCase(), any=false;
       document.querySelectorAll('#missions details.reg').forEach(function(d){ var vis=0; d.querySelectorAll('li').forEach(function(li){ var m=!v||(li.textContent+' '+(li.getAttribute('data-q')||'')).toLowerCase().indexOf(v)>-1; li.hidden=!m; if(m) vis++; }); d.hidden=!!v&&!vis; if(v) d.open=vis>0; if(vis) any=true; });
@@ -309,16 +310,94 @@
     if(!arr.length) return '<section class="card nearlist"><p class="mono">Nearby stops</p><p>No unstamped stop within 90 miles of you. Pick a town from Towns to plan a trip.</p></section>';
     return '<section class="nearlist" aria-label="Stops near you"><p class="mono">Nearby stops, closest first</p>'+arr.map(function(x){ var st=CITIES[x.c].stops[x.i]; return '<button class="rcard" data-a="neargo" data-c="'+x.c+'" data-i="'+x.i+'" data-far="1"><span><strong>'+st.name+'</strong><span class="rsub">'+CITIES[x.c].name+' · '+nice(x.d)+'</span></span><span class="go">Open ›</span></button>'; }).join('')+(more?'<button class="btn ghost" data-a="nearall">See more nearby stops</button>':'')+'</section>';
   }
-  /* starting-town suggestion for players far from Nevada: guessed from the phone's time zone on the phone itself, nothing is sent anywhere */
-  function startTownHtml(){
-    try{
-      var tz=(Intl.DateTimeFormat().resolvedOptions().timeZone||''), M={'America/New_York':'ny','America/Toronto':'buffalo','America/Detroit':'detroit','America/Chicago':'chicago','America/Indiana/Indianapolis':'indianapolis','America/Indianapolis':'indianapolis','America/Kentucky/Louisville':'louisville','America/Denver':'denver','America/Boise':'saltlake','America/Phoenix':'phoenix','America/Anchorage':'sitka','Pacific/Honolulu':'honolulu'};
-      var k=M[tz]; if(!k&&tz&&!/^(America|Pacific)\//.test(tz)) k='ny';
-      if(!k||!CITIES[k]||sum(ALL[k].done)>0) return '';
-      var c=CITIES[k];
-      return '<button class="rcard starttown" data-a="city" data-c="'+k+'"><span><strong>New here? Start in '+c.name+'</strong><span class="rsub">A good first town if you are far from Nevada. '+c.stops.length+' stops, picked from your time zone on this phone.</span></span><span class="go">Go ›</span></button>';
+  /* ---------- Slim Home (Nov 10 2026): one start card, a Today row, two links. Everything else lives on Towns, Passport or the Menu. ---------- */
+  /* starting town guessed from the phone's time zone, on the phone itself; nothing is sent anywhere. Pacific zones return '' on purpose: the card asks "Where are you?" */
+  function tzName(){ try{ return Intl.DateTimeFormat().resolvedOptions().timeZone||''; }catch(e){ return ''; } }
+  function tzTown(){
+    var tz=tzName(), M={'America/New_York':'ny','America/Toronto':'buffalo','America/Detroit':'detroit','America/Chicago':'chicago','America/Indiana/Indianapolis':'indianapolis','America/Indianapolis':'indianapolis','America/Kentucky/Louisville':'louisville','America/Denver':'denver','America/Boise':'saltlake','America/Phoenix':'phoenix','America/Anchorage':'sitka','Pacific/Honolulu':'honolulu'};
+    var k=M[tz]; if(!k&&tz&&!/^(America|Pacific)\//.test(tz)) k='ny';
+    return (k&&CITIES[k])?k:'';
+  }
+  /* every state: code, name, rough middle (lat, lon). The middle is only used to say which town is closest to a state that has none yet. */
+  var USST='AL,Alabama,32.8,-86.8|AK,Alaska,64.2,-152.3|AZ,Arizona,34.2,-111.7|AR,Arkansas,34.9,-92.4|CA,California,37.2,-119.4|CO,Colorado,39,-105.5|CT,Connecticut,41.6,-72.7|DE,Delaware,39,-75.5|DC,Washington DC,38.9,-77|FL,Florida,28.6,-82.4|GA,Georgia,32.7,-83.4|HI,Hawaii,20.8,-156.9|ID,Idaho,44.4,-114.6|IL,Illinois,40,-89.2|IN,Indiana,39.9,-86.3|IA,Iowa,42.1,-93.5|KS,Kansas,38.5,-98.4|KY,Kentucky,37.5,-85.3|LA,Louisiana,31.1,-92|ME,Maine,45.4,-69.2|MD,Maryland,39,-76.8|MA,Massachusetts,42.3,-71.8|MI,Michigan,44.3,-85.4|MN,Minnesota,46.3,-94.3|MS,Mississippi,32.7,-89.7|MO,Missouri,38.4,-92.5|MT,Montana,47,-109.6|NE,Nebraska,41.5,-99.8|NV,Nevada,39.3,-116.6|NH,New Hampshire,43.7,-71.6|NJ,New Jersey,40.2,-74.7|NM,New Mexico,34.4,-106.1|NY,New York,42.9,-75.5|NC,North Carolina,35.6,-79.4|ND,North Dakota,47.4,-100.5|OH,Ohio,40.3,-82.8|OK,Oklahoma,35.6,-97.5|OR,Oregon,43.9,-120.6|PA,Pennsylvania,40.9,-77.8|RI,Rhode Island,41.7,-71.5|SC,South Carolina,33.9,-80.9|SD,South Dakota,44.4,-100.2|TN,Tennessee,35.9,-86.4|TX,Texas,31.5,-99.3|UT,Utah,39.3,-111.7|VT,Vermont,44.1,-72.7|VA,Virginia,37.5,-78.9|WA,Washington,47.4,-120.5|WV,West Virginia,38.6,-80.6|WI,Wisconsin,44.6,-89.9|WY,Wyoming,43,-107.5'.split('|').map(function(x){ var a=x.split(','); return {c:a[0],n:a[1],lat:+a[2],lon:+a[3]}; });
+  function usSt(code){ for(var i=0;i<USST.length;i++) if(USST[i].c===code) return USST[i]; return null; }
+  function stTowns(code){ var a=ORDER.filter(function(k){ return !isCom(k)&&(TSTATE[k]||'').split('/').indexOf(code)>-1; }); function rank(k){ return ((TSTATE[k]||'').indexOf('/')>-1?2:0)+(CITIES[k].level==='Classics'?0:1); } return a.map(function(k,i){ return [rank(k),i,k]; }).sort(function(x,y){ return x[0]-y[0]||x[1]-y[1]; }).map(function(x){ return x[2]; }); }
+  function stNearest(code){ var s=usSt(code), best=null; if(!s) return null; ORDER.forEach(function(k){ if(isCom(k)) return; var g=null; CITIES[k].stops.forEach(function(st){ if(!g&&st.geo) g=st.geo; }); if(!g) return; var d=distM(s.lat,s.lon,g[0],g[1]); if(!best||d<best.d) best={k:k,d:d}; }); return best; }
+  function startGet(){ try{ var o=JSON.parse(localStorage.getItem('stp-start')||'null'); return (o&&typeof o==='object')?o:null; }catch(e){ return null; } }
+  function startSet(o){ try{ if(o) localStorage.setItem('stp-start',JSON.stringify(o)); else localStorage.removeItem('stp-start'); }catch(e){} }
+  var spAsk=false;
+  function startStopIn(k){ var c=CITIES[k], i=-1, q; for(q=0;q<c.stops.length;q++){ if(!ALL[k].done[q]&&!virtHas(k,q)){ i=q; break; } } var all=(i<0); if(all){ for(q=0;q<c.stops.length;q++){ if(!ALL[k].done[q]){ i=q; break; } } } return {i:i<0?0:i,all:all}; }
+  /* which stop the start card offers: 1. the nearest stop when location is already on, 2. the town or state the player picked, 3. the time-zone guess, 4. ask */
+  function startPick(){
+    if(spAsk) return {mode:'ask'};
+    var sg=startGet(), r;
+    if(geoPos&&!(sg&&sg.k)){ var best=null; ORDER.forEach(function(k){ if(isCom(k)) return; CITIES[k].stops.forEach(function(st,i){ if(!st.geo||ALL[k].done[i]) return; var d=distM(geoPos.lat,geoPos.lon,st.geo[0],st.geo[1]); if(d<=150000&&(!best||d<best.d)) best={k:k,i:i,d:d}; }); }); if(nearHit&&nearHit.inr&&!isCom(nearHit.c)) return {mode:'stop',k:nearHit.c,i:nearHit.i,d:nearHit.d,src:'geo',here:1}; if(best) return {mode:'stop',k:best.k,i:best.i,d:best.d,src:'geo'}; }
+    if(sg&&sg.k&&CITIES[sg.k]){ r=startStopIn(sg.k); return {mode:'stop',k:sg.k,i:r.i,all:r.all,src:'pick',s:sg.s||'',none:sg.none||''}; }
+    var tk=tzTown(); if(tk){ r=startStopIn(tk); return {mode:'stop',k:tk,i:r.i,all:r.all,src:'tz'}; }
+    return {mode:'ask'};
+  }
+  /* a stop's photo that fades by itself from the old photo to today's and back: the whole idea of the app, shown without a tap. Still when a photo is missing or Reduce Motion is on. */
+  function fadePh(k,i,cls){
+    var st=CITIES[k].stops[i], np=st.now&&st.now.ph, tp=st.then&&st.then.ph, ns=np&&PHOTOS[np.k], ts=tp&&PHOTOS[tp.k];
+    if(!ns&&!ts) return '';
+    var alt=(st.name+', '+CITIES[k].name).replace(/"/g,'&quot;'), two=!!(ns&&ts), cr=[];
+    if(ts&&tp.by) cr.push((st.then.yr||'Then')+': '+tp.by+(tp.lic?' ('+tp.lic+')':''));
+    if(ns&&np.by) cr.push('Now: '+np.by+(np.lic?' ('+np.lic+')':''));
+    return '<div class="fph '+(cls||'')+(two?' two':'')+'"><div class="fbox perf"><img class="f-now" src="'+(ns||ts)+'" alt="'+alt+'" decoding="async">'+(two?'<img class="f-then" src="'+ts+'" alt="" aria-hidden="true" decoding="async"><span class="f-yr" aria-hidden="true"><b class="y-then">'+(st.then.yr||'Then')+'</b><b class="y-now">Now</b></span>':'')+postmark()+'</div>'+'</div>'+(cr.length?'<p class="fcred">Photos: '+cr.join(' · ')+'</p>':'');
+  }
+  function postmark(){ return '<svg class="pmark" viewBox="0 0 120 64" aria-hidden="true"><circle cx="32" cy="32" r="26" fill="none" stroke="currentColor" stroke-width="2.5"/><circle cx="32" cy="32" r="19" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M22 36h20M24 36v-8m5 8v-8m6 8v-8m5 8v-8M21 28h22l-11-7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M62 16c8-5 14 5 22 0s14 5 22 0 8 2 12 0M62 27c8-5 14 5 22 0s14 5 22 0 8 2 12 0M62 38c8-5 14 5 22 0s14 5 22 0 8 2 12 0M62 49c8-5 14 5 22 0s14 5 22 0 8 2 12 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'; }
+  function miles(m){ var x=m/1609.34; return x<10?'about '+(Math.round(x*10)/10)+' miles':'about '+(Math.round(x/10)*10)+' miles'; }
+  function stSelect(){ return '<label class="sr" for="stSel">Pick your state</label><select id="stSel" class="stsel"><option value="">Pick your state</option>'+USST.map(function(s){ return '<option value="'+s.c+'">'+s.n+'</option>'; }).join('')+'</select>'; }
+  function startAskHtml(){
+    var sg=startGet(), pac=/^America\/Los_Angeles$|^America\/Vancouver$|^America\/Tijuana$/.test(tzName()), h='<section class="scard ask" id="startBox" aria-label="Pick where to start">';
+    if(pac&&!(sg&&sg.k)) h+='<div class="hstamps" aria-hidden="true">'+stampsHtml()+'</div>';
+    h+='<div class="sc-in"><p class="mono">Start close to home</p><h2>Where are you?</h2><p class="sc-sub">Pick a state and we will start you in a town there. Nothing is sent anywhere.</p>';
+    if(pac) h+='<div class="sc-states">'+['CA','NV','OR','WA'].map(function(c){ return '<button class="btn ghost" data-a="startstate" data-s="'+c+'">'+usSt(c).n+'</button>'; }).join('')+'</div>';
+    h+=stSelect();
+    if(sg&&sg.s&&stTowns(sg.s).length>1) h+='<p class="mono sc-more">Towns in '+usSt(sg.s).n+'</p><div class="sc-towns">'+stTowns(sg.s).map(function(k){ return '<button class="chip'+(k===sg.k?' on':'')+'" data-a="starttown" data-c="'+k+'">'+CITIES[k].name+'</button>'; }).join('')+'</div>';
+    h+='<button class="link" data-a="nbopen">Or find real stops near me</button>'+((sg&&sg.k)||tzTown()?'<button class="link" data-a="startkeep">Never mind, keep '+CITIES[(sg&&sg.k)||tzTown()].name+'</button>':'')+'</div></section>';
+    return h;
+  }
+  function startCardHtml(){
+    var p=startPick(); if(p.mode==='ask') return startAskHtml();
+    var c=CITIES[p.k], st=c.stops[p.i], n=c.stops.length, vc=0, dots='', q;
+    for(q=0;q<n;q++){ var on=ALL[p.k].done[q]||virtHas(p.k,q); if(virtHas(p.k,q)) vc++; dots+='<i class="'+(on?'on':(q===p.i?'cur':''))+'"></i>'; }
+    var eyebrow, title=st.name, sub=c.name+(TSTATE[p.k]?', '+TSTATE[p.k].replace('/',' and '):'')+' · about '+stopMins(st)+' minutes', btn, note='';
+    if(p.none){ var s0=usSt(p.none), nr=stNearest(p.none); note='<p class="sc-note"><b>No towns in '+s0.n+' yet.</b> The closest is '+c.name+(nr?', '+miles(nr.d)+' from the middle of the state':'')+'. <button class="link" data-a="reqtown">Add your town</button></p>'; }
+    if(p.all){ eyebrow='You explored all of '+c.name+' from home'; title='Go there for the real stamps'; sub='Or try another town from your couch.'; btn='<button class="btn sc-go" data-a="gomissions">Pick another town</button>'; }
+    else {
+      eyebrow=p.here?'You are here':(vc>0?'You faded the past into today':(p.src==='geo'?'Closest to you · '+nice(p.d):'Try one from your couch'));
+      if(vc>0&&!p.here) title='Next: '+st.name;
+      if(p.here) btn='<button class="btn gold sc-go" data-a="neargo" data-c="'+p.k+'" data-i="'+p.i+'">Start this stop</button>'; else
+      btn='<button class="btn sc-go" data-a="startplay" data-c="'+p.k+'" data-i="'+p.i+'"'+(p.src==='geo'?'':' data-demo="1"')+'>'+(p.src==='geo'?'Open this stop':'Play this stop')+'</button>';
+    }
+    var chg=p.src==='geo'?'':'<button class="link sc-chg" data-a="startask">Not near '+c.name+'? '+(p.s&&stTowns(p.s).length>1?(stTowns(p.s).length-1)+' more in '+usSt(p.s).n:'Pick your state')+'</button>';
+    return '<section class="scard" id="startBox" aria-label="Start here">'+note+fadePh(p.k,p.i,'sc-ph')+'<div class="sc-in"><p class="mono">'+eyebrow+'</p><h2>'+title+'</h2><p class="sc-sub">'+sub+'</p>'+btn+'<div class="sc-dots" role="img" aria-label="Stop '+(p.i+1)+' of '+n+' in '+c.name+'">'+dots+'<span>Stop '+(p.i+1)+' of '+n+'</span></div><button class="link" data-a="nbopen">'+(p.src==='geo'?'See more stops near me':'Or find real stops near me')+'</button>'+chg+'</div></section>';
+  }
+  function startState(code){ var s=usSt(code); if(!s) return; var t=stTowns(code); if(t.length) startSet({k:t[0],s:code}); else { var nr=stNearest(code); if(!nr) return; startSet({k:nr.k,none:code}); } spAsk=false; render(); var e=document.getElementById('startBox'); if(e){ e.setAttribute('tabindex','-1'); try{ e.focus({preventScroll:true}); }catch(x){} } }
+  /* photo grows into the next screen where the browser can do it (skipped under automation, Reduce Motion and older phones) */
+  function vtGo(fn){ try{ var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; if(document.startViewTransition&&!rm&&(!navigator.webdriver||window.__vt)){ document.startViewTransition(fn); return; } }catch(e){} fn(); }
+  function startPaint(){ var e=document.getElementById('startBox'); if(e&&atHome&&!onPass&&!onTowns&&!onNear) { e.outerHTML=startCardHtml(); var tb=document.getElementById('todayBox'); if(tb) tb.innerHTML=todayHtml(0); } }
+  /* Today row: Daily Fact or Fiction on the website; where that page does not exist (the app, test hosts), a story from the player's town */
+  function storyPick(tk,skip){
+    var c=CITIES[tk]; if(!c) return null; var shown={}; if(geoPos) nearArr().slice(0,nearAll?8:3).forEach(function(x){ shown[x.c+':'+x.i]=1; });
+    var open=[]; c.stops.forEach(function(st,i){ if(!ALL[tk].done[i]&&i!==skip&&!shown[tk+':'+i]) open.push(i); });
+    var pool=open.length?open:c.stops.map(function(x,i){ return i; }).filter(function(i){ return i!==skip; }); if(!pool.length) return null;
+    var day=Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5); return {k:tk,i:pool[day%pool.length]};
+  }
+  function todayHtml(got){
+    var d=dailyCardHtml(); if(d) return '<section class="today" aria-label="Today"><p class="mono">Today</p>'+d+'</section>';
+    try{ var tk, skip; if(got>0){ var nx=nextRef(); if(!nx) return ''; tk=nx.k; skip=nx.i; } else { var p=startPick(); if(p.mode!=='stop') return ''; tk=p.k; skip=p.i; }
+      var s=storyPick(tk,skip); if(!s) return ''; var st=CITIES[s.k].stops[s.i], ph=st.now&&st.now.ph, src=ph&&PHOTOS[ph.k];
+      return '<section class="today" aria-label="Today"><p class="mono">Today</p><button class="rcard srow" data-a="neargo" data-c="'+s.k+'" data-i="'+s.i+'" data-far="1">'+(src?'<img class="tthumb" loading="lazy" decoding="async" src="'+src+'" alt="">':'')+'<span class="srt"><strong>'+st.name+'</strong><span class="rsub">Story of the day · '+CITIES[s.k].name+'</span></span><span class="go">Read ›</span></button></section>';
     }catch(e){ return ''; }
   }
+  function weekRowHtml(){
+    var el=TRAILS.filter(function(tr){ return trailStops(tr.re).length>=3; }); if(!el.length) return '';
+    var tr=el[Math.floor(Date.now()/604800000)%el.length], L=trailStops(tr.re), d=L.filter(function(x){ return x.done; }).length;
+    return '<button class="hrow" data-a="trailweek" data-t="'+tr.id+'"><span class="hr-i" style="color:'+TRCOL[tr.id]+'"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+TRICON[tr.id]+'</svg></span><span class="hr-t"><b>Trail of the week</b> '+tr.name+' · '+d+' of '+L.length+'</span><span class="hr-go" aria-hidden="true">›</span></button>';
+  }
+  function homeLinksHtml(nOff,pre){ return '<nav class="hlinks" aria-label="More">'+(pre||'')+'<button class="hrow" data-a="gomissions"><span class="hr-t"><b>Browse all '+nOff+' towns</b></span><span class="hr-go" aria-hidden="true">›</span></button><button class="hrow" data-a="reqtown"><span class="hr-t"><b>Add your town</b> Tell us which one is missing</span><span class="hr-go" aria-hidden="true">›</span></button></nav>'; }
 
   /* ---------- Nearby stops: a discovery list of town stops and Story stops (no route, no stamp, no XP for Story stops) ---------- */
   var TOURS=DATA.tours||[], STORY=[];
@@ -506,7 +585,7 @@
     return h+'</section>';
   }
   function nearHtml(){ return nearCardHtml()+nearListHtml(); }
-  function nearPaint(){ var e=document.getElementById('nearBox'); if(e) e.innerHTML=nearHtml(); }
+  function nearPaint(){ var e=document.getElementById('nearBox'), first=document.body.classList.contains('homefirst'); if(e) e.innerHTML=first?'':nearHtml(); if(first) startPaint(); }
   // Optional alerts when the app is closed (iPhone app only; the phone does the watching, nothing is sent anywhere)
   var NG=null;
   try{ if(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()&&Capacitor.getPlatform&&Capacitor.getPlatform()==='ios') NG=Capacitor.registerPlugin('StampGeo'); }catch(e){}
@@ -519,6 +598,7 @@
   var hereSeen={};
   function hereHide(){ var e=document.querySelector('.herebanner'); if(e&&e.parentNode) e.parentNode.removeChild(e); }
   function hereShow(h){
+    /* first-time Home: the start card already says You are here, so no second banner on top of it */ if(atHome&&!onPass&&!onTowns&&!onNear&&document.body.classList.contains('homefirst')&&document.getElementById('startBox')) return;
     var key=h.c+':'+h.i; if(hereSeen[key]) return; hereSeen[key]=1;
     var c=CITIES[h.c], st=c.stops[h.i]; hereHide();
     var e=document.createElement('div'); e.className='herebanner'; e.setAttribute('role','alert');
@@ -663,7 +743,7 @@
     var btn=allDone?'<button class="bigbtn" data-a="gomissions"><span class="bl">Town complete</span><span class="bs">Pick your next town</span></button>':'<button class="bigbtn" data-a="nextstop" data-c="'+tk+'" data-i="'+ni+'"><span class="bl">'+(got>0?'Next stop':'Start your first stop')+'</span><span class="bs">'+tc.stops[ni].name+' · '+tc.name+'</span></button>';
     var nb=got>0?nextBadge():null;
     var st=got>0?'<div class="stl"><div class="snum"><b>'+got+'</b><span>of '+total+' stamps</span></div><p class="sverd">Explorer level '+lv.n+' · '+lv.title+' <span class="snext">· '+nfmt(lv.to-gs.xp)+' XP to level '+(lv.n+1)+'</span></p>'+(nb?'<p class="sgoal">Next badge: '+nb.b.n+' · '+nb.cur+' of '+nb.goal+'</p>':'')+'</div>':'';
-    return '<section class="stat" aria-label="Your progress">'+st+btn+'</section>';
+    return '<section class="stat" aria-label="Your progress">'+(allDone?'':fadePh(tk,ni,'st-ph'))+st+btn+'</section>';
   }
   function ringsHtml(){
     var seen={}, list=[];
@@ -707,7 +787,7 @@
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
     regs=regs.filter(function(r){ return r!==COMREG; }).concat(regs.indexOf(COMREG)>-1?[COMREG]:[]);
-    h+=(onTownsPage?'':reqBanHtml())+browseOpen()+'<section id="missions"><h2 class="hh">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.'+(COMON?' Or <button class="link" data-a="suggest">suggest a place</button>.':'')+'</p>'+regs.map(function(r){
+    h+=(onTownsPage?'':reqBanHtml())+browseOpen()+'<section id="missions"><h2 class="hh'+(onTownsPage?' sr':'')+'">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.'+(COMON?' Or <button class="link" data-a="suggest">suggest a place</button>.':'')+'</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -720,31 +800,24 @@
     var got=0,total=0,nOff=0;
     ORDER.forEach(function(k){ if(isCom(k)) return; nOff++; total+=CITIES[k].stops.length; got+=sum(ALL[k].done); });
     document.body.classList.toggle('homefirst',got===0);
-    return '<section class="townspage"><h1 class="hh2">Towns</h1></section>'+browseHtml(got,total,nOff,true)+savedCardHtml()+goalHtml();
+    return '<section class="townspage"><h1 class="hh2">Towns</h1></section>'+browseHtml(got,total,nOff,true)+comCardHtml()+savedCardHtml()+goalHtml();
   }
   function viewHome(){
     var got=0,total=0,nOff=0;
     ORDER.forEach(function(k){ if(isCom(k)) return; nOff++; total+=CITIES[k].stops.length; got+=sum(ALL[k].done); });
-    var hk=homeTown(), stamps=stampsHtml();
+    var hk=homeTown();
     document.body.classList.toggle('homefirst',got===0);
     var res0=null; [cityId].concat(ORDER).forEach(function(k){ if(!res0&&CITIES[k]){ var d0=sum(ALL[k].done); if(d0>0&&d0<CITIES[k].stops.length) res0=k; } });
-    var h='<section class="home-hero'+(got>0?' ret':'')+'"><div><div class="wordmark" role="img" aria-label="Stamp the Past">Stamp the Past</div><h1>Go there.<br>Prove it.<br>Stamp it.</h1><p class="sub">A mission game for real places. Travel to the spot, answer what is in front of you, sort fact from tall tale, and watch the past fade into the present.</p><button class="btn heroGo" data-a="gomissions">'+(got>0?'Choose a mission':'Pick a mission')+'</button></div><div class="hstamps" aria-label="Four passport stamps, each a real photo of a landmark">'+stamps+'</div></section>';
-    var how=got>0?'':'<section class="howto" aria-label="How it works"><h2>How it works</h2><ol><li><b>Go there.</b> Pick a mission and walk or drive to a real landmark.</li><li><b>Prove it.</b> Tap "I am here", read the story, answer the question in front of you.</li><li><b>Stamp it.</b> Each stamp earns XP, points that raise your level and unlock badges.</li></ol><p class="hint">Not near a mission? Open any stop and tap "Explore from home" to read it and fade the photos. Stamps are saved for real visits.</p></section>';
-    var nearH='<div id="nearBox" class="nearbox">'+nearHtml()+'</div>'+(got===0?startTownHtml():nbCardHtml());
-    h=(got>0?statusHtml(got,total,res0,hk)+bkNudgeHtml()+contribCardHtml()+nearH+featuredHtml()+ringsHtml()+comCardHtml()+dailyCardHtml()+h:nearH+contribCardHtml()+h+how+nbCardHtml()+comCardHtml()+ringsHtml()+dailyCardHtml());
-    var vcount=0; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st){ if(st.verified&&st.verified.on) vcount++; }); });
-    var res=null; [cityId].concat(ORDER).forEach(function(k){ if(!res&&CITIES[k]){ var d=sum(ALL[k].done); if(d>0&&d<CITIES[k].stops.length) res=k; } });
-        var passTop=got>0?'<section class="passport" id="passport"><button class="rcard" data-a="mypass"><span><strong>Your passport</strong><span class="rsub">'+got+' of '+total+' stamps earned'+(totalPts()?' · '+totalPts()+' challenge points':'')+'</span></span><span class="go">Open ›</span></button></section>':'';
-    h+=savedCardHtml()+goalHtml();
-    h+=browseHtml(got,total,nOff);
-    if(got>0) h+='<details class="pitch"><summary><span class="mono">About</span><strong>How Stamp the Past works</strong></summary>';
-    var hkx=(CITIES[hk].stops.length<4||CITIES[hk].community)?BASE_ORDER[0]:hk, hs=CITIES[hkx].stops, HT=[['Find the spot','A clue sends you to a real landmark. Bring your own two feet.'],['Prove it','Answer a question about what is right in front of you.'],['Fact or fiction','Is the famous story solid, disputed, or a tall tale? Historians argue. Now so can you.'],['Get stamped','Every stop adds a stamp to your passport and a Then/Now photo you can fade through.']];
-    h+='<section class="navy"><p class="mono">How it works</p><h2>Four steps. One stamp.</h2><p class="why" style="color:inherit;opacity:.85">Pictured: '+(hkx===hk?'your current mission, ':'')+CITIES[hkx].name+'.</p><div class="hsteps">'+HT.map(function(t,i){ var st=hs[i]; return '<div class="hstep"><span class="bbox sm" aria-hidden="true">'+badge(st.id,true,hkx)+'</span><b>'+(i+1)+'</b><h3>'+t[0]+'</h3><p>'+t[1]+'</p><p class="mono" style="opacity:.8">e.g. '+st.name+'</p></div>'; }).join('')+'</div></section>';
-    if(PHOTOS.arch_now&&PHOTOS.sign1973) h+='<section class="hsec"><p class="mono">Then and now</p><h2 class="hh2">Swipe back through time.</h2><p>Swipe the photo or drag the slider. Every stop unlocks a real old photo next to a current one. This one is the Reno Arch, 1973 to 2021.</p><div class="cmp" style="margin-top:12px"><div class="box"><img src="'+PHOTOS.arch_now+'" alt="The Reno Arch in 2021"><img class="top" src="'+PHOTOS.sign1973+'" alt="The Reno sign in 1973"></div><div class="row"><span>Now</span><input type="range" min="0" max="100" value="0" aria-label="Fade from now to 1973" data-cmp="1"><span>1973</span></div></div></section>';
-    h+='<section class="hsec"><p class="mono">The part nobody else does</p><h2 class="hh2">Is that actually true?</h2><p>Every story comes with claims to sort: well documented, disputed, or not true. Every answer shows its sources, so the game rewards checking, not guessing.</p><div id="homefof" style="margin-top:12px">'+homeFof()+'</div></section>';
-    h+='<section class="grown"><p class="mono">For parents (the grown-up section)</p><h2 class="hh2">A game that gets the whole family reading the plaque. Voluntarily.</h2><ul><li>No accounts and no sign-up</li><li>Location is optional, used only on the phone and never sent anywhere</li><li>No photo uploads</li><li>No ads</li><li>Every story shows its sources</li><li>Every photo shows its credit</li>'+(vcount?'<li>'+vcount+' of '+total+' stops verified on site by the makers</li>':'')+'</ul></section>';
-    if(got>0) h+='</details>';
-    h+='<p class="home-foot"><strong>Made by a mom and her teenage son.</strong><br>The West, the Midwest, the South, the East and the Southwest so far. More regions on the way.<br><button class="link" data-a="menu">Menu: backup, help, settings</button></p>';
+    var h, wk='';
+    if(got>0){
+      /* returning: progress and Next stop first; nearby stops only when location is already on */
+      h='<h1 class="sr">Stamp the Past: Home</h1>'+statusHtml(got,total,res0,hk)+'<div id="nearBox" class="nearbox">'+nearHtml()+'</div>'+savedCardHtml()+todayHtml(got)+contribCardHtml(); wk=weekRowHtml();
+    } else {
+      /* first time: one start card. Location is never asked for here; "You are here" only shows when it was already allowed. */
+      h='<header class="shead"><div class="wordmark" role="img" aria-label="Stamp the Past">Stamp the Past</div><h1 class="htag">Go there. Prove it. Stamp it.</h1></header><div id="nearBox" class="nearbox"></div>'+startCardHtml()+savedCardHtml()+'<div id="todayBox">'+todayHtml(0)+'</div>'+contribCardHtml();
+    }
+    h+=homeLinksHtml(nOff,got>0?wk:'');
+    h+='<p class="home-foot"><strong>Made by a mom and her teenage son.</strong><br><button class="link" data-a="menu">Menu: backup, help, settings</button></p>';
     return h;
   }
   function curTownLine(){
@@ -756,7 +829,7 @@
     ORDER.forEach(function(k){ if(isCom(k)) return; nOff++; total+=CITIES[k].stops.length; var d=sum(ALL[k].done); got+=d; if(d===CITIES[k].stops.length) full++; if(sealTier(b[k])) seals++; });
     var regs=[]; ORDER.forEach(function(k){ if(isCom(k)) return; var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     var h='<section class="passhead"><p class="mono">Stamp the Past</p><h1 class="hh2">Your passport</h1>'+(got===0?'<p class="pnote pblank">Nice and blank. Your first stamp goes here, and the page starts filling up from there. '+total+' stamps are waiting across '+nOff+' towns.</p>':'')+'<div class="pstats"'+(got===0?' hidden':'')+'><div><b>'+got+'</b><span>of '+total+' stamps</span></div><div><b>'+full+'</b><span>of '+nOff+' towns done</span></div><div><b>'+seals+'</b><span>challenge seals</span></div><div><b>'+totalPts()+'</b><span>challenge points</span></div></div>'+curTownLine()+(seals===0?'<p class="pnote">Challenge seals and points come from a town\'s final challenge. Stamp every stop in a town to unlock it.</p><button class="btn small" data-a="'+(got>0?'nextstop':'gomissions')+'"'+(got>0&&nextRef()?' data-c="'+nextRef().k+'" data-i="'+nextRef().i+'"':'')+'>'+(got>0?'Go to my next stop':'Pick a town')+'</button>':'')+(got>0?'<button class="btn small" data-a="share" data-k="" style="margin-top:12px">Share my passport</button>':'')+'</section>';
-    var bd=bdAll(); h+=levelHtml(bd.s)+trophyHtml(bd);
+    h+=bkNudgeHtml(); var bd=bdAll(); h+=levelHtml(bd.s)+trophyHtml(bd);
     h+='<section class="passport" id="passport">'+regs.map(function(r){ var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }); if(!rk.length) return ''; var g=0,t=0; rk.forEach(function(k){ g+=sum(ALL[k].done); t+=CITIES[k].stops.length; }); return '<details class="reg ppreg"'+(g>0?' open':'')+'><summary class="region"><span>'+r+'</span><span class="rcount">'+g+' of '+t+' stamps</span></summary>'+rk.filter(function(k){ return sum(ALL[k].done)>0; }).map(function(k){
       var c=CITIES[k], d=sum(ALL[k].done);
       return '<div class="pprow'+(d===c.stops.length?' full':'')+'"><div class="ppname"><strong>'+c.name+'</strong><span class="mono">'+d+' of '+c.stops.length+(d===c.stops.length?' · complete':'')+(bossBest()[k]!==undefined?' · challenge '+bossBest()[k]+'/4':'')+'</span></div><div class="ppstamps">'+(sealTier(bossBest()[k])?'<span class="bbox sm sealbox" title="'+SEALS[sealTier(bossBest()[k])][3]+'">'+seal(sealTier(bossBest()[k]),38)+'</span>':'')+c.stops.map(function(st,i){ return '<span class="bbox sm'+(ALL[k].done[i]&&geoVerified(k,i)?' gv':'')+'" title="'+st.badge+(ALL[k].done[i]&&geoVerified(k,i)?' (verified visit)':'')+'">'+badge(st.id,ALL[k].done[i],k)+gpin(k,i,ALL[k].done[i])+'</span>'; }).join('')+'</div></div>';
@@ -924,7 +997,7 @@
     {h:'Go there. Prove it.',p:'A history game played on real streets. Sixty seconds to learn the moves, then you are on your own. Bring shoes.',ill:'hello',nx:'Show me'},
     {h:'Find it. Prove it.',p:'Every town is four real landmarks. A clue sends you there. Stand in front of it, tap "I am here", and answer a question about what is right in front of you.',ill:'find'},
     {h:'Travel back',p:'Every stamp unlocks a real old photo. Drag the slider to fade between then and now.',ill:'cmp'},
-    {h:'Fact or fiction',p:'Famous stories are often wrong. Sort each claim: documented, disputed, or not true. Every stamp lands in your passport, and you can replay this guide from Home.',ill:'fof',nx:'Pick a mission',done:1}
+    {h:'Fact or fiction',p:'Famous stories are often wrong. Sort each claim: documented, disputed, or not true. Every stamp lands in your passport, and you can replay this guide from the Menu.',ill:'fof',nx:'Start exploring',done:1}
   ], tourI=0;
   var TILL={
     hello:'<div class="ti ti-hero"><span>A history game</span><b>Stamp<br>the Past</b></div>',
@@ -1608,7 +1681,7 @@
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }
     if(a==='repclose'){ closeReport(); return; }
     if(a==='repsend'){ sendReport(); return; }
-    if(a==='tournext'){ if(tourI>=TOUR.length-1){ endTour(); if(!atHome||onPass||onNear) goHome(); var mm0=document.getElementById('missions'); if(mm0&&mm0.scrollIntoView) mm0.scrollIntoView({behavior:'smooth',block:'start'}); } else { tourI++; showTour(); } return; }
+    if(a==='tournext'){ if(tourI>=TOUR.length-1){ endTour(); if(!atHome||onPass||onNear) goHome(); var mm0=document.getElementById('startBox')||document.querySelector('.stat'); if(mm0&&mm0.scrollIntoView) mm0.scrollIntoView({behavior:'smooth',block:'center'}); } else { tourI++; showTour(); } return; }
     if(a==='tourback'){ if(tourI>0){ tourI--; showTour(); } return; }
     if(a==='replaytour'){ replayTour(); return; }
     if(a==='tourskip'){ endTour(); return; }
@@ -1629,7 +1702,12 @@
     if(a==='savestop'){ var sk=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), key=savedKey(sk,si), sa=savedRaw(), sx=sa.indexOf(key); if(!key) return; if(sx>-1) sa.splice(sx,1); else sa.push(key); savedSet(sa); var sy=window.scrollY; render(false); window.scrollTo(0,sy); toast(sx>-1?'Removed from saved stops.':'Saved. Find it on Home under My trip.'); return; }
     if(a==='trip'){ var tk=b.getAttribute('data-c'), ta=tripGet(), ti=ta.indexOf(tk); if(ti>-1) ta.splice(ti,1); else ta.push(tk); tripSet(ta); var sv=window.scrollY; render(); window.scrollTo(0,sv); toast(ti>-1?'Removed from your trip.':'Added to your trip.'); return; }
     if(a==='schip'){ var inp=document.getElementById('townSearch'); if(inp){ var sv2=b.getAttribute('data-s'); inp.value=(inp.value.trim().toLowerCase()===sv2.toLowerCase())?'':sv2; inp.dispatchEvent(new Event('input',{bubbles:true})); } return; }
-    if(a==='gomissions'){ ping('pick-mission'); setBtab('towns'); var mm=document.getElementById('missions'); if(mm&&mm.scrollIntoView) mm.scrollIntoView({behavior:'smooth',block:'start'}); return; }
+    if(a==='gomissions'){ ping('pick-mission'); openTowns('towns'); return; }
+    if(a==='startplay'){ ping('start-town'); var sc=b.getAttribute('data-c'), si=+b.getAttribute('data-i'), sd=b.getAttribute('data-demo'); if(!CITIES[sc]) return; vtGo(function(){ railRegion=null; if(sc!==cityId||atHome) setCity(sc); openStop(si,0); if(sd&&!S.done[si]){ demoSnap={done:S.done.slice(),claims:S.claims.slice()}; demoC=S; cur.demo=1; cur.step=1; render(true); window.scrollTo(0,0); } }); return; }
+    if(a==='startask'){ spAsk=true; startPaint(); var ss=document.getElementById('stSel'); if(ss) ss.focus(); return; }
+    if(a==='startkeep'){ spAsk=false; startPaint(); return; }
+    if(a==='startstate'){ startState(b.getAttribute('data-s')); return; }
+    if(a==='starttown'){ var tk0=b.getAttribute('data-c'), sg0=startGet()||{}; if(CITIES[tk0]){ startSet({k:tk0,s:sg0.s||''}); spAsk=false; render(); } return; }
     if(a==='backup'){ closeCeleb(); try{ localStorage.setItem('stp-bk-seen',String(totalStamps())); }catch(e){} openPass(); setTimeout(function(){ var el=document.getElementById('backup'); if(el) el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}); },60); return; }
     if(a==='bkdismiss'){ try{ localStorage.setItem('stp-bk-seen',String(totalStamps())); }catch(e){} render(); return; }
     if(a==='passport'||a==='mypass'){ closeCeleb(); openPass(); return; }

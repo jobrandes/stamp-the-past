@@ -2,12 +2,15 @@
 # One command to prove nothing broke: build, validate content, check layout, compare every screen to the saved snapshot.
 set -e
 cd "$(dirname "$0")/.."
+# the start card reads the time zone, so every check runs in one fixed zone
+export TZ=America/New_York
 python3 build.py
 python3 tests/validate_packs.py
 python3 tests/check.py
 python3 tests/flows.py
 python3 tests/nearby.py
 python3 tests/townspage.py
+python3 tests/slimhome.py
 python3 tests/reqtown.py
 python3 tests/offline.py
 python3 tests/seo_check.py 2>&1 | grep -v "GET /"

@@ -20,8 +20,10 @@ def need(c,m):
     if not c: bad.append(m)
 with sync_playwright() as p:
     b=p.chromium.launch()
+    def T(pg):
+        if not pg.locator('#missions').count(): pg.click('#bnav [data-t=towns]')
     def new(seed=None,tour=False):
-        ctx=b.new_context(viewport={'width':390,'height':844},reduced_motion='reduce')
+        ctx=b.new_context(viewport={'width':390,'height':844},reduced_motion='reduce',timezone_id='America/New_York')
         if not tour: ctx.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}")
         if seed:
             js="try{if(!sessionStorage.getItem('_seeded')){sessionStorage.setItem('_seeded','1');"+''.join("localStorage.setItem(%s,%s);"%(json.dumps(k),json.dumps(json.dumps(v))) for k,v in seed.items())+"}}catch(e){}"
@@ -38,15 +40,16 @@ with sync_playwright() as p:
     pg=new()
     need('go there' in pg.inner_text('#main').lower(),'first launch should show Home')
     need(not pg.locator('.hero').is_visible(),'hero should be hidden on Home')
-    need(pg.locator('#missions .town:not(.soon)').count()==NT and pg.locator('#missions .town.soon').count()==0,f'Home should list {NT} towns and no coming-soon dead ends')
-    pg.click('.town >> nth=0'); need(pg.locator('.hero').is_visible() and pg.inner_text('#cityName').lower()=='reno','Start Reno from Home')
-    pg.click('#bnav [data-t=home]'); need('pick a mission' in pg.inner_text('#main').lower(),'Home chip returns Home')
-    pg.reload(); need('pick a mission' in pg.inner_text('#main').lower(),'Home persists across reload')
-    pg.click('.town >> nth=1'); pg.reload(); need(pg.inner_text('#cityName').lower()=='sparks' and pg.locator('.hero').is_visible(),'last town persists across reload')
+    need(pg.locator('#startBox [data-a=startplay]').count()==1 and pg.locator('#main #missions').count()==0,'slim Home: one start card and no town list'); pg.click('#bnav [data-t=towns]')
+    need(pg.locator('#missions .town:not(.soon)').count()==NT and pg.locator('#missions .town.soon').count()==0,f'Towns should list {NT} towns and no coming-soon dead ends')
+    T(pg); pg.click('.town >> nth=0'); need(pg.locator('.hero').is_visible() and pg.inner_text('#cityName').lower()=='reno','Start Reno from Home')
+    pg.click('#bnav [data-t=home]'); need(pg.locator('#startBox').count()==1,'Home chip returns Home')
+    pg.reload(); need(pg.locator('#startBox').count()==1,'Home persists across reload')
+    T(pg); pg.click('.town >> nth=1'); pg.reload(); need(pg.inner_text('#cityName').lower()=='sparks' and pg.locator('.hero').is_visible(),'last town persists across reload')
     # hardware back from a stop returns to the trail, not out of the app
     pg.click('.stop >> nth=0'); pg.go_back(); pg.wait_for_timeout(200); need(pg.locator('.stops').count()==1,'browser Back from a stop returns to the trail')
     # progress shows on Home
-    pg.click('#bnav [data-t=home]'); need('0 of 4 stamps' in pg.inner_text('#main').lower(),'Home shows progress')
+    pg.click('#bnav [data-t=home]'); need('stop 1 of 4' in pg.inner_text('#main').lower(),'Home shows where you are in the town')
     # resume card appears for a town in progress
     # Trail of the week card opens the Trails tab on that trail
     pg=new({'then-now-v3':{'city':'reno','home':True,'p':{'reno':{'done':[1,0,0,0],'claims':[0,0,0,0,0,0,0,0]}}}})
@@ -85,7 +88,7 @@ with sync_playwright() as p:
     need(pg2.locator('#celeb').count()==0 and 'question' in pg2.inner_text('#main').lower(),'celebration button starts the final challenge')
     pg.click('text=See my passport'); pg.wait_for_timeout(300)
     need(pg.locator('#celeb').count()==0 and pg.locator('#passport .pprow.full').count()==1,'passport shows the completed mission and closes the celebration')
-    pg.reload(); pg.click('.town >> nth=0'); pg.wait_for_timeout(700); need(pg.locator('#celeb').count()==0,'celebration does not repeat')
+    pg.reload(); T(pg); pg.click('.town >> nth=0'); pg.wait_for_timeout(700); need(pg.locator('#celeb').count()==0,'celebration does not repeat')
     # final challenge: only after all four stamps; scores and saves best
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,1,1,0],'claims':[0,0,0,0,0,0,0,0]}}}})
     need(pg.locator('[data-a=boss]').count()==0,'final challenge is hidden until the mission is complete')
@@ -165,22 +168,22 @@ with sync_playwright() as p:
         ctx.add_init_script("try{Object.defineProperty(navigator,'permissions',{value:undefined})}catch(e){}")
         gp=ctx.new_page(); gp.on('pageerror',lambda e:errs.append(str(e))); gp.goto(U); gp.click('#bnav [data-t=home]'); return ctx,gp
     ctx,gp=live_ctx(39.52812,-119.81366); gp.wait_for_timeout(1200)
-    need('you are here' in gp.inner_text('#nearBox').lower(),'live location: Home says You are here at a stop')
+    need('you are here' in gp.inner_text('#startBox').lower(),'live location: Home says You are here at a stop')
     gp.click('[data-a=neargo]'); gp.wait_for_timeout(500); need(gp.locator('.opt').count()>0,'tapping the Home card jumps to the question')
-    ctx,gp=live_ctx(0.0,-30.0); gp.wait_for_timeout(1200)
+    ctx,gp=live_ctx(0.0,-30.0,done=1); gp.wait_for_timeout(1200)
     need('within 90 miles' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()==0,'live location: nothing pushy when no stop is near')
-    ctx,gp=live_ctx(39.5325,-119.81366); gp.wait_for_timeout(1200); need('closest first' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()>0,'live location: shows the nearest stop distance')
+    ctx,gp=live_ctx(39.5325,-119.81366,done=1); gp.wait_for_timeout(1200); need('closest first' in gp.inner_text('#nearBox').lower() and gp.locator('#nearBox .rcard').count()>0,'live location: shows the nearest stop distance')
     need(gp.locator('#nearBox .rcard[data-a=neargo]').count()<=3,'Home shows at most 3 nearby stops first')
     if gp.locator('#nearBox [data-a=nearall]').count():
         gp.click('#nearBox [data-a=nearall]'); need(gp.locator('#nearBox .rcard[data-a=neargo]').count()>3,'See more nearby stops shows the rest')
     gp.click('#nearBox [data-a=neargo]'); gp.wait_for_timeout(400); need(gp.locator('.opt').count()==0,'opening a far stop stays on Find it')
-    ctx.set_geolocation({'latitude':39.5287,'longitude':-119.8116,'accuracy':20}); gp.wait_for_timeout(2500)
+    ctx.set_geolocation({'latitude':39.52507,'longitude':-119.81263,'accuracy':20}); gp.wait_for_timeout(2500)  # the Virginia Street Bridge: the list skips the Next stop (the depot), so the bridge is the one that was opened
     need(gp.locator('.opt').count()>0,'walking up to the stop you are looking at moves on by itself')
-    ctx,gp=live_ctx(39.5378,-119.7236); gp.wait_for_timeout(1500)
+    ctx,gp=live_ctx(39.5378,-119.7236,done=1); gp.wait_for_timeout(1500)
     need(gp.locator('.herebanner').count()==1 and 'Sparks Marina' in gp.inner_text('.herebanner'),'standing at a stop pops up a proactive you-are-here banner')
     gp.click('.herebanner [data-hb=go]'); gp.wait_for_timeout(500)
     need(gp.locator('.herebanner').count()==0 and gp.locator('.opt').count()>0,'banner Open jumps straight to the question')
-    ctx,gp=live_ctx(39.5378,-119.7236); gp.wait_for_timeout(1500); gp.click('.herebanner [data-hb=no]'); gp.wait_for_timeout(300)
+    ctx,gp=live_ctx(39.5378,-119.7236,done=1); gp.wait_for_timeout(1500); gp.click('.herebanner [data-hb=no]'); gp.wait_for_timeout(300)
     need(gp.locator('.herebanner').count()==0,'Not now dismisses the banner')
     # finishing a stop points at the next one
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{'reno':{'done':[1,0,0,0],'claims':[1,1,0,0,0,0,0,0]}}}})
@@ -203,9 +206,9 @@ with sync_playwright() as p:
     need(pg.inner_text('#cityName').lower()=='reno' and '225 TOWN XP' in pg.inner_text('#xpText'),'v1 save migrates (225 XP)')
     # restore each code format
     for good,exp in (('TN1-110010000000','225 XP'),('TN2-110010000000-000000000000','225 XP'),('TN3-110010000000-100000000000','225 XP')):
-        pg=new(); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn',good); pg.click('text=Restore')
+        pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn',good); pg.click('text=Restore')
         need(exp.replace(' XP',' TOWN XP') in pg.inner_text('#xpText'),f'restore {good[:3]} gives {exp}, got {pg.inner_text("#xpText")}')
-    pg=new(); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn','TN3-1100'); pg.click('text=Restore')
+    pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn','TN3-1100'); pg.click('text=Restore')
     need('does not look right' in pg.inner_text('#codeMsg').lower(),'bad code is rejected')
     pg.fill('#codeIn','TN3-'+'-'.join(['000000000000']*(NT+1))); pg.click('text=Restore'); need('more towns' in pg.inner_text('#codeMsg').lower(),'code with too many towns is rejected with a clear message')
     # towns do not need four stops: Walnut Creek has two (save code group is 6 characters, max 300 XP)
@@ -214,8 +217,8 @@ with sync_playwright() as p:
     need('300 TOWN XP' in pg.inner_text('#xpText') and 'top rank' in pg.inner_text('#xpText').lower(),'two stamps and four claims are the top rank of a two-stop town, got '+pg.inner_text('#xpText'))
     pg.click('#tab-rewards'); wcode=pg.input_value('#codeOut')
     need(wcode.endswith('-111111') and len(wcode.split('-')[1])==12 and wcode.count('-')==NT,f'two-stop town adds a 6 character group and 4-stop towns keep 12, got {wcode}')
-    pg=new(); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn',wcode); pg.click('text=Restore'); pg.wait_for_timeout(300)
-    pg=new(); pg.click('.town >> nth=0'); pg.click('#tab-rewards')
+    pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('#tab-rewards'); pg.fill('#codeIn',wcode); pg.click('text=Restore'); pg.wait_for_timeout(300)
+    pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('#tab-rewards')
     pg.fill('#codeIn','TN3-'+'-'.join(['000000000000']*(NT-1))+'-000000000000'); pg.click('text=Restore')
     need('does not look right' in pg.inner_text('#codeMsg').lower(),'a 12 character group for a two-stop town is rejected')
     pg.fill('#codeIn','TN3-'+'-'.join(['000000000000']*(NT-1))+'-111111'); pg.click('text=Restore'); pg.wait_for_timeout(300)
@@ -242,7 +245,7 @@ with sync_playwright() as p:
         need(_g and _e and abs(_g['width']-_e['width'])<2 and abs(_g['height']-_e['height'])<2 and _e['height']>=44,f'I am here and Explore from home are the same size at {_w}')
         need(pg.locator('[data-a=demo]').count()==1 and pg.evaluate("document.querySelector('.stickgo').nextElementSibling.getAttribute('data-a')")=='demo','Explore from home sits right under I am here, once')
     # try it from home: preview unlocks the story but saves nothing
-    pg=new(); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
+    pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('.stoplist button >> nth=0') if pg.locator('.stoplist button').count() else pg.click('[data-a=open] >> nth=0')
     need(pg.locator('[data-a=demo]').count()>=1,'unstamped stop offers Explore from home')
     pg.click('[data-a=demo]'); need(pg.locator('.demo-banner').count()==1,'demo shows a preview banner')
     for k in range(4):
@@ -294,14 +297,14 @@ with sync_playwright() as p:
     need('next stop' in pg.inner_text('.passhead .pnote + button').lower(),'zero challenge seals offers a next-stop button')
     # phone UX audit u08: returning players get a Story of the day card that opens its stop
     pg=new({'then-now-v3':{'city':'reno','home':1,'p':{'reno':{'done':[1,0,0,0],'claims':[1,1,1,1,1,1,1,1]}}}}); pg.wait_for_timeout(300)
-    need(pg.locator('.feat').count()==1 and 'photo:' in pg.inner_text('.feat').lower(),'Home shows a credited Story of the day for returning players')
-    pg.click('.feat button'); pg.wait_for_timeout(300); need(pg.locator('#stopTitle').count()==1,'Story of the day opens its stop')
+    need(pg.locator('.today .srow').count()==1 and 'story of the day' in pg.inner_text('.today').lower(),'Home shows a Story of the day row for returning players')
+    pg.click('.today .srow'); pg.wait_for_timeout(300); need(pg.locator('#stopTitle').count()==1,'Story of the day opens its stop')
     # phone UX audit u10: trail rows carry a small photo
     pg=new({'then-now-v3':{'city':'reno','home':1,'p':{'reno':{'done':[1,0,0,0],'claims':[1,1,1,1,1,1,1,1]}}}}); pg.click('#bnav [data-t=trails]'); pg.wait_for_timeout(300)
     need(pg.locator('.trl .trow .tthumb').count()>=3,'trail stop rows show thumbnails')
     # phone audit #2 v01: Story of the day follows the Next stop's town and never repeats the Next stop
     pg=new({'then-now-v3':{'city':'reno','home':1,'p':{'reno':{'done':[1,1,1,1],'claims':[1,1,1,1,1,1,1,1]},'sparks':{'done':[1,0,0,0],'claims':[1,1,1,1,1,1,1,1]}}}}); pg.wait_for_timeout(300)
-    nx=pg.inner_text('[data-a=nextstop] .bs').lower(); ft=pg.inner_text('.feat h3').lower(); fm=pg.inner_text('.feat .mono').lower()
+    nx=pg.inner_text('[data-a=nextstop] .bs').lower(); ft=pg.inner_text('.today .srow strong').lower(); fm=pg.inner_text('.today .srow .rsub').lower()
     need('sparks' in nx and 'sparks' in fm and ft not in nx,'Story of the day is from the Next-stop town and is a different stop, got next=%s story=%s'%(nx,ft+' / '+fm))
     # phone audit #2 v04: a Home link always highlights Home in the bottom bar, even after visiting Towns
     pg=new({'then-now-v3':{'city':'reno','home':1,'p':{'reno':{'done':[1,0,0,0],'claims':[1,1,1,1,1,1,1,1]}}}}); pg.click('#bnav [data-t=towns]'); pg.wait_for_timeout(300)
@@ -367,8 +370,8 @@ with sync_playwright() as p:
     need(pg.get_attribute('[data-a=savestop]','aria-pressed')=='true','Save toggles to Saved')
     pg.click('[data-a=exit]'); pg.click('#bnav [data-t=home]'); pg.wait_for_timeout(200)
     need('saved stops: 1' in pg.inner_text('#main').lower(),'Home shows a saved-stops card')
-    need('(1)' in pg.inner_text('#bt-trip'),'My trip tab counts saved stops')
     pg.click('[data-a=gotrip]'); pg.wait_for_timeout(300)
+    need('(1)' in pg.inner_text('#bt-trip'),'My trip tab counts saved stops')
     need('minutes on site' in pg.inner_text('#bp-trip').lower(),'My trip shows total time on site for saved stops')
     need('train depot' in pg.inner_text('#bp-trip').lower(),'saved stop appears under My trip')
     pg.click('#bp-trip [data-a=neargo]'); pg.wait_for_timeout(250)
@@ -421,7 +424,7 @@ with sync_playwright() as p:
     pg.click('.bigbtn[data-a=nextstop]'); pg.wait_for_timeout(250)
     need(pg.inner_text('#cityName').lower()=='reno' and pg.locator('#bnav').is_hidden(),'Home Next stop opens the stop inside the town, not in Home state')
     # audit ra03: Explore from home only promises what it gives (a virtual stamp, 25 XP), before and after answering
-    pg=new(); pg.click('.town >> nth=0'); pg.click('[data-a=open] >> nth=0'); pg.click('[data-a=demo]'); pg.click('text=I am here') if pg.locator('text=I am here').count() else None
+    pg=new(); T(pg); pg.click('.town >> nth=0'); pg.click('[data-a=open] >> nth=0'); pg.click('[data-a=demo]'); pg.click('text=I am here') if pg.locator('text=I am here').count() else None
     pre=pg.inner_text('#main').lower()
     need('badge and 100 xp' not in pre and 'virtual stamp, worth 25 xp' in pre,'preview question promises a virtual stamp worth 25 XP, not a badge and 100 XP')
     for k in range(4):
@@ -485,7 +488,7 @@ with sync_playwright() as p:
     # audit rb01: town cards say roughly how far apart the stops are and whether to walk or drive, same estimate as the town page
     for w,h in ((390,844),(320,640)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
-        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.wait_for_timeout(200)
+        pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))"); pg.wait_for_timeout(200)
         n=pg.locator('#missions button.town .tsize').count()
         need(NT-3<=n<=NT,'rb01 (%dpx): most town cards show an outing line, got %d of %d'%(w,n,NT))
         sp=pg.locator('#missions button.town[data-c=sparks] .tsize'); need(sp.count()==1 and 'drive' in sp.inner_text().lower(),'rb01 (%dpx): Sparks card says to drive'%w)
@@ -493,13 +496,13 @@ with sync_playwright() as p:
         need(pg.locator('#missions button.town .tsize:has-text("drive")').count()>=1,'rb01 (%dpx): some town card says drive'%w)
         bad_t=pg.evaluate("""()=>[...document.querySelectorAll('#missions button.town:not(.soon)')].filter(t=>{const r=t.getBoundingClientRect(),i=t.querySelector('.tin').getBoundingClientRect(),h=t.querySelector('h3').getBoundingClientRect(),g=t.querySelector('.go').getBoundingClientRect();return r.width&&(h.top<g.bottom+3||i.bottom>r.bottom+1||h.top<r.top)}).map(t=>t.getAttribute('data-c'))""")
         need(not bad_t,'rb01 (%dpx): card text must stay inside the tile and clear of the Start pill, got %s'%(w,bad_t[:6]))
-    pg=new(); pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
+    pg=new(); pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))")
     pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(250)
     need('plan to drive' in pg.inner_text('.tourinfo').lower(),'rb01: town page still says plan to drive for Sparks')
     # audit rb02: a town's first screen leads with the next stop, does not list the four stops twice, and the XP label is readable over the photo
     for w,h in ((390,844),(375,667),(360,740)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
-        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(300)
+        pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(300)
         nr=pg.locator('.nextrow'); need(nr.count()==1 and 'victorian square' in nr.inner_text().lower() and 'start here' in nr.inner_text().lower(),'rb02 (%dx%d): first screen has a Start here row for the first stop'%(w,h))
         bb=pg.evaluate("(()=>{const r=document.querySelector('.nextrow').getBoundingClientRect(),n=document.querySelector('#bnav').getBoundingClientRect();return [r.top,r.bottom,n.top]})()")
         need(bb[1]<=bb[2]-4,'rb02 (%dx%d): the Start here row sits fully above the bottom bar, got %s'%(w,h,bb))
@@ -516,8 +519,8 @@ with sync_playwright() as p:
     def lum(c): return 0.2126*lin(c[0])+0.7152*lin(c[1])+0.0722*lin(c[2])
     pg=new(); pg.set_viewport_size({'width':390,'height':844})
     for k in ('knoxville','nashville','tucson','pittsburgh','columbus'):
-        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
-        if not pg.locator('#missions button.town[data-c=%s]'%k).count(): pg.click('#bnav [data-t=towns]'); pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)")
+        pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))")
+        if not pg.locator('#missions button.town[data-c=%s]'%k).count(): pg.click('#bnav [data-t=towns]'); pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))")
         pg.click('#missions button.town[data-c=%s]'%k); pg.wait_for_timeout(250)
         pg.evaluate("new Promise(r=>{const i=document.getElementById('heroImg');if(!i||i.complete)r();else{i.onload=i.onerror=r;setTimeout(r,2000)}})")
         pg.add_style_tag(content='#xpText{color:transparent!important}')
@@ -530,7 +533,7 @@ with sync_playwright() as p:
     # audit rb03: on a stop's first step the photo is a compact crop, the clue starts on the first screen and a cue points down to it
     for w,h in ((390,844),(375,667),(360,740)):
         pg=new(); pg.set_viewport_size({'width':w,'height':h})
-        pg.evaluate("document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true)"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(250)
+        pg.evaluate("(document.querySelector('#missions')||document.querySelector('#bnav [data-t=towns]').click(),document.querySelectorAll('#missions details.reg').forEach(d=>d.open=true))"); pg.click('#missions button.town[data-c=sparks]'); pg.wait_for_timeout(250)
         pg.click('.stop >> nth=0'); pg.wait_for_timeout(400)
         g=pg.evaluate("(()=>{const s=document.querySelector('.banner.b0 .scene.ph').getBoundingClientRect(),c=document.querySelector('.clue').getBoundingClientRect(),q=document.querySelector('.banner .cue').getBoundingClientRect(),b=document.querySelector('.banner').getBoundingClientRect();return {sh:s.height,sw:s.width,clue:c.top,cue:q.width>0&&q.top>=b.top&&q.bottom<=b.bottom+1,vh:innerHeight}})()")
         need(g['sh']<=g['vh']*0.3+1 and g['sw']/g['sh']>=1.7,'rb03 (%dx%d): Find it photo is a compact wide crop, got %s'%(w,h,g))
