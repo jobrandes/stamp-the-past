@@ -809,8 +809,8 @@ body:not(.instop)::after{content:"";position:fixed;left:0;right:0;bottom:0;heigh
 body.navhide::after{opacity:0}
 
 /* Passport page: menu button gets its own row so it never sits on the card */
-body.ispass .navwrap{position:static;justify-content:flex-end;padding:6px 0 0}
-body.ispass .menubtn{margin-top:0}
+body.ispass .navwrap,body.istowns .navwrap{position:static;justify-content:flex-end;padding:6px 0 0}
+body.ispass .menubtn,body.istowns .menubtn{margin-top:0}
 
 .btn.gold{background:#9a6a00;border-color:#9a6a00;color:#fff}.btn.gold:hover{filter:brightness(1.08)}
 .vchip.gold{background:#f6e3a8;color:#4a3300;border-color:#d9b44a}
