@@ -16,6 +16,7 @@ with sync_playwright() as p:
     for city in ('Reno','Virginia City'):
         pg.click('.city >> text='+city)
         out[city+':trail']=h(pg.inner_html('#main')+pg.inner_html('#hero'))
+        seen_celeb=0
         for i in range(4):
             pg.evaluate("(()=>{var e=document.getElementById('bpop');if(e)e.remove()})()")
             pg.locator(f'.stop >> nth={i}').evaluate("e=>e.scrollIntoView({block:'center'})")
@@ -34,10 +35,11 @@ with sync_playwright() as p:
                     if pg.locator('.fcard').count()==0: break
                     pg.locator('.fbtn').nth(k).click()
             out[f'{city}:{i}:fofdone']=h(pg.inner_html('#main'))
-            pg.wait_for_timeout(600)
-            if pg.locator('#celeb').count(): pg.click('text=Keep exploring')
+            # the town celebration opens 1.4 s after the last stamp: wait it out so it can never land on top of the exit button
+            pg.wait_for_timeout(1500)
+            if pg.locator('#celeb').count(): seen_celeb=1; pg.click('text=Keep exploring')
             pg.click('.stophead [data-a=exit]')
-        pg.wait_for_timeout(700); out[city+':celeb']=pg.locator('#celeb').count()
+        pg.wait_for_timeout(700); out[city+':celeb']=1 if (seen_celeb or pg.locator('#celeb').count()) else 0
         if pg.locator('#celeb').count(): pg.click('text=Keep exploring')
         for t in ('cards','rewards','trail'):
             pg.click('#tab-'+t); out[f'{city}:tab:{t}']=h(pg.inner_html('#main'))

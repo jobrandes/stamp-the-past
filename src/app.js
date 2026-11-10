@@ -2,12 +2,15 @@
   var DATA=__DATA__;
   var BASE_ORDER=DATA.order.slice(), CPH={}, COMON=false;
   var TSTATE={"reno":"NV","vc":"NV","sparks":"NV","carson":"NV","tahoeicons":"CA/NV","tahoe":"CA/NV","boston":"MA","dc":"DC","ny":"NY","chicago":"IL","sf":"CA","philly":"PA","la":"CA","seattle":"WA","nola":"LA","detroit":"MI","minneapolis":"MN","atlanta":"GA","memphis":"TN","savannah":"GA","denver":"CO","santafe":"NM","phoenix":"AZ","albuquerque":"NM","tucson":"AZ","pittsburgh":"PA","baltimore":"MD","cleveland":"OH","stlouis":"MO","cincinnati":"OH","indianapolis":"IN","buffalo":"NY","richmond":"VA","williamsburg":"VA","charleston":"SC","houston":"TX","nashville":"TN","providence":"RI","saltlake":"UT","sandiego":"CA","portland":"OR","milwaukee":"WI","columbus":"OH","gettysburg":"PA","louisville":"KY","newport":"RI","knoxville":"TN","portlandme":"ME","newhaven":"CT","burlington":"VT","coloradosprings":"CO","lasvegas":"NV","flagstaff":"AZ","elpaso":"TX","sanantonio":"TX","dayton":"OH","honolulu":"HI","skagway":"AK","sitka":"AK","sacramento":"CA","walnutcreek":"CA","nsierra":"CA"}, TFULL={"NV":"Nevada","CA":"California","MA":"Massachusetts","DC":"District of Columbia Washington","NY":"New York","IL":"Illinois","PA":"Pennsylvania","WA":"Washington","LA":"Louisiana","MI":"Michigan","MN":"Minnesota","GA":"Georgia","TN":"Tennessee","CO":"Colorado","NM":"New Mexico","AZ":"Arizona","MD":"Maryland","OH":"Ohio","MO":"Missouri","IN":"Indiana","VA":"Virginia","SC":"South Carolina","TX":"Texas","RI":"Rhode Island","UT":"Utah","OR":"Oregon","WI":"Wisconsin","KY":"Kentucky","ME":"Maine","CT":"Connecticut","VT":"Vermont","HI":"Hawaii","AK":"Alaska"};
-  /* Community test branch only: add contributed cities at runtime. Never on stampthepast.com, never in the native app. */
-  if(DATA.community && /^https?:$/.test(location.protocol) && location.hostname!=='stampthepast.com' && location.hostname!=='www.stampthepast.com'){
+  /* Community places (live on the website since Nov 10 2026): contributed places are added at runtime. Never in the native app. */
+  var CSUBS={};
+  if(DATA.community && /^https?:$/.test(location.protocol) && !(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform())){
     COMON=true;
     try{ var cx=new XMLHttpRequest(); cx.open('GET','/community/places.json',false); cx.send();
       if(cx.status===200){ var cj=JSON.parse(cx.responseText); CPH=cj.photos||{};
-        var HID={}; try{ var hx=new XMLHttpRequest(); hx.open('GET','/api/community/hidden',false); hx.send(); if(hx.status===200) (JSON.parse(hx.responseText).hidden||[]).forEach(function(i){ HID[i]=1; }); }catch(e){}
+        /* the reported-and-hidden list comes from this device's copy so the page never waits on the server; hidSync() refreshes it after load */
+        var HID={}; try{ var hc=JSON.parse(localStorage.getItem('stp-hid')||'[]'); if(Array.isArray(hc)) hc.forEach(function(i){ HID[i]=1; }); }catch(e){}
+        (cj.tours||[]).forEach(function(t){ (t.stops||[]).forEach(function(st){ if(st.sub) CSUBS[st.sub]=1; }); }); (cj.packs||[]).forEach(function(p){ ((p&&p.stops)||[]).forEach(function(st){ if(st.sub) CSUBS[st.sub]=1; }); });
         if(Object.keys(HID).length){ var subOf=function(st){ var k=((st.then&&st.then.ph)||(st.now&&st.now.ph)||st.ph||{}).k||''; return k.replace(/^cm_/,'').slice(0,8); };
           (cj.packs||[]).forEach(function(p){ if(p) p.stops=(p.stops||[]).filter(function(st){ return !HID[subOf(st)]; }); }); cj.packs=(cj.packs||[]).filter(function(p){ return p&&p.stops&&p.stops.length; });
           (cj.tours||[]).forEach(function(t){ t.stops=(t.stops||[]).filter(function(st){ return !HID[subOf(st)]; }); });
@@ -390,11 +393,60 @@
     if(L.length>1){
       h+='<div class="galstrip" role="group" aria-label="Photos of this place, '+L.length+' in all">'+L.map(function(m,i){ return '<button type="button" class="galth" data-a="galpick" data-i="'+i+'" aria-pressed="'+(i===0?'true':'false')+'" aria-label="Photo '+(i+1)+' of '+L.length+(m.label?': '+gEsc(m.label):'')+'"><img src="'+PHOTOS[m.k]+'" alt="" loading="lazy"></button>'; }).join('')+'</div>';
     }
-    return h+'<button type="button" class="link galbig" data-a="galfull">View larger</button></div>'; }
+    return h+'<div class="galact"><span class="likeslot">'+likeBtn(L[0])+'</span><button type="button" class="link galbig" data-a="galfull">View larger</button></div></div>'; }
+  /* ---------- likes on community photos (no account: one like per photo per device, only a count is stored) ---------- */
+  var LIKES={}, LIKED={}; try{ var lq=JSON.parse(localStorage.getItem('stp-liked')||'{}'); if(lq&&typeof lq==='object'&&!Array.isArray(lq)) LIKED=lq; }catch(e){}
+  function likeKey(m){ var x=/^cm_([a-f0-9]{8}_(?:t|n|x[1-5]))$/.exec(String((m&&m.k)||'')); return x?x[1]:''; }
+  function likeTxt(n){ return n+(n===1?' like':' likes'); }
+  function likeBtn(m){ var k=likeKey(m); if(!COMON||!k) return ''; var n=LIKES[k]||0, on=!!LIKED[k];
+    return '<button type="button" class="likebtn'+(on?' on':'')+'" data-a="like" data-k="'+k+'" aria-pressed="'+(on?'true':'false')+'" aria-label="'+(on?'Liked. Tap to take it back':'Like this photo')+' ('+likeTxt(n)+')"><span class="lh" aria-hidden="true">'+(on?'♥':'♡')+'</span><span class="ln">'+(n?likeTxt(n):'Like')+'</span></button>'; }
+  function likePaint(){ Array.prototype.forEach.call(document.querySelectorAll('.likebtn'),function(b){ var k=b.getAttribute('data-k'), n=LIKES[k]||0, on=!!LIKED[k];
+      b.classList.toggle('on',on); b.setAttribute('aria-pressed',on?'true':'false'); b.setAttribute('aria-label',(on?'Liked. Tap to take it back':'Like this photo')+' ('+likeTxt(n)+')');
+      b.querySelector('.lh').textContent=on?'♥':'♡'; b.querySelector('.ln').textContent=n?likeTxt(n):'Like'; });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-lk]'),function(e){ var n=placeLikes(e.getAttribute('data-lk')); e.textContent=n?' · ♥ '+likeTxt(n):''; }); }
+  function placeLikes(sub){ var n=0; Object.keys(LIKES).forEach(function(k){ if(k.slice(0,8)===sub) n+=LIKES[k]||0; }); return n; }
+  function likeTap(k){ if(!/^[a-f0-9]{8}_(t|n|x[1-5])$/.test(k||'')) return; var on=!LIKED[k]; if(on) LIKED[k]=1; else delete LIKED[k];
+    LIKES[k]=Math.max(0,(LIKES[k]||0)+(on?1:-1)); try{ localStorage.setItem('stp-liked',JSON.stringify(LIKED)); }catch(e){}
+    likePaint(); if(on) ping('photo-like');
+    try{ fetch('/api/community/like/'+k,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({on:on})}).then(function(r){ return r.ok?r.json():null; }).then(function(j){ if(j&&typeof j.n==='number'){ LIKES[k]=Math.max(j.n,LIKED[k]?1:0); likePaint(); } }).catch(function(){}); }catch(e){} }
+  function likesLoad(){ if(!COMON||!STORY.some(function(sp){ return sp.community; })) return;
+    try{ fetch('/api/community/likes').then(function(r){ return r.ok?r.json():null; }).then(function(j){ if(!j||!j.likes) return; LIKES=j.likes; Object.keys(LIKED).forEach(function(k){ if(!(LIKES[k]>0)) LIKES[k]=1; }); likePaint(); }).catch(function(){}); }catch(e){} }
+  /* a place hidden after reports: refresh this device's list after load, and reload once if a place on screen has just been hidden */
+  function hidSync(){ if(!COMON||!Object.keys(CSUBS).length) return;
+    try{ fetch('/api/community/hidden').then(function(r){ return r.ok?r.json():null; }).then(function(j){ if(!j||!Array.isArray(j.hidden)) return; var old=[]; try{ old=JSON.parse(localStorage.getItem('stp-hid')||'[]'); }catch(e){} if(!Array.isArray(old)) old=[];
+        var nw=j.hidden.filter(function(i){ return /^[a-f0-9]{8}$/.test(i); }).slice(0,200), fresh=nw.filter(function(i){ return old.indexOf(i)<0&&CSUBS[i]; }), back=old.filter(function(i){ return nw.indexOf(i)<0; });
+        try{ localStorage.setItem('stp-hid',JSON.stringify(nw)); }catch(e){ return; }
+        if(fresh.length||back.length){ var once=''; try{ once=sessionStorage.getItem('stp-hid-rl')||''; }catch(e){} var sig=nw.join(','); if(once!==sig){ try{ sessionStorage.setItem('stp-hid-rl',sig); }catch(e){ return; } location.reload(); } }
+      }).catch(function(){}); }catch(e){} }
+  /* ---------- contributor kudos: what this device's suggestions have earned (places added, photos published, likes) ---------- */
+  var FOUND={}; STORY.forEach(function(sp){ if(sp.community&&sp.founder&&sp.sub) FOUND[sp.sub]=1; });
+  function ctGet(){ if(!COMON) return {}; try{ var o=JSON.parse(localStorage.getItem('stp-contrib')||'{}'); return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}; }catch(e){ return {}; } }
+  function ctSync(){ if(!COMON) return; var a=sugList(); if(!a.length) return; var t={a:0,p:0,l:0,f:0,w:0,ids:[]}, left=a.length, bad=false;
+    function fin(){ if(--left>0||bad) return; var old=ctGet(); t.nw=(typeof old.l==='number'&&t.l>old.l)?t.l-old.l:0; t.na=(typeof old.a==='number'&&t.a>old.a)?t.a-old.a:0;
+      try{ localStorage.setItem('stp-contrib',JSON.stringify(t)); }catch(e){ return; }
+      var el=document.getElementById('ctCard'); if(el) el.outerHTML=contribCardHtml()||'<div id="ctCard" hidden></div>';
+      if(t.na>0) toast(t.na===1?'Your place was added to the app. Thank you!':t.na+' of your places were added to the app. Thank you!');
+      awardCheck(); }
+    a.forEach(function(x){ fetch('/api/community/mine/'+x.t).then(function(r){ if(r.status===404) return {gone:1}; return r.ok?r.json():null; }).then(function(j){ if(!j){ bad=true; return; } if(j.gone||j.correction) return;
+        if(j.status==='added'){ if(!j.target){ t.a++; t.ids.push(j.id); if(FOUND[j.id]) t.f++; } (j.photos||[]).forEach(function(q){ if(q.status==='added'&&q.own) t.p++; }); t.l+=(+j.likes||0); }
+        else if(j.status==='received'||j.status==='waiting') t.w++; }).catch(function(){ bad=true; }).then(fin); }); }
+  function ctStory(id){ for(var i=0;i<STORY.length;i++) if(STORY[i].sub===id) return STORY[i]; return null; }
+  function contribCardHtml(){ if(!COMON) return ''; var c=ctGet(), a=c.a||0, p=c.p||0, l=c.l||0, w=c.w||0; if(!a&&!p&&!w) return sugList().length?'<div id="ctCard" hidden></div>':'';
+    var bits=[]; if(a) bits.push(a+(a===1?' place':' places')+' in the app'); if(p) bits.push(p+(p===1?' photo':' photos')+' of yours published'); if(a||p) bits.push('♥ '+likeTxt(l)); if(w) bits.push(w+' in review');
+    var sp=(c.ids&&c.ids.length)?ctStory(c.ids[0]):null;
+    return '<section class="ctcard" id="ctCard" aria-label="Your contributions"><p class="mono">Your contributions</p><p class="ct-l">'+bits.join(' · ')+'</p>'+(c.nw>0?'<p class="ct-new">+'+c.nw+' new '+(c.nw===1?'like':'likes')+' since your last visit</p>':'')+(c.f?'<p class="ct-f">★ Town Founder: you put '+(c.f===1?'a town':c.f+' towns')+' on the map.</p>':'')
+      +'<div class="ct-b">'+(sp?'<button class="btn ghost" data-a="comopen" data-s="'+nbKey(sp)+'">See your place</button>':'')+'<button class="btn ghost" data-a="suggest">Add another place</button></div></section>'; }
+  /* Home: the newest community place, with who suggested it and its likes. Gives visitors a reason to add their own town. */
+  function comNewest(){ var best=null; STORY.forEach(function(sp){ if(sp.community&&sp.ph&&PHOTOS[sp.ph.k]&&(!best||String(sp.addedOn||'')>String(best.addedOn||''))) best=sp; }); return best; }
+  function comTown(sp){ var n=''; TOURS.forEach(function(t){ if(t.id===sp.tour||t.id===sp.town) n=t.name+(t.state?', '+t.state:''); }); return n; }
+  function comCardHtml(){ if(!COMON) return ''; var sp=comNewest();
+    if(!sp) return '<section class="comcard" aria-label="Add your town"><p class="mono">From the community</p><p class="cc-t">Know a place with a past? Add it, with your photo, and get the credit.</p><button class="btn ghost" data-a="suggest">Add a place</button></section>';
+    var by=sp.by?gEsc(String(sp.by).slice(0,30)):'';
+    return '<section class="comcard" aria-label="From the community"><p class="mono">From the community</p><button class="cc-row" data-a="comopen" data-s="'+nbKey(sp)+'"><img src="'+PHOTOS[sp.ph.k]+'" alt="" loading="lazy" decoding="async"><span class="cc-in"><strong>'+gEsc(sp.name)+'</strong><span class="cc-sub">'+gEsc(comTown(sp))+(by?' · added by '+by:'')+'<span data-lk="'+sp.sub+'">'+(placeLikes(sp.sub)?' · ♥ '+likeTxt(placeLikes(sp.sub)):'')+'</span></span></span><span class="go" aria-hidden="true">›</span></button><p class="cc-t">Your town has history too. Add a place and your photo, and your name goes on it.</p><button class="btn ghost" data-a="suggest">Add a place</button></section>'; }
   function galCur(g){ var b=g.querySelector('.galth[aria-pressed=true]'); return b?+b.getAttribute('data-i'):0; }
   function galShow(g,i){ var L=GAL[g.getAttribute('data-g')], sp=nbStory(g.getAttribute('data-g')); if(!L||!L[i]||!sp) return;
     g.querySelector('.galmain').innerHTML=galFig(sp,L[i]);
-    g.querySelectorAll('.galth').forEach(function(x,j){ x.setAttribute('aria-pressed',j===i?'true':'false'); }); }
+    g.querySelectorAll('.galth').forEach(function(x,j){ x.setAttribute('aria-pressed',j===i?'true':'false'); }); var ls=g.querySelector('.likeslot'); if(ls) ls.innerHTML=likeBtn(L[i]); }
   function galClose(){ var o=document.getElementById('galbox'); if(o){ var f=o._from; o.remove(); if(f&&f.focus) f.focus(); } }
   function galOpen(g,btn){ galClose(); var L=GAL[g.getAttribute('data-g')], sp=nbStory(g.getAttribute('data-g')); if(!L||!sp) return; var i=galCur(g);
     var o=document.createElement('div'); o.id='galbox'; o.className='galbox'; o.setAttribute('role','dialog'); o.setAttribute('aria-modal','true'); o.setAttribute('aria-label','Photo viewer'); o._from=btn;
@@ -648,7 +700,7 @@
     var h='<section class="home-hero'+(got>0?' ret':'')+'"><div><div class="wordmark" role="img" aria-label="Stamp the Past">Stamp the Past</div><h1>Go there.<br>Prove it.<br>Stamp it.</h1><p class="sub">A mission game for real places. Travel to the spot, answer what is in front of you, sort fact from tall tale, and watch the past fade into the present.</p><button class="btn heroGo" data-a="gomissions">'+(got>0?'Choose a mission':'Pick a mission')+'</button></div><div class="hstamps" aria-label="Four passport stamps, each a real photo of a landmark">'+stamps+'</div></section>';
     var how=got>0?'':'<section class="howto" aria-label="How it works"><h2>How it works</h2><ol><li><b>Go there.</b> Pick a mission and walk or drive to a real landmark.</li><li><b>Prove it.</b> Tap "I am here", read the story, answer the question in front of you.</li><li><b>Stamp it.</b> Each stamp earns XP, points that raise your level and unlock badges.</li></ol><p class="hint">Not near a mission? Open any stop and tap "Explore from home" to read it and fade the photos. Stamps are saved for real visits.</p></section>';
     var nearH='<div id="nearBox" class="nearbox">'+nearHtml()+'</div>'+(got===0?startTownHtml():nbCardHtml());
-    h=(got>0?statusHtml(got,total,res0,hk)+bkNudgeHtml()+nearH+featuredHtml()+ringsHtml()+dailyCardHtml()+h:nearH+h+how+nbCardHtml()+ringsHtml()+dailyCardHtml());
+    h=(got>0?statusHtml(got,total,res0,hk)+bkNudgeHtml()+contribCardHtml()+nearH+featuredHtml()+ringsHtml()+comCardHtml()+dailyCardHtml()+h:nearH+contribCardHtml()+h+how+nbCardHtml()+comCardHtml()+ringsHtml()+dailyCardHtml());
     var vcount=0; ORDER.forEach(function(k){ CITIES[k].stops.forEach(function(st){ if(st.verified&&st.verified.on) vcount++; }); });
     var res=null; [cityId].concat(ORDER).forEach(function(k){ if(!res&&CITIES[k]){ var d=sum(ALL[k].done); if(d>0&&d<CITIES[k].stops.length) res=k; } });
         var passTop=got>0?'<section class="passport" id="passport"><button class="rcard" data-a="mypass"><span><strong>Your passport</strong><span class="rsub">'+got+' of '+total+' stamps earned'+(totalPts()?' · '+totalPts()+' challenge points':'')+'</span></span><span class="go">Open ›</span></button></section>':'';
@@ -772,7 +824,7 @@
   function sugList(){ try{ return JSON.parse(localStorage.getItem('stp-sugg')||'[]').filter(function(x){ return x&&/^[a-f0-9]{9,}$/.test(x.t); }).slice(0,10); }catch(x){ return []; } }
   function mySugHtml(){ var a=sugList(); if(!a.length) return ''; var e=function(t){ return String(t==null?'':t).replace(/[<>&"]/g,''); };
     return '<details class="mdet mhelp" id="mysug"><summary>My suggestions ('+a.length+')</summary><ul class="mysug">'+a.map(function(x){ return '<li><a class="mitem" href="/contribute/?status='+x.t+'"><span><strong>'+e(x.p)+'</strong><span class="msub">'+e(x.c)+(x.c?' · ':'')+'<span class="sugst" data-t="'+x.t+'">Checking…</span></span></span><span class="go" aria-hidden="true">›</span></a></li>'; }).join('')+'</ul><p class="msub" style="margin:0 12px 8px">Saved on this device only. Tap one to see its status or add a photo.</p></details>'; }
-  function mySugLoad(){ var LB={received:'Received',added:'Added to the app',waiting:'Waiting for a photo',declined:'Not added'}; Array.prototype.forEach.call(document.querySelectorAll('#menu .sugst'),function(sp){ fetch('/api/community/mine/'+sp.getAttribute('data-t')).then(function(r){ return r.ok?r.json():null; }).then(function(j){ sp.textContent=j?(LB[j.status]||j.status):'Status unavailable'; }).catch(function(){ sp.textContent='Status unavailable'; }); }); }
+  function mySugLoad(){ var LB={received:'Received',added:'Added to the app',waiting:'Waiting for a photo',declined:'Not added'}; Array.prototype.forEach.call(document.querySelectorAll('#menu .sugst'),function(sp){ fetch('/api/community/mine/'+sp.getAttribute('data-t')).then(function(r){ return r.ok?r.json():null; }).then(function(j){ sp.textContent=j?((LB[j.status]||j.status)+(j.status==='added'&&j.likes?' · ♥ '+likeTxt(j.likes):'')):'Status unavailable'; }).catch(function(){ sp.textContent='Status unavailable'; }); }); }
   function openMenu(){
     closeMenu(); menuFrom=document.activeElement;
     var d=document.createElement('div'); d.id='menu'; d.className='menu'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-labelledby','menuT');
@@ -806,7 +858,7 @@
   var COMREG='Community-added';
   function sugGo(k){ var u='/contribute/'; if(k&&CITIES[k]){ var c=CITIES[k], st=(c.state||(TSTATE[k]||'').split('/')[0]||''); u+='?city='+encodeURIComponent(c.name)+(st?'&state='+encodeURIComponent(st):''); } location.href=u; }
   function isCom(k){ return !!(CITIES[k]&&CITIES[k].community); }
-  function comBadge(st){ var by=st&&st.by?String(st.by).replace(/[<>&"]/g,'').slice(0,30):''; return '<div class="combadge"><b>Community-added</b><span>'+(by?'Suggested by <strong>'+by+'</strong> and researched':'Suggested by a contributor and researched')+' from sources. Not checked on site, and not reviewed by a historian.</span></div>'; }
+  function comBadge(st){ var by=st&&st.by?String(st.by).replace(/[<>&"]/g,'').slice(0,30):''; var fd=(st&&st.founder&&comTown(st))?'<span class="cfound">★ First community place in '+gEsc(comTown(st))+(by?'. '+by+' put it on the map.':'')+'</span>':''; return '<div class="combadge"><b>Community-added</b>'+fd+'<span>'+(by?'Suggested by <strong>'+by+'</strong> and researched':'Suggested by a contributor and researched')+' from sources. Not checked on site, and not reviewed by a historian.</span></div>'; }
   function vnote(st){
     var v=st.verified;
     if(st.community) return comBadge(st)+(v&&v.on?'<div class="vbadge ok"><b>Verified on site</b><span>by '+v.by+(vdate(v.on)?' \u00b7 '+vdate(v.on):'')+'</span></div>':'');
@@ -1097,6 +1149,7 @@
     });
     var cnt={}, mx=0; logGet().forEach(function(d){ cnt[d]=(cnt[d]||0)+1; if(cnt[d]>mx) mx=cnt[d]; }); s.day=mx; s.wk=streakWeeks();
     s.nst=Object.keys(s.st).length; s.nreg=Object.keys(s.reg).length;
+    var ct=ctGet(); s.cadd=ct.a||0; s.cph=ct.p||0; s.clk=ct.l||0; s.cfound=ct.f||0; s.xp+=s.cadd*100; /* a place you suggested that made it into the app: 100 XP */
     return s;
   }
   function trailN(re){ return trailStops(re).filter(function(x){ return x.done; }).length; }
@@ -1143,6 +1196,14 @@
     {id:'tr3',n:'Steeple Chaser',d:'Stamp 5 churches, cathedrals or missions.',t:'r',g:'✚',f:function(){ return [trailN(/church(?!ill| street)|cathedral|temple|mission|basilica|meeting ?house/i),5]; }},
     {id:'tr4',n:'Bridge Troll',d:'Stamp 5 bridges, towers or monuments.',t:'r',g:'∩',f:function(){ return [trailN(/bridge|\b(?!terminal\b)\w+ tower|monument|needle|gate\b/i),5]; }}
   ];
+  /* contributor badges: only where people can contribute (the website, not the native app) */
+  if(COMON) BADGES.push(
+    {id:'ca1',n:'Local Historian',d:'Suggest a place that gets added to the app. Your town thanks you.',t:'c',g:'+',f:function(s){ return [s.cadd,1]; }},
+    {id:'ca5',n:'Town Crier',d:'Get 5 places you suggested added to the app.',t:'r',g:'5',f:function(s){ return [s.cadd,5]; }},
+    {id:'cf',n:'Town Founder',d:'Be the first to put a town on the map.',t:'r',g:'★',f:function(s){ return [s.cfound,1]; }},
+    {id:'cp',n:'Photo Credit',d:'Get a photo you took published in the app, with your credit on it.',t:'c',g:'◉',f:function(s){ return [s.cph,1]; }},
+    {id:'cl10',n:'Crowd Favorite',d:'Collect 10 likes on your places and photos.',t:'r',g:'♥',f:function(s){ return [s.clk,10]; }},
+    {id:'cl50',n:'Hall of Frame',d:'Collect 50 likes. People really like your angle.',t:'l',g:'♥',f:function(s){ return [s.clk,50]; }});
   var TIERN={c:'Common',r:'Rare',l:'Legendary'};
   function bdGet(){ try{ var o=JSON.parse(localStorage.getItem('stp-badges')||'{}'); return (o&&typeof o==='object'&&!Array.isArray(o))?o:{}; }catch(e){ return {}; } }
   function bdAll(){
@@ -1173,7 +1234,9 @@
     mountain:{a:'<path d="M1 36L14 12l7 11 5-7 13 20z"/>',b:'<path d="M14 12l-4 7 4-2 3 3zM26 16l-3 5 3-1.500 2.500 2z" fill="@D" opacity=".35"/>'},
     wave:{a:'<path d="M2 14q4-5 8 0t8 0 8 0 8 0M2 22q4-5 8 0t8 0 8 0 8 0M2 30q4-5 8 0t8 0 8 0 8 0" stroke="#fff" stroke-width="3.400" fill="none" stroke-linecap="round"/>',b:''}
   };
-  var BDART={first:['stamp'],s10:['stamp','10'],s25:['stamp','25'],s50:['stamp','50'],s100:['stamp','100'],s200:['stamp','200'],s400:['stamp','400'],t1:['star'],t5:['flag','5'],t15:['flag','15'],st3:['map','3'],st10:['map','10'],st25:['map','25'],coast:['compass'],reg5:['compass','5'],far:['sun'],nv:['mountain','NV'],rush:['nugget'],gem5:['gem','5'],gem20:['gem','20'],c10:['check','10'],c50:['check','50'],c150:['check','150'],q1:['quiz'],q4:['trophy'],q5:['trophy','5'],v1:['pin'],v10:['pin','10'],v40:['pin','40'],w2:['flame','2w'],w4:['flame','4w'],w12:['flame','12w'],d3:['bolt','3'],d5:['bolt','5'],d8:['bolt','8'],tr1:['train'],tr2:['dome'],tr3:['church'],tr4:['bridge']};
+  MICON.heart={a:'<path d="M20 36C8 27 2 20.5 2 13.2 2 7.6 6.3 3.5 11.6 3.5c3.300 0 6.300 1.700 8.400 4.500 2.100-2.800 5.100-4.500 8.400-4.500C33.700 3.500 38 7.600 38 13.200 38 20.500 32 27 20 36z"/>',b:''};
+  MICON.camera={a:'<path d="M13 6h14l3 5h5a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3V14a3 3 0 0 1 3-3h5z"/>',b:'<circle cx="20" cy="22" r="7.5" fill="@D"/><circle cx="20" cy="22" r="3.4" fill="#fff"/>'};
+  var BDART={ca1:['flag'],ca5:['flag','5'],cf:['dome'],cp:['camera'],cl10:['heart','10'],cl50:['heart','50'],first:['stamp'],s10:['stamp','10'],s25:['stamp','25'],s50:['stamp','50'],s100:['stamp','100'],s200:['stamp','200'],s400:['stamp','400'],t1:['star'],t5:['flag','5'],t15:['flag','15'],st3:['map','3'],st10:['map','10'],st25:['map','25'],coast:['compass'],reg5:['compass','5'],far:['sun'],nv:['mountain','NV'],rush:['nugget'],gem5:['gem','5'],gem20:['gem','20'],c10:['check','10'],c50:['check','50'],c150:['check','150'],q1:['quiz'],q4:['trophy'],q5:['trophy','5'],v1:['pin'],v10:['pin','10'],v40:['pin','40'],w2:['flame','2w'],w4:['flame','4w'],w12:['flame','12w'],d3:['bolt','3'],d5:['bolt','5'],d8:['bolt','8'],tr1:['train'],tr2:['dome'],tr3:['church'],tr4:['bridge']};
   function medal(b,on,sz){
     var id='m'+(++MEDN), art=BDART[b.id]||['star'], ic=MICON[art[0]]||MICON.star, lb=art[1]||'', t=b.t;
     var P={c:{r0:'#8fdcf0',r1:'#1c6786',d0:'#59bfe0',d1:'#145a78',rb:'#1c6786',rb2:'#2f8fb3',dk:'#0f3f56'},r:{r0:'#e2c8ff',r1:'#51299a',d0:'#a678e6',d1:'#42207f',rb:'#42207f',rb2:'#7a4cc4',dk:'#2e1560'},l:{r0:'#fff6bf',r1:'#a8730a',d0:'#ffdc63',d1:'#b97a06',rb:'#a82a18',rb2:'#e0503a',dk:'#6b4204'}}[t];
@@ -1500,6 +1563,8 @@
     if(a==='menuclose'){ closeMenu(); return; }
     if(a==='daily'){ location.href='/daily/'; return; }
     if(a==='suggest'){ sugGo(b.getAttribute('data-c')); return; }
+    if(a==='like'){ likeTap(b.getAttribute('data-k')); return; }
+    if(a==='comopen'){ var cs=nbStory(b.getAttribute('data-s')); if(cs){ leave(); atHome=true; onPass=false; onNear=true; nv={mode:'ask',tour:null,sid:nbKey(cs),msg:''}; confirmReset=false; applyCity(); render(true); window.scrollTo(0,0); } return; }
     if(a==='theme'){ var tv=b.getAttribute('data-t'); try{ if(tv==='system') localStorage.removeItem('stp-theme'); else localStorage.setItem('stp-theme',tv); }catch(x){} themeApply(tv); b.parentNode.querySelectorAll('.seg').forEach(function(x){ var on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on?'true':'false'); }); return; }
     if(document.getElementById('menu')&&['backup','share','replaytour','report'].indexOf(a)>-1) closeMenu();
     if(a==='home'){ goHome(); return; }
@@ -1670,6 +1735,7 @@
   if(deepExp){ /* link like /play#explore-savannah opens that town's Explore history list directly */
     atHome=true; onPass=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:deepExp}; confirmReset=false; applyCity();
   }
+  try{ likesLoad(); hidSync(); ctSync(); }catch(e){}
   render(); if(deepMs){ try{ openStop(deepMs.i,0); }catch(e){} } if(!deepExp&&!deepSt&&!deepMs) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
   if(NG){ try{ NG.addListener('stopTap',function(){ bgOpenPending(); }); }catch(e){} }
   if(NG&&!BGALERTS){ try{ NG.disable(); }catch(e){} } /* clear any region monitoring an older build registered */

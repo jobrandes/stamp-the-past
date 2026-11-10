@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Community places (test branch): build town packs from src/community/places/*.json and check them.
+"""Community places: build town packs from src/community/places/*.json and check them.
    python3 tools/community.py check   -> validate every place file"""
 import json,os,re,sys,glob,math
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/'
@@ -59,6 +59,9 @@ def build(R=R,places_dir=None,declined_file=None,stories_dir=None):
         if ph: photos[ph['k']]='/api/community/photo/'+ph['k'][3:]
         for m in sp.get('more') or []:
             if m.get('k'): photos[m['k']]='/api/community/photo/'+m['k'][3:]
+    # Town Founder: the first place added in each town (earliest date, then file order) carries founder=True (shown as kudos in the app).
+    for t in tours.values():
+        if t['stops']: min(t['stops'],key=lambda sp:(sp.get('addedOn') or '9999',sp.get('sub',''))) ['founder']=True
     mf=R+'src/community/merged.json'  # add-photo submissions the agent has merged into an existing place's `more`
     merged=json.load(open(mf)) if os.path.exists(mf) else []
     added=sorted({p['sub'] for _,p in load_places(R,places_dir)}|{p['sub'] for _,p in load_stories(R,stories_dir)}|set(merged))

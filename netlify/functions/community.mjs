@@ -1,5 +1,6 @@
-// Community-place test backend. Works ONLY on non-production deploys (branch deploys / previews / local dev).
-// Production answers 404, so merging this file into main cannot expose anything.
+// Community-place backend (live on stampthepast.com since Nov 10 2026, Jo-Anne's decision).
+// Production shares the blob store the test branch used ("community-branch-deploy"), so the places, photos and status links
+// collected during the test carry over. Deploy previews and local dev keep their own stores.
 import { getStore } from '@netlify/blobs';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import sharp from 'sharp';
@@ -8,7 +9,7 @@ import { validate, validateText, parseSourceLink, readCommons, readLoc, isImageB
 
 const json = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
 const sha = (t) => createHash('sha256').update(t).digest('hex');
-const UA = { 'user-agent': 'StampThePastTest/1.0 (https://stampthepast.com; community test)' };
+const UA = { 'user-agent': 'StampThePast/1.0 (https://stampthepast.com; community places)' };
 
 // Decode and re-encode every photo on the server: rejects broken or oversized images and drops all metadata (EXIF, GPS, comments).
 export async function cleanImage(buf) {
@@ -51,8 +52,7 @@ async function locPhoto(link, fetchFn) {
 const handle = (opts) => async (req, context) => {
   const getStoreFn = opts.getStoreFn || getStore, fetchFn = opts.fetchFn || fetch;
   const ctx = context.deploy?.context || 'dev';
-  if (ctx === 'production') return json({ error: 'not found' }, 404);
-  const store = getStoreFn({ name: 'community-' + ctx.replace(/[^a-z-]/g, ''), consistency: 'strong' });
+  const store = getStoreFn({ name: 'community-' + (ctx === 'production' ? 'branch-deploy' : ctx.replace(/[^a-z-]/g, '')), consistency: 'strong' });
   const url = new URL(req.url);
   const parts = url.pathname.replace(/^\/api\/community\/?/, '').split('/').filter(Boolean);
   const adminKey = (opts.adminKey ?? globalThis.Netlify?.env?.get?.('COMMUNITY_ADMIN_KEY') ?? '');
@@ -178,11 +178,36 @@ const handle = (opts) => async (req, context) => {
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) dp = (await r.json()).declinedPhotos || []; } catch {}
     const dec = (await store.get('dec/' + id, { type: 'json' })) || { declined: [] }; dp = dp.concat((dec.declined || []).map(k => id + '_' + k));
     const ps = (n, present) => !present ? null : dp.includes(id + '_' + n) ? 'not added' : status === 'added' ? (dp.includes(id + '_' + n) ? 'not added' : 'added') : (status === 'declined' ? 'not added' : 'waiting for review');
-    const photos = [];
-    if (sub.then) photos.push({ label: 'Old photo', status: ps('t', true) });
-    if (sub.now) photos.push({ label: 'Recent photo', status: ps('n', true) });
-    (sub.extra || []).forEach(x => photos.push({ label: ({ old: 'Old photo', today: 'Recent photo', detail: 'Detail photo', unsure: 'Photo' })[x.type] + (x.caption ? ': ' + x.caption : ''), status: ps(x.n, true) }));
-    return json({ id, status, note, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now }, photos, target: sub.target || '', correction: !!sub.correction });
+    const lk = ((await store.get('like/' + id, { type: 'json' })) || {}).n || {};
+    const photos = []; let likes = 0;
+    const pp = (n, label, o) => { const s2 = ps(n, true), l = s2 === 'added' ? (lk[n] || 0) : 0; likes += l; photos.push({ n, label, status: s2, own: !!(o && o.kind === 'own'), likes: l }); };
+    if (sub.then) pp('t', 'Old photo', sub.then);
+    if (sub.now) pp('n', 'Recent photo', sub.now);
+    (sub.extra || []).forEach(x => pp(x.n, ({ old: 'Old photo', today: 'Recent photo', detail: 'Detail photo', unsure: 'Photo' })[x.type] + (x.caption ? ': ' + x.caption : ''), x));
+    return json({ id, status, likes, note, oneLiner: sub.oneLiner, nickname: sub.nickname || '', address: sub.address || '', place: sub.place, city: sub.city, state: sub.state, created: sub.created, has: { then: !!sub.then, now: !!sub.now }, photos, target: sub.target || '', correction: !!sub.correction });
+  }
+
+  // Likes: anyone may like a PUBLISHED community photo. No accounts: only a count per photo is stored (no liker id, no IP).
+  // The app lets one device like a photo once (and take it back); the function's rate limit bounds abuse.
+  if (req.method === 'GET' && parts[0] === 'likes') {
+    const { blobs } = await store.list({ prefix: 'like/' });
+    const out = {};
+    for (const b of blobs.slice(0, 1000)) { const r = await store.get(b.key, { type: 'json' }); const id = b.key.slice(5); for (const [k, n] of Object.entries((r && r.n) || {})) if (n > 0) out[id + '_' + k] = n; }
+    return new Response(JSON.stringify({ likes: out }), { headers: { 'content-type': 'application/json', 'cache-control': 'public, max-age=30' } });
+  }
+  if (req.method === 'POST' && parts[0] === 'like' && parts[1]) {
+    const m = /^([a-f0-9]{8})_(t|n|x[1-5])$/.exec(parts[1]);
+    if (!m) return json({ error: 'bad photo id' }, 400);
+    let st = {};
+    try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}
+    if (!(st.photos || []).includes(parts[1])) return json({ error: 'not a published photo' }, 404);
+    let body = {}; try { body = await req.json(); } catch {}
+    const cur = (await store.get('like/' + m[1], { type: 'json' })) || { n: {} };
+    cur.n = cur.n || {};
+    cur.n[m[2]] = Math.max(0, Math.min(1000000, (cur.n[m[2]] || 0) + (body && body.on === false ? -1 : 1)));
+    cur.last = new Date().toISOString();
+    await store.setJSON('like/' + m[1], cur);
+    return json({ ok: true, n: cur.n[m[2]] });
   }
 
   // Reports: anyone may report a published place. Three reports hide it in the app until a person looks (hiding is reversible, nothing is deleted).
@@ -244,7 +269,7 @@ const handle = (opts) => async (req, context) => {
 
   if (isAdmin() && req.method === 'POST' && parts[0] === 'delete' && parts[1]) {
     const id = parts[1].replace(/[^a-f0-9]/g, '');
-    for (const k of [`dec/${id}`, `own/${id}`, `sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`, `photo/${id}_x4`, `photo/${id}_x5`]) await store.delete(k);
+    for (const k of [`like/${id}`, `dec/${id}`, `own/${id}`, `sub/${id}`, `photo/${id}_t`, `photo/${id}_n`, `photo/${id}_x1`, `photo/${id}_x2`, `photo/${id}_x3`, `photo/${id}_x4`, `photo/${id}_x5`]) await store.delete(k);
     return json({ ok: true, deleted: id });
   }
 
@@ -271,7 +296,7 @@ const handle = (opts) => async (req, context) => {
     if (!body || typeof body !== 'object' || Array.isArray(body)) return json({ errors: ['Could not read the form.'] }, 400);
     if (body.hp) return json({ ok: true, id: 'ignored', status: 'ignored' });
     const { blobs } = await store.list({ prefix: 'sub/' });
-    if (blobs.length >= 500) return json({ errors: ['The test inbox is full for now.'] }, 429);
+    if (blobs.length >= 500) return json({ errors: ['The inbox is full for now. Please try again in a few days.'] }, 429);
     // Queue limit: only places still waiting for a decision count (not added or declined ones).
     let st = {};
     try { const r = await fetchFn(new URL('/community/status.json', url.origin).href); if (r.ok) st = await r.json(); } catch {}

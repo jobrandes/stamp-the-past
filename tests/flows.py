@@ -269,7 +269,7 @@ with sync_playwright() as p:
     need(pg.evaluate("JSON.parse(localStorage.getItem('stp-badges')||'{}').first")!=None,'earned badge is saved')
     need(pg.locator('#celeb').count()==0 and pg.locator('#bpop [data-a=trophy]').count()==1,'badge popup does not block the screen')
     pg.click('#bpop [data-a=trophy]'); pg.wait_for_timeout(300)
-    need(pg.locator('#trophy').count()==1 and 'of 40 badges' in pg.inner_text('#trophy').lower(),'Trophy Case opens from the badge popup and counts badges')
+    need(pg.locator('#trophy').count()==1 and 'of 46 badges' in pg.inner_text('#trophy').lower(),'Trophy Case opens from the badge popup and counts badges')
     need('level 2' in pg.inner_text('.xlv').lower() or 'level\n2' in pg.inner_text('.xlv').lower(),'150 XP puts a new explorer at level 2')
     # ra04: the badge note must not sit on the story screen's feedback, and answering a puzzle clears it
     pg=new({'then-now-v3':{'city':'reno','home':0,'p':{}}})

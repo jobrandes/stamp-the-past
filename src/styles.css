@@ -1072,3 +1072,24 @@ body.instop .bsnack,body.inboss .bsnack{animation-name:bsdn}
 .galx,.galnav button{min-height:44px;min-width:44px;padding:8px 16px;border-radius:22px;border:1px solid #fff8;background:#222;color:#fff;font:inherit;cursor:pointer}
 .galx{position:absolute;top:max(12px,env(safe-area-inset-top));right:12px}
 .galnav{display:flex;gap:12px;margin-top:12px}
+/* ---------- community: likes, contributor kudos, Home cards (Nov 10 2026) ---------- */
+.galact{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:6px}
+.galact .galbig{margin-top:0}
+.likebtn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;border:1.5px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--ink);font:600 0.9375rem var(--font-body,inherit);cursor:pointer}
+.likebtn .lh{font-size:1.25rem;line-height:1;color:var(--accent)}
+.likebtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.likebtn.on .lh{color:#fff}
+@media (prefers-reduced-motion:no-preference){.likebtn.on .lh{animation:likepop .28s ease-out}@keyframes likepop{0%{transform:scale(.6)}60%{transform:scale(1.35)}100%{transform:scale(1)}}}
+.combadge .cfound{font-weight:700;color:var(--ink)}
+.ctcard,.comcard{margin:14px 0 0;padding:14px;border:1.5px solid var(--accent);border-radius:14px;background:var(--surface);color:var(--ink)}
+.ctcard .mono,.comcard .mono{margin:0 0 6px}
+.ct-l{margin:0;font-weight:700;font-size:1.0625rem}
+.ct-new{margin:6px 0 0;font-weight:700;color:var(--accent)}
+.ct-f{margin:6px 0 0;font-size:0.9375rem}
+.ct-b{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.ct-b .btn,.comcard>.btn{width:auto;min-height:44px;margin:0}
+.cc-row{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:0;border:0;background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.cc-row img{width:64px;height:64px;flex:none;object-fit:cover;border-radius:10px}
+.cc-in{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1;overflow-wrap:anywhere}
+.cc-sub{font-size:0.875rem;color:var(--muted)}
+.cc-t{margin:10px 0;font-size:0.9375rem}

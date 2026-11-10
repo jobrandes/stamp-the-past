@@ -56,9 +56,15 @@ ok(cm.check_approvals(_rules,{'eeeeeeee':_ap(decision='needs-sources',notes='Tri
 ok(any('say why' in x for x in cm.check_approvals(_rules,{'eeeeeeee':_ap(decision='needs-sources',notes='',rules={})},[],[],{},[],[])),'a needs-sources record must say what was tried')
 ok(any('bad decision' in x for x in cm.check_approvals(_rules,{'eeeeeeee':_ap(decision='needs-source')},[],[],{},[],[])),'a misspelt decision is refused')
 import glob as _g
-ok(not any('10587d75' in f for f in _g.glob(R+'src/community/stories/*')) and os.path.exists(R+'src/community/held/10587d75.json'),'Liberty Island is held back, not published')
-_rp=cm.report(R); ok(_rp['counts']['needs-owner']>=1 and _rp['rules'] and all('id' in r for r in _rp['records']),'report lists rules and decisions')
+ok(any('10587d75' in f for f in _g.glob(R+'src/community/stories/*')) and not os.path.exists(R+'src/community/held/10587d75.json') and cm.load_approvals(R)['10587d75'].get('dup_ok_by')=='Jo-Anne','Liberty Island is published only with Jo-Anne\'s recorded approval')
+_rp=cm.report(R); ok(_rp['rules'] and all('id' in r for r in _rp['records']),'report lists rules and decisions')
 ok(json.load(open(TMP+'/community/report.json'))['counts']==_rp['counts'],'built report.json matches the log')
+# Fixture for the admin-page tests below: put Liberty Island back to the "needs the owner" state it had on Nov 5 (test copy only).
+_fx=json.load(open(TMP+'/community/report.json'))
+for _i,_r in enumerate(_fx['records']):
+    if _r['id']=='10587d75': _fx['records'][_i]={'id':'10587d75','kind':'place','decision':'needs-owner','on':'2026-11-05','by':'Claude','place':'Liberty Island','town':'New York','state':'NY','rules':{'dp-place':'fail: its map point is about 50 m from the official Statue of Liberty stop in New York'},'notes':'It breaks the duplicate rule. Your call: leave it out, or allow it as a separate island-history card.','photos':[{'k':'cm_10587d75_n','verdict':'used','why':'Statue and plaza'}]}
+_fx['counts']['needs-owner']=_fx['counts'].get('needs-owner',0)+1; _fx['counts']['added']-=1
+json.dump(_fx,open(TMP+'/community/report.json','w'))
 
 def server(ctx,uploads='1'):
     pr=subprocess.Popen(['node',R+'tests/community/server.mjs',TMP,str(PORT)],env={**os.environ,'CTX':ctx,'FAKE_JPG':FAKE,'UPLOADS':uploads},stdout=subprocess.PIPE); pr.stdout.readline(); return pr
@@ -462,6 +468,30 @@ try:
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'story card sideways scroll')
     ok(pg.evaluate("!!document.querySelector('.combadge')"),'community story card shows the Community-added label')
     ok(pg.evaluate("document.querySelector('.repline [data-a=report]')&&document.querySelector('.repline [data-a=report]').getAttribute('data-com')")=='chapel','community story card has a Report button')
+    # ---- likes on community photos + contributor kudos (Nov 10 2026) ----
+    ok(pg.evaluate("!!document.querySelector('.combadge .cfound')") and 'first community place in storyville' in pg.inner_text('.combadge').lower(),'the first place in a town carries the Town Founder line')
+    lk=pg.evaluate("document.querySelector('.likebtn')&&document.querySelector('.likebtn').getAttribute('data-k')"); ok(lk==cid_s+'_n','story card has a Like button for the photo on screen: %r'%lk)
+    pg.evaluate("document.querySelector('.likebtn').click()"); pg.wait_for_timeout(500)
+    s,j=api('/api/community/likes'); ok(s==200 and j['likes'].get(lk)==1,'a like is counted on the server: %r'%j)
+    ok(pg.evaluate("document.querySelector('.likebtn').getAttribute('aria-pressed')")=='true' and '1 like' in pg.inner_text('.likebtn'),'the button shows the like')
+    pg.evaluate("document.querySelector('.likebtn').click()"); pg.wait_for_timeout(500)
+    s,j=api('/api/community/likes'); ok(not j['likes'].get(lk),'taking a like back lowers the count: %r'%j)
+    pg.evaluate("document.querySelector('.likebtn').click()"); pg.wait_for_timeout(500)
+    pg.evaluate("document.querySelectorAll('.galth')[1].click()"); pg.wait_for_timeout(200)
+    ok(pg.evaluate("document.querySelector('.likebtn').getAttribute('data-k')")==cid_s+'_t' and pg.evaluate("document.querySelector('.likebtn').getAttribute('aria-pressed')")=='false','each photo has its own like')
+    bx=pg.evaluate("(function(){var r=document.querySelector('.likebtn').getBoundingClientRect();return [r.width,r.height];})()"); ok(bx[0]>=44 and bx[1]>=44,'like button is a 44px target: %r'%bx)
+    s,j=api('/api/community/like/'+xid+'_x1',{'on':True}); ok(s==404,'an unpublished photo cannot be liked: %s'%s)
+    s,j=api('/api/community/like/nope',{'on':True}); ok(s==400,'a malformed photo id is rejected')
+    s,j=api('/api/community/mine/'+jn['edit']); ok(j.get('likes')==1 and j['photos'][0].get('likes')==1,'the contributor status carries the likes: %r'%j)
+    pg.evaluate("localStorage.setItem('stp-sugg',JSON.stringify([{t:%s,p:'Hilltop Chapel',c:'Storyville'}]))"%json.dumps(jn['edit']))
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.evaluate("document.querySelector('#bnav [data-t=home]').click()"); pg.wait_for_selector('#ctCard:not([hidden])')
+    ct=pg.inner_text('#ctCard').lower(); ok('1 place in the app' in ct and '1 like' in ct and 'town founder' in ct,'Home shows the contributor card with places, likes and founder kudos: %r'%ct)
+    ok(pg.evaluate("!!document.querySelector('.comcard [data-a=comopen]')") and 'hilltop chapel' in pg.inner_text('.comcard').lower() and '1 like' in pg.inner_text('.comcard'),'Home shows the newest community place with its likes')
+    pg.wait_for_timeout(600); bd=pg.evaluate("Object.keys(JSON.parse(localStorage.getItem('stp-badges')||'{}'))"); ok('ca1' in bd and 'cf' in bd and 'cl10' not in bd,'contributor badges are earned from added places: %r'%bd)
+    ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'Home with community cards has no sideways scroll')
+    pg.evaluate("document.querySelector('.comcard [data-a=comopen]').click()"); pg.wait_for_timeout(400)
+    ok('hilltop chapel' in pg.inner_text('#stopTitle').lower() and pg.evaluate("document.querySelector('.likebtn').getAttribute('aria-pressed')")=='true','the Home card opens the place and the like is remembered on this device')
+    pg.evaluate("localStorage.removeItem('stp-sugg');localStorage.removeItem('stp-contrib');localStorage.removeItem('stp-badges')")
     # the real save code is unchanged by community towns
     pg.set_viewport_size({'width':390,'height':844}); pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
     n_real=json.load(open(R+'src/packs/index.json'))['order']
@@ -517,7 +547,7 @@ try:
   s,j=api('/api/community/hidden'); ok(j.get('hidden')==['cc000001'],'hidden list: %r'%j)
   with sync_playwright() as pw:
     b=pw.chromium.launch(); pg=b.new_page(viewport={'width':390,'height':844}); pg.add_init_script("try{localStorage.setItem('then-now-tour','1')}catch(e){}")
-    pg.goto(B+'/play.html'); pg.wait_for_selector('#main')
+    pg.goto(B+'/play.html'); pg.wait_for_selector('#main'); pg.wait_for_function("localStorage.getItem('stp-hid')&&localStorage.getItem('stp-hid').indexOf('cc000001')>0"); pg.wait_for_timeout(800); pg.wait_for_selector('#main')
     ok(pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).some(function(e){return e.getAttribute('data-c')==='c_testville-nv';})"),'town with one hidden place still lists')
     pg.evaluate("Array.from(document.querySelectorAll('[data-a=city]')).find(function(e){return e.getAttribute('data-c')==='c_testville-nv';}).click()"); pg.wait_for_timeout(400)
     names=pg.evaluate("Array.from(document.querySelectorAll('[data-a=open]')).map(function(e){return e.textContent})"); ok(any('Second Probe' in n for n in names) and not any('Credit Probe' in n for n in names),'hidden place is gone from the town: %r'%names)
@@ -550,7 +580,7 @@ try:
     ok('Needs your decision' in pg.inner_text('#needs') and 'Liberty Island' in pg.inner_text('#needs'),'admin shows items that need the owner: '+pg.inner_text('#needs'))
     ok(pg.is_hidden('#tp-rules') and pg.get_attribute('#tb-needs','aria-selected')=='true','the page opens on Needs you, with the rules on their own tab')
     pg.click('#tb-rules'); ok(pg.is_visible('#tp-rules') and pg.is_hidden('#tp-needs'),'tabs switch panels'); ok('No people in any photo' in pg.inner_text('#rulesl') and 'Checked by code' in pg.inner_text('#rulesl'),'admin lists every rule and who checks it')
-    pg.click('#tb-act'); ok('Added before the written rules' in pg.inner_text('#repl') and 'Needs re-check' in pg.inner_text('#repl'),'report lists everything decided, including re-checks')
+    pg.click('#tb-act'); ok('Mount Tamalpais' in pg.inner_text('#repl'),'report lists everything decided: '+pg.inner_text('#repl')[:200])
     ok(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'report and rules fit the phone')
     ok(pg.evaluate("[...document.querySelectorAll('#added a')].every(a=>/^\\/play\\.html#(story|stop)=/.test(a.getAttribute('href')))"),'admin place links deep-link to the story card')
     pg.fill('#k','wrong-key-wrong-key'); pg.click('#go'); pg.wait_for_selector('#err:not([hidden])'); ok('not accepted' in pg.inner_text('#err'),'admin page rejects a wrong key')
@@ -709,11 +739,13 @@ try:
     s,r=api('/api/community/submit',{**good,'place':'Queue After'}); ok(s==200,'room frees up once places are added or declined: %s'%s)
   s,r=api('/api/community/submit',{**good,'place':'Queue Over'}); ok(s==429,'cap applies again once full: %s'%s)
   json.dump({'added':[],'declined':{}},open(TMP+'/community/status.json','w'))
-  # ---- production context: everything off ----
+  # ---- production context: live since Nov 10 2026, same private rules ----
   sv.terminate(); sv=server('production')
-  for u in ('/api/community/pending','/api/community/photo/x_t'):
-    s,_=api(u); ok(s==404,'production should 404 '+u)
-  s,_=api('/api/community/submit',good); ok(s==404,'production submit 404')
+  for u in ('/api/community/pending','/api/community/photo/x_t','/api/community/reports'):
+    s,_=api(u); ok(s==404,'production keeps private routes private '+u)
+  s,j=api('/api/community/config'); ok(s==200 and 'uploads' in j,'production answers the public config route')
+  s,j=api('/api/community/submit',good); ok(s==200 and j.get('edit'),'production accepts a suggestion: %r'%j)
+  s,j=api('/api/community/pending',key=KEY); ok(s==200 and any(p['place']==good['place'] for p in j['pending']),'the owner key reads the production inbox')
 finally:
   sv.terminate()
 print('community: errors:',errs); sys.exit(1 if errs else 0)
