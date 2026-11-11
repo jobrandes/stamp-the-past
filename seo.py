@@ -51,6 +51,7 @@ ul.fc li{border:1px solid var(--line);border-radius:12px;background:var(--surfac
 .t0{background:var(--good)}.t1{background:var(--warn)}.t2{background:var(--bad)}
 ul.src{padding-left:20px;margin:10px 0 0}ul.src li{margin-top:6px;overflow-wrap:anywhere}
 .cta{margin-top:34px;background:var(--navy);color:var(--navy-ink);border-radius:16px;padding:24px 20px}
+.playrow{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;margin:18px 0 0}.playrow span{color:var(--muted);font-size:15px;flex:1 1 200px}
 .cta h2{margin-top:0}.cta p{opacity:.92}.cta .btn{margin-top:16px}
 .stops{list-style:none;padding:0;margin:14px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .stops a{display:block;border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden;text-decoration:none;color:var(--ink);height:100%}
@@ -127,8 +128,9 @@ def build(R,packs,order,tstate,tfull,common_ids=None):
         hero=next(((s['now'].get('ph') or s['then'].get('ph') or {}).get('k') for s in stops if (s['now'].get('ph') or s['then'].get('ph'))),None)
         body=('<div class="crumbs"><a href="/places/">Places</a> › %s</div><h1>%s: then and now</h1>'%(E(p.get('region','')),E(place))
               +'<p>%d real landmarks in %s, each with an old photo you can fade into today\'s view. %s</p>'%(len(stops),E(tname),E(trunc(p.get('mission',''),220)))
+              +'<p class="playrow"><a class="btn" href="/play#play=%s:%s">Play the first stop</a><span>One question about %s, from your couch. Free, no sign-up.</span></p>'%(tid,stops[0]['id'],E(stops[0]['name']))
               +'<ul class="stops">'+''.join(cards)+'</ul>'
-              +'<div class="cta"><h2>Walk it. Stamp it.</h2><p>Visit all %d stops in %s, answer what is in front of you, and earn the town\'s passport stamps. Free, no sign-up.</p><a class="btn" href="/play">Play %s</a></div>'%(len(stops),E(tname),E(tname))
+              +'<div class="cta"><h2>Walk it. Stamp it.</h2><p>Visit all %d stops in %s, answer what is in front of you, and earn the town\'s passport stamps. Free, no sign-up.</p><a class="btn" href="/play#play=%s:%s">Play %s</a></div>'%(len(stops),E(tname),tid,stops[0]['id'],E(tname))
               +'<p class="note">Written from sources; not yet walked on site unless a stop says otherwise.</p>')
         ld={"@context":"https://schema.org","@type":"CollectionPage","name":place+': then and now',"url":BASE+'/%s/'%tid}
         page(tid+'/index.html',f'{place}: historic landmarks then and now | Stamp the Past',
@@ -162,9 +164,9 @@ def build(R,packs,order,tstate,tfull,common_ids=None):
             nxt=stops[(i+1)%len(stops)]
             body=('<div class="crumbs"><a href="/places/">Places</a> › <a href="/%s/">%s</a></div><h1>%s: then and now</h1>'%(tid,E(place),E(s['name']))
                   +'<p class="mono" style="margin-top:10px">%s vs %s · %s</p>'%(E(th['yr']),E(nw['yr']),E(place))
-                  +sl+caps+'<h2>The story</h2><div class="story">'+story+'</div>'
+                  +sl+caps+'<p class="playrow"><a class="btn" href="/play#play=%s:%s">Play this stop</a><span>Answer one question from your couch. Free, no sign-up.</span></p>'%(tid,s['id'])+'<h2>The story</h2><div class="story">'+story+'</div>'
                   +'<div class="dyk"><b>Did you know?</b> %s</div>'%E(s['fact'])+disp+fcs+src+more
-                  +'<div class="cta"><h2>Stamp it in person</h2><p>Go there, answer the question that only someone standing at %s can answer, and add the stamp to your passport. Free, no sign-up.</p><a class="btn" href="/play">Play %s</a></div>'%(E(s['name']),E(tname))
+                  +'<div class="cta"><h2>Stamp it in person</h2><p>Go there, answer the question that only someone standing at %s can answer, and add the stamp to your passport. Free, no sign-up.</p><a class="btn" href="/play#play=%s:%s">Play this stop</a></div>'%(E(s['name']),tid,s['id'])
                   +'<h2>More in %s</h2><ul class="src">%s</ul><p class="note">Next: <a href="/%s/%s/">%s</a>. Written from the cited sources, not yet walked on site unless noted.</p>'%(E(tname),others,tid,nxt['id'],E(nxt['name'])))
             ld=[{"@context":"https://schema.org","@type":"Article","headline":f"{s['name']}: then and now","description":trunc(s['story'][0],200),
                  "image":[BASE+'/photos/%s.jpg'%k for k in [(nph or {}).get('k'),(tph or {}).get('k')] if k],

@@ -15,6 +15,15 @@ for p in pages:
         f=R+m
         if m.endswith('/'): f+='index.html'
         if not os.path.exists(f): bad.append('broken %s in %s'%(m,p))
+# every town and stop page carries a Play button that opens a real stop of that town from the couch
+import json as _j
+SRC=os.path.dirname(R)+'/src/packs/'
+for tid in _j.load(open(SRC+'index.json'))['order']:
+    pk=_j.load(open(SRC+'%s.json'%tid)); ids=[x['id'] for x in pk['stops']]
+    t=open(R+'/'+tid+'/index.html').read()
+    if t.count('href="/play#play=%s:%s"'%(tid,ids[0]))<2: bad.append('town page %s lacks the Play buttons'%tid)
+    for sid in ids:
+        if open(R+'/%s/%s/index.html'%(tid,sid)).read().count('href="/play#play=%s:%s"'%(tid,sid))<2: bad.append('stop page %s/%s lacks the Play buttons'%(tid,sid))
 print(len(pages),'pages;',len(bad),'problems'); [print(' ',b) for b in bad[:20]]
 if bad: sys.exit(1)
 from playwright.sync_api import sync_playwright

@@ -26,6 +26,8 @@ with sync_playwright() as p:
                     if pg.query_selector('.opt.right'): break
                 pg.click('text=Unlock the story')
                 need(pg.evaluate('document.documentElement.scrollWidth')<=w,f'{tag} {city}: sideways scroll on unlock')
+                try: pg.wait_for_function("[...document.images].every(i=>i.complete)",timeout=4000)  # photos load on demand: give a slow one time to finish before judging it broken
+                except Exception: pass
                 need(pg.evaluate("[...document.images].every(i=>i.complete&&i.naturalWidth>0)"),f'{tag} {city}: broken image')
                 pg.click('text=sort fact from fiction')
                 need(pg.evaluate('document.documentElement.scrollWidth')<=w,f'{tag} {city}: sideways scroll on game')

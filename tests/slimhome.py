@@ -116,6 +116,20 @@ with sync_playwright() as p:
     pg.click('#bnav [data-t=pass]'); pg.wait_for_timeout(250); need('protect your stamps' in pg.inner_text('#main').lower(),'backup nudge lives on the Passport')
     pg=new(seed=STAMPED); pg.click('.hlinks [data-a=trailweek]'); pg.wait_for_timeout(250); need(pg.locator('#bt-trails[aria-selected=true]').count()==1,'Trail of the week row opens Trails')
 
+    # ---- 5b. the Play button on the shared town and stop pages lands on the question, from the couch ----
+    def deep(h,seed=None):
+        ctx=b.new_context(viewport={'width':402,'height':874},device_scale_factor=3,has_touch=True,is_mobile=True,reduced_motion='reduce',timezone_id='America/Los_Angeles')
+        if seed: ctx.add_init_script(seed_js(seed))
+        pg=ctx.new_page(); pg.on('pageerror',lambda e:errs.append(str(e))); pg.goto(U+h); pg.wait_for_selector('#main'); pg.wait_for_timeout(500); return pg
+    pg=deep('#play=boston:faneuil')
+    need(pg.locator('#stopTitle').count()==1 and 'faneuil' in pg.inner_text('#stopTitle').lower() and pg.locator('.opt').count()>0,'#play= opens that stop on its question')
+    need(pg.locator('.tour-card').count()==0,'#play= skips the first-run guide so nothing covers the question')
+    need(pg.evaluate("document.documentElement.scrollWidth<=innerWidth"),'#play= no sideways scroll'); shot(pg,'10-page-play')
+    ans=json.load(open(R+'src/packs/boston.json'))['stops'][1]['q']['answer']; pg.locator('.opt').nth(ans).click(); pg.wait_for_timeout(500)
+    need('boston:faneuil' in pg.evaluate("localStorage.getItem('stp-virt')||''"),'a right answer from the page link earns a virtual stamp, not a real one')
+    need(json.loads(pg.evaluate("localStorage.getItem('then-now-v3')||'{}'")).get('p',{}).get('boston',{}).get('done',[0,0,0,0])[1]==0,'the real stamp stays unearned')
+    pg=deep('#play=reno:arch',seed=STAMPED); need(pg.locator('#stopTitle').count()==1 and pg.locator('.demo-banner').count()==0,'#play= on an already stamped stop opens it normally')
+    pg=deep('#play=nowhere:nothing'); need(pg.locator('#startBox').count()==1,'#play= with unknown ids falls back to Home')
     # ---- 6. sizes, dark, motion ----
     for (w,h) in [(320,568),(360,740),(390,844),(402,874),(768,1024),(1024,768),(1280,800)]:
         for seed,nm in [(None,'new'),(STAMPED,'ret')]:

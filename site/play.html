@@ -1564,7 +1564,7 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     arr.sort(function(x,y){ return x.d-y.d; }); return arr; }
   function nearListHtml(){
     if(atHome===false||geoDenied||!navigator.geolocation) return '';
-    if(!geoPos){ return ''; /* the single "Nearby stops" card (nbCardHtml) is the one entry point */ }
+    if(!geoPos){ return ''; /* Nearby opens from the start card or the Towns page */ }
     var arr=nearArr(); var more=arr.length>3&&!nearAll; arr=arr.slice(0,nearAll?8:3);
     if(!arr.length) return '<section class="card nearlist"><p class="mono">Nearby stops</p><p>No unstamped stop within 90 miles of you. Pick a town from Towns to plan a trip.</p></section>';
     return '<section class="nearlist" aria-label="Stops near you"><p class="mono">Nearby stops, closest first</p>'+arr.map(function(x){ var st=CITIES[x.c].stops[x.i]; return '<button class="rcard" data-a="neargo" data-c="'+x.c+'" data-i="'+x.i+'" data-far="1"><span><strong>'+st.name+'</strong><span class="rsub">'+CITIES[x.c].name+' · '+nice(x.d)+'</span></span><span class="go">Open ›</span></button>'; }).join('')+(more?'<button class="btn ghost" data-a="nearall">See more nearby stops</button>':'')+'</section>';
@@ -1683,10 +1683,6 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     }
     var sp=x.s, v=!!nbGet()[nbKey(sp)];
     return '<button class="rcard nbrow" data-a="nbstory" data-s="'+nbKey(sp)+'"><span><strong>'+sp.name+'</strong><span class="rsub">Story stop · '+sp.area+dist+'</span>'+(sp.community?'<span class="nbst com">Community-added</span>':'')+'<span class="nbst'+(v?' on':'')+'">'+(v?'Visited':'Not visited')+'</span><span class="nbshort">'+(x.teaser?sp.invite:nbFirst(sp.access))+'</span></span><span class="go">Open ›</span></button>';
-  }
-  function nbCardHtml(){
-    if(!STORY.length) return '';
-    return '<section class="card nbcard" aria-label="Nearby stops"><p class="mono">Nearby stops</p><h3>Find history around you</h3><p>See town missions and short Story stops close to where you are. Location is optional and stays on this phone.</p><button class="btn" data-a="nbopen">Explore nearby</button></section>';
   }
   function nbTownsRow(){
     if(!STORY.length) return '';
@@ -2004,20 +2000,6 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     var st=got>0?'<div class="stl"><div class="snum"><b>'+got+'</b><span>of '+total+' stamps</span></div><p class="sverd">Explorer level '+lv.n+' · '+lv.title+' <span class="snext">· '+nfmt(lv.to-gs.xp)+' XP to level '+(lv.n+1)+'</span></p>'+(nb?'<p class="sgoal">Next badge: '+nb.b.n+' · '+nb.cur+' of '+nb.goal+'</p>':'')+'</div>':'';
     return '<section class="stat" aria-label="Your progress">'+(allDone?'':fadePh(tk,ni,'st-ph'))+st+btn+'</section>';
   }
-  function ringsHtml(){
-    var seen={}, list=[];
-    function add(k){ if(CITIES[k]&&!seen[k]){ seen[k]=1; list.push(k); } }
-    [cityId].concat(ORDER).forEach(function(k){ if(CITIES[k]){ var d=sum(ALL[k].done); if(d>0&&d<CITIES[k].stops.length) add(k); } });
-    var started=list.length;
-    tripGet().forEach(function(k){ var d=CITIES[k]?sum(ALL[k].done):0; if(CITIES[k]&&d<CITIES[k].stops.length) add(k); });
-    ORDER.forEach(function(k){ if(list.length<10&&CITIES[k]&&CITIES[k].level==='Classics'&&!sum(ALL[k].done)) add(k); });
-    list=list.slice(0,10);
-    if(!list.length) return '';
-    return '<section class="rings" aria-label="Towns to continue"><p class="mono">'+(started?'Jump back in':'Try one of these')+'</p><div class="rrow">'+list.map(function(k){
-      var c=CITIES[k], n=sum(ALL[k].done), pc=Math.round(n/c.stops.length*100), key=c.heroKey||((BMAPS[k]||{})[c.stops[0].id]||[])[0], img=(key&&PHOTOS[key])?'<img loading="lazy" decoding="async" src="'+PHOTOS[key]+'" alt="">':'';
-      return '<button class="rbtn" data-a="city" data-c="'+k+'" aria-label="'+c.name+', '+n+' of '+c.stops.length+' stamps"><span class="rg" style="--p:'+pc+'"><span class="rph">'+img+'</span></span><span class="rn">'+c.name+'</span></button>';
-    }).join('')+'</div></section>';
-  }
   // Daily Fact or Fiction card (website only; the daily page and the game share this origin's storage)
   function dailyCardHtml(){
     if(!(/^https?:$/.test(location.protocol)&&/stampthepast\.com$/.test(location.hostname))) return '';
@@ -2046,7 +2028,7 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     var regs=[]; ORDER.forEach(function(k){ var r=CITIES[k].region||'More places'; if(regs.indexOf(r)<0) regs.push(r); });
     SOON.forEach(function(o){ var r=(typeof o==='string')?'More places':(o.region||'More places'); if(regs.indexOf(r)<0) regs.push(r); });
     regs=regs.filter(function(r){ return r!==COMREG; }).concat(regs.indexOf(COMREG)>-1?[COMREG]:[]);
-    h+=(onTownsPage?'':reqBanHtml())+browseOpen()+'<section id="missions"><h2 class="hh'+(onTownsPage?' sr':'')+'">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.'+(COMON?' Or <button class="link" data-a="suggest">suggest a place</button>.':'')+'</p>'+regs.map(function(r){
+    h+=browseOpen()+'<section id="missions"><h2 class="hh'+(onTownsPage?' sr':'')+'">Pick a mission</h2>'+nbTownsRow()+chipsHtml()+'<label class="tsearch"><span class="sr">Search towns or states</span><input id="townSearch" type="search" placeholder="Search towns or states" autocomplete="off" autocapitalize="words" spellcheck="false" aria-controls="missions"></label><p class="tnone" id="townNone" hidden>No town matches. Try another spelling, or <button class="link" data-a="reqtown">ask us to add it</button>.'+(COMON?' Or <button class="link" data-a="suggest">suggest a place</button>.':'')+'</p>'+regs.map(function(r){
       var items=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }).map(townLi).join('')+SOON.filter(function(o){ return ((typeof o==='string')?'More places':(o.region||'More places'))===r; }).map(soonLi).join('');
       var rk=ORDER.filter(function(k){ return (CITIES[k].region||'More places')===r; }), rg=0, rt=0; rk.forEach(function(k){ rg+=sum(ALL[k].done); rt+=CITIES[k].stops.length; });
       var open=(CITIES[cityId]&&(CITIES[cityId].region||'More places')===r)||(regs[0]===r&&!(CITIES[cityId]&&(ALL[cityId]&&sum(ALL[cityId].done)>0)));
@@ -2237,20 +2219,6 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     }).catch(function(){ out.className='feedback bad'; out.textContent='Could not send from here. Try the test site, or check your connection.'; });
   }
   /* ---------- Town request banner on Home: one field, one tap, no dialog ---------- */
-  function reqBanHtml(){
-    return '<section class="card reqban" aria-label="Request a town"><p class="mono">Your town not here yet?</p><h3>Tell us which town to add</h3><p>Type it below and we will add it. Community-suggested places are coming soon, too.</p><div class="reqrow"><label class="sr" for="reqBanIn">Town and state</label><input id="reqBanIn" maxlength="120" autocomplete="off" autocapitalize="words" placeholder="Town and state, e.g. Mill Valley, CA"><button class="btn" data-a="reqban">Request this town</button></div><p id="reqBanOut" class="feedback" role="status"></p></section>';
-  }
-  function sendReqBan(){
-    var inp=document.getElementById('reqBanIn'), out=document.getElementById('reqBanOut'); if(!inp||!out) return;
-    var msg=inp.value.trim();
-    if(msg.length<2){ out.className='feedback bad'; out.textContent='Type a town first.'; return; }
-    var body=new URLSearchParams({'form-name':'report','bot-field':'','where':'Town request','message':msg,'contact':''}).toString();
-    out.className='feedback'; out.textContent='Sending...';
-    var web=/^https?:$/.test(location.protocol);
-    fetch(web?'/':'https://stampthepast.com/',{method:'POST',mode:web?'same-origin':'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body}).then(function(r){
-      if(web&&!r.ok) throw new Error('bad'); inp.value=''; out.className='feedback good'; out.textContent='Thanks. We read every request.';
-    }).catch(function(){ out.className='feedback bad'; out.textContent='Could not send from here. Check your connection and try again.'; });
-  }
   /* ---------- first-run tour ---------- */
   var TOUR=[
     {h:'Go there. Prove it.',p:'A history game played on real streets. Sixty seconds to learn the moves, then you are on your own. Bring shoes.',ill:'hello',nx:'Show me'},
@@ -2378,16 +2346,6 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
   // share card
   /* one notable discovery for a finished town's share card: one stop's sourced "fact" (same one every time for a town), trimmed to fit two lines */
   /* phone UX audit u08: one real photo and sourced fact from the current town, changing daily, for returning players */
-  function featuredHtml(){
-    try{ var nx=nextRef(), fk=nx?nx.k:cityId, c=CITIES[fk]; if(!c||!c.stops||!c.stops.length) return '';
-      var shown={}; if(!(atHome===false||geoDenied||!navigator.geolocation)) nearArr().slice(0,nearAll?8:3).forEach(function(x){ shown[x.c+':'+x.i]=1; });
-      var open=[]; c.stops.forEach(function(st,i){ if(!ALL[fk].done[i]&&!(nx&&nx.i===i)&&!shown[fk+':'+i]) open.push(i); });
-      var pool=open.length?open:c.stops.map(function(x,i){ return i; }).filter(function(i){ return !(nx&&nx.k===fk&&nx.i===i); }); if(!pool.length) return '';
-      var day=Math.floor((Date.now()-new Date().getTimezoneOffset()*6e4)/864e5), i=pool[day%pool.length], st=c.stops[i];
-      var ph=st.now&&st.now.ph, src=ph&&PHOTOS[ph.k]; if(!src) return '';
-      var f=(st.fact&&st.fact.length>20&&st.fact.length<=170)?st.fact:(st.teaser||'');
-      return '<section class="feat" aria-label="Story of the day"><img loading="lazy" decoding="async" src="'+src+'" alt="'+(st.now.label||st.name).replace(/"/g,'&quot;')+'"><div class="fin"><p class="mono">Story of the day · '+c.name+'</p><h3>'+st.name+'</h3><p>'+f+'</p><p class="fcred">Photo: '+(ph.by||'')+(ph.lic?' · '+ph.lic:'')+'</p><button class="btn small" data-a="neargo" data-c="'+fk+'" data-i="'+i+'" data-far="1">Read this stop</button></div></section>'; }catch(e){ return ''; }
-  }
   function townDiscovery(k){
     try{ var c=CITIES[k]; if(!c||sum(ALL[k].done)<c.stops.length) return '';
       var L=c.stops.map(function(st){ return st.fact||''; }).filter(function(x){ return x.length>20&&x.length<=150; }), h=0; for(var i=0;i<k.length;i++) h+=k.charCodeAt(i); var f=L.length?L[h%L.length]:'';
@@ -2936,7 +2894,6 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
       else { try{ navigator.clipboard.writeText(pt+' '+pu).then(function(){ toast('Link copied.'); },function(){ toast(pu); }); }catch(err){ toast(pu); } }
       return; }
     if(a==='report'){ showReport(b.getAttribute('data-com')?{com:b.getAttribute('data-com')}:null); return; }
-    if(a==='reqban'){ sendReqBan(); return; }
     if(a==='reqtown'){ var ts=document.getElementById('townSearch'); showReport({req:1,pre:ts&&ts.value.trim()?ts.value.trim()+': ':''}); return; }
     if(a==='repclose'){ closeReport(); return; }
     if(a==='repsend'){ sendReport(); return; }
@@ -3075,7 +3032,7 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
   var deepSt=null;
   try{ var sm=/^#story=([A-Za-z0-9_:.-]+)$/.exec(location.hash||''); if(sm&&nbStory(sm[1])) deepSt=sm[1]; }catch(e){}
   var deepMs=null;
-  try{ var mm=/^#stop=([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+)$/.exec(location.hash||''); if(mm&&CITIES[mm[1]]){ var mi=-1; CITIES[mm[1]].stops.forEach(function(x,q){ if(x.id===mm[2]) mi=q; }); if(mi>-1) deepMs={c:mm[1],i:mi}; } }catch(e){}
+  try{ /* #stop= opens the stop; #play= (the Play button on the shared town and stop pages) opens it in explore-from-home mode, on the question */ var mm=/^#(stop|play)=([A-Za-z0-9_.-]+):([A-Za-z0-9_.-]+)$/.exec(location.hash||''); if(mm&&CITIES[mm[2]]){ var mi=-1; CITIES[mm[2]].stops.forEach(function(x,q){ if(x.id===mm[3]) mi=q; }); if(mi>-1) deepMs={c:mm[2],i:mi,couch:mm[1]==='play'}; } }catch(e){}
   load(); applyCity();
   if(deepMs){ /* link like /play.html#stop=reno:arch opens that mission stop */
     try{ setCity(deepMs.c); atHome=false; }catch(e){}
@@ -3087,7 +3044,7 @@ body.ishome::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:n
     atHome=true; onPass=false; onTowns=false; onNear=true; nv={mode:'city',tour:null,sid:null,msg:'',town:deepExp}; confirmReset=false; applyCity();
   }
   try{ likesLoad(); hidSync(); ctSync(); }catch(e){}
-  render(); if(deepMs){ try{ openStop(deepMs.i,0); }catch(e){} } if(!deepExp&&!deepSt&&!deepMs) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
+  render(); if(deepMs){ try{ openStop(deepMs.i,0); if(deepMs.couch){ ping('page-play'); if(!S.done[deepMs.i]){ demoSnap={done:S.done.slice(),claims:S.claims.slice()}; demoC=S; cur.demo=1; cur.step=1; render(true); window.scrollTo(0,0); } } }catch(e){} } if(!deepExp&&!deepSt&&!deepMs) maybeTour(); geoStartWatch(); bgSync(); bgOpenPending(); try{ if(totalStamps()>0) pingOnce('d:'+dstr(new Date()),'active-day'); }catch(e){} try{ if(localStorage.getItem('stp-badges')===null&&!totalStamps()) localStorage.setItem('stp-badges','{}'); }catch(e){} awardSoon();
   if(NG){ try{ NG.addListener('stopTap',function(){ bgOpenPending(); }); }catch(e){} }
   if(NG&&!BGALERTS){ try{ NG.disable(); }catch(e){} } /* clear any region monitoring an older build registered */
 })();
